@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://api.charthop.com/swagger.json
+docs: https://docs.charthop.com/developer-basics
+summary:
+  types: [http, oauth2]
+  api_key_in: [header]
+  oauth2_flows: [authorizationCode]
+  note: >-
+    The published Swagger 2.0 document declares no securityDefinitions; the auth model
+    below is captured from ChartHop's developer documentation and its live OAuth
+    authorization-server metadata (well-known/charthop-oauth-authorization-server.json).
+schemes:
+- name: appAuthorizationToken
+  type: http
+  scheme: bearer
+  description: >-
+    Server-to-server apps are issued an API authorization token when ChartHop creates
+    and installs the app in an org account. The token is presented as an Authorization
+    Bearer header and acts on behalf of the app (a special user with scoped permissions).
+    Apps are requested via support@charthop.com ("new app request").
+  docs: https://docs.charthop.com/developer-basics
+- name: mcpOAuth
+  type: oauth2
+  flow: authorizationCode
+  description: >-
+    OAuth 2.1 authorization-code + PKCE flow used to authorize agent MCP sessions and
+    OAuth apps. Supports dynamic client registration via client-id metadata documents.
+  authorizationUrl: https://app.charthop.com/oauth/mcp/authorize
+  tokenUrl: https://api.charthop.com/oauth/token
+  pkce: S256
+  grant_types: [authorization_code, refresh_token]
+  source: well-known/charthop-oauth-authorization-server.json
+permissions_model: >-
+  Apps declare required permission levels at request time; access is governed by
+  ChartHop's user-role permission system rather than named OAuth scopes.
