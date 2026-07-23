@@ -1,0 +1,802 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access job-code API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: job-code
+paths:
+  /v1/org/{orgId}/job-code:
+    get:
+      tags:
+      - job-code
+      summary: Return all job codes in the organization paginated
+      operationId: findJobCodes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Job code id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to return fields in; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: filterValues
+        in: query
+        description: 'JSON map of field filters as {fieldId: value} to filter job codes. All filters are applied with AND logic. Field IDs must be ObjectIds of valid job code fields.'
+        required: false
+        type: string
+      - name: includeFieldValues
+        in: query
+        description: 'Whether to include fieldValues in the response (default: false)'
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsJobCode'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - job-code
+      summary: Create a job code
+      operationId: createJobCode
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Job code data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateJobCode'
+      responses:
+        '201':
+          description: job code created
+          schema:
+            $ref: '#/definitions/JobCode'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/job-code/export:
+    post:
+      tags:
+      - job-code
+      summary: Export job codes
+      operationId: exportJobCodes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/JobCodeExportOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/job-code/import:
+    post:
+      tags:
+      - job-code
+      summary: Import data from CSV file
+      operationId: importCsv
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: skipErrors
+        in: query
+        description: Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: false
+        type: boolean
+      responses:
+        '202':
+          description: start import process
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/job-code/import/download-template:
+    get:
+      tags:
+      - job-code
+      summary: Download a CSV template for a job code import
+      operationId: downloadImportCsvTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: success
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/job-code/linked-fields:
+    get:
+      tags:
+      - job-code
+      summary: Return all job code linked field IDs
+      operationId: getJobCodeLinkedFields
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobCodeId
+        in: query
+        description: Job Code ID
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to return fields in; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to apply time tracked fields as of
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/JobCodeLinkedFieldsResponse'
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/job-code/match:
+    post:
+      tags:
+      - job-code
+      summary: Start an async process that uses AI to suggest a JobCode for each job that does not yet have one. Poll GET /v1/org/{orgId}/process/{processId} for status; suggestions are written to process.results once status is DONE. Read-only — writes nothing to jobs.
+      operationId: matchJobsToJobCodes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Optional list of job IDs to match. If omitted, matches all jobs without a job code.
+        required: false
+        schema:
+          $ref: '#/definitions/JobCodeMatchRequest'
+      responses:
+        '200':
+          description: matching process started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: 'Bad request. errorCode is one of: INVALID_JOB_CODE_MATCH_CATALOG_EMPTY (no job codes configured), INVALID_JOB_CODE_MATCH_CATALOG_TOO_LARGE (catalog exceeds supported size), or other validation errors (e.g. JOB_CODE_MATCH prompt not configured).'
+        '401':
+          description: not authorized
+        '403':
+          description: AI or dynamic fields not enabled for this org
+        '404':
+          description: org not found
+  /v1/org/{orgId}/job-code/match/{processId}/reset:
+    post:
+      tags:
+      - job-code
+      summary: Mark a completed JobCodeMatchProcessor process as reset. Writes state.hasReset = true so the frontend can force the matcher UI to reset after the user applies changes, instead of redisplaying the matching table.
+      operationId: resetJobCodeMatch
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: JobCodeMatchProcessor process id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: reset flag written
+        '400':
+          description: process is not a JobCodeMatchProcessor
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: process not found
+  /v1/org/{orgId}/job-code/{jobCodeId}:
+    get:
+      tags:
+      - job-code
+      summary: Return a particular job code by id
+      operationId: getJobCode
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobCodeId
+        in: path
+        description: Job code id
+        required: true
+        type: string
+      - name: format
+        in: query
+        description: Data format to return fields in; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/JobCode'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - job-code
+      summary: Update an existing job code
+      operationId: updateJobCode
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobCodeId
+        in: path
+        description: Job code id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Job code data to update
+        required: true
+        schema:
+          $ref: '#/definitions/JobCode'
+      responses:
+        '204':
+          description: job code updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - job-code
+      summary: Delete a job code
+      operationId: deleteJobCode
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobCodeId
+        in: path
+        description: Job code id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: job code deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  JobCodeLinkedFieldsResponse:
+    type: object
+    required:
+    - fields
+    properties:
+      fields:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fieldValues:
+        type: object
+        additionalProperties:
+          type: object
+      jobCodeId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      excludedOnFilledJobFields:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  JobCodeMatchRequest:
+    type: object
+    properties:
+      jobIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      batchSize:
+        type: integer
+        format: int32
+  CreateJobCode:
+    type: object
+    required:
+    - orgId
+    - title
+    - code
+    properties:
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title corresponding to this job code
+        example: Data Engineer III
+      code:
+        type: string
+        description: code of job code
+        example: US-DAENG-03
+      notes:
+        description: description of the job code
+        $ref: '#/definitions/TextRef'
+      color:
+        type: string
+        description: hex color string for job code
+        pattern: ^#[a-f0-9]{6}$
+      image:
+        type: string
+        description: path to job code image
+        pattern: ^[a-zA-Z0-9._/-]*$
+      fieldValues:
+        type: object
+        additionalProperties:
+          type: object
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  JobCode:
+    type: object
+    required:
+    - id
+    - orgId
+    - title
+    - code
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title corresponding to this job code
+        example: Data Engineer III
+      code:
+        type: string
+        description: code of job code
+        example: US-DAENG-03
+      notes:
+        description: description of the job code
+        $ref: '#/definitions/TextRef'
+      color:
+        type: string
+        description: hex color string for job code
+        pattern: ^#[a-f0-9]{6}$
+      image:
+        type: string
+        description: path to job code image
+        pattern: ^[a-zA-Z0-9._/-]*$
+      fieldValues:
+        type: object
+        additionalProperties:
+          type: object
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  TextRef:
+    type: object
+    properties:
+      textId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      text:
+        type: string
+  JobCodeExportOptions:
+    type: object
+    properties:
+      format:
+        type: string
+      splitColumns:
+        type: boolean
+  ResultsJobCode:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/JobCode'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

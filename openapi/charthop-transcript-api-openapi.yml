@@ -1,0 +1,908 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access transcript API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: transcript
+paths:
+  /v1/org/{orgId}/transcript:
+    get:
+      tags:
+      - transcript
+      summary: Return transcripts in the organization
+      operationId: findTranscripts
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Only include transcripts starting at or after this timestamp (inclusive)
+        required: false
+        type: string
+      - name: until
+        in: query
+        description: Only include transcripts starting before this timestamp (exclusive)
+        required: false
+        type: string
+      - name: fromId
+        in: query
+        description: Transcript id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: Return access information
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTranscript'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - transcript
+      summary: Create a transcript
+      operationId: createTranscript
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Transcript data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTranscript'
+      responses:
+        '201':
+          description: transcript created
+          schema:
+            $ref: '#/definitions/Transcript'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/transcript/import:
+    post:
+      tags:
+      - transcript
+      summary: Import transcripts from a JSONL file
+      operationId: importTranscripts
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: file
+        in: formData
+        description: JSONL file containing transcript data
+        required: true
+        type: file
+      responses:
+        '200':
+          description: import process started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/transcript/import/filepath:
+    post:
+      tags:
+      - transcript
+      summary: Import transcripts from a JSONL file already stored (by process file path)
+      operationId: importTranscriptsWithFilePath
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: filePath
+        in: query
+        description: path to the JSONL file in storage
+        required: true
+        type: string
+      - name: parentProcessId
+        in: query
+        description: process id of the parent process
+        required: false
+        type: string
+      responses:
+        '200':
+          description: import process started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/transcript/{transcriptId}:
+    get:
+      tags:
+      - transcript
+      summary: Return a particular transcript by id
+      operationId: getTranscript
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: transcriptId
+        in: path
+        description: Transcript id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Transcript'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - transcript
+      summary: Update a transcript
+      operationId: updateTranscript
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: transcriptId
+        in: path
+        description: Transcript id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Transcript data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTranscript'
+      responses:
+        '204':
+          description: transcript updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - transcript
+      summary: Delete a transcript
+      operationId: deleteTranscript
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: transcriptId
+        in: path
+        description: Transcript id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: transcript deleted
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/transcript/{transcriptId}/content:
+    get:
+      tags:
+      - transcript
+      summary: Return the transcript's content as speaker-attributed lines
+      operationId: getTranscriptContent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: transcriptId
+        in: path
+        description: Transcript id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTranscriptContentLine'
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  ResultsTranscript:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Transcript'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  Transcript:
+    type: object
+    required:
+    - id
+    - orgId
+    - externalId
+    - recordingSystem
+    - startAt
+    - untilAt
+    - attendees
+    - label
+    - hasTranscriptContent
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 665f3aabe88164e4ef6c3a22
+      orgId:
+        type: string
+        description: parent organization id
+        example: 665f3ad1e47a82bf1d3d180b
+      calendarEntryId:
+        type: string
+        description: optional calendar entry ID
+        example: 588f7ee98f138b19220041a7
+      externalCalendarEntryId:
+        type: string
+        description: optional external calendar event id from the recording system (e.g. the Google Calendar event id)
+      externalId:
+        type: string
+        description: external ID of the recording
+      externalUrl:
+        type: string
+        description: URL to view/watch the recording on the external system
+        example: https://app.gong.io/call?id=7815638069569786872
+      recordingSystem:
+        type: string
+        description: system type used to record
+        example: gong
+      startAt:
+        type: string
+        description: timestamp of the start time (inclusive)
+        example: '2017-01-24T13:57:52Z'
+      untilAt:
+        type: string
+        description: timestamp of the ending time (exclusive)
+        example: '2017-01-24T14:57:52Z'
+      attendees:
+        type: array
+        description: list of attendees
+        items:
+          $ref: '#/definitions/TranscriptAttendee'
+      tags:
+        type: array
+        description: tags on the transcript, such as customer name
+        items:
+          type: string
+      language:
+        type: string
+        description: ISO 639-1 (two-letter) language code of the meeting
+        example: en
+        minItems: 0
+        maxItems: 10
+      label:
+        type: string
+        description: meeting title
+        minItems: 0
+        maxItems: 500
+      description:
+        type: string
+        description: very short description of the meeting discussion (1-3 sentences)
+        minItems: 0
+        maxItems: 2000
+      summary:
+        type: string
+        description: detailed summary of the meeting discussion (a few paragraphs)
+        minItems: 0
+        maxItems: 20000
+      hasTranscriptContent:
+        type: boolean
+        description: whether transcript content (the JSONL utterance file) has been stored for this transcript; the content's storage location is derived from the transcript id, so no path is stored
+      sensitive:
+        type: string
+        description: sensitivity level of the transcript
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the transcript shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  CreateTranscript:
+    type: object
+    required:
+    - externalId
+    - recordingSystem
+    - startAt
+    - untilAt
+    - attendees
+    - label
+    - sensitive
+    properties:
+      calendarEntryId:
+        type: string
+        description: optional calendar entry ID
+        example: 588f7ee98f138b19220041a7
+      externalCalendarEntryId:
+        type: string
+        description: optional external calendar event id from the recording system (e.g. the Google Calendar event id)
+      externalId:
+        type: string
+        description: external ID of the recording
+      externalUrl:
+        type: string
+        description: URL to view/watch the recording on the external system
+        example: https://app.gong.io/call?id=7815638069569786872
+      recordingSystem:
+        type: string
+        description: system type used to record
+        example: gong
+      startAt:
+        type: string
+        description: timestamp of the start time (inclusive)
+        example: '2017-01-24T13:57:52Z'
+      untilAt:
+        type: string
+        description: timestamp of the ending time (exclusive)
+        example: '2017-01-24T14:57:52Z'
+      attendees:
+        type: array
+        description: list of attendees
+        items:
+          $ref: '#/definitions/TranscriptAttendee'
+      tags:
+        type: array
+        description: tags on the transcript, such as customer name
+        items:
+          type: string
+      language:
+        type: string
+        description: ISO 639-1 (two-letter) language code of the meeting
+        example: en
+        minItems: 0
+        maxItems: 10
+      label:
+        type: string
+        description: meeting title
+        minItems: 0
+        maxItems: 500
+      description:
+        type: string
+        description: very short description of the meeting discussion (1-3 sentences)
+        minItems: 0
+        maxItems: 2000
+      summary:
+        type: string
+        description: detailed summary of the meeting discussion (a few paragraphs)
+        minItems: 0
+        maxItems: 20000
+      sensitive:
+        type: string
+        description: sensitivity level of the transcript
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the transcript shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ResultsTranscriptContentLine:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/TranscriptContentLine'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateTranscript:
+    type: object
+    properties:
+      calendarEntryId:
+        type: string
+        description: optional calendar entry ID
+        example: 588f7ee98f138b19220041a7
+      externalCalendarEntryId:
+        type: string
+        description: optional external calendar event id from the recording system (e.g. the Google Calendar event id)
+      externalId:
+        type: string
+        description: external ID of the recording
+      externalUrl:
+        type: string
+        description: URL to view/watch the recording on the external system
+        example: https://app.gong.io/call?id=7815638069569786872
+      recordingSystem:
+        type: string
+        description: system type used to record
+        example: gong
+      startAt:
+        type: string
+        description: timestamp of the start time (inclusive)
+        example: '2017-01-24T13:57:52Z'
+      untilAt:
+        type: string
+        description: timestamp of the ending time (exclusive)
+        example: '2017-01-24T14:57:52Z'
+      attendees:
+        type: array
+        description: list of attendees
+        items:
+          $ref: '#/definitions/TranscriptAttendee'
+      tags:
+        type: array
+        description: tags on the transcript, such as customer name
+        items:
+          type: string
+      language:
+        type: string
+        description: ISO 639-1 (two-letter) language code of the meeting
+        example: en
+        minItems: 0
+        maxItems: 10
+      label:
+        type: string
+        description: meeting title
+        minItems: 0
+        maxItems: 500
+      description:
+        type: string
+        description: very short description of the meeting discussion (1-3 sentences)
+        minItems: 0
+        maxItems: 2000
+      summary:
+        type: string
+        description: detailed summary of the meeting discussion (a few paragraphs)
+        minItems: 0
+        maxItems: 20000
+      sensitive:
+        type: string
+        description: sensitivity level of the transcript
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the transcript shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+  TranscriptAttendee:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        description: unique speaker identifier for the transcript (equals personId if available)
+      personId:
+        type: string
+        description: ChartHop person ID, if in the system
+        example: 588f7ee98f138b19220041a7
+      email:
+        type: string
+        description: email address, if available
+      name:
+        type: string
+        description: display name, if available
+      title:
+        type: string
+        description: job title, if available
+      orgId:
+        type: string
+        description: ChartHop org ID, if available
+        example: 588f7ee98f138b19220041a7
+      orgName:
+        type: string
+        description: name of the person's organization, if available
+  TranscriptContentLine:
+    type: object
+    required:
+    - text
+    properties:
+      speakerId:
+        type: string
+        description: speaker's attendee id (matches a TranscriptAttendee.id), if known
+      startAt:
+        type: string
+        description: when this line was spoken
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: when this line ended
+        example: '2017-01-24T13:57:55Z'
+      text:
+        type: string
+        description: the spoken text

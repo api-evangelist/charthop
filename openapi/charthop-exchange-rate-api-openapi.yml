@@ -1,0 +1,324 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access exchange-rate API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: exchange-rate
+paths:
+  /v1/org/{orgId}/exchange-rate/{date}:
+    get:
+      tags:
+      - exchange-rate
+      summary: Return the exchange rates on a particular date
+      operationId: getExchangeRates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ExchangeRate'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - exchange-rate
+      summary: Update the USD-based exchange rates for a particular date. Must be the first of a month.
+      operationId: setExchangeRates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateExchangeRate'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - exchange-rate
+      summary: Delete a custom exchange rate on a particular date
+      operationId: deleteExchangeRate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      - name: currencyCode
+        in: query
+        description: Currency code
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/exchange-rate/{date}/custom:
+    get:
+      tags:
+      - exchange-rate
+      summary: Return org custom exchange rates
+      operationId: getCustomExchangeRates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ExchangeRate'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/exchange-rate/{date}/custom/bulkupdate:
+    post:
+      tags:
+      - exchange-rate
+      summary: Bulk update custom currency rates in org custom exchange rates
+      operationId: bulkUpdateCustomExchangeRates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      - name: addRates
+        in: query
+        description: Boolean to determine whether to add or remove rates from update
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: Update data
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/UpdateExchangeRate'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/exchange-rate/{date}/global:
+    get:
+      tags:
+      - exchange-rate
+      summary: Return the global exchange rates based on USD for a particular date
+      operationId: getGlobalExchangeRates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ExchangeRate'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/exchange-rate/{date}/history:
+    get:
+      tags:
+      - exchange-rate
+      summary: Return org custom exchange rates
+      operationId: getCurrencyRateHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to use
+        required: true
+        type: string
+        format: date
+      - name: currency
+        in: query
+        description: Currency to search for
+        required: true
+        type: string
+      - name: fromDate
+        in: query
+        description: Start date for search
+        required: true
+        type: string
+        format: date
+      - name: toDate
+        in: query
+        description: End date for search
+        required: true
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ExchangeRate'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  UpdateExchangeRate:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date
+        description: date
+      rates:
+        type: object
+        description: exchange rates, per currency - the multiplier to convert the base currency into the foreign currency
+        additionalProperties:
+          type: number
+  ExchangeRate:
+    type: object
+    required:
+    - id
+    - date
+    - currency
+    - rates
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id, if an org-specific exchange rate is in use
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+        description: date
+      currency:
+        type: string
+        description: base currency
+      rates:
+        type: object
+        description: exchange rates, per currency - the multiplier to convert the base currency into the foreign currency
+        additionalProperties:
+          type: number
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'

@@ -1,0 +1,45 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access status API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: status
+paths:
+  /v1/status:
+    get:
+      tags:
+      - status
+      summary: Returns true if the API is up and available
+      operationId: isOk
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/OkResponse'
+definitions:
+  OkResponse:
+    type: object
+    required:
+    - ok
+    properties:
+      ok:
+        type: boolean
+        description: whether the status is okay
+        example: 'true'

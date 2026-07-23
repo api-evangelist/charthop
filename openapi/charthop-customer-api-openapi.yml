@@ -1,0 +1,1021 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access customer API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: customer
+paths:
+  /v1/customer:
+    get:
+      tags:
+      - customer
+      summary: Return all visible customers, paginated by name
+      operationId: findCustomers
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: from
+        in: query
+        description: Customer id to start from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: status
+        in: query
+        description: Customer.Status. (ACTIVE/INACTIVE/TRAIL)
+        required: false
+        type: string
+      - name: trialAsOf
+        in: query
+        description: Only return customers with a product trial in progress as of this date (range inclusive)
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCustomer'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    post:
+      tags:
+      - customer
+      summary: Create a new customer
+      operationId: createCustomer
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Customer data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCustomer'
+      responses:
+        '201':
+          description: customer created
+          schema:
+            $ref: '#/definitions/Customer'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/customer/{customerId}:
+    get:
+      tags:
+      - customer
+      summary: Return a particular customer by id
+      operationId: getCustomer
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Customer'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - customer
+      summary: Update an existing customer
+      operationId: updateCustomer
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Customer data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCustomer'
+      responses:
+        '204':
+          description: customer updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/customer/{customerId}/invoices:
+    get:
+      tags:
+      - customer
+      summary: Returns a list of all the invoices for the given customer
+      operationId: getCustomerInvoices
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/InvoiceResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/customer/{customerId}/subscription:
+    get:
+      tags:
+      - customer
+      summary: Returns information about the Charthop subscription for the given customer
+      operationId: getCharthopSubscription
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Subscription'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - customer
+      summary: Update a subscription on a customer
+      operationId: updateSubscription
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Subscription data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateSubscription'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  Address:
+    type: object
+    required:
+    - country
+    properties:
+      street1:
+        type: string
+        description: street address, line 1
+        example: 123 Anywhere Street
+        minItems: 0
+        maxItems: 200
+      street2:
+        type: string
+        description: street address, line 2
+        example: Apt 6L
+        minItems: 0
+        maxItems: 200
+      street3:
+        type: string
+        description: street address, line 3
+        example: Sixth Floor
+        minItems: 0
+        maxItems: 200
+      city:
+        type: string
+        description: city
+        example: New York
+        minItems: 0
+        maxItems: 80
+      state:
+        type: string
+        description: state
+        example: NY
+        minItems: 0
+        maxItems: 80
+      country:
+        type: string
+        description: country (two-digit ISO code)
+        example: NY
+        pattern: ^[A-Z]{2}$
+      postal:
+        type: string
+        description: postal code
+        example: '10001'
+        minItems: 0
+        maxItems: 10
+      geo:
+        description: geopoint location
+        $ref: '#/definitions/Geopoint'
+      approxGeo:
+        description: approximate geopoint location (suitable for a map placement, but not exact location)
+        $ref: '#/definitions/Geopoint'
+  Customer:
+    type: object
+    required:
+    - id
+    - name
+    - status
+    properties:
+      id:
+        type: string
+        description: unique id of customer
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: name of customer
+      email:
+        type: string
+        description: email address for billing purposes
+      billAddress:
+        description: mailing address for billing purposes
+        $ref: '#/definitions/Address'
+      industry:
+        type: string
+        description: industry that customer is in
+      source:
+        type: string
+        description: source of customer signup
+        enum:
+        - ADP_MARKETPLACE
+        - SELF_SERVE
+        - SELF_SERVE_TEST
+        - SEQUOIA_ONE
+        - CONNECT
+      status:
+        type: string
+        description: current status
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - TRIAL
+        - CHURN
+        - PAYMENT_ERROR
+      stripeCustomerId:
+        type: string
+        description: stripe customer id
+      salesforceAccountId:
+        type: string
+        description: salesforce account id
+        pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+      products:
+        type: array
+        description: products that this customer has purchased
+        items:
+          $ref: '#/definitions/ProductItem'
+      trialProducts:
+        type: array
+        description: products this customer has temporary trial access to, each bounded by a date range
+        items:
+          $ref: '#/definitions/TrialProduct'
+      restrictedFeatures:
+        type: array
+        description: features that are restricted for the customer
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      featureOptionOverrides:
+        type: array
+        description: override feature options for the customer
+        items:
+          $ref: '#/definitions/FeatureAccessOption'
+      startDate:
+        type: string
+        format: date
+        description: initial date of billing
+      endDate:
+        type: string
+        format: date
+        description: end of service date for churning customers -- on or after this date, service should be disabled
+      nextInvoiceDate:
+        type: string
+        format: date
+        description: date of next invoice
+      orgCount:
+        type: integer
+        format: int32
+        description: number of orgs covered by this customer
+      primaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      secondaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      tertiaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      primaryHeadCountFilter:
+        type: string
+        description: primary headcount filter - used for billing purposes
+      secondaryHeadCountFilter:
+        type: string
+        description: secondary headcount filter - used for billing purposes
+      tertiaryHeadCountFilter:
+        type: string
+        description: tertiary headcount filter - used for billing purposes
+      arr:
+        type: number
+        description: current ARR of the customer based on most recent invoice
+      trialStartDate:
+        type: string
+        format: date
+        description: date this customer begins their trial period
+      trialEndDate:
+        type: string
+        format: date
+        description: date this customer ends their trial period
+      stripeSubscriptionSync:
+        type: string
+        description: Stripe subscription settings
+        enum:
+        - SYNC
+        - DELETE
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+  Invoice:
+    type: object
+    required:
+    - number
+    - amount
+    - status
+    - createAt
+    properties:
+      number:
+        type: string
+        description: a unique identifying string for invoices
+        example: F38A6C8-0010
+      amount:
+        type: number
+        description: current final amount due for the invoices
+        example: '1002.31'
+      hostedInvoiceUrl:
+        type: string
+        description: URL for the hosted invoice page, which allows customers to view and pay an invoice
+        example: https://pay.stripe.com/invoice/invst_Nv8DFERQvTsBJqnZ4z19cGZBU1
+      invoicePdf:
+        type: string
+        description: the link to download the PDF for the invoice
+        example: https://pay.stripe.com/invoice/invst_wNK0BvV4iUOWOn5mzLT1ybQ2LC/pdf
+      status:
+        type: string
+        description: one of PAID, UNPAID, or VOID
+        example: PAID
+        enum:
+        - PAID
+        - UNPAID
+        - VOID
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2019-07-27T20:56:10Z'
+  FeatureAccessOption:
+    type: object
+    required:
+    - name
+    - type
+    properties:
+      name:
+        type: string
+        description: The name of the feature option tied to the feature access
+        example: smart_fields
+        enum:
+        - CONFIGURED_ROLES
+        - SMART_FIELDS
+        - APP_FIELD_MAPPERS
+        - MULTI_PAYROLL_INSTALLS
+      description:
+        type: string
+        description: The description of the feature option
+      type:
+        type: string
+        description: The feature option type
+        enum:
+        - LIMIT
+        - FULL_ACCESS
+      limit:
+        type: integer
+        format: int32
+        description: The feature option limit
+  PaymentInfo:
+    type: object
+    required:
+    - paymentType
+    properties:
+      paymentType:
+        type: string
+        description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
+        example: CREDIT_CARD
+        enum:
+        - CREDIT_CARD
+        - INVOICE
+      creditCardEndDigits:
+        type: string
+        description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
+        example: '4242'
+      brand:
+        type: string
+        description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
+        example: Visa
+  Subscription:
+    type: object
+    required:
+    - nextInvoiceAt
+    - plan
+    - paymentInfo
+    properties:
+      nextInvoiceAt:
+        type: string
+        description: Timestamp when the next invoice will be generated
+        example: '2019-07-27T20:56:10Z'
+      plan:
+        description: Plan this subscription is for
+        $ref: '#/definitions/Plan'
+      paymentInfo:
+        description: Information about how the customer pays for this subscription
+        $ref: '#/definitions/PaymentInfo'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  InvoiceResponse:
+    type: object
+    required:
+    - invoices
+    properties:
+      invoices:
+        type: array
+        items:
+          $ref: '#/definitions/Invoice'
+  CreateCustomer:
+    type: object
+    required:
+    - name
+    - email
+    - startDate
+    properties:
+      name:
+        type: string
+        description: name of customer
+      email:
+        type: string
+        description: email address for billing purposes
+      billAddress:
+        description: mailing address for billing purposes
+        $ref: '#/definitions/Address'
+      industry:
+        type: string
+        description: industry that customer is in
+      source:
+        type: string
+        description: source of customer signup
+        enum:
+        - ADP_MARKETPLACE
+        - SELF_SERVE
+        - SELF_SERVE_TEST
+        - SEQUOIA_ONE
+        - CONNECT
+      status:
+        type: string
+        description: current status
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - TRIAL
+        - CHURN
+        - PAYMENT_ERROR
+      salesforceAccountId:
+        type: string
+        description: salesforce account id
+        pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+      products:
+        type: array
+        description: products that this customer has purchased
+        items:
+          $ref: '#/definitions/ProductItem'
+      trialProducts:
+        type: array
+        description: products this customer has temporary trial access to, each bounded by a date range
+        items:
+          $ref: '#/definitions/TrialProduct'
+      restrictedFeatures:
+        type: array
+        description: features that are restricted for the customer
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      featureOptionOverrides:
+        type: array
+        description: override feature options for the customer
+        items:
+          $ref: '#/definitions/FeatureAccessOption'
+      startDate:
+        type: string
+        format: date
+        description: initial date of billing
+      endDate:
+        type: string
+        format: date
+        description: end of service date for churning customers -- on or after this date, service should be disabled
+      nextInvoiceDate:
+        type: string
+        format: date
+        description: date of next invoice
+      primaryHeadCountFilter:
+        type: string
+        description: primary headcount filter - used for billing purposes
+      secondaryHeadCountFilter:
+        type: string
+        description: secondary headcount filter - used for billing purposes
+      tertiaryHeadCountFilter:
+        type: string
+        description: tertiary headcount filter - used for billing purposes
+      arr:
+        type: number
+        description: current ARR of the customer based on most recent invoice
+      trialStartDate:
+        type: string
+        format: date
+        description: date this customer begins their trial period
+      trialEndDate:
+        type: string
+        format: date
+        description: date this customer ends their trial period
+      stripeSubscriptionSync:
+        type: string
+        description: Stripe subscription settings
+        enum:
+        - SYNC
+        - DELETE
+  Geopoint:
+    type: object
+    required:
+    - type
+    - coordinates
+    properties:
+      type:
+        type: string
+        description: Type of point
+        readOnly: true
+      coordinates:
+        type: array
+        description: The longitude and latitude of the point
+        readOnly: true
+        items:
+          type: number
+          format: double
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  UpdateCustomer:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of customer
+      email:
+        type: string
+        description: email address for billing purposes
+      billAddress:
+        description: mailing address for billing purposes
+        $ref: '#/definitions/Address'
+      industry:
+        type: string
+        description: industry that customer is in
+      source:
+        type: string
+        description: source of customer signup
+        enum:
+        - ADP_MARKETPLACE
+        - SELF_SERVE
+        - SELF_SERVE_TEST
+        - SEQUOIA_ONE
+        - CONNECT
+      status:
+        type: string
+        description: current status
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - TRIAL
+        - CHURN
+        - PAYMENT_ERROR
+      salesforceAccountId:
+        type: string
+        description: salesforce account id
+        pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+      products:
+        type: array
+        description: products that this customer has purchased
+        items:
+          $ref: '#/definitions/ProductItem'
+      trialProducts:
+        type: array
+        description: products this customer has temporary trial access to, each bounded by a date range
+        items:
+          $ref: '#/definitions/TrialProduct'
+      restrictedFeatures:
+        type: array
+        description: features that are restricted for the customer
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      featureOptionOverrides:
+        type: array
+        description: override feature options for the customer
+        items:
+          $ref: '#/definitions/FeatureAccessOption'
+      startDate:
+        type: string
+        format: date
+        description: initial date of billing
+      endDate:
+        type: string
+        format: date
+        description: end of service date for churning customers -- on or after this date, service should be disabled
+      nextInvoiceDate:
+        type: string
+        format: date
+        description: date of next invoice
+      primaryHeadCountFilter:
+        type: string
+        description: primary headcount filter - used for billing purposes
+      secondaryHeadCountFilter:
+        type: string
+        description: secondary headcount filter - used for billing purposes
+      tertiaryHeadCountFilter:
+        type: string
+        description: tertiary headcount filter - used for billing purposes
+      arr:
+        type: number
+        description: current ARR of the customer based on most recent invoice
+      trialStartDate:
+        type: string
+        format: date
+        description: date this customer begins their trial period
+      trialEndDate:
+        type: string
+        format: date
+        description: date this customer ends their trial period
+      stripeSubscriptionSync:
+        type: string
+        description: Stripe subscription settings
+        enum:
+        - SYNC
+        - DELETE
+  Plan:
+    type: object
+    required:
+    - id
+    - name
+    - interval
+    - intervalCount
+    - tiers
+    - stripeProductId
+    properties:
+      id:
+        type: string
+        description: unique Stripe identifier for this plan
+      name:
+        type: string
+        description: human-readable nickname for this plan
+      interval:
+        type: string
+        description: interval for billing on this plan
+        enum:
+        - DAY
+        - WEEK
+        - MONTH
+        - YEAR
+      intervalCount:
+        type: integer
+        format: int32
+        description: number of intervals, for example 3 for quarterly billing
+      tiers:
+        type: array
+        description: pricing tiers, per employee per interval
+        items:
+          $ref: '#/definitions/PlanTier'
+      stripeProductId:
+        type: string
+        description: stripe product id that this plan belongs to
+  PlanTier:
+    type: object
+    required:
+    - unitAmount
+    properties:
+      upTo:
+        type: integer
+        format: int64
+        description: headcount up to this level is charged at the below rate
+      unitAmount:
+        type: number
+        description: PEPM rate
+  UpdateSubscription:
+    type: object
+    required:
+    - paymentMethod
+    properties:
+      paymentMethod:
+        type: string
+        description: Payment method to create; 'INVOICE' to make subscription paid by invoice, or the ID of the payment method if to make the subscription automatically charge a card
+  TrialProduct:
+    type: object
+    required:
+    - productId
+    - startDate
+    - endDate
+    properties:
+      productId:
+        type: string
+        description: id of the product the customer is trialing
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+        description: first date the trial grants access (inclusive)
+      endDate:
+        type: string
+        format: date
+        description: last date the trial grants access (inclusive)
+  ResultsCustomer:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Customer'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ProductItem:
+    type: object
+    required:
+    - productId
+    - stripePriceId
+    properties:
+      productId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      stripePriceId:
+        type: string

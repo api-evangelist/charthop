@@ -1,0 +1,436 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access approval-request API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: approval-request
+paths:
+  /v1/org/{orgId}/approval-request/entity/scenario:
+    get:
+      tags:
+      - approval-request
+      summary: Return all approval request scenario responses for an org
+      operationId: findApprovalRequestResponsesByScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: entityIds
+        in: query
+        description: entity ids to filter on
+        required: false
+        type: string
+      - name: includeDeleted
+        in: query
+        description: Include deleted approval requests
+        required: false
+        type: boolean
+      - name: includeCompReviewScenarios
+        in: query
+        description: Include scenario approval requests in comp reviews
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApprovalRequestScenarioResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-request/entity/timeoff/{timeOffId}:
+    get:
+      tags:
+      - approval-request
+      summary: Return a particular approval request timeoff response by entity id
+      operationId: getApprovalRequestTimeoffResponseByTimeoffId
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: timeOffId
+        in: path
+        description: Time off entity id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalRequestTimeoffResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-request/scenario-job/{jobId}:
+    get:
+      tags:
+      - approval-request
+      summary: Return a particular approval request scenario response by jobId
+      operationId: getApprovalRequestScenarioResponseByJobId
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalRequestScenarioResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-request/{approvalRequestId}/scenario-response:
+    get:
+      tags:
+      - approval-request
+      summary: Return a particular approval request scenario response by id
+      operationId: getApprovalRequestScenarioResponseById
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: Approval request id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalRequestScenarioResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ApprovalGroup:
+    type: object
+    required:
+    - type
+    - approvers
+    properties:
+      groupId:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: What type of group this is
+        enum:
+        - REVIEWER
+        - COLLABORATOR
+        - FINAL_APPROVER
+      approvers:
+        type: array
+        description: approvers that make up the group
+        items:
+          $ref: '#/definitions/ApprovalGroupApprover'
+      expandExpression:
+        type: string
+        description: optional custom expression to determine approval request tree
+      minApproversNeeded:
+        type: integer
+        format: int32
+        description: minimum number of approvers required in this group for approval (null means all approvers required)
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  ApprovalGroupApprover:
+    type: object
+    required:
+    - jobId
+    - status
+    properties:
+      jobId:
+        type: string
+        description: A job ID that is part of the group
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: The status of the approver
+        enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
+        - SKIPPED
+      commentId:
+        type: string
+        description: Last comment of the approver
+        example: 588f7ee98f138b19220041a7
+      reassignCommentId:
+        type: string
+        description: Last comment associated with a reassignment
+        example: 588f7ee98f138b19220041a7
+      isFallback:
+        type: boolean
+        description: Whether approver is a fallback
+      fallbackFor:
+        type: string
+        description: What jobId approver is a fallback for
+        example: 588f7ee98f138b19220041a7
+      actedByJobId:
+        type: string
+        description: Job of the delegate who acted on this slot on the approver's behalf
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: The date the status was updated last
+  ApprovalRequestScenarioResponse:
+    type: object
+    required:
+    - id
+    - isComplete
+    - stageOverrides
+    - isApprovalCommentRequiredForActiveStage
+    - isRejectionCommentRequiredForActiveStage
+    - approvalChainId
+    - scenarioId
+    - createId
+    - createAt
+    - updateId
+    - updateAt
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      activeStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      proposerStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      nextReviewerStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      isComplete:
+        type: boolean
+      rejectedStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      stageOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChainStageOverride'
+      isApprovalCommentRequiredForActiveStage:
+        type: boolean
+      isRejectionCommentRequiredForActiveStage:
+        type: boolean
+      approvalChainId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      scenarioId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+      updateId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+      deleteId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+      delegatedApproverJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      delegatedApproverJobIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  ApprovalRequestTimeoffResponse:
+    type: object
+    required:
+    - id
+    - isComplete
+    - stageOverrides
+    - approvalChainId
+    - timeOffId
+    - createId
+    - createAt
+    - updateId
+    - updateAt
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      proposerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      approverJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      isComplete:
+        type: boolean
+      stageOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChainStageOverride'
+      approvalChainId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      timeOffId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+      updateId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+      deleteId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+  ApprovalChainStageOverride:
+    type: object
+    required:
+    - stageOverrideId
+    - approvalChainStageId
+    - status
+    - order
+    properties:
+      stageOverrideId:
+        type: string
+        description: unique id for stage
+        example: 588f7ee98f138b19220041a7
+      approvalChainStageId:
+        type: string
+        description: parent approval chain stage id
+        example: 588f7ee98f138b19220041a7
+      groups:
+        type: array
+        description: approval group override
+        items:
+          $ref: '#/definitions/ApprovalGroup'
+      status:
+        type: string
+        description: status of the stage
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      order:
+        type: integer
+        format: int32
+        description: order of the stage
+  ResultsApprovalRequestScenarioResponse:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalRequestScenarioResponse'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

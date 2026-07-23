@@ -1,0 +1,1104 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access process API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: process
+paths:
+  /v1/org/{orgId}/process:
+    get:
+      tags:
+      - process
+      summary: Retrieve a number of previously run processes
+      operationId: findProcesses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: isAppProcess
+        in: query
+        description: Boolean if an app process
+        required: false
+        type: boolean
+      - name: appId
+        in: query
+        description: App ID to filter by
+        required: false
+        type: string
+      - name: parentProcessId
+        in: query
+        description: Parent process ID to search for children
+        required: false
+        type: string
+      - name: type
+        in: query
+        description: 'Type to filter by. Accepted values: [''auto'', ''manual'']'
+        required: false
+        type: string
+      - name: createAtFrom
+        in: query
+        description: Create at instant from, inclusive
+        required: false
+        type: string
+      - name: createAtUntil
+        in: query
+        description: Create at instant until, exclusive
+        required: false
+        type: string
+      - name: statuses
+        in: query
+        description: 'Statuses to filter by, comma-separated. Accepted values: [''DONE'', ''ERROR'', ''PENDING'', ''RUNNING'', ''DONE_WITH_ERRORS'']'
+        required: false
+        type: string
+      - name: isParentProcess
+        in: query
+        description: Boolean if a parent process
+        required: false
+        type: boolean
+      - name: processTypes
+        in: query
+        description: Process types to filter by, comma-separated.
+        required: false
+        type: string
+      - name: searchValue
+        in: query
+        description: Search term for general filtering
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: from id
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: limit
+        required: false
+        type: integer
+        format: int32
+      - name: syncDirections
+        in: query
+        description: direction
+        required: false
+        type: string
+      - name: syncCauses
+        in: query
+        description: 'V2 Causes to filter by, comma-separated. Accepted values: [''MANUAL'', ''AUTO'', ''EVENT_BASED]'
+        required: false
+        type: string
+      - name: runUserId
+        in: query
+        description: The user id under which the process is run
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsProcess'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - process
+      summary: Creates a new process in the pending state
+      operationId: createProcess
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Process data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateProcess'
+      responses:
+        '201':
+          description: Process created
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/last-sync/{appUserId}:
+    get:
+      tags:
+      - process
+      summary: Get last success sync and last sync for given appUserId
+      operationId: getAppProcessStatus
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: app user id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppProcessStatus'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/self-serve:
+    post:
+      tags:
+      - process
+      summary: Creates a new process in the pending state
+      operationId: createSelfServeProcess
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: state
+        in: formData
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Process type
+        required: true
+        type: string
+      - name: maxRows
+        in: query
+        description: Max rows allowed in an imported spreadsheet file
+        required: false
+        type: integer
+        format: int32
+      - name: minColumns
+        in: query
+        description: Min columns required in an imported spreadsheet file
+        required: false
+        type: integer
+        format: int32
+      - name: isSync
+        in: query
+        description: Whether the created process is sync flow or manual flow
+        required: false
+        type: boolean
+      responses:
+        '201':
+          description: Process created
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{createIdOverride}:
+    post:
+      tags:
+      - process
+      summary: Creates a new process with a specified createId in the pending state
+      operationId: createProcessWithUserId
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Process data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateProcess'
+      - name: createIdOverride
+        in: path
+        description: created user id override
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Process created
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}:
+    get:
+      tags:
+      - process
+      summary: Check the status of a particular process
+      operationId: getProcess
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: showState
+        in: query
+        description: showState
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    patch:
+      tags:
+      - process
+      summary: Update the status of a process, marking its progress or setting status to DONE or ERROR
+      operationId: updateProcess
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateProcess'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/decrement:
+    put:
+      tags:
+      - process
+      summary: Decrement the step of an asynchronous process
+      operationId: decrement
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/events:
+    get:
+      tags:
+      - process
+      summary: Get events associated to a particular process
+      operationId: getProcessEvents
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProcessEventResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/file:
+    get:
+      tags:
+      - process
+      summary: Download the file associated with a particular process
+      operationId: getProcessFile
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - process
+      summary: Upload a file to be attached to a process, and mark the process as complete
+      operationId: completeWithFileExport
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: false
+        type: file
+      responses:
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/increment:
+    put:
+      tags:
+      - process
+      summary: Increment the step of an asynchronous process
+      operationId: increment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/log:
+    get:
+      tags:
+      - process
+      summary: Download the newline-delimited JSON log associated with a particular process
+      operationId: getProcessLogFile
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - process
+      summary: Append log messages to a process
+      operationId: appendToProcessLogFile
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: log messages to append
+        required: true
+        schema:
+          $ref: '#/definitions/AppendLogRequest'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/resume:
+    put:
+      tags:
+      - process
+      summary: Resume an asynchronous process
+      operationId: resume
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: data to process
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/resumeWithFile:
+    put:
+      tags:
+      - process
+      summary: Resume an asynchronous process
+      operationId: resumeWithFile
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: false
+        type: file
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/process/{processId}/state:
+    put:
+      tags:
+      - process
+      summary: Update process state
+      operationId: updateStatefulProcess
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: process id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: state
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+definitions:
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  ProcessEvent:
+    type: object
+    required:
+    - type
+    - updates
+    - at
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - DEPART
+        - HIRE
+        - UPDATE
+        - CREATE_PERSON
+        - ERROR
+        - INBOUND
+        - CHANGE
+        - OUTBOUND_CREATE
+        - OUTBOUND_UPDATE
+        - OUTBOUND_DELETE
+        - INITIATING_CREATE
+        - INITIATING_DELETE
+      entityData:
+        type: object
+        additionalProperties:
+          type: object
+      updates:
+        type: array
+        items:
+          $ref: '#/definitions/ProcessEventUpdate'
+      at:
+        type: string
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsProcess:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Process'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  CreateProcess:
+    type: object
+    required:
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - options
+    properties:
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  ProcessEventResponse:
+    type: object
+    required:
+    - events
+    properties:
+      events:
+        type: array
+        items:
+          $ref: '#/definitions/ProcessEvent'
+  AppProcessStatus:
+    type: object
+    properties:
+      appLastSync:
+        description: last application sync
+        $ref: '#/definitions/Process'
+      appLastSuccessSync:
+        description: last successful sync
+        $ref: '#/definitions/Process'
+  AppendLogRequest:
+    type: object
+    required:
+    - log
+    properties:
+      log:
+        type: array
+        items:
+          $ref: '#/definitions/LogData'
+  ProcessEventUpdate:
+    type: object
+    required:
+    - type
+    - payload
+    properties:
+      type:
+        type: string
+        enum:
+        - FIELD
+        - CONTACT
+        - COMP
+        - ERROR
+      payload:
+        $ref: '#/definitions/ProcessEventUpdatePayload'
+  UpdateProcess:
+    type: object
+    properties:
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ProcessEventUpdatePayload:
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: object
+      currency:
+        type: string
+      contactFormat:
+        type: string
+        enum:
+        - PHONE
+        - EMAIL
+        - ID
+      errorMessage:
+        type: string

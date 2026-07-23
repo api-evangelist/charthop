@@ -1,0 +1,650 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access budget API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: budget
+paths:
+  /v1/org/{orgId}/budget:
+    get:
+      tags:
+      - budget
+      summary: Find budgets
+      operationId: findBudgets
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: query
+        description: Group id to filter budgets by
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to filter budgets as-of (defaults to today)
+        required: false
+        type: string
+        format: date
+      - name: fromId
+        in: query
+        description: Starting budget id for pagination
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Status to filter budgets by (DRAFT, ACTIVE, or ARCHIVED)
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsBudget'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - budget
+      summary: Create a new budget
+      operationId: createBudget
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Budget data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBudget'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/Budget'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/budget/calculate-usage:
+    get:
+      tags:
+      - budget
+      summary: Calculate potential budget usage, for use while creating/setting budgets
+      operationId: calculateBudgetUsage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupIds
+        in: query
+        description: Group ids
+        required: false
+        type: string
+      - name: costExpr
+        in: query
+        description: Cost expression to calculate
+        required: false
+        type: string
+      - name: currency
+        in: query
+        description: Currency to calculate in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to retrieve as of
+        required: false
+        type: string
+        format: date
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/budget/{budgetId}:
+    get:
+      tags:
+      - budget
+      summary: Get a budget by id or slug
+      operationId: getBudget
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: budgetId
+        in: path
+        description: Budget id or slug
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to get budget data as-of (defaults to today)
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/Budget'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - budget
+      summary: Update an existing budget
+      operationId: updateBudget
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: budgetId
+        in: path
+        description: Budget id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to update budget on (defaults to today)
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        description: Budget data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateBudget'
+      responses:
+        '200':
+          description: updated
+          schema:
+            $ref: '#/definitions/Budget'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - budget
+      summary: Delete a budget
+      operationId: deleteBudget
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: budgetId
+        in: path
+        description: Budget id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to delete budget on (defaults to today)
+        required: false
+        type: string
+        format: date
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  Budget:
+    type: object
+    required:
+    - id
+    - orgId
+    - slug
+    - startDate
+    - endDate
+    - sensitive
+    - shareAccess
+    - status
+    - createDate
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: url-safe slug for the budget, auto-generated from label if not provided
+      label:
+        type: string
+        description: human-readable label for the budget
+      ownerPersonIds:
+        type: array
+        description: list of persons who own this budget
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: list of group IDs (e.g. department) for this budget
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      color:
+        type: string
+        description: color of budget
+        pattern: ^#[a-f0-9]{6}$
+      startDate:
+        type: string
+        format: date
+        description: start date of the budget
+      endDate:
+        type: string
+        format: date
+        description: end date of the budget
+      sensitive:
+        type: string
+        description: sensitivity level of budget
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this budget
+        items:
+          $ref: '#/definitions/ShareAccess'
+      costExpr:
+        type: string
+        description: calculation to compute cost
+      status:
+        type: string
+        description: status of the budget
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+      usage:
+        description: current amount used (calculated and time tracked field)
+        $ref: '#/definitions/Money'
+      amount:
+        description: budget amount for the current date (time tracked field)
+        $ref: '#/definitions/Money'
+      createDate:
+        type: string
+        format: date
+        description: when this budget starts existing in org history
+      deleteDate:
+        type: string
+        format: date
+        description: when this budget stops existing in org history (null if still active)
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  ResultsBudget:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Budget'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateBudget:
+    type: object
+    properties:
+      slug:
+        type: string
+        description: url-safe slug for the budget, auto-generated from label if not provided
+      label:
+        type: string
+        description: human-readable label for the budget
+      ownerPersonIds:
+        type: array
+        description: list of persons who own this budget
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: list of group IDs (e.g. department) for this budget
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      color:
+        type: string
+        description: color of budget
+        pattern: ^#[a-f0-9]{6}$
+      startDate:
+        type: string
+        format: date
+        description: start date of the budget
+      endDate:
+        type: string
+        format: date
+        description: end date of the budget
+      sensitive:
+        type: string
+        description: sensitivity level of budget
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this budget
+        items:
+          $ref: '#/definitions/ShareAccess'
+      costExpr:
+        type: string
+        description: calculation to compute cost
+      status:
+        type: string
+        description: status of the budget
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+      amount:
+        description: budget amount for the current date (time tracked field)
+        $ref: '#/definitions/Money'
+  CreateBudget:
+    type: object
+    required:
+    - startDate
+    - endDate
+    - sensitive
+    properties:
+      slug:
+        type: string
+        description: url-safe slug for the budget, auto-generated from label if not provided
+      label:
+        type: string
+        description: human-readable label for the budget
+      ownerPersonIds:
+        type: array
+        description: list of persons who own this budget
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: list of group IDs (e.g. department) for this budget
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      color:
+        type: string
+        description: color of budget
+        pattern: ^#[a-f0-9]{6}$
+      startDate:
+        type: string
+        format: date
+        description: start date of the budget
+      endDate:
+        type: string
+        format: date
+        description: end date of the budget
+      sensitive:
+        type: string
+        description: sensitivity level of budget
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this budget
+        items:
+          $ref: '#/definitions/ShareAccess'
+      costExpr:
+        type: string
+        description: calculation to compute cost
+      status:
+        type: string
+        description: status of the budget
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+      amount:
+        description: budget amount for the current date (time tracked field)
+        $ref: '#/definitions/Money'

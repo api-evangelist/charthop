@@ -1,0 +1,1083 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access band API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: band
+paths:
+  /v1/org/{orgId}/band:
+    get:
+      tags:
+      - band
+      summary: Find comp bands in the organization
+      operationId: findCompBands
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: from
+        in: query
+        description: Table id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: includeDeleted
+        in: query
+        description: Include deleted bands
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: jobTierOne
+        in: query
+        description: Filter by job tier one value
+        required: false
+        type: string
+      - name: jobTierTwo
+        in: query
+        description: Filter by job tier two value
+        required: false
+        type: string
+      - name: jobTierThree
+        in: query
+        description: Filter by job tier three value
+        required: false
+        type: string
+      - name: sort
+        in: query
+        description: Sort by CompBand field (e.g., label, baseCompMin, baseCompMax)
+        required: false
+        type: string
+      - name: jobLevel
+        in: query
+        description: Filter by job level label
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCompBand'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - band
+      summary: Create a comp band
+      operationId: createCompBand
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Effective date of band creation
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCompBand'
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - band
+      summary: Delete all comp bands on a date
+      operationId: deleteAllCompBands
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Effective date of group update
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+  /v1/org/{orgId}/band/bulkupdate:
+    post:
+      tags:
+      - band
+      summary: Perform a bulk update on comp bands
+      operationId: bulkUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/BulkCompBandUpdateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+  /v1/org/{orgId}/band/count:
+    get:
+      tags:
+      - band
+      summary: Return the count of comp bands in the organization
+      operationId: countCompBands
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: jobTierOne
+        in: query
+        description: Filter by job tier one value
+        required: false
+        type: string
+      - name: jobTierTwo
+        in: query
+        description: Filter by job tier two value
+        required: false
+        type: string
+      - name: jobTierThree
+        in: query
+        description: Filter by job tier three value
+        required: false
+        type: string
+      - name: jobLevel
+        in: query
+        description: Filter by job level label
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompBandCount'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/band/reset:
+    delete:
+      tags:
+      - band
+      summary: Delete all comp band data on a date
+      operationId: resetCompBands
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Effective date of group update
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+  /v1/org/{orgId}/band/schema:
+    get:
+      tags:
+      - band
+      summary: Get comp band schema with job tier field configurations and their possible values
+      operationId: getCompBandSchema
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompBandSchema'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/band/{bandId}:
+    get:
+      tags:
+      - band
+      summary: Return a particular comp band by id on an effective date
+      operationId: getCompBandById
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: bandId
+        in: path
+        description: Comp band id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompBand'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - band
+      summary: Update a comp band
+      operationId: updateCompBand
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: bandId
+        in: path
+        description: Band id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Effective date of band update
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCompBand'
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - band
+      summary: Delete a comp band
+      operationId: deleteCompBand
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: bandId
+        in: path
+        description: Comp band id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Effective date of group update
+        required: false
+        type: string
+        format: date
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  CreateCompBand:
+    type: object
+    required:
+    - label
+    - color
+    - baseInterval
+    - jobLevel
+    properties:
+      label:
+        type: string
+        description: human-readable name of content
+        example: L15
+      color:
+        type: string
+        description: hex color associated with the band level
+        example: '#ffee4a'
+      baseCompMax:
+        description: maximum base compensation for the band
+        $ref: '#/definitions/Money'
+      baseCompMid:
+        description: midpoint base compensation for the band
+        $ref: '#/definitions/Money'
+      baseCompMin:
+        description: minimum base compensation for the band
+        $ref: '#/definitions/Money'
+      baseSpread:
+        type: number
+        description: spread percent used to calculate base comp from the midpoint
+      baseInterval:
+        description: interval of compensation for the base, hourly or annual
+        $ref: '#/definitions/EnumValue'
+      baseTargetPay:
+        description: base target pay associated with open jobs at this band level
+        $ref: '#/definitions/Money'
+      baseTargetPayPercentile:
+        type: number
+        description: base target pay associated with open jobs at this band level, as a percentile
+      equityTargetShares:
+        type: number
+        description: target equity for the band, in shares
+      equityTargetPercentOfBase:
+        type: number
+        description: target equity for the band, as a percentage of base
+      equityTargetValue:
+        type: number
+        description: target equity for the band, as a monetary value, in the same currency as the base
+      equityRefreshShares:
+        type: number
+        description: refresh grant equity for the band, in shares
+      equityRefreshPercentOfBase:
+        type: number
+        description: refresh grant equity for the band, as a percentage of base
+      equityRefreshValue:
+        type: number
+        description: refresh grant equity for the band, as a monetary value, in the same currency as the base
+      variableValue:
+        description: variable compensation for the band
+        $ref: '#/definitions/Money'
+      variablePercentOfBase:
+        type: number
+        description: variable compensation for the band, specified as a percentage of base
+      startingSalary:
+        description: the default starting salary for this band
+        $ref: '#/definitions/Money'
+      jobTierOneField:
+        description: first job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobTierTwoField:
+        description: second job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobTierThreeField:
+        description: third job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobLevel:
+        type: string
+        description: job level associated with the comp band
+        example: 588f7ee98f138b19220041a7
+  JobTierField:
+    type: object
+    required:
+    - value
+    properties:
+      code:
+        type: string
+      value:
+        type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  ResultsCompBand:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CompBand'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  CompBandCount:
+    type: object
+    required:
+    - bandCount
+    properties:
+      bandCount:
+        type: integer
+        format: int64
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  CompBandUpdateOperation:
+    type: object
+    required:
+    - compBandId
+    - update
+    properties:
+      compBandId:
+        type: string
+        description: Comp band ID to update
+        example: 588f7ee98f138b19220041a7
+      update:
+        description: Update data
+        $ref: '#/definitions/UpdateCompBand'
+  CompBandSchema:
+    type: object
+    required:
+    - jobLevelValues
+    - fields
+    properties:
+      jobLevelValues:
+        type: array
+        description: Job level values
+        items:
+          type: string
+      jobTierOneField:
+        description: First job tier field configuration
+        $ref: '#/definitions/JobTierFieldSchema'
+      jobTierTwoField:
+        description: Second job tier field configuration
+        $ref: '#/definitions/JobTierFieldSchema'
+      jobTierThreeField:
+        description: Third job tier field configuration
+        $ref: '#/definitions/JobTierFieldSchema'
+      fields:
+        type: array
+        description: List of available compensation fields that have non-null values across comp bands
+        items:
+          type: string
+  CompBand:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - color
+    - baseInterval
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable name of content
+        example: L15
+      color:
+        type: string
+        description: hex color associated with the band level
+        example: '#ffee4a'
+      baseCompMax:
+        description: maximum base compensation for the band
+        $ref: '#/definitions/Money'
+      baseCompMid:
+        description: midpoint base compensation for the band
+        $ref: '#/definitions/Money'
+      baseCompMin:
+        description: minimum base compensation for the band
+        $ref: '#/definitions/Money'
+      baseSpread:
+        type: number
+        description: spread percent used to calculate base comp from the midpoint
+      baseInterval:
+        description: interval of compensation for the base, hourly or annual
+        $ref: '#/definitions/EnumValue'
+      baseTargetPay:
+        description: base target pay associated with open jobs at this band level
+        $ref: '#/definitions/Money'
+      baseTargetPayPercentile:
+        type: number
+        description: target pay associated with open jobs at this band level, specified as a percentile of [min,max]
+      jobTierOneField:
+        description: first job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobTierTwoField:
+        description: second job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobTierThreeField:
+        description: third job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobLevel:
+        description: job level associated with the comp band
+        $ref: '#/definitions/TableRowRef'
+      equityTargetShares:
+        type: number
+        description: target equity for the band, in shares
+      equityTargetPercentOfBase:
+        type: number
+        description: target equity for the band, as a percentage of base
+      equityTargetValue:
+        type: number
+        description: target equity for the band, as a monetary value, in the same currency as the org
+      equityRefreshShares:
+        type: number
+        description: refresh grant equity for the band, in shares
+      equityRefreshPercentOfBase:
+        type: number
+        description: refresh grant equity for the band, as a percentage of base
+      equityRefreshValue:
+        type: number
+        description: refresh grant equity for the band, as a monetary value, in the same currency as the org
+      variableValue:
+        description: variable compensation for the band
+        $ref: '#/definitions/Money'
+      variablePercentOfBase:
+        type: number
+        description: variable compensation for the band, specified as a percentage of base
+      startingSalary:
+        description: the default starting salary for this band
+        $ref: '#/definitions/Money'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      createDate:
+        type: string
+        format: date
+        description: when this entity starts existing in org history
+      deleteDate:
+        type: string
+        format: date
+        description: when this entity stops existing in org history
+  TableRowRef:
+    type: object
+    required:
+    - tableId
+    - tableName
+    - id
+    properties:
+      tableId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  BulkCompBandUpdateRequest:
+    type: object
+    required:
+    - updates
+    properties:
+      updates:
+        type: array
+        description: List of update operations to perform
+        items:
+          $ref: '#/definitions/CompBandUpdateOperation'
+      date:
+        type: string
+        format: date
+        description: Effective date for all updates
+  JobTierFieldSchema:
+    type: object
+    required:
+    - values
+    properties:
+      code:
+        type: string
+        description: Field code (e.g., department)
+      values:
+        type: array
+        description: All possible values for this field across comp bands
+        items:
+          type: string
+  UpdateCompBand:
+    type: object
+    required:
+    - label
+    - color
+    - baseInterval
+    properties:
+      label:
+        type: string
+        description: human-readable name of content
+        example: L15
+      color:
+        type: string
+        description: hex color associated with the band level
+        example: '#ffee4a'
+      baseCompMax:
+        description: maximum base compensation for the band
+        $ref: '#/definitions/Money'
+      baseCompMid:
+        description: midpoint base compensation for the band
+        $ref: '#/definitions/Money'
+      baseCompMin:
+        description: minimum base compensation for the band
+        $ref: '#/definitions/Money'
+      baseSpread:
+        type: number
+        description: spread percent used to calculate base comp from the midpoint
+      baseInterval:
+        description: interval of compensation for the base, hourly or annual
+        $ref: '#/definitions/EnumValue'
+      baseTargetPay:
+        description: base target pay associated with open jobs at this band level
+        $ref: '#/definitions/Money'
+      baseTargetPayPercentile:
+        type: number
+        description: base target pay associated with open jobs at this band level, as a percentile
+      equityTargetShares:
+        type: number
+        description: target equity for the band, in shares
+      equityTargetPercentOfBase:
+        type: number
+        description: target equity for the band, as a percentage of base
+      equityTargetValue:
+        type: number
+        description: target equity for the band, as a monetary value, in the same currency as the base
+      equityRefreshShares:
+        type: number
+        description: refresh grant equity for the band, in shares
+      equityRefreshPercentOfBase:
+        type: number
+        description: refresh grant equity for the band, as a percentage of base
+      equityRefreshValue:
+        type: number
+        description: refresh grant equity for the band, as a monetary value, in the same currency as the base
+      variableValue:
+        description: variable compensation for the band
+        $ref: '#/definitions/Money'
+      variablePercentOfBase:
+        type: number
+        description: variable compensation for the band, specified as a percentage of base
+      startingSalary:
+        description: the default starting salary for this band
+        $ref: '#/definitions/Money'
+      jobTierOneField:
+        description: first job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobTierTwoField:
+        description: second job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobTierThreeField:
+        description: third job tier associated with the comp band
+        $ref: '#/definitions/JobTierField'
+      jobLevel:
+        type: string
+        description: job level associated with the comp band
+        example: 588f7ee98f138b19220041a7

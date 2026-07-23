@@ -1,0 +1,150 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access saml API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: saml
+paths:
+  /saml/org/{orgId}/xml-cert:
+    post:
+      tags:
+      - saml
+      summary: Save per org Xml Cert from IDP
+      operationId: uploadXmlCertificate
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: idp
+        in: query
+        description: Identifier Provider
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: false
+        type: file
+      responses:
+        '400':
+          description: invalid data
+    get:
+      tags:
+      - saml
+      summary: Save per org Xml Cert from IDP
+      operationId: getXmlCertificate
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: idp
+        in: query
+        description: Identifier Provider
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: string
+        '400':
+          description: invalid data
+  /saml/sso/{org}:
+    post:
+      tags:
+      - saml
+      summary: Single sign on URL, where SAML assertion is perform
+      operationId: sso
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/xml
+      parameters:
+      - name: prevToken
+        in: cookie
+        required: false
+        type: string
+      - name: org
+        in: path
+        description: Org slug
+        required: true
+        type: string
+      - name: SAMLResponse
+        in: formData
+        description: SAML Response
+        required: true
+        type: string
+      - name: RelayState
+        in: formData
+        description: Relay State
+        required: false
+        type: string
+      responses:
+        '400':
+          description: invalid data
+  /saml/{org}/login:
+    post:
+      tags:
+      - saml
+      summary: Return an redirect to the designated Idp, given an identity provider
+      operationId: redirectToIdp
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/xml
+      parameters:
+      - name: org
+        in: path
+        description: Org slug
+        required: true
+        type: string
+      - name: idp
+        in: query
+        description: Identifier Provider
+        required: false
+        type: string
+      - name: clientId
+        in: query
+        description: clientId
+        required: false
+        type: string
+      - name: codeChallenge
+        in: query
+        description: codeChallenge
+        required: false
+        type: string
+      - name: codeChallengeMethod
+        in: query
+        description: codeChallengeMethod
+        required: false
+        type: string
+      - name: redirectUri
+        in: query
+        description: redirectUri
+        required: false
+        type: string
+      responses:
+        '400':
+          description: invalid data

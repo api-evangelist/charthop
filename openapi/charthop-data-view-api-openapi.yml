@@ -1,0 +1,892 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access data-view API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: data-view
+paths:
+  /v1/org/{orgId}/data-view:
+    get:
+      tags:
+      - data-view
+      summary: Return all data views in the organization paginated
+      operationId: findDataViews
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Data view id to start paginating from
+        required: false
+        type: string
+      - name: type
+        in: query
+        description: Data view type to filter by
+        required: false
+        type: string
+        enum:
+        - ANY
+        - DATA_SHEET
+        - ORG_CHART
+        - MAP
+        - CALIBRATION
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: ids
+        in: query
+        description: Comma delimited of ids to return
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: entityId
+        in: query
+        description: Filter by associated entity id (e.g. assessment id)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsDataView'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - data-view
+      summary: Create a data view
+      operationId: createDataView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Data view data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDataView'
+      responses:
+        '201':
+          description: data view created
+          schema:
+            $ref: '#/definitions/DataView'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/data-view/{dataViewId}:
+    get:
+      tags:
+      - data-view
+      summary: Return a particular data view by id
+      operationId: getDataView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: dataViewId
+        in: path
+        description: Data view id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/DataView'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - data-view
+      summary: Update an existing data view
+      operationId: updateDataView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: dataViewId
+        in: path
+        description: Data view id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Data view data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateDataView'
+      responses:
+        '200':
+          description: data view updated
+          schema:
+            $ref: '#/definitions/DataView'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - data-view
+      summary: Delete a data  view
+      operationId: deleteDataView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: dataViewId
+        in: path
+        description: Data view id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: data view deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsDataView:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DataView'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  DataViewColumn:
+    type: object
+    properties:
+      name:
+        type: string
+      label:
+        type: string
+      expr:
+        type: string
+  DataView:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - slug
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: data view name
+        minItems: 1
+        maxItems: 1000
+      slug:
+        type: string
+        description: slug for URL
+        readOnly: true
+      columns:
+        type: string
+        description: comma delimited list of columns (deprecated, prefer using dataColumns)
+        example: image,name,title
+        minItems: 1
+        maxItems: 5000
+      dataColumns:
+        type: array
+        description: list of columns
+        items:
+          $ref: '#/definitions/DataViewColumn'
+      type:
+        type: string
+        description: type of data view
+        enum:
+        - ANY
+        - DATA_SHEET
+        - ORG_CHART
+        - MAP
+        - CALIBRATION
+      entityType:
+        type: string
+        description: entity type being viewed
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: entity being viewed
+        example: 588f7ee98f138b19220041a7
+      columnWidths:
+        type: object
+        description: map of column names to widths in pixels
+        additionalProperties:
+          type: number
+          format: double
+      date:
+        type: string
+        description: date of view, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      startDate:
+        type: string
+        description: start date of view, if displaying a date range, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      endDate:
+        type: string
+        description: end date of view, if displaying a date range, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      filter:
+        type: string
+        description: filter query
+        example: managerCount:1
+        minItems: 0
+        maxItems: 1000
+      sort:
+        type: string
+        description: comma delimited list of columns by which to sort
+        example: name,title
+        minItems: 0
+        maxItems: 1000
+      groupBy:
+        type: string
+        description: column to group duplicates by
+        example: title
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this data view
+        items:
+          $ref: '#/definitions/ShareAccess'
+      sensitive:
+        type: string
+        description: sensitivity level of data view
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  UpdateDataView:
+    type: object
+    properties:
+      name:
+        type: string
+        description: data view name
+        minItems: 1
+        maxItems: 1000
+      columns:
+        type: string
+        description: comma delimited list of columns (deprecated, prefer using dataColumns)
+        example: image,name,title
+        minItems: 1
+        maxItems: 5000
+      dataColumns:
+        type: array
+        description: list of columns
+        items:
+          $ref: '#/definitions/DataViewColumn'
+      type:
+        type: string
+        description: type of data view
+        enum:
+        - ANY
+        - DATA_SHEET
+        - ORG_CHART
+        - MAP
+        - CALIBRATION
+      entityType:
+        type: string
+        description: entity type being viewed
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: entity being viewed
+        example: 588f7ee98f138b19220041a7
+      columnWidths:
+        type: object
+        description: map of column names to widths in pixels
+        additionalProperties:
+          type: number
+          format: double
+      date:
+        type: string
+        description: date of view, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      startDate:
+        type: string
+        description: start date of view, if displaying a date range, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      endDate:
+        type: string
+        description: end date of view, if displaying a date range, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      filter:
+        type: string
+        description: filter query
+        example: managerCount:1
+        minItems: 0
+        maxItems: 1000
+      sort:
+        type: string
+        description: comma delimited list of columns by which to sort
+        example: name,title
+        minItems: 0
+        maxItems: 1000
+      groupBy:
+        type: string
+        description: column to group duplicates by
+        example: title
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this data view
+        items:
+          $ref: '#/definitions/ShareAccess'
+      sensitive:
+        type: string
+        description: sensitivity level of data view
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+  CreateDataView:
+    type: object
+    required:
+    - name
+    properties:
+      name:
+        type: string
+        description: data view name
+        minItems: 1
+        maxItems: 1000
+      columns:
+        type: string
+        description: comma delimited list of columns (deprecated, prefer using dataColumns)
+        example: image,name,title
+        minItems: 1
+        maxItems: 5000
+      dataColumns:
+        type: array
+        description: list of columns
+        items:
+          $ref: '#/definitions/DataViewColumn'
+      type:
+        type: string
+        description: type of data view
+        enum:
+        - ANY
+        - DATA_SHEET
+        - ORG_CHART
+        - MAP
+        - CALIBRATION
+      entityType:
+        type: string
+        description: entity type being viewed
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: entity being viewed
+        example: 588f7ee98f138b19220041a7
+      columnWidths:
+        type: object
+        description: map of column names to widths in pixels
+        additionalProperties:
+          type: number
+          format: double
+      date:
+        type: string
+        description: date of view, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      startDate:
+        type: string
+        description: start date of view, if displaying a date range, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      endDate:
+        type: string
+        description: end date of view, if displaying a date range, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      filter:
+        type: string
+        description: filter query
+        example: managerCount:1
+        minItems: 0
+        maxItems: 1000
+      sort:
+        type: string
+        description: comma delimited list of columns by which to sort
+        example: name,title
+        minItems: 0
+        maxItems: 1000
+      groupBy:
+        type: string
+        description: column to group duplicates by
+        example: title
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this data view
+        items:
+          $ref: '#/definitions/ShareAccess'
+      sensitive:
+        type: string
+        description: sensitivity level of data view
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE

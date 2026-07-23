@@ -1,0 +1,102 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access search API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: search
+paths:
+  /v1/org/{orgId}/search:
+    get:
+      tags:
+      - search
+      summary: Return people, job, group, field, goal, and other entity data for a particular org that match a provided search string
+      operationId: searchOrgData
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: q
+        in: query
+        description: Query search term
+        required: false
+        type: string
+      - name: entityTypes
+        in: query
+        description: Entity types
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        type: integer
+        format: int32
+      - name: includeFormer
+        in: query
+        description: Include former users or persons
+        required: false
+        type: boolean
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario Id
+        required: false
+        type: string
+      - name: canAccess
+        in: query
+        description: entity action pairs that can be accessed
+        required: false
+        type: string
+      - name: returnEntityBody
+        in: query
+        description: Include full entity body in results
+        required: false
+        type: boolean
+      - name: terminatedWithoutBackfill
+        in: query
+        description: Filter to only terminated jobs without backfill
+        required: false
+        type: boolean
+      - name: jobState
+        in: query
+        description: Filter jobs by state (OPEN or FILLED)
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: CQL filter expression applied to job results (currently only the jobs entity type honors this)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+        '400':
+          description: bad request
+        '404':
+          description: not found

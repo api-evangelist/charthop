@@ -1,0 +1,670 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access ai-prompt API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: ai-prompt
+paths:
+  /v1/ai-prompt:
+    get:
+      tags:
+      - ai-prompt
+      summary: Find prompts
+      operationId: findPrompts
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: from
+        in: query
+        description: Identifier to paginate from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsAiPrompt'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - ai-prompt
+      summary: Create a prompt
+      operationId: createPrompt
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Prompt data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAiPrompt'
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiPrompt'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/ai-prompt/test:
+    post:
+      tags:
+      - ai-prompt
+      summary: Test a prompt
+      operationId: testPrompt
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Prompt data to test with
+        required: true
+        schema:
+          $ref: '#/definitions/TestAiPrompt'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TestAiPromptResult'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/ai-prompt/types:
+    get:
+      tags:
+      - ai-prompt
+      summary: List prompt types
+      operationId: listPromptTypes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiPromptTypes'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/ai-prompt/{id}:
+    get:
+      tags:
+      - ai-prompt
+      summary: Get a prompt
+      operationId: getPrompt
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Prompt identifier
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiPrompt'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    patch:
+      tags:
+      - ai-prompt
+      summary: Update a prompt
+      operationId: updatePrompt
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Prompt identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Fields to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAiPrompt'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - ai-prompt
+      summary: Delete a prompt
+      operationId: deletePrompt
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Prompt identifier
+        required: true
+        type: string
+      responses:
+        '204':
+          description: successful operation
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  ResultsAiPrompt:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AiPrompt'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  TestAiPromptResult:
+    type: object
+    required:
+    - responseText
+    properties:
+      responseText:
+        type: string
+  AiPrompt:
+    type: object
+    required:
+    - id
+    - name
+    - type
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id, or null if this is a global prompt
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name
+      type:
+        type: string
+        description: usecase for this prompt
+        enum:
+        - AUTO_CHAT
+        - CHAT
+        - CHAT_SHOULD_RESPOND
+        - CHAT_SUMMARY
+        - FORM_RESPONSE_SUMMARY
+        - REPORT_RESULT_SUMMARY
+        - SCENARIO_PLANNING
+        - CQL
+        - CQL_TRANSLATE
+        - PROMPT_SUGGEST
+        - JOB_CODE_MATCH
+      parentAiPromptId:
+        type: string
+        description: cascading parent prompt
+        example: 588f7ee98f138b19220041a7
+      modelId:
+        type: string
+        description: 'comma-separated list of preferred models in priority order. When a ModelTier is provided, the list is interpreted as: 3 entries -> [HIGH, MEDIUM, LOW]; 2 entries -> [HIGH/MEDIUM, LOW]; 1 entry -> always that model. With no tier, the first entry is used.'
+      systemPrompt:
+        type: string
+        description: the value of the system prompt that will provide model context. System prompts can use CQL, and will automatically be chained together with parent prompts' system prompts
+      userPrompt:
+        type: string
+        description: the value of the user prompt. User prompts can use CQL, and by convention will use {{content}} to refer to the inner content or data provided by the end user.
+      maxTokens:
+        type: integer
+        format: int32
+        description: Maximum number of tokens that the model can generate in response to the user prompt. This is a soft limit, and the model may generate fewer tokens.
+      maxStringLength:
+        type: integer
+        format: int32
+        description: Maximum length of a string that the model can generate in response to the user prompt. This is a soft limit, and the model may generate shorter strings.
+      temperature:
+        type: number
+        format: double
+        description: Parameter that controls the randomness of the model's output. A value of 0.0 means the model will always choose the most likely next token, while a value of 1.0 means the model will choose tokens more randomly.
+      topP:
+        type: number
+        format: double
+        description: An alternative to temperature, called nucleus sampling. This parameter controls the number of tokens that the model considers when generating a response. A value of 1.0 means the model will consider all tokens, while a value of 0.0 means the model will only consider the most likely token.
+      stopSequences:
+        type: array
+        description: An optional list of stop sequences that will cause the model to stop generating tokens when encountered. This can be useful for preventing the model from generating unwanted content or going off-topic.
+        items:
+          type: string
+      usageCount:
+        type: integer
+        format: int32
+        description: The number of times this prompt has been used
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  CreateAiPrompt:
+    type: object
+    required:
+    - name
+    - type
+    properties:
+      orgId:
+        type: string
+        description: org id, or null if this is a global prompt
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name
+      type:
+        type: string
+        description: usecase for this prompt
+        enum:
+        - AUTO_CHAT
+        - CHAT
+        - CHAT_SHOULD_RESPOND
+        - CHAT_SUMMARY
+        - FORM_RESPONSE_SUMMARY
+        - REPORT_RESULT_SUMMARY
+        - SCENARIO_PLANNING
+        - CQL
+        - CQL_TRANSLATE
+        - PROMPT_SUGGEST
+        - JOB_CODE_MATCH
+      parentAiPromptId:
+        type: string
+        description: cascading parent prompt
+        example: 588f7ee98f138b19220041a7
+      modelId:
+        type: string
+        description: 'comma-separated list of preferred models in priority order. When a ModelTier is provided, the list is interpreted as: 3 entries -> [HIGH, MEDIUM, LOW]; 2 entries -> [HIGH/MEDIUM, LOW]; 1 entry -> always that model. With no tier, the first entry is used.'
+      systemPrompt:
+        type: string
+        description: the value of the system prompt that will provide model context. System prompts can use CQL, and will automatically be chained together with parent prompts' system prompts
+      userPrompt:
+        type: string
+        description: the value of the user prompt. User prompts can use CQL, and by convention will use {{content}} to refer to the inner content or data provided by the end user.
+      maxTokens:
+        type: integer
+        format: int32
+        description: Maximum number of tokens that the model can generate in response to the user prompt. This is a soft limit, and the model may generate fewer tokens.
+      maxStringLength:
+        type: integer
+        format: int32
+        description: Maximum length of a string that the model can generate in response to the user prompt. This is a soft limit, and the model may generate shorter strings.
+      temperature:
+        type: number
+        format: double
+        description: Parameter that controls the randomness of the model's output. A value of 0.0 means the model will always choose the most likely next token, while a value of 1.0 means the model will choose tokens more randomly.
+      topP:
+        type: number
+        format: double
+        description: An alternative to temperature, called nucleus sampling. This parameter controls the number of tokens that the model considers when generating a response. A value of 1.0 means the model will consider all tokens, while a value of 0.0 means the model will only consider the most likely token.
+      stopSequences:
+        type: array
+        description: An optional list of stop sequences that will cause the model to stop generating tokens when encountered. This can be useful for preventing the model from generating unwanted content or going off-topic.
+        items:
+          type: string
+  PartialAiPrompt:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id, or null if this is a global prompt
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name
+      type:
+        type: string
+        description: usecase for this prompt
+        enum:
+        - AUTO_CHAT
+        - CHAT
+        - CHAT_SHOULD_RESPOND
+        - CHAT_SUMMARY
+        - FORM_RESPONSE_SUMMARY
+        - REPORT_RESULT_SUMMARY
+        - SCENARIO_PLANNING
+        - CQL
+        - CQL_TRANSLATE
+        - PROMPT_SUGGEST
+        - JOB_CODE_MATCH
+      parentAiPromptId:
+        type: string
+        description: cascading parent prompt
+        example: 588f7ee98f138b19220041a7
+      modelId:
+        type: string
+        description: 'comma-separated list of preferred models in priority order. When a ModelTier is provided, the list is interpreted as: 3 entries -> [HIGH, MEDIUM, LOW]; 2 entries -> [HIGH/MEDIUM, LOW]; 1 entry -> always that model. With no tier, the first entry is used.'
+      systemPrompt:
+        type: string
+        description: the value of the system prompt that will provide model context. System prompts can use CQL, and will automatically be chained together with parent prompts' system prompts
+      userPrompt:
+        type: string
+        description: the value of the user prompt. User prompts can use CQL, and by convention will use {{content}} to refer to the inner content or data provided by the end user.
+      maxTokens:
+        type: integer
+        format: int32
+        description: Maximum number of tokens that the model can generate in response to the user prompt. This is a soft limit, and the model may generate fewer tokens.
+      maxStringLength:
+        type: integer
+        format: int32
+        description: Maximum length of a string that the model can generate in response to the user prompt. This is a soft limit, and the model may generate shorter strings.
+      temperature:
+        type: number
+        format: double
+        description: Parameter that controls the randomness of the model's output. A value of 0.0 means the model will always choose the most likely next token, while a value of 1.0 means the model will choose tokens more randomly.
+      topP:
+        type: number
+        format: double
+        description: An alternative to temperature, called nucleus sampling. This parameter controls the number of tokens that the model considers when generating a response. A value of 1.0 means the model will consider all tokens, while a value of 0.0 means the model will only consider the most likely token.
+      stopSequences:
+        type: array
+        description: An optional list of stop sequences that will cause the model to stop generating tokens when encountered. This can be useful for preventing the model from generating unwanted content or going off-topic.
+        items:
+          type: string
+      usageCount:
+        type: integer
+        format: int32
+        description: The number of times this prompt has been used
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  AiPromptTypes:
+    type: object
+    required:
+    - types
+    properties:
+      types:
+        type: array
+        items:
+          type: string
+          enum:
+          - AUTO_CHAT
+          - CHAT
+          - CHAT_SHOULD_RESPOND
+          - CHAT_SUMMARY
+          - FORM_RESPONSE_SUMMARY
+          - REPORT_RESULT_SUMMARY
+          - SCENARIO_PLANNING
+          - CQL
+          - CQL_TRANSLATE
+          - PROMPT_SUGGEST
+          - JOB_CODE_MATCH
+  TestAiPrompt:
+    type: object
+    required:
+    - prompt
+    - testParams
+    properties:
+      prompt:
+        $ref: '#/definitions/PartialAiPrompt'
+      testParams:
+        type: string
+      org:
+        type: string
+      userEmail:
+        type: string
+  UpdateAiPrompt:
+    type: object
+    properties:
+      name:
+        type: string
+        description: unique name
+      type:
+        type: string
+        description: usecase for this prompt
+        enum:
+        - AUTO_CHAT
+        - CHAT
+        - CHAT_SHOULD_RESPOND
+        - CHAT_SUMMARY
+        - FORM_RESPONSE_SUMMARY
+        - REPORT_RESULT_SUMMARY
+        - SCENARIO_PLANNING
+        - CQL
+        - CQL_TRANSLATE
+        - PROMPT_SUGGEST
+        - JOB_CODE_MATCH
+      parentAiPromptId:
+        type: string
+        description: cascading parent prompt
+        example: 588f7ee98f138b19220041a7
+      modelId:
+        type: string
+        description: 'comma-separated list of preferred models in priority order. When a ModelTier is provided, the list is interpreted as: 3 entries -> [HIGH, MEDIUM, LOW]; 2 entries -> [HIGH/MEDIUM, LOW]; 1 entry -> always that model. With no tier, the first entry is used.'
+      systemPrompt:
+        type: string
+        description: the value of the system prompt that will provide model context. System prompts can use CQL, and will automatically be chained together with parent prompts' system prompts
+      userPrompt:
+        type: string
+        description: the value of the user prompt. User prompts can use CQL, and by convention will use {{content}} to refer to the inner content or data provided by the end user.
+      maxTokens:
+        type: integer
+        format: int32
+        description: Maximum number of tokens that the model can generate in response to the user prompt. This is a soft limit, and the model may generate fewer tokens.
+      maxStringLength:
+        type: integer
+        format: int32
+        description: Maximum length of a string that the model can generate in response to the user prompt. This is a soft limit, and the model may generate shorter strings.
+      temperature:
+        type: number
+        format: double
+        description: Parameter that controls the randomness of the model's output. A value of 0.0 means the model will always choose the most likely next token, while a value of 1.0 means the model will choose tokens more randomly.
+      topP:
+        type: number
+        format: double
+        description: An alternative to temperature, called nucleus sampling. This parameter controls the number of tokens that the model considers when generating a response. A value of 1.0 means the model will consider all tokens, while a value of 0.0 means the model will only consider the most likely token.
+      stopSequences:
+        type: array
+        description: An optional list of stop sequences that will cause the model to stop generating tokens when encountered. This can be useful for preventing the model from generating unwanted content or going off-topic.
+        items:
+          type: string

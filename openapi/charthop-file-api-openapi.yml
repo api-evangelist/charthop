@@ -1,0 +1,949 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access file API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: file
+paths:
+  /v1/org/{orgId}/file:
+    get:
+      tags:
+      - file
+      summary: Returns a list of files
+      operationId: findFiles
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entityId
+        in: query
+        description: Entity id
+        required: false
+        type: string
+      - name: entityType
+        in: query
+        description: Entity type
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Field name(s) to filter by, comma-separated
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Target entity filter
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: from
+        in: query
+        description: From result id
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: personFields
+        in: query
+        description: Person field name(s) to include in response, comma-separated
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsFileEntity'
+        '401':
+          description: Not authorized
+        '403':
+          description: Permission denied
+        '404':
+          description: File not found
+    post:
+      tags:
+      - file
+      summary: Upload a new file
+      operationId: uploadFile
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entityId
+        in: query
+        description: entity id (if not passed, defaults to user id, not used if entity type is ORG)
+        required: false
+        type: string
+      - name: entityType
+        in: query
+        description: entity type (if not passed, defaults to user)
+        required: false
+        type: string
+      - name: fieldId
+        in: query
+        description: field id - can leave blank for a general upload
+        required: false
+        type: string
+      - name: sensitive
+        in: query
+        description: file sensitivity level - defaults to PERSONAL
+        required: false
+        type: string
+      - name: uploadPersonId
+        in: query
+        description: ID of the person who originally uploaded the file, only settable by apps
+        required: false
+        type: string
+      - name: uploadAt
+        in: query
+        description: Date when the file was originally uploaded, only settable by apps
+        required: false
+        type: string
+      - name: metadata
+        in: formData
+        required: false
+        type: string
+      - name: filename
+        in: formData
+        description: name of the file being uploaded
+        required: false
+        type: string
+      - name: keepFilename
+        in: formData
+        description: whether the file should be renamed to the field name
+        required: false
+        type: boolean
+      - name: file
+        in: formData
+        required: true
+        type: file
+      responses:
+        '201':
+          description: File created
+          schema:
+            $ref: '#/definitions/FileEntity'
+        '400':
+          description: Invalid type or bad request
+        '401':
+          description: Not authorized
+  /v1/org/{orgId}/file/data:
+    get:
+      tags:
+      - file
+      summary: Query files with additional person field data
+      operationId: queryFiles
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entityId
+        in: query
+        description: Entity id
+        required: false
+        type: string
+      - name: entityType
+        in: query
+        description: Entity type
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Field name(s) to filter by, comma-separated
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Target entity filter
+        required: false
+        type: string
+      - name: personFields
+        in: query
+        description: Person field name(s) to include in response, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: from
+        in: query
+        description: From result id
+        required: false
+        type: string
+      responses:
+        '200':
+          description: files found
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/file/export:
+    post:
+      tags:
+      - file
+      summary: Export a zipfile of files matching some criteria
+      operationId: exportFiles
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FileExportParams'
+      responses:
+        '201':
+          description: process started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/file/export-csv:
+    post:
+      tags:
+      - file
+      summary: Export a CSV of file metadata matching some criteria
+      operationId: exportFilesCsv
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FileExportCsvParams'
+      responses:
+        '201':
+          description: process started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/file/{fileId}:
+    get:
+      tags:
+      - file
+      summary: Returns metadata about a file
+      operationId: getFileMetadata
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fileId
+        in: path
+        description: File id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FileEntity'
+        '401':
+          description: Not authorized
+        '403':
+          description: Permission denied
+        '404':
+          description: File not found
+    patch:
+      tags:
+      - file
+      summary: Update a file's metadata
+      operationId: updateFile
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fileId
+        in: path
+        description: File id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: File data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateFileEntity'
+      responses:
+        '204':
+          description: file deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - file
+      summary: Delete a file
+      operationId: deleteFile
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fileId
+        in: path
+        description: File id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: file deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/file/{fileId}/download:
+    get:
+      tags:
+      - file
+      summary: Download a file
+      operationId: downloadFile
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fileId
+        in: path
+        description: File id
+        required: true
+        type: string
+      responses:
+        '401':
+          description: Not authorized
+        '403':
+          description: Permission denied
+        '404':
+          description: File not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  FileExportCsvParams:
+    type: object
+    properties:
+      fields:
+        type: string
+      entityIds:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+      filter:
+        type: string
+      format:
+        type: string
+      personFields:
+        type: string
+      splitColumns:
+        type: boolean
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  UpdateFileEntity:
+    type: object
+    properties:
+      fieldId:
+        type: string
+        description: field that the file uses, if the file is tied to a field
+        example: offerLetter
+      sensitive:
+        type: string
+        description: level of sensitivity of the file, if the file is not tied to a field
+        example: PERSONAL
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      filename:
+        type: string
+        description: customer facing filename of file
+        example: Offer Letter - Bob Smith.pdf
+      metadata:
+        type: object
+        description: Optional metadata about the file
+        additionalProperties:
+          type: object
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsFileEntity:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/FileEntity'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  FileExportParams:
+    type: object
+    properties:
+      fields:
+        type: string
+      entityIds:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+      filter:
+        type: string
+  FileEntity:
+    type: object
+    required:
+    - id
+    - orgId
+    - entityId
+    - entityType
+    - filename
+    - originalFilename
+    - type
+    - ext
+    - bytes
+    properties:
+      id:
+        type: string
+        description: globally unique id of file
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: entity id that the file is attached to
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: entity type (should only be PERSON, USER, CONTENT, or ORG)
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      fieldId:
+        type: string
+        description: field that the file uses, if the file is tied to a field
+        example: offerLetter
+      hash:
+        type: string
+        description: SHA-256 hash of the contents of the file
+      templateId:
+        type: string
+        description: for files that were generated from a template, the template that was used
+        example: 588f7ee98f138b19220041a7
+      formResponseId:
+        type: string
+        description: for files that were generated from a form response, the form response that was used
+        example: 588f7ee98f138b19220041a7
+      signatureStatus:
+        type: string
+        description: for files that contain a signature or signature request, information about the status of that signature. The presence of this does not automatically imply a SignatureRequest exists, because the file can be imported from another system
+        enum:
+        - PENDING
+        - SIGNED
+      signerUserIds:
+        type: array
+        description: for files that were signed or attempted to sign in ChartHop, the list of users who signed or were requested to sign
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      sensitive:
+        type: string
+        description: level of sensitivity of the file, if the file is not tied to a field
+        example: PERSONAL
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      filename:
+        type: string
+        description: customer facing filename of file
+        example: Offer Letter - Bob Smith.pdf
+      originalFilename:
+        type: string
+        description: original filename of file
+        example: BOB-SMITH.pdf
+      type:
+        type: string
+        description: mime type of file
+        example: application/pdf
+      ext:
+        type: string
+        description: extension of file
+        example: pdf
+      bytes:
+        type: integer
+        format: int64
+        description: size of file in bytes
+        example: '102342'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      uploadPersonId:
+        type: string
+        description: uploaded by person id
+        example: 588f7ee98f138b19220041a7
+      uploadAt:
+        type: string
+        description: timestamp that the file was uploaded
+      pageCount:
+        type: integer
+        format: int32
+        description: number of pages (PDF), slides (PPTX), or sheets (XLSX/XLS) in the file. Null for formats without a page concept or when not yet computed.
+      lineCount:
+        type: integer
+        format: int32
+        description: number of lines in the file, for line-oriented text formats (CSV, TXT, JSON, MD, HTML). Null for formats without a line concept or when not yet computed.
+      metadata:
+        type: object
+        description: Optional metadata about the file
+        additionalProperties:
+          type: object
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object

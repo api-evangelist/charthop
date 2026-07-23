@@ -1,0 +1,786 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access import API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: import
+paths:
+  /v1/org/{orgId}/import/csv/columnMatch:
+    post:
+      tags:
+      - import
+      summary: Import data from CSV file
+      operationId: importDataCsvWithColumnMatch
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: scenario id to import into
+        required: false
+        type: string
+      - name: skipErrors
+        in: query
+        description: whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: true
+        type: boolean
+      - name: upsert
+        in: query
+        description: whether to create persons/jobs that are not matched
+        required: true
+        type: boolean
+      - name: createGroups
+        in: query
+        description: whether to create groups that are not matched
+        required: true
+        type: boolean
+      - name: disableSyncHireDate
+        in: query
+        description: whether to disable adjusting dates of hires in cases where the start dates differ
+        required: true
+        type: boolean
+      - name: useTitleManagerMatcher
+        in: query
+        description: whether to fall back to job title and manager for job matching
+        required: false
+        type: boolean
+      - name: updateTypes
+        in: query
+        description: 'types of updates to apply (default all: title,comp,group,relationship,data,other)'
+        required: false
+        type: string
+      - name: notifyUserIds
+        in: query
+        description: comma-separated list of user ids who should be notified when the import is complete
+        required: false
+        type: string
+      - name: notifyAppName
+        in: query
+        description: name of the app that should be listed in the notify
+        required: false
+        type: string
+      - name: defaultChangeDate
+        in: query
+        description: date of the changes - if not presented on the csv file
+        required: false
+        type: string
+        format: date
+      - name: disableOverwritePerson
+        in: query
+        description: disable overwriting changes to persons' data -- only update data if the person field is null
+        required: true
+        type: boolean
+      - name: importDryRun
+        in: query
+        description: import dry run
+        required: true
+        type: boolean
+      - name: importAfterDryRun
+        in: query
+        description: whether to automatically import if dry run succeeds
+        required: false
+        type: boolean
+      - name: parentProcessId
+        in: query
+        description: process id of parent process
+        required: false
+        type: string
+      - name: importSource
+        in: query
+        description: self identified source caller into this method
+        required: false
+        type: string
+      - name: syncImages
+        in: query
+        description: import images from csv
+        required: false
+        type: boolean
+      - name: userDefinedFieldAliases
+        in: formData
+        description: user defined field aliases for column matching
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      - name: ignoreResumeParentProcess
+        in: query
+        description: Ignore resumption of parent process
+        required: false
+        type: boolean
+      - name: transformer
+        in: query
+        description: Data transformer
+        required: false
+        type: string
+      - name: postProcessor
+        in: query
+        description: Post processor
+        required: false
+        type: string
+      - name: useImporterV3
+        in: query
+        description: Use importer V3
+        required: false
+        type: boolean
+      - name: performImportPhases
+        in: query
+        description: Group import phases to perform
+        required: false
+        type: string
+      - name: overwriteGroupTypes
+        in: query
+        description: Group types to overwrite
+        required: false
+        type: string
+      - name: retainOpenReportingLines
+        in: query
+        description: Don't reassign manager if the assigned manager is already a grand-manager and there are only open jobs between
+        required: false
+        type: boolean
+      - name: enrichLinkedFields
+        in: query
+        description: whether to enrich jobs with job code linked field defaults during import
+        required: false
+        type: boolean
+      - name: createJobCodes
+        in: query
+        description: whether to create job codes that don't exist when found in import data
+        required: false
+        type: boolean
+      - name: adjustCreateDate
+        in: query
+        description: whether to adjust the create date of existing jobs when the import row date is earlier
+        required: false
+        type: boolean
+      - name: createJobsWithMissingManager
+        in: query
+        description: whether to create jobs whose manager could not be resolved during import
+        required: false
+        type: boolean
+      - name: reassignDirectReportsOnMove
+        in: query
+        description: when a person moves out of a job, reassign that job's direct and indirect reports to the target job
+        required: false
+        type: boolean
+      - name: adjustDeleteOnDepartDate
+        in: query
+        description: when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it
+        required: false
+        type: boolean
+      responses:
+        '202':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/import/csv/data:
+    post:
+      tags:
+      - import
+      summary: Import data from CSV file
+      operationId: importDataCsv
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: scenario id to import into
+        required: false
+        type: string
+      - name: skipErrors
+        in: query
+        description: whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: true
+        type: boolean
+      - name: upsert
+        in: query
+        description: whether to create persons/jobs that are not matched
+        required: true
+        type: boolean
+      - name: createGroups
+        in: query
+        description: whether to create groups that are not matched
+        required: true
+        type: boolean
+      - name: disableSyncHireDate
+        in: query
+        description: whether to disable adjusting dates of hires in cases where the start dates differ
+        required: true
+        type: boolean
+      - name: useTitleManagerMatcher
+        in: query
+        description: whether to fall back to job title and manager for job matching
+        required: false
+        type: boolean
+      - name: updateTypes
+        in: query
+        description: 'types of updates to apply (default all: title,comp,group,relationship,data,other)'
+        required: false
+        type: string
+      - name: notifyUserIds
+        in: query
+        description: comma-separated list of user ids who should be notified when the import is complete
+        required: false
+        type: string
+      - name: notifyAppName
+        in: query
+        description: name of the app that should be listed in the notify
+        required: false
+        type: string
+      - name: defaultChangeDate
+        in: query
+        description: date of the changes - if not presented on the csv file
+        required: false
+        type: string
+        format: date
+      - name: disableOverwritePerson
+        in: query
+        description: disable overwriting changes to persons' data -- only update data if the person field is null
+        required: true
+        type: boolean
+      - name: importDryRun
+        in: query
+        description: import dry run
+        required: true
+        type: boolean
+      - name: importAfterDryRun
+        in: query
+        description: whether to automatically import if dry run succeeds
+        required: false
+        type: boolean
+      - name: parentProcessId
+        in: query
+        description: process id of parent process
+        required: false
+        type: string
+      - name: importSource
+        in: query
+        description: self identified source caller into this method
+        required: false
+        type: string
+      - name: ignoreResumeParentProcess
+        in: query
+        description: Ignore resumption of parent process
+        required: false
+        type: boolean
+      - name: adjustCreateDate
+        in: query
+        description: whether to adjust the create date of existing jobs when the import row date is earlier
+        required: false
+        type: boolean
+      - name: createJobsWithMissingManager
+        in: query
+        description: whether to create jobs whose manager could not be resolved during import
+        required: false
+        type: boolean
+      - name: reassignDirectReportsOnMove
+        in: query
+        description: when a person moves out of a job, reassign that job's direct and indirect reports to the target job
+        required: false
+        type: boolean
+      - name: adjustDeleteOnDepartDate
+        in: query
+        description: when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it
+        required: false
+        type: boolean
+      - name: overwriteGroupTypes
+        in: query
+        description: Group types to overwrite
+        required: false
+        type: string
+      - name: postProcessor
+        in: query
+        description: Post processor
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/import/csv/filepath:
+    post:
+      tags:
+      - import
+      summary: Import data from CSV file
+      operationId: importDataCsvWithFilePath
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: filePath
+        in: query
+        description: filePath
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: scenario id to import into
+        required: false
+        type: string
+      - name: skipErrors
+        in: query
+        description: whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: true
+        type: boolean
+      - name: upsert
+        in: query
+        description: whether to create persons/jobs that are not matched
+        required: true
+        type: boolean
+      - name: createGroups
+        in: query
+        description: whether to create groups that are not matched
+        required: true
+        type: boolean
+      - name: disableSyncHireDate
+        in: query
+        description: whether to disable adjusting dates of hires in cases where the start dates differ
+        required: true
+        type: boolean
+      - name: useTitleManagerMatcher
+        in: query
+        description: whether to fall back to job title and manager for job matching
+        required: false
+        type: boolean
+      - name: updateTypes
+        in: query
+        description: 'types of updates to apply (default all: title,comp,group,relationship,data,other)'
+        required: false
+        type: string
+      - name: notifyUserIds
+        in: query
+        description: comma-separated list of user ids who should be notified when the import is complete
+        required: false
+        type: string
+      - name: notifyAppName
+        in: query
+        description: name of the app that should be listed in the notify
+        required: false
+        type: string
+      - name: defaultChangeDate
+        in: query
+        description: date of the changes - if not presented on the csv file
+        required: false
+        type: string
+        format: date
+      - name: disableOverwritePerson
+        in: query
+        description: disable overwriting changes to persons' data -- only update data if the person field is null
+        required: true
+        type: boolean
+      - name: importDryRun
+        in: query
+        description: import dry run
+        required: true
+        type: boolean
+      - name: importAfterDryRun
+        in: query
+        description: whether to automatically import if dry run succeeds
+        required: false
+        type: boolean
+      - name: parentProcessId
+        in: query
+        description: process id of parent process
+        required: false
+        type: string
+      - name: importSource
+        in: query
+        description: self identified source caller into this method
+        required: false
+        type: string
+      - name: ignoreResumeParentProcess
+        in: query
+        description: Ignore resumption of parent process
+        required: false
+        type: boolean
+      - name: performImportPhases
+        in: query
+        description: Group import phases to perform
+        required: false
+        type: string
+      - name: useImporterV3
+        in: query
+        description: Use importer V3
+        required: false
+        type: boolean
+      - name: enrichLinkedFields
+        in: query
+        description: whether to enrich jobs with job code linked field defaults during import
+        required: false
+        type: boolean
+      - name: createJobCodes
+        in: query
+        description: whether to create job codes that don't exist when found in import data
+        required: false
+        type: boolean
+      - name: adjustCreateDate
+        in: query
+        description: whether to adjust the create date of existing jobs when the import row date is earlier
+        required: false
+        type: boolean
+      - name: createJobsWithMissingManager
+        in: query
+        description: whether to create jobs whose manager could not be resolved during import
+        required: false
+        type: boolean
+      - name: reassignDirectReportsOnMove
+        in: query
+        description: when a person moves out of a job, reassign that job's direct and indirect reports to the target job
+        required: false
+        type: boolean
+      - name: adjustDeleteOnDepartDate
+        in: query
+        description: when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it
+        required: false
+        type: boolean
+      - name: overwriteGroupTypes
+        in: query
+        description: Group types to overwrite
+        required: false
+        type: string
+      - name: postProcessor
+        in: query
+        description: Post processor
+        required: false
+        type: string
+      - name: transformer
+        in: query
+        description: Data transformer
+        required: false
+        type: string
+      responses:
+        '202':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/import/csv/initialColumnMatch:
+    post:
+      tags:
+      - import
+      summary: Parse a CSV file in preparation for column matching as part of spreadsheet import process
+      operationId: initialColumnMatch
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: true
+        type: file
+      responses:
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/import/csv/time-off-balances:
+    post:
+      tags:
+      - import
+      summary: Import time off balance data from CSV file
+      operationId: importTimeOffBalances
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: query
+        description: time off policy id to import into
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: effective date of the balances
+        required: false
+        type: string
+        format: date
+      responses:
+        '202':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/import/spreadsheet/validateFormat:
+    post:
+      tags:
+      - import
+      summary: Check if a spreadsheet file is valid to be imported
+      operationId: validateSpreadsheetFormat
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: maxRows
+        in: query
+        description: Max rows allowed in an imported spreadsheet file
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '400':
+          description: bad request
+        '404':
+          description: not found
+definitions:
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object

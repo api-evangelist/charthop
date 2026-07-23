@@ -1,0 +1,833 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access group-type API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: group-type
+paths:
+  /v1/org/{orgId}/group-type:
+    get:
+      tags:
+      - group-type
+      summary: Return all groups in the organization paginated
+      operationId: findGroupTypes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Group Type id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGroupType'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - group-type
+      summary: Create a group type
+      operationId: createGroupType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Group Type data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGroupTypeWithFieldOverrides'
+      responses:
+        '201':
+          description: group created
+          schema:
+            $ref: '#/definitions/GroupTypeWithFieldOverrides'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/group-type/{groupTypeId}:
+    get:
+      tags:
+      - group-type
+      summary: Return a particular group type by id
+      operationId: getGroupType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupTypeId
+        in: path
+        description: Group Type id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GroupTypeWithFieldOverrides'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - group-type
+      summary: Update an existing group
+      operationId: updateGroupType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupTypeId
+        in: path
+        description: Group Type id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Group Type data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGroupTypeWithFieldOverrides'
+      responses:
+        '204':
+          description: group updatbed
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - group-type
+      summary: Delete a group
+      operationId: deleteGroupType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupTypeId
+        in: path
+        description: Group Type id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: group deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  GroupType:
+    type: object
+    required:
+    - id
+    - name
+    - fieldName
+    - membershipType
+    - assignmentType
+    - parentTypesAllowed
+    - enableApprovals
+    - defaultSensitivity
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name of group
+        example: Engineering
+        minItems: 1
+        maxItems: 80
+      fieldName:
+        type: string
+        description: field name for field representing membership in this type of group
+        example: engineering
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+      code:
+        type: string
+        description: external code identifier of the group type
+        example: D123
+      requirePositions:
+        type: boolean
+        description: whether the group requires members to be positions
+      description:
+        type: string
+        description: description of the group type
+        minItems: 0
+        maxItems: 1000
+      membershipType:
+        type: string
+        description: whether members can be in multiple groups or only a single group of this type
+        enum:
+        - SINGLE
+        - MULTIPLE
+      assignmentType:
+        type: string
+        description: whether members are added by manual assignment or by matching a filter expression (or both)
+        enum:
+        - ASSIGNED
+        - EXPR
+        - COMBINATION
+      parentTypesAllowed:
+        type: string
+        description: group types allowed for parent groups
+        enum:
+        - SAME
+        - OTHER
+        - BOTH
+        - NONE
+      otherGroupTypeId:
+        type: string
+        description: if parents can be another group type the ID of that group type
+        example: 588f7ee98f138b19220041a7
+      sourceGroupTypeId:
+        type: string
+        description: for a portfolio mirror, the child org group type this type was replicated from
+        example: 588f7ee98f138b19220041a7
+      enableApprovals:
+        type: boolean
+        description: whether approvals can be used when changing membership
+      hidden:
+        type: boolean
+        description: when true, hides groups of this type from the Org Chart Groups view and from profile tags; null is treated as visible
+      defaultSensitivity:
+        type: string
+        description: default sensitivity for groups of this type
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      positions:
+        type: array
+        description: list of positions (e.g. 'lead') that exist on groups of this type
+        items:
+          $ref: '#/definitions/GroupPosition'
+      membershipFieldId:
+        type: string
+        description: ID of the field that indicates membership in groups of this type
+        example: 588f7ee98f138b19220041a7
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  GroupTypeWithFieldOverrides:
+    type: object
+    required:
+    - id
+    - name
+    - fieldName
+    - membershipType
+    - assignmentType
+    - parentTypesAllowed
+    - enableApprovals
+    - defaultSensitivity
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name of group
+        example: Engineering
+        minItems: 1
+        maxItems: 80
+      fieldName:
+        type: string
+        description: field name for field representing membership in this type of group
+        example: engineering
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+      code:
+        type: string
+        description: external code identifier of the group type
+        example: D123
+      requirePositions:
+        type: boolean
+        description: whether the group requires members to be positions
+      description:
+        type: string
+        description: description of the group type
+        minItems: 0
+        maxItems: 1000
+      membershipType:
+        type: string
+        description: whether members can be in multiple groups or only a single group of this type
+        enum:
+        - SINGLE
+        - MULTIPLE
+      assignmentType:
+        type: string
+        description: whether members are added by manual assignment or by matching a filter expression (or both)
+        enum:
+        - ASSIGNED
+        - EXPR
+        - COMBINATION
+      parentTypesAllowed:
+        type: string
+        description: group types allowed for parent groups
+        enum:
+        - SAME
+        - OTHER
+        - BOTH
+        - NONE
+      otherGroupTypeId:
+        type: string
+        description: if parents can be another group type the ID of that group type
+        example: 588f7ee98f138b19220041a7
+      sourceGroupTypeId:
+        type: string
+        description: for a portfolio mirror, the child org group type this type was replicated from
+        example: 588f7ee98f138b19220041a7
+      enableApprovals:
+        type: boolean
+        description: whether approvals can be used when changing membership
+      hidden:
+        type: boolean
+        description: when true, hides groups of this type from the Org Chart Groups view and from profile tags; null is treated as visible
+      defaultSensitivity:
+        type: string
+        description: default sensitivity for groups of this type
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      positions:
+        type: array
+        description: list of positions (e.g. 'lead') that exist on groups of this type
+        items:
+          $ref: '#/definitions/GroupPosition'
+      membershipFieldId:
+        type: string
+        description: ID of the field that indicates membership in groups of this type
+        example: 588f7ee98f138b19220041a7
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      fieldSensitive:
+        type: string
+        description: sensitivity of the membership field on jobs/profiles. Defaults to ORG when omitted on create. For built-in group types this is stored as a per-org FieldOverride.
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      fieldRequired:
+        type: boolean
+        description: whether membership in a group of this type is required when creating or updating a job. Defaults to false when omitted on create. For built-in group types this is stored as a per-org FieldOverride.
+      fieldEnableEditDialog:
+        type: boolean
+        description: whether the membership field is shown in the create-or-update job dialog. Maps to the membership Field's options.enableEditDialog. Only configurable for custom group types; built-in membership fields do not support this override.
+      fieldCategoryId:
+        type: string
+        description: category id of the membership field. For built-in group types this is stored as a per-org FieldOverride.
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  GroupPosition:
+    type: object
+    required:
+    - name
+    - allowMultiple
+    properties:
+      name:
+        type: string
+      allowMultiple:
+        type: boolean
+      eligibilityFilter:
+        type: string
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  CreateGroupTypeWithFieldOverrides:
+    type: object
+    required:
+    - name
+    - fieldName
+    - membershipType
+    - assignmentType
+    - parentTypesAllowed
+    - enableApprovals
+    - defaultSensitivity
+    properties:
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name of group
+        example: Engineering
+        minItems: 1
+        maxItems: 80
+      fieldName:
+        type: string
+        description: field name for field representing membership in this type of group
+        example: engineering
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+      code:
+        type: string
+        description: external code identifier of the group type
+        example: D123
+      requirePositions:
+        type: boolean
+        description: whether the group requires members to be positions
+      description:
+        type: string
+        description: description of the group type
+        minItems: 0
+        maxItems: 1000
+      membershipType:
+        type: string
+        description: whether members can be in multiple groups or only a single group of this type
+        enum:
+        - SINGLE
+        - MULTIPLE
+      assignmentType:
+        type: string
+        description: whether members are added by manual assignment or by matching a filter expression (or both)
+        enum:
+        - ASSIGNED
+        - EXPR
+        - COMBINATION
+      parentTypesAllowed:
+        type: string
+        description: group types allowed for parent groups
+        enum:
+        - SAME
+        - OTHER
+        - BOTH
+        - NONE
+      otherGroupTypeId:
+        type: string
+        description: if parents can be another group type the ID of that group type
+        example: 588f7ee98f138b19220041a7
+      sourceGroupTypeId:
+        type: string
+        description: for a portfolio mirror, the child org group type this type was replicated from
+        example: 588f7ee98f138b19220041a7
+      enableApprovals:
+        type: boolean
+        description: whether approvals can be used when changing membership
+      hidden:
+        type: boolean
+        description: when true, hides groups of this type from the Org Chart Groups view and from profile tags; null is treated as visible
+      defaultSensitivity:
+        type: string
+        description: default sensitivity for groups of this type
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      positions:
+        type: array
+        description: list of positions (e.g. 'lead') that exist on groups of this type
+        items:
+          $ref: '#/definitions/GroupPosition'
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      fieldSensitive:
+        type: string
+        description: sensitivity of the membership field on jobs/profiles. Defaults to ORG when omitted on create. For built-in group types this is stored as a per-org FieldOverride.
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      fieldRequired:
+        type: boolean
+        description: whether membership in a group of this type is required when creating or updating a job. Defaults to false when omitted on create. For built-in group types this is stored as a per-org FieldOverride.
+      fieldEnableEditDialog:
+        type: boolean
+        description: whether the membership field is shown in the create-or-update job dialog. Maps to the membership Field's options.enableEditDialog. Only configurable for custom group types; built-in membership fields do not support this override.
+      fieldCategoryId:
+        type: string
+        description: category id of the membership field. For built-in group types this is stored as a per-org FieldOverride.
+        example: 588f7ee98f138b19220041a7
+  ResultsGroupType:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GroupType'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateGroupTypeWithFieldOverrides:
+    type: object
+    properties:
+      name:
+        type: string
+        description: unique name of group
+        example: Engineering
+        minItems: 1
+        maxItems: 80
+      code:
+        type: string
+        description: external code identifier of the group type
+        example: D123
+      requirePositions:
+        type: boolean
+        description: whether the group requires members to be positions
+      description:
+        type: string
+        description: description of the group type
+        minItems: 0
+        maxItems: 1000
+      membershipType:
+        type: string
+        description: whether members can be in multiple groups or only a single group of this type
+        enum:
+        - SINGLE
+        - MULTIPLE
+      assignmentType:
+        type: string
+        description: whether members are added by manual assignment or by matching a filter expression (or both)
+        enum:
+        - ASSIGNED
+        - EXPR
+        - COMBINATION
+      parentTypesAllowed:
+        type: string
+        description: group types allowed for parent groups
+        enum:
+        - SAME
+        - OTHER
+        - BOTH
+        - NONE
+      otherGroupTypeId:
+        type: string
+        description: if parents can be another group type the ID of that group type
+        example: 588f7ee98f138b19220041a7
+      enableApprovals:
+        type: boolean
+        description: whether approvals can be used when changing membership
+      hidden:
+        type: boolean
+        description: when true, hides groups of this type from the Org Chart Groups view and from profile tags; null is treated as visible
+      defaultSensitivity:
+        type: string
+        description: default sensitivity for groups of this type
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      positions:
+        type: array
+        description: list of positions (e.g. 'lead') that exist on groups of this type
+        items:
+          $ref: '#/definitions/GroupPosition'
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      fieldSensitive:
+        type: string
+        description: sensitivity of the membership field on jobs/profiles. Defaults to ORG when omitted on create. For built-in group types this is stored as a per-org FieldOverride.
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      fieldRequired:
+        type: boolean
+        description: whether membership in a group of this type is required when creating or updating a job. Defaults to false when omitted on create. For built-in group types this is stored as a per-org FieldOverride.
+      fieldEnableEditDialog:
+        type: boolean
+        description: whether the membership field is shown in the create-or-update job dialog. Maps to the membership Field's options.enableEditDialog. Only configurable for custom group types; built-in membership fields do not support this override.
+      fieldCategoryId:
+        type: string
+        description: category id of the membership field. For built-in group types this is stored as a per-org FieldOverride.
+        example: 588f7ee98f138b19220041a7

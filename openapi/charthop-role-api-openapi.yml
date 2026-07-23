@@ -1,0 +1,1177 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access role API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: role
+paths:
+  /v1/org/{orgId}/role:
+    get:
+      tags:
+      - role
+      summary: Return all or a set of roles in the organization
+      operationId: findRoles
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: ids
+        in: query
+        description: (Optional) Comma separated Role Ids to find
+        required: false
+        type: string
+      - name: type
+        in: query
+        description: (Optional) Return only default or custom roles
+        required: false
+        type: string
+      - name: expand
+        in: query
+        description: '(Optional) Expand each role''s policies and user count. Off by default: roles come back bare for a fast bulk lookup. Full user objects are only returned by the get-by-id endpoint.'
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsRole'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - role
+      summary: Create a role
+      operationId: createRole
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Role data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateRole'
+      responses:
+        '201':
+          description: role created
+          schema:
+            $ref: '#/definitions/Role'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/role/export:
+    post:
+      tags:
+      - role
+      summary: Export roles to CSV format
+      operationId: exportRoles
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '201':
+          description: process started
+          schema:
+            $ref: '#/definitions/Process'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/role/{roleId}:
+    get:
+      tags:
+      - role
+      summary: Return a particular role by id
+      operationId: getRole
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: roleId
+        in: path
+        description: Role id
+        required: true
+        type: string
+      - name: expand
+        in: query
+        description: (Optional) Expand the role's policies and full user list.
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Role'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - role
+      summary: Update an existing role
+      operationId: updateRole
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: roleId
+        in: path
+        description: Role id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Role data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateRole'
+      responses:
+        '204':
+          description: role updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - role
+      summary: Delete a role
+      operationId: deleteRole
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: roleId
+        in: path
+        description: Role id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: role deleted
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+  /v1/org/{orgId}/role/{roleId}/copy:
+    post:
+      tags:
+      - role
+      summary: Copy an existing role
+      operationId: copyRole
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: roleId
+        in: path
+        description: Role id
+        required: true
+        type: string
+      responses:
+        '201':
+          description: role created
+          schema:
+            $ref: '#/definitions/Role'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  OrgAccess:
+    type: object
+    required:
+    - orgId
+    - access
+    properties:
+      orgId:
+        type: string
+        description: org id
+        example: 5887a7718f138b6a2a0041a7
+      personId:
+        type: string
+        description: person id, if this user directly corresponds with a person
+        example: 5887a7718f138b6a2a0041a7
+      access:
+        type: string
+        description: legacy access permission level
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      groupIds:
+        type: array
+        description: group ids that the above access applies to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      expr:
+        type: string
+        description: expression that the above access applies to
+      expireAt:
+        type: string
+        description: timestamp that this org access will expire
+      roleId:
+        type: string
+        description: the role id that defines the users access
+        example: 5887a7718f138b6a2a0041a7
+      status:
+        type: string
+        description: Onboarding status of the user in this org
+        enum:
+        - INACTIVE
+        - PREBOARDING
+        - ACTIVATION
+        - ACTIVE
+        - OFFBOARDED
+      homeEmail:
+        type: string
+        description: Personal email address of user, while they are preboarding
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      workEmail:
+        type: string
+        description: Work email address of user, once they have started
+        example: robert.doe@example.com
+        minItems: 0
+        maxItems: 120
+      workRoleId:
+        type: string
+        description: Active role ID that defines the user's access once they have started
+        example: 67c851da3dd1668c2fdd7e44
+  TargetedInstruction:
+    type: object
+    required:
+    - filter
+    - instructions
+    properties:
+      filter:
+        type: string
+        description: filter expression matched against the current viewer's person record
+      instructions:
+        type: string
+        description: instructions injected into the chat prompt when filter matches
+  PolicyRuleTarget:
+    type: object
+    properties:
+      userId:
+        type: string
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      channel:
+        type: string
+      email:
+        type: string
+  Role:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of role
+        example: Engineering People Manager
+        minItems: 3
+        maxItems: 80
+      description:
+        type: string
+        description: description of role
+        example: This role is able to create and update new job data for the engineering department.
+        minItems: 0
+        maxItems: 1000
+      policyIds:
+        type: array
+        description: the policies that define the role
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      policies:
+        type: array
+        description: the policies attached to the role
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Policy'
+      users:
+        type: array
+        description: the users the role is attached to
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/User'
+      userCount:
+        type: integer
+        format: int32
+        description: number of users the role is attached to; populated when expand=true on the list endpoint
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  User:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      appId:
+        type: string
+        description: if the user is an app user, the id of the app
+        example: 588f7ee98f138b19220041a7
+      name:
+        description: full name of user
+        $ref: '#/definitions/Name'
+      email:
+        type: string
+        description: email address of user
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      password:
+        type: string
+        description: password of user (encrypted)
+        minItems: 0
+        maxItems: 120
+      orgs:
+        type: array
+        description: list of member orgs with permission levels
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/OrgAccess'
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of user
+        enum:
+        - SUPERUSER
+        - NORMAL
+        - INACTIVE
+        - UNINSTALLED
+      type:
+        type: string
+        description: type of user
+        enum:
+        - USER
+        - APP
+      options:
+        type: object
+        description: for apps, options (specific options are specific to the particular app); for users, user-set preferences
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+      bundleInstall:
+        description: if this user represents an installed bundle, details on what was installed
+        $ref: '#/definitions/BundleInstall'
+      secrets:
+        type: object
+        description: write-only secrets; the content of these secrets are not retrievable via the external-facing API
+      activeAt:
+        type: string
+        description: last activity timestamp
+        example: '2017-01-24T13:57:52Z'
+      loginAt:
+        type: string
+        description: last login timestamp
+        example: '2017-01-24T13:57:52Z'
+      appRunCheckAt:
+        type: string
+        description: for apps, last time the app was checked for a scheduled sync
+        example: '2024-02-29T09:30:00Z'
+      loginCount:
+        type: integer
+        format: int32
+        description: number of lifetime successful logins
+        example: '3'
+      sessionCount:
+        type: integer
+        format: int32
+        description: number of lifetime sessions
+        example: '3'
+      loginFailCount:
+        type: integer
+        format: int32
+        description: number of consecutive failed logins
+        example: '3'
+      title:
+        type: string
+        description: job title, if available
+        example: CEO
+      remoteIp:
+        type: string
+        description: last IP address used
+        example: 127.0.0.1
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      verifyAt:
+        type: string
+        description: email verified timestamp, if the email has been verified
+        example: '2017-01-24T13:57:52Z'
+      mfas:
+        type: array
+        description: list of registered 2FA registered credentials
+        items:
+          $ref: '#/definitions/WebRegisteredCredential'
+      emailSettings:
+        type: array
+        description: Email settings for the user
+        items:
+          $ref: '#/definitions/UserEmailSetting'
+      sensitive:
+        type: string
+        description: sensitivity level of the user's configuration; only applicable to APP users
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users and groups who have access to configure this user; only applicable to APP users
+        items:
+          $ref: '#/definitions/ShareAccess'
+      agentConfig:
+        description: per-user agent configuration overrides
+        $ref: '#/definitions/AiAgentConfig'
+  AiAgentConfig:
+    type: object
+    properties:
+      personality:
+        type: string
+      instructions:
+        type: string
+      guardrails:
+        type: string
+      enableMemory:
+        type: boolean
+      enableMcpServer:
+        type: boolean
+        description: whether this agent exposes an MCP server endpoint for per-user OAuth access
+      enableMcpWrite:
+        type: boolean
+        description: 'whether this agent''s MCP server may invoke write/mutating tools (e.g. a non-read-only AskAgent delegation). Read-only by default: when unset or false, a tool that mutates on the call is rejected at the MCP edge regardless of the agent''s role/policy. This is defense in depth layered on top of the role, never a grant beyond it.'
+      isExternal:
+        type: boolean
+        description: 'whether this agent is an external (non-ChartHop) client, e.g. Claude Code or ChatGPT. External agents have no ChartHop-side prompt/behavior config: only permissions, MCP, and activity are configurable.'
+      approvedPolicyRules:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyRule'
+      approvalGuidelines:
+        type: string
+      managerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      messagingConfig:
+        $ref: '#/definitions/MessagingConfig'
+      contentIds:
+        type: array
+        description: pinned content document IDs; when merging user and app configs, both lists are unioned (not replaced); validate with validateContentIds before persisting
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      modelTier:
+        type: string
+        description: requested model tier for the agent; defaults to MEDIUM when not set
+        enum:
+        - HIGH
+        - MEDIUM
+        - LOW
+      targetedInstructions:
+        type: array
+        description: audience-scoped instruction snippets injected into the chat prompt when the filter matches the current viewer's person record; size and filter syntax are checked by AgentValidationService before persisting
+        items:
+          $ref: '#/definitions/TargetedInstruction'
+  BundleInstallEntity:
+    type: object
+    required:
+    - entityType
+    - entityId
+    - originalId
+    properties:
+      entityType:
+        type: string
+        enum:
+        - ACTION
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - FIELD
+        - FORM
+        - GROUP
+        - PROFILE_TAB
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - TASK_CONFIG
+        - TEMPLATE
+        - TIME_OFF_POLICY
+        - CONTENT
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      originalId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  ResultsRole:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+      next:
+        type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  BundleInstall:
+    type: object
+    required:
+    - entities
+    properties:
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/BundleInstallEntity'
+  CreateRole:
+    type: object
+    required:
+    - label
+    properties:
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of role
+        example: Engineering People Manager
+        minItems: 3
+        maxItems: 80
+      description:
+        type: string
+        description: description of role
+        example: This role is able to create and update new job data for the engineering department.
+        minItems: 0
+        maxItems: 1000
+      policyIds:
+        type: array
+        description: the policies that define the role
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  Policy:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of policy
+        example: View Compensation
+        minItems: 3
+        maxItems: 80
+      description:
+        type: string
+        description: description of policy
+        example: This policy allows compensation to be viewed.
+        minItems: 0
+        maxItems: 1000
+      rules:
+        type: array
+        description: the rules that define the policy
+        items:
+          $ref: '#/definitions/PolicyRule'
+      roles:
+        type: array
+        description: the roles the policy is attached to
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Role'
+      users:
+        type: array
+        description: the users the policy is attached to
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/User'
+      userCount:
+        type: integer
+        format: int32
+        description: number of users the policy is attached to; populated when expand=true on the list endpoint
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  UpdateRole:
+    type: object
+    properties:
+      label:
+        type: string
+        description: human-readable full name of role
+        example: Engineering People Manager
+        minItems: 3
+        maxItems: 80
+      description:
+        type: string
+        description: description of role
+        example: This role is able to create and update new job data for the engineering department.
+        minItems: 0
+        maxItems: 1000
+      policyIds:
+        type: array
+        description: the policies that define the role
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  MessagingConfig:
+    type: object
+    properties:
+      slackAppId:
+        type: string
+      slackClientId:
+        type: string
+      slackBotUserId:
+        type: string
+  WebRegisteredCredential:
+    type: object
+    required:
+    - credentialId
+    - publicKeyBase64
+    - userHandleBase64
+    - signatureCount
+    - createdAt
+    properties:
+      credentialId:
+        type: string
+        description: Credential id
+      publicKeyBase64:
+        type: string
+        description: The public key we're saving
+      userHandleBase64:
+        type: string
+        description: The user handle - a random 64 bits of data
+      signatureCount:
+        type: integer
+        format: int64
+        description: This is used to protect against duplicated key attacks
+      createdAt:
+        type: string
+        description: When was this created
+  UserEmailSetting:
+    type: object
+    required:
+    - category
+    - subscribed
+    properties:
+      category:
+        type: string
+        description: Category of emails
+        example: ADMINISTRATIVE
+        enum:
+        - ADMINISTRATIVE
+        - BILLING
+        - DATA_IMPORT_AND_SYNC_STATUS
+        - TRIAL_REMINDERS
+        - APPROVAL_NOTIFICATIONS
+      subscribed:
+        type: boolean
+        description: Is user subscribed to the category of emails
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  PolicyRule:
+    type: object
+    properties:
+      allow:
+        type: array
+        description: allow rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      deny:
+        type: array
+        description: deny rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      categories:
+        type: array
+        description: categories the rule is limited to
+        example: '[''Compensation'', ''Stock Grants'']'
+        items:
+          type: string
+      fields:
+        type: array
+        description: fields the rule is limited to
+        example: '[''base'']'
+        items:
+          type: string
+      departmentIds:
+        type: array
+        description: departments the rule is limited to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: custom filter the rule is limited to
+        example: department:engineering and under:me
+      directions:
+        type: array
+        description: directions that the rule applies to -- either self or under
+        items:
+          type: string
+      types:
+        type: array
+        description: types that the rule applies to
+        items:
+          type: string
+      targets:
+        type: array
+        description: targets allowed for messaging (email addresses, chat channels, user ids)
+        items:
+          $ref: '#/definitions/PolicyRuleTarget'
+      visibleSensitive:
+        type: array
+        description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+      fieldsSensitive:
+        type: array
+        description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+  Name:
+    type: object
+    required:
+    - last
+    properties:
+      first:
+        type: string
+        description: first name
+        example: Jane
+        minItems: 0
+        maxItems: 80
+      middle:
+        type: string
+        description: middle name
+        example: Quidditch
+        minItems: 0
+        maxItems: 80
+      last:
+        type: string
+        description: last name
+        example: Public
+        minItems: 0
+        maxItems: 80
+      pref:
+        type: string
+        description: preferred first name
+        example: JQ
+        minItems: 0
+        maxItems: 80
+      prefLast:
+        type: string
+        description: preferred last name
+        example: Smith
+        minItems: 0
+        maxItems: 80

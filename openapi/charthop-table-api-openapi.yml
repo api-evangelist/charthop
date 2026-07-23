@@ -1,0 +1,1246 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access table API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: table
+paths:
+  /v1/org/{orgId}/table:
+    get:
+      tags:
+      - table
+      summary: Return all tables in the organization paginated
+      operationId: findTables
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Table id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: includeBuiltIns
+        in: query
+        description: Whether to include built-in tables
+        required: false
+        type: boolean
+      - name: names
+        in: query
+        description: Table names to filter to
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTable'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - table
+      summary: Create a table
+      operationId: createTable
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Table data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTable'
+      responses:
+        '201':
+          description: table created
+          schema:
+            $ref: '#/definitions/Table'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/table/{tableId}:
+    get:
+      tags:
+      - table
+      summary: Return a particular table by id or name
+      operationId: getTable
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Table'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - table
+      summary: Update an existing table
+      operationId: updateTable
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or name
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Table data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTable'
+      responses:
+        '204':
+          description: table updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - table
+      summary: Delete a table
+      operationId: deleteTable
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or name
+        required: true
+        type: string
+      responses:
+        '204':
+          description: table deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/table/{tableId}/data:
+    get:
+      tags:
+      - table
+      summary: Retrieve all rows from the table
+      operationId: findRows
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to retrieve
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario id to retrieve from
+        required: false
+        type: string
+      - name: q
+        in: query
+        description: Filter to query by
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Job id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: Sort by fields, comma-separated. For descending sort, prepend a -
+        required: false
+        type: string
+      - name: columns
+        in: query
+        description: Columns to retrieve, comma-separated (defaults to all columns)
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended, json-readable, or csv
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful retrieval
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - table
+      summary: Upsert row data
+      operationId: upsertRow
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to update as of
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario id to update
+        required: false
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/table/{tableId}/data/{keyColumn}/{keyValue}:
+    get:
+      tags:
+      - table
+      summary: Retrieve a particular row
+      operationId: getRow
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to retrieve
+        required: true
+        type: string
+      - name: keyColumn
+        in: path
+        description: 'Column name to look up the row by (for example: id)'
+        required: true
+        type: string
+      - name: keyValue
+        in: path
+        description: Value of the column
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario id to retrieve from
+        required: false
+        type: string
+      - name: columns
+        in: query
+        description: Columns to retrieve, comma-separated (defaults to all columns)
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended, json-readable, or csv
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful retrieval
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - table
+      summary: Update an existing row
+      operationId: updateRow
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      - name: keyColumn
+        in: path
+        description: 'Column name to look up the row by (for example: id)'
+        required: true
+        type: string
+      - name: keyValue
+        in: path
+        description: Value of the key column
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to update as of
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario id to update
+        required: false
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - table
+      summary: Delete an existing row
+      operationId: deleteRow
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      - name: keyColumn
+        in: path
+        description: 'Column name to look up the row by (for example: id)'
+        required: true
+        type: string
+      - name: keyValue
+        in: path
+        description: Value of the key column
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to delete as of
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario id to delete from
+        required: false
+        type: string
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/table/{tableId}/data/{keyColumn}/{keyValue}/history:
+    get:
+      tags:
+      - table
+      summary: Retrieve the history of a particular row
+      operationId: findRowHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to retrieve
+        required: true
+        type: string
+      - name: keyColumn
+        in: path
+        description: 'Column name to look up the row by (for example: id)'
+        required: true
+        type: string
+      - name: keyValue
+        in: path
+        description: Value of the column
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Start date to retrieve from, inclusive
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date to retrieve through, inclusive
+        required: false
+        type: string
+        format: date
+      - name: scenarioId
+        in: query
+        description: Scenario id to retrieve from
+        required: false
+        type: string
+      - name: columns
+        in: query
+        description: Columns to retrieve, comma-separated (defaults to all columns)
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: History id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended, json-readable, or csv
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful retrieval
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/table/{tableId}/data/{keyColumn}/{keyValue}/purge:
+    delete:
+      tags:
+      - table
+      summary: Delete an existing row, purging from history entirely
+      operationId: purgeRowFromHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      - name: keyColumn
+        in: path
+        description: 'Column name to look up the row by (for example: id)'
+        required: true
+        type: string
+      - name: keyValue
+        in: path
+        description: Value of the key column
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to look up as of
+        required: false
+        type: string
+        format: date
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/table/{tableId}/export:
+    post:
+      tags:
+      - table
+      summary: Export table data to CSV file
+      operationId: exportCsv
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: export options
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '202':
+          description: export started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/table/{tableId}/import:
+    post:
+      tags:
+      - table
+      summary: Import data from CSV file
+      operationId: importCsv
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to update as of
+        required: false
+        type: string
+        format: date
+      - name: skipErrors
+        in: query
+        description: Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: true
+        type: boolean
+      - name: importFromProcessId
+        in: query
+        description: Import a file from another process, instead of directly uploading it
+        required: false
+        type: string
+      - name: parentProcessId
+        in: query
+        description: Parent process id to attach to
+        required: false
+        type: string
+      responses:
+        '200':
+          description: import started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/table/{tableId}/import/download-template:
+    get:
+      tags:
+      - table
+      summary: Download a CSV template for a table import
+      operationId: downloadImportCsvTemplate
+      consumes:
+      - application/json
+      produces:
+      - text/csv
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or unique name to update
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: object
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/table/{tableId}/reorder:
+    post:
+      tags:
+      - table
+      summary: Reorder the default order that columns in a table will appear
+      operationId: reorderTableColumns
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableId
+        in: path
+        description: Table id or name
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Columns to reorder
+        required: true
+        schema:
+          $ref: '#/definitions/ReorderColumns'
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  UpdateTable:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of table
+        example: budget-data
+      label:
+        type: string
+        description: human readable label for the table
+        example: Budget Data
+      labelColumnId:
+        type: string
+        description: if set, use this column id as the label when referencing rows
+        example: 588f7ee98f138b19220041a7
+      effectiveDated:
+        type: boolean
+        description: whether or not the table is time tracked with effective dates (allows time travel or not). If false, then the values set in the table will be the same across all dates.
+      sensitive:
+        type: string
+        description: base sensitivity of this table and entities in it -- should be either ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this table
+        items:
+          $ref: '#/definitions/ShareAccess'
+  CreateTable:
+    type: object
+    required:
+    - name
+    - effectiveDated
+    properties:
+      name:
+        type: string
+        description: name of table
+        example: budget-data
+      label:
+        type: string
+        description: human readable label for the table
+        example: Budget Data
+      effectiveDated:
+        type: boolean
+        description: whether or not the table is time tracked with effective dates (allows time travel or not). If false, then the values set in the table will be the same across all dates.
+      sensitive:
+        type: string
+        description: base sensitivity of this table and entities in it -- should be either ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this table
+        items:
+          $ref: '#/definitions/ShareAccess'
+  ResultsTable:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Table'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ReorderColumns:
+    type: object
+    required:
+    - columns
+    properties:
+      columns:
+        type: array
+        items:
+          type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  Table:
+    type: object
+    required:
+    - id
+    - name
+    - label
+    - effectiveDated
+    - sensitive
+    - shareAccess
+    - rowCount
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: name of table
+        example: budget-data
+      label:
+        type: string
+        description: human readable label for the table
+        example: Budget Data
+      labelColumnId:
+        type: string
+        description: if set, use this column id as the label when referencing rows
+        example: 588f7ee98f138b19220041a7
+      effectiveDated:
+        type: boolean
+        description: whether or not the table is time tracked with effective dates (allows time travel or not). If false, then the values set in the table will be the same across all dates.
+      sensitive:
+        type: string
+        description: base sensitivity of this table and entities in it -- should be either ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this table
+        items:
+          $ref: '#/definitions/ShareAccess'
+      rowCount:
+        type: integer
+        format: int64
+        description: number of rows in the table
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object

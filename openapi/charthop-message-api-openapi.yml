@@ -1,0 +1,454 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access message API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: message
+paths:
+  /v1/org/{orgId}/message:
+    post:
+      tags:
+      - message
+      summary: Create a new message
+      operationId: createMessage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Message data to create
+        required: true
+        schema:
+          $ref: '#/definitions/PartialMessage'
+      responses:
+        '201':
+          description: message created
+          schema:
+            $ref: '#/definitions/Message'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/message/bulk/read:
+    post:
+      tags:
+      - message
+      summary: Sets each of the designated message's `readAt` property
+      operationId: bulkMarkAsRead
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Messages to update
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/PartialMessage'
+      responses:
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/message/bulk/seen:
+    post:
+      tags:
+      - message
+      summary: Marks each message as `seen`
+      operationId: bulkMarkAsSeen
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Messages to update
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/PartialMessage'
+      responses:
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/message/me:
+    get:
+      tags:
+      - message
+      summary: Return all messages for a particular user
+      operationId: me
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Message "type" (WEB, CHAT, or EMAIL)
+        required: false
+        type: string
+      - name: unreadOnly
+        in: query
+        description: Message "status" (read or unread)
+        required: false
+        type: boolean
+      - name: from
+        in: query
+        description: MessageId to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Limit
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsMessage'
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/message/me/{messageKey}:
+    get:
+      tags:
+      - message
+      summary: Return a particular message by key
+      operationId: getMessageByKey
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: messageKey
+        in: path
+        description: Message key
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Message'
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/message/{messageId}:
+    get:
+      tags:
+      - message
+      summary: Return a particular message by id
+      operationId: getMessage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: messageId
+        in: path
+        description: Message id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Message'
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/message/{messageId}/read:
+    post:
+      tags:
+      - message
+      summary: Sets the designated message's `readAt` property
+      operationId: markAsRead
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: messageId
+        in: path
+        description: Message id
+        required: true
+        type: string
+      responses:
+        '401':
+          description: unauthorized
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Message:
+    type: object
+    required:
+    - id
+    - orgId
+    - type
+    - notificationType
+    - userId
+    - createAt
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of message
+        enum:
+        - CHAT
+        - EMAIL
+        - WEB
+      notificationType:
+        type: string
+        description: type of notification (SUCCESS, ERR, ANNOUNCEMENT etc.)
+        enum:
+        - SUCCESS
+        - WARN
+        - ERROR
+        - COMMENT
+        - TASK_COMPLETED
+        - TASK_ASSIGNED
+        - REMINDER
+        - ANNOUNCEMENT
+        - PROCESS_ERROR
+        - PROCESS_DONE
+        - SHARE
+      userId:
+        type: string
+        description: user who receives the message
+        example: 588f7ee98f138b19220041a7
+      content:
+        type: object
+        description: message content
+      title:
+        type: string
+        description: message title
+      messageUrl:
+        type: string
+        description: link to message content (if applicable)
+      key:
+        type: string
+        description: key of message if applicable (e.g. product-tour, import-complete-{id})
+      readAt:
+        type: string
+        description: read timestamp
+        example: '2017-01-24T13:57:52Z'
+      seenAt:
+        type: string
+        description: seen timestamp
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ResultsMessage:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Message'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  PartialMessage:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of message
+        enum:
+        - CHAT
+        - EMAIL
+        - WEB
+      notificationType:
+        type: string
+        description: type of notification (SUCCESS, ERR, ANNOUNCEMENT etc.)
+        enum:
+        - SUCCESS
+        - WARN
+        - ERROR
+        - COMMENT
+        - TASK_COMPLETED
+        - TASK_ASSIGNED
+        - REMINDER
+        - ANNOUNCEMENT
+        - PROCESS_ERROR
+        - PROCESS_DONE
+        - SHARE
+      userId:
+        type: string
+        description: user who receives the message
+        example: 588f7ee98f138b19220041a7
+      content:
+        type: object
+        description: message content
+      title:
+        type: string
+        description: message title
+      messageUrl:
+        type: string
+        description: link to message content (if applicable)
+      key:
+        type: string
+        description: key of message if applicable (e.g. product-tour, import-complete-{id})
+      readAt:
+        type: string
+        description: read timestamp
+        example: '2017-01-24T13:57:52Z'
+      seenAt:
+        type: string
+        description: seen timestamp
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp

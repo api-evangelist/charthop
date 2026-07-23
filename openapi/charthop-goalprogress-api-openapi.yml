@@ -1,0 +1,472 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access goalProgress API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: goalProgress
+paths:
+  /v1/org/{orgId}/goal-progress:
+    get:
+      tags:
+      - goalProgress
+      summary: Find goal progress for a goal
+      operationId: findGoalProgress
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: query
+        description: Goal id
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGoalProgress'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - goalProgress
+      summary: Create a new goal progress update
+      operationId: createGoalProgress
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Goal progress data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGoalProgress'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/GoalProgress'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: goal not found
+  /v1/org/{orgId}/goal-progress/{goalProgressId}:
+    get:
+      tags:
+      - goalProgress
+      summary: Get a goal progress by id
+      operationId: getGoalProgress
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: path
+        description: Goal id
+        required: true
+        type: string
+      - name: goalProgressId
+        in: path
+        description: Goal progress id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/GoalProgress'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - goalProgress
+      summary: Update an existing goal progress
+      operationId: updateGoalProgress
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalProgressId
+        in: path
+        description: Goal progress id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Goal progress data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGoalProgress'
+      responses:
+        '200':
+          description: updated
+          schema:
+            $ref: '#/definitions/GoalProgress'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - goalProgress
+      summary: Delete a goal progress
+      operationId: deleteGoalProgress
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalProgressId
+        in: path
+        description: Goal progress id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  GoalTargetActual:
+    type: object
+    required:
+    - goalTargetId
+    properties:
+      goalTargetId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      value:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  GoalProgress:
+    type: object
+    required:
+    - id
+    - orgId
+    - goalId
+    - createId
+    - createAt
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      goalId:
+        type: string
+        description: goal id that this progress update belongs to
+        example: 588f7ee98f138b19220041a7
+      actuals:
+        type: array
+        description: manually entered values for the current actual progress towards the goal target(s)
+        items:
+          $ref: '#/definitions/GoalTargetActual'
+      forecasts:
+        type: array
+        description: forecasts for where the goal target(s) will be as-of the end date
+        items:
+          $ref: '#/definitions/GoalProgressForecast'
+      confidence:
+        type: integer
+        format: int32
+        description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
+      done:
+        type: integer
+        format: int32
+        description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
+      comment:
+        type: string
+        description: comment on the progress update
+      date:
+        type: string
+        format: date
+        description: effective date of this progress update
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  GoalProgressForecast:
+    type: object
+    required:
+    - goalTargetId
+    - type
+    - value
+    properties:
+      goalTargetId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - WORST
+        - COMMIT
+        - CALL
+        - LIKELY
+        - BEST
+      label:
+        type: string
+      value:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  CreateGoalProgress:
+    type: object
+    required:
+    - goalId
+    properties:
+      goalId:
+        type: string
+        description: goal id that this progress update belongs to
+        example: 588f7ee98f138b19220041a7
+      actuals:
+        type: array
+        description: manually entered values for the current actual progress towards the goal target(s)
+        items:
+          $ref: '#/definitions/GoalTargetActual'
+      forecasts:
+        type: array
+        description: forecasts for where the goal target(s) will be as-of the end date
+        items:
+          $ref: '#/definitions/GoalProgressForecast'
+      confidence:
+        type: integer
+        format: int32
+        description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
+      done:
+        type: integer
+        format: int32
+        description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
+      comment:
+        type: string
+        description: comment on the progress update
+      date:
+        type: string
+        format: date
+        description: effective date of this progress update
+  ResultsGoalProgress:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GoalProgress'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateGoalProgress:
+    type: object
+    properties:
+      goalId:
+        type: string
+        description: goal id that this progress update belongs to
+        example: 588f7ee98f138b19220041a7
+      actuals:
+        type: array
+        description: manually entered values for the current actual progress towards the goal target(s)
+        items:
+          $ref: '#/definitions/GoalTargetActual'
+      forecasts:
+        type: array
+        description: forecasts for where the goal target(s) will be as-of the end date
+        items:
+          $ref: '#/definitions/GoalProgressForecast'
+      confidence:
+        type: integer
+        format: int32
+        description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
+      done:
+        type: integer
+        format: int32
+        description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
+      comment:
+        type: string
+        description: comment on the progress update
+      date:
+        type: string
+        format: date
+        description: effective date of this progress update

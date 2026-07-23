@@ -1,0 +1,2109 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access change API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: change
+paths:
+  /v1/org/{orgId}/change:
+    get:
+      tags:
+      - change
+      summary: Return recent changes across an org, or for a particular person or job
+      operationId: findChanges
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to start from
+        required: false
+        type: string
+        format: date
+      - name: untilDate
+        in: query
+        description: Date to get changes through (exclusive)
+        required: false
+        type: string
+        format: date
+      - name: type
+        in: query
+        description: Types of change to filter by
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Return changes that modify these fields
+        required: false
+        type: string
+      - name: personId
+        in: query
+        description: Person id to filter by
+        required: false
+        type: string
+      - name: jobId
+        in: query
+        description: Job id to filter by
+        required: false
+        type: string
+      - name: includeBackfill
+        in: query
+        description: Find and include first backfill if it exists
+        required: false
+        type: boolean
+      - name: refs
+        in: query
+        description: References to filter by
+        required: false
+        type: string
+      - name: q
+        in: query
+        description: Query to filter against
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Change id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: open
+        in: query
+        description: Whether the role is open or not
+        required: false
+        type: string
+        enum:
+        - FILLED
+        - OPEN
+      - name: desc
+        in: query
+        description: Descending (default false)
+        required: false
+        type: boolean
+      - name: scenarioOnly
+        in: query
+        description: Scenario only (exclude primary changes)
+        required: false
+        type: boolean
+      - name: parentOnly
+        in: query
+        description: Parent changes only (exclude child changes)
+        required: false
+        type: boolean
+      - name: excludeAtsRecruitingFields
+        in: query
+        description: Whether to exclude ats recruiting fields. Only applies when fieldEntityTypeString is passed
+        required: false
+        type: boolean
+      - name: includeStruck
+        in: query
+        description: Deprecated parameter for backwards-compatibility (use statuses) - whether to include STRUCK and PROPOSED changes, or just ACTIVE changes
+        required: false
+        type: boolean
+      - name: status
+        in: query
+        description: Statuses to filter by
+        required: false
+        type: string
+      - name: stripUpdates
+        in: query
+        description: Whether to strip returned update changes of update types that were not explicitly requested
+        required: false
+        type: boolean
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: fieldEntityTypes
+        in: query
+        description: Only return changes which set fields with these entity types
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsChange'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/bulkchange:
+    post:
+      tags:
+      - change
+      summary: Perform a series of changes at once
+      operationId: bulkChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Bulk change data
+        required: false
+        schema:
+          $ref: '#/definitions/BulkChangeRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/bulkupdate:
+    post:
+      tags:
+      - change
+      summary: Perform a bulk update on a number of jobs
+      operationId: bulkUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Bulk update data
+        required: false
+        schema:
+          $ref: '#/definitions/BulkUpdateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/compensation-history:
+    get:
+      tags:
+      - change
+      summary: Return enriched compensation history rows (one row per comp change), in descending date order
+      operationId: findCompensationHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Date to start from
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: Date to get changes through (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Filter query string
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Cursor for paginating from a previous response
+        required: false
+        type: integer
+        format: int64
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCompensationHistoryRow'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/depart-rehire:
+    post:
+      tags:
+      - change
+      summary: Create a depart-rehire pair of changes, for filling in historical data
+      operationId: departRehire
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Rehire start date
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        description: Depart data
+        required: true
+        schema:
+          $ref: '#/definitions/CreateChange'
+      responses:
+        '202':
+          description: accepted
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/scenario/{scenarioId}:
+    get:
+      tags:
+      - change
+      summary: Return all changes for a particular scenario, with before job
+      operationId: findScenarioChanges
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ScenarioChangesWithBudgetRollup'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/sync/{type}:
+    post:
+      tags:
+      - change
+      summary: Sync a change (create the change only if it does not already exist)
+      operationId: syncChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Change type
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Change data
+        required: false
+        schema:
+          $ref: '#/definitions/CreateChange'
+      - name: processId
+        in: query
+        description: Process id of person creation
+        required: false
+        type: string
+      responses:
+        '200':
+          description: synced change
+          schema:
+            $ref: '#/definitions/Change'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/{changeId}:
+    get:
+      tags:
+      - change
+      summary: Return a particular change by id
+      operationId: getChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Change'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - change
+      summary: Make a change to a change
+      operationId: updateChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Change data
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateChange'
+      - name: processId
+        in: query
+        description: Process id of person creation
+        required: false
+        type: string
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    delete:
+      tags:
+      - change
+      summary: Delete a previous change
+      operationId: deleteChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      - name: processId
+        in: query
+        description: Process id of person creation
+        required: false
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/{changeId}/approve:
+    post:
+      tags:
+      - change
+      summary: Approve or reject a change
+      operationId: approveChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Change approval details
+        required: true
+        schema:
+          $ref: '#/definitions/ApproveChange'
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/{changeId}/approver:
+    get:
+      tags:
+      - change
+      summary: Given a of change id, see if the person can approve/reject
+      operationId: changeApprover
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change Id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to check the approval on
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: boolean
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/{type}:
+    post:
+      tags:
+      - change
+      summary: Create a new change
+      operationId: createChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Change type
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Change data
+        required: false
+        schema:
+          $ref: '#/definitions/CreateChange'
+      - name: source
+        in: query
+        description: Source of change
+        required: false
+        type: string
+      - name: processId
+        in: query
+        description: Process id of change creation
+        required: false
+        type: string
+      responses:
+        '201':
+          description: created change
+          schema:
+            $ref: '#/definitions/Change'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/change/{type}/validate:
+    post:
+      tags:
+      - change
+      summary: Validate a change
+      operationId: validateChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Change type
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Change data
+        required: false
+        schema:
+          $ref: '#/definitions/CreateChange'
+      responses:
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/change/{changeId}:
+    patch:
+      tags:
+      - change
+      summary: Amend a change within a scenario, and potentially return the updated data
+      operationId: updateScenarioChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve
+        required: false
+        type: string
+      - name: includeUpdatedFields
+        in: query
+        description: Include all updated fields in the response, including change.after.fieldName for each updated field
+        required: false
+        type: boolean
+      - name: format
+        in: query
+        description: Data format to return; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Column and data to update (must contain only one entry)
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/UpdateScenarioChangeResponse'
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/change/{changeId}/status/{processId}:
+    get:
+      tags:
+      - change
+      summary: Get the status of a running change within a scenario
+      operationId: getChangeStatus
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      - name: processId
+        in: path
+        description: Process id
+        required: true
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ChangeStatusResponse'
+        '404':
+          description: not found
+definitions:
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  JobRelationship:
+    type: object
+    required:
+    - jobId
+    - type
+    properties:
+      jobId:
+        type: string
+        description: destination job id
+        example: 5887a7718f138b6a2a0041a7
+      type:
+        type: string
+        description: type of relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE
+  JobUpdate:
+    type: object
+    properties:
+      addRelationships:
+        type: array
+        description: relationships to add
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      removeRelationships:
+        type: array
+        description: relationships to remove
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      addGroupIds:
+        type: array
+        description: groups to add
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      removeGroupIds:
+        type: array
+        description: groups to remove
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      setGroupIds:
+        type: object
+        description: groups to set
+        additionalProperties:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      grant:
+        description: stock grant to add
+        $ref: '#/definitions/StockGrant'
+      timeOff:
+        description: time off to add
+        $ref: '#/definitions/TimeOff'
+      title:
+        type: string
+        description: new title
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: new compensation level
+        $ref: '#/definitions/Comp'
+      placement:
+        type: string
+        description: new placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: new employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      sensitive:
+        type: string
+        description: new view sensitivity
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      startDatePlanned:
+        type: string
+        format: date
+        description: planned start date
+      startDatePlannedRemove:
+        type: boolean
+        description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
+      startDate:
+        type: string
+        format: date
+        description: new expected start date - will update to person start date in future
+      backfillPersonId:
+        type: string
+        description: set who this job is backfilling
+        example: 588f7ee98f138b19220041a7
+      jobCodeId:
+        type: string
+        description: set (or unset) the job code for this job
+        example: 588f7ee98f138b19220041a7
+      hasUnsetFields:
+        type: boolean
+        description: set who this job is backfilling
+      fields:
+        type: object
+        description: custom fields values to set
+        additionalProperties:
+          type: object
+  ResultsChangeData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChangeData'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  CreateChange:
+    type: object
+    properties:
+      jobId:
+        type: string
+        description: job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      scenarioId:
+        type: string
+        description: scenario that this change belongs to
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: the id of the person involved, or empty if no person attached to job
+        example: 588f7ee98f138b19220041a7
+      otherJobId:
+        type: string
+        description: for MOVE changes, the id of the job moving from; for RELATE changes, the id of the other job
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of change
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+        description: date of change
+      announceDate:
+        type: string
+        format: date
+        description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+      departType:
+        type: string
+        description: for DEPART changes, the type of departure
+        enum:
+        - VOLUNTARY
+        - INVOLUNTARY
+      departRegret:
+        type: string
+        description: for DEPART changes, whether the departure is regrettable
+        enum:
+        - REGRET
+        - NONREGRET
+      reason:
+        type: string
+        description: the reason of the change
+      promotionType:
+        type: string
+        description: if it's a promotion or a demotion
+        enum:
+        - PROMOTION
+        - DEMOTION
+        - NONE
+      job:
+        description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+        $ref: '#/definitions/PartialJob'
+      update:
+        description: for UPDATE changes, the data being updated
+        $ref: '#/definitions/JobUpdate'
+      note:
+        type: string
+        description: note on the change
+      mergeId:
+        type: string
+        description: merged by user id, if this change was merged
+        example: 588f7ee98f138b19220041a7
+      mergeScenarioId:
+        type: string
+        description: scenario that this change was merged in from, if the change originally came from a scenario
+        example: 588f7ee98f138b19220041a7
+      overrideDefaults:
+        type: object
+        description: for job code linked field overrides, records the default job code value
+        additionalProperties:
+          type: object
+      autoAppliedDefaults:
+        type: object
+        description: for job code linked fields, records which fields were auto-populated from defaults
+        additionalProperties:
+          type: object
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  PayInterval:
+    type: object
+    required:
+    - interval
+    - pay
+    properties:
+      interval:
+        type: string
+        description: Interval (annual or hourly)
+        enum:
+        - YEARLY
+        - MONTHLY
+        - WEEKLY
+        - DAILY
+        - HOURLY
+      pay:
+        description: Pay over the given interval
+        $ref: '#/definitions/Money'
+      hoursPerWeek:
+        type: integer
+        format: int32
+        description: working hours per week if interval=hourly
+        example: '40'
+      weeksPerYear:
+        type: integer
+        format: int32
+        description: working weeks per year if interval=hourly
+        example: '52'
+      monthsPerYear:
+        type: integer
+        format: int32
+        description: months per year if interval=month
+        example: '52'
+      daysPerYear:
+        type: integer
+        format: int32
+        description: days per year if interval=day
+        example: '250'
+  BulkUpdateRequest:
+    type: object
+    required:
+    - jobIds
+    - update
+    - date
+    properties:
+      jobIds:
+        type: array
+        description: list of job ids to update
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      update:
+        description: update to perform
+        $ref: '#/definitions/JobUpdate'
+      date:
+        type: string
+        format: date
+        description: date of update
+      scenarioId:
+        type: string
+        description: scenario id
+        example: 588f7ee98f138b19220041a7
+      note:
+        type: string
+        description: note for update
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ResultsChange:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Change'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  VariableComp:
+    type: object
+    required:
+    - type
+    - interval
+    properties:
+      type:
+        type: string
+        description: compensation type
+        enum:
+        - BONUS
+        - COMMISSION
+      interval:
+        type: string
+        description: compensation interval
+        enum:
+        - YEARLY
+    description: 'variable compensation
+
+      Implementations: VariableCompPercent, VariableCompPercent'
+    discriminator: compType
+  UpdateChange:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date
+        description: date of change
+      announceDate:
+        type: string
+        format: date
+        description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+      status:
+        type: string
+        description: whether the change is active or not
+        enum:
+        - ACTIVE
+        - STRUCK
+        - CONFLICT
+        - INACTIVE
+        - PROPOSED
+      departType:
+        type: string
+        description: for DEPART changes, the type of departure
+        enum:
+        - VOLUNTARY
+        - INVOLUNTARY
+      departRegret:
+        type: string
+        description: for DEPART changes, whether the departure is regrettable
+        enum:
+        - REGRET
+        - NONREGRET
+      reason:
+        type: string
+        description: the reason of the change
+      promotionType:
+        type: string
+        description: if it's a promotion or a demotion
+        enum:
+        - PROMOTION
+        - DEMOTION
+        - NONE
+      job:
+        description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+        $ref: '#/definitions/PartialJob'
+      update:
+        description: for UPDATE changes, the data being updated
+        $ref: '#/definitions/JobUpdate'
+      note:
+        type: string
+        description: note on the change
+      approvalNote:
+        type: string
+        description: approval/rejection note
+        example: Not acceptable
+  ScenarioChangesWithBudgetRollup:
+    type: object
+    required:
+    - changes
+    - budgetPoolSummaries
+    properties:
+      changes:
+        $ref: '#/definitions/ResultsChangeData'
+      budgetPoolSummaries:
+        type: object
+        additionalProperties:
+          type: object
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  CompensationHistoryRow:
+    type: object
+    required:
+    - changeId
+    - jobId
+    - date
+    - name
+    properties:
+      changeId:
+        type: string
+        description: id of the change that produced this row
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: person id at the time of the change
+        example: 588f7ee98f138b19220041a7
+      jobId:
+        type: string
+        description: job id at the time of the change
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: object
+        description: date the comp change took effect
+      name:
+        type: string
+        description: person's full name (first last)
+      workEmail:
+        type: string
+        description: person's work email
+      title:
+        type: string
+        description: job title as of the change date
+      basePay:
+        type: object
+        description: annualized base pay as of the change date
+      variablePay:
+        type: object
+        description: annualized variable target pay as of the change date
+      total:
+        type: object
+        description: base + variable pay (only when both share a currency)
+      department:
+        type: object
+        description: department group as of the change date
+      manager:
+        type: object
+        description: manager (person) as of the change date
+  BulkChangeRequest:
+    type: object
+    required:
+    - changes
+    properties:
+      changes:
+        type: array
+        description: list of changes to create
+        items:
+          $ref: '#/definitions/CreateChange'
+  Change:
+    type: object
+    required:
+    - id
+    - jobId
+    - orgId
+    - type
+    - date
+    - status
+    properties:
+      id:
+        type: string
+        description: unique id
+        example: 588f7ee98f138b19220041a7
+      jobId:
+        type: string
+        description: job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      scenarioId:
+        type: string
+        description: scenario that this change belongs to
+        example: 588f7ee98f138b19220041a7
+      mergeScenarioId:
+        type: string
+        description: scenario that this change was merged in from, if the change originally came from a scenario
+        example: 588f7ee98f138b19220041a7
+      parentChangeId:
+        type: string
+        description: change that this change emanates from
+        example: 588f7ee98f138b19220041a7
+      priorStateChangeId:
+        type: string
+        description: connects this change to a previous version if itself that you might want to roll back to because of bad edits
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of change
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+        description: date of change
+      sort:
+        type: integer
+        format: int64
+        description: sort order of change
+      announceDate:
+        type: string
+        format: date
+        description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+      status:
+        type: string
+        description: whether the change is active or not
+        enum:
+        - ACTIVE
+        - STRUCK
+        - CONFLICT
+        - INACTIVE
+        - PROPOSED
+      personId:
+        type: string
+        description: the id of the person involved, or empty if no person attached to job
+        example: 588f7ee98f138b19220041a7
+      otherJobId:
+        type: string
+        description: for MOVE changes, the id of the job moving from; for RELATE changes, the id of the other job
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        description: for MOVE changes, the id of the other person involved in the move
+        example: 588f7ee98f138b19220041a7
+      departType:
+        type: string
+        description: for DEPART changes, the type of departure
+        enum:
+        - VOLUNTARY
+        - INVOLUNTARY
+      departRegret:
+        type: string
+        description: for DEPART changes, whether the departure was regrettable
+        enum:
+        - REGRET
+        - NONREGRET
+      promotionType:
+        type: string
+        description: if it's a promotion or a demotion
+        enum:
+        - PROMOTION
+        - DEMOTION
+        - NONE
+      reason:
+        type: string
+        description: the reason for the change
+      relateType:
+        type: string
+        description: for RELATE changes, the type of the relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE
+      refs:
+        type: array
+        description: list of ids referenced in text field body, for indexing purposes only
+        items:
+          type: object
+      job:
+        description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+        $ref: '#/definitions/PartialJob'
+      otherJob:
+        description: if otherJobId present, contains title and person.startDate of the other job at the time of change
+        $ref: '#/definitions/PartialJob'
+      formId:
+        type: string
+        description: if this change was data submitted by a form, the id of that form
+        example: 588f7ee98f138b19220041a7
+      formResponseId:
+        type: string
+        description: if this change is associated with a form response, the id of that form response
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: if this change is associated with a assessment, the id of that assessment
+        example: 588f7ee98f138b19220041a7
+      update:
+        description: for UPDATE changes, the data being updated
+        $ref: '#/definitions/JobUpdate'
+      upcoming:
+        description: for UPCOMING changes, the change ahead
+        $ref: '#/definitions/UpcomingChange'
+      conflict:
+        type: string
+        description: for changes that have been struck due to a merge conflict, the description of the conflict
+      note:
+        type: string
+        description: note on the change
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        description: attribution for the create
+        $ref: '#/definitions/Attribution'
+      mergeId:
+        type: string
+        description: merged by user id, if this change was merged
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        description: attribution for the last update
+        $ref: '#/definitions/Attribution'
+      statusAt:
+        type: string
+        description: timestamp of status change
+      approvalAt:
+        type: string
+        description: timestamp of approval
+      approvalId:
+        type: string
+        description: approved by user id
+        example: 588f7ee98f138b19220041a7
+      approvalNote:
+        type: string
+        description: approval/rejection note
+        example: Not acceptable
+      approval:
+        type: string
+        description: if approval is required, who is allowed to approve
+        enum:
+        - MANAGER
+        - GRAND_MANAGER
+      authorSensitive:
+        type: string
+        description: view sensitivity for the author author of this form - the level of view access required to view the createId and updateId fields
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      canEdit:
+        type: boolean
+        description: flag indicating whether authorized user can modify this change (will vary depending on user)
+  TimeOff:
+    type: object
+    required:
+    - id
+    - startDate
+    - endDate
+    properties:
+      id:
+        type: string
+        description: unique id of a time off request
+      startDate:
+        type: string
+        format: date
+        description: start date of time off, inclusive
+      endDate:
+        type: string
+        format: date
+        description: end date of time off, inclusive
+      days:
+        type: number
+        description: number of days used
+      hours:
+        type: number
+        description: number of hours used
+      type:
+        type: string
+        description: type of time off
+      note:
+        type: string
+        description: notes on the time off
+      approval:
+        type: string
+        description: approval status of the time off
+        enum:
+        - APPROVED
+        - PENDING
+        - CANCELLED
+        - REJECTED
+        - SUPERSEDED
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  ResultsCompensationHistoryRow:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CompensationHistoryRow'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ApproveChange:
+    type: object
+    required:
+    - status
+    properties:
+      status:
+        type: string
+        enum:
+        - ACTIVE
+        - STRUCK
+        - CONFLICT
+        - INACTIVE
+        - PROPOSED
+      approvalNote:
+        type: string
+      changeId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ChangeStatusResponse:
+    type: object
+    required:
+    - processId
+    - status
+    properties:
+      processId:
+        type: integer
+        format: int32
+      status:
+        type: boolean
+  UpcomingChange:
+    type: object
+    required:
+    - date
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+      announceDate:
+        type: string
+        format: date
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  UpdateScenarioChangeResponse:
+    type: object
+    required:
+    - processId
+    - data
+    properties:
+      processId:
+        type: integer
+        format: int32
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChangeData'
+  StockGrant:
+    type: object
+    required:
+    - id
+    - stock
+    - date
+    - shares
+    - price
+    - type
+    - vestSchedule
+    properties:
+      id:
+        type: string
+        description: unique identifier of grant
+      stock:
+        type: string
+        description: ticker symbol of this stock
+        example: GOOG
+      date:
+        type: string
+        format: date
+        description: date of grant
+      vestStartDate:
+        type: string
+        format: date
+        description: vesting start date of grant
+      expireDate:
+        type: string
+        format: date
+        description: expiration date of grant
+      shares:
+        type: number
+        description: number of shares granted
+      price:
+        type: number
+        description: per share strike price
+      type:
+        type: string
+        description: type of grant
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+      vestSchedule:
+        type: string
+        description: vesting schedule
+      originalPrice:
+        type: number
+        description: original per share value of stock (grant price at time of issue)
+      currentPrice:
+        type: number
+        description: current per share value of stock
+      vestedShares:
+        type: number
+        description: current number of shares vested
+      vestedSharesNextYear:
+        type: number
+        description: number of shares vested one year from today
+      vestedSharesByDate:
+        type: object
+        description: number of shares vested, by future date
+        additionalProperties:
+          type: number
+      vestEndDate:
+        type: string
+        format: date
+        description: vesting end date
+      cancelDate:
+        type: string
+        format: date
+        description: cancellation date
+      terminationDate:
+        type: string
+        format: date
+        description: termination date — vesting freezes on this date when the holder separates
+      lastExercisableDate:
+        type: string
+        format: date
+        description: last date on which vested shares can be exercised; after this the grant is forfeited
+      details:
+        type: string
+        description: details of the grant (arbitrary text)
+      description:
+        type: string
+        description: human-readable description of vesting schedule
+  ChangeData:
+    type: object
+    required:
+    - change
+    - data
+    - cost
+    properties:
+      change:
+        description: the change that was applied
+        $ref: '#/definitions/Change'
+      data:
+        type: object
+        description: the returned data fields requested
+        additionalProperties:
+          type: object
+      cost:
+        type: number
+        description: the annualized impact of this change, denoted in organization's currency
+      lockedFields:
+        type: array
+        description: set of locked fields for this change
+        uniqueItems: true
+        items:
+          type: string
+  PartialJob:
+    type: object
+    properties:
+      jobId:
+        type: string
+        description: globally unique job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      snapshotId:
+        type: string
+        description: snapshot that this job belongs to
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title
+        example: Senior Engineer
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: compensation
+        $ref: '#/definitions/Comp'
+      sensitive:
+        type: string
+        description: view sensitive of the job while open
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      relationships:
+        type: array
+        description: relationship to other jobs
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      groupIds:
+        type: array
+        description: groups that this job is a member of
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIdsByType:
+        type: object
+        description: groups that this job is a member of, mapped by group type id
+        additionalProperties:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      placement:
+        type: string
+        description: guidance on placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      state:
+        type: string
+        description: current state - whether the job is open, filled, or has someone departed or hired
+        enum:
+        - OPEN
+        - FILLED
+        - DEPART
+        - START
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      fieldDates:
+        type: object
+        description: dates of the field data
+        additionalProperties:
+          type: string
+          format: date
+      fieldsProposed:
+        type: object
+        description: proposed values for fields
+        additionalProperties:
+          type: object
+      createDate:
+        type: string
+        format: date
+        description: job creation date
+      startDate:
+        type: string
+        format: date
+        description: for empty jobs, expected start date - for filled jobs, confirmed start date
+      startDatePlanned:
+        type: string
+        format: date
+        description: expected start date whether job is open or has been filled - doesn't change when job is filled
+      personStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the org after the latest departure (if any)
+      personEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing, the last day of that person in the org
+      personJobStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the job
+      personIdDate:
+        type: string
+        format: date
+        description: if personId is present, the first day that the personId actually filled the job
+      personJobEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing or moving out, the last day of that person in the job
+      personId:
+        type: string
+        description: the person holding this job -- either currently in the job, or upcoming announced hire
+        example: 588f7ee98f138b19220041a7
+      backfillPersonId:
+        type: string
+        description: the person who most recently held the job, who this represents a backfill for
+        example: 588f7ee98f138b19220041a7
+      jobCodeId:
+        type: string
+        description: the ID of the job code for this job
+        example: 588f7ee98f138b19220041a7
+      backfillByJobId:
+        type: string
+        description: another job which is planned to be a backfill for this job
+        example: 588f7ee98f138b19220041a7
+      upcoming:
+        type: array
+        description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+        items:
+          $ref: '#/definitions/UpcomingChange'
+      scenarioId:
+        type: string
+        description: scenario that the job was created in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      scenarioChangedId:
+        type: string
+        description: scenario that the job was changed in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      fetchState:
+        type: string
+        description: scenario that the job was changed in (null if job is on primary timeline)
+        enum:
+        - PERSON
+        - STRUCTURE
+        - ALL
+  Comp:
+    type: object
+    properties:
+      baseComp:
+        description: base pay (money) with interval (annual or hourly)
+        $ref: '#/definitions/PayInterval'
+      variableTargets:
+        type: array
+        description: variable compensation (money or percent)
+        items:
+          $ref: '#/definitions/VariableComp'
+      grantShares:
+        type: integer
+        format: int32
+        description: planned stock grant, in shares
+        example: '5000'
+      grantValue:
+        type: integer
+        format: int32
+        description: planned stock grant, in value (based on the stock's currency, not the comp)
+        example: '5000'
+      grantType:
+        type: string
+        description: planned stock grant type
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA

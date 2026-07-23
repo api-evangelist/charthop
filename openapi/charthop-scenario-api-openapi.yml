@@ -1,0 +1,1649 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access scenario API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: scenario
+paths:
+  /v1/org/{orgId}/scenario:
+    get:
+      tags:
+      - scenario
+      summary: Return all scenarios in the organization paginated
+      operationId: findScenarios
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Scenario id to start paginating from
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Scenario status to filter by
+        required: false
+        type: string
+        enum:
+        - OPEN
+        - INACTIVE
+        - MERGED
+        - DRAFT
+        - ARCHIVED
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsScenario'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - scenario
+      summary: Create a scenario
+      operationId: createScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: silent
+        in: query
+        description: Suppress notification emails
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: Scenario data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateScenario'
+      - name: skipChangeCreation
+        in: query
+        description: Skip over change creation for PROMOTION scenarios
+        required: false
+        type: boolean
+      responses:
+        '201':
+          description: scenario created
+          schema:
+            $ref: '#/definitions/Scenario'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/scenario/bulk/archive:
+    post:
+      tags:
+      - scenario
+      summary: Archive a set of scenarios
+      operationId: bulkArchiveScenarios
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of scenario ids to archive
+        required: true
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/bulk/delete:
+    post:
+      tags:
+      - scenario
+      summary: Delete a set of scenarios
+      operationId: bulkDeleteScenarios
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of scenario ids to delete
+        required: true
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/bulk/unarchive:
+    post:
+      tags:
+      - scenario
+      summary: Unarchive a set of scenarios
+      operationId: bulkUnarchiveScenarios
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of scenario ids to unarchive
+        required: true
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}:
+    get:
+      tags:
+      - scenario
+      summary: Return a particular scenario by id
+      operationId: getScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Scenario'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - scenario
+      summary: Update an existing scenario
+      operationId: updateScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: silent
+        in: query
+        description: Suppress notification emails
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: Scenario data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateScenario'
+      responses:
+        '204':
+          description: scenario updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - scenario
+      summary: Delete a scenario
+      operationId: deleteScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: scenario deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/audit-log:
+    get:
+      tags:
+      - scenario
+      summary: Return past audit log events for a scenario, paginated
+      operationId: getScenarioAuditLog
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: from
+        in: query
+        description: Timestamp to start search at
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsEvent'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/combine:
+    post:
+      tags:
+      - scenario
+      summary: Combine multiple scenarios into another scenario
+      operationId: combineScenarios
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id to combine the other scenarios into
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CombineScenarioRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/dates:
+    post:
+      tags:
+      - scenario
+      summary: Adjust the dates of the changes in a scenario
+      operationId: adjustDatesScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AdjustScenarioDateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/export/audit:
+    post:
+      tags:
+      - scenario
+      summary: Export a scenario's audit log
+      operationId: exportScenarioAuditLog
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Export options
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/merge:
+    post:
+      tags:
+      - scenario
+      summary: Merge a scenario into the primary timeline
+      operationId: mergeScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id to merge
+        required: true
+        type: string
+      - name: skipErrors
+        in: query
+        description: If passed, will skip any changes that fail validation
+        required: true
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/recalculate-metadata:
+    post:
+      tags:
+      - scenario
+      summary: Manually recalculate a scenario's metadata
+      operationId: recalculateScenarioMetadata
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ScenarioMetadata'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/update-shared-view:
+    post:
+      tags:
+      - scenario
+      summary: Update a scenario view config
+      operationId: updateScenarioSharedView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ScenarioSharedViewConfig'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/scenario/{scenarioId}/update-shared-views:
+    post:
+      tags:
+      - scenario
+      summary: Upsert multiple scenario view configs in a single atomic request
+      operationId: updateScenarioSharedViews
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Shared view configs to upsert, each matched and replaced by type
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/ScenarioSharedViewConfig'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  CostImpact:
+    type: object
+    required:
+    - annual
+    - firstMonth
+    - months
+    properties:
+      annual:
+        type: number
+        description: total annual run-rate impact
+      firstMonth:
+        type: string
+        description: first month to be affected
+      months:
+        type: array
+        description: impact to each month, starting at firstMonth
+        items:
+          type: number
+  ScenarioBudgetImpact:
+    type: object
+    required:
+    - budgetId
+    - budgetLabel
+    - primaryUsage
+    - scenarioUsage
+    - amount
+    properties:
+      budgetId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      budgetLabel:
+        type: string
+      budgetColor:
+        type: string
+      primaryUsage:
+        description: usage in primary absent the scenario's changes
+        $ref: '#/definitions/Money'
+      scenarioUsage:
+        description: usage within the scenario
+        $ref: '#/definitions/Money'
+      amount:
+        description: total amount available in the budget
+        $ref: '#/definitions/Money'
+  ScenarioMetadata:
+    type: object
+    required:
+    - scenarioId
+    - access
+    - canChange
+    - budgetImpacts
+    properties:
+      scenarioId:
+        type: string
+        description: scenario id
+        example: 588f7ee98f138b19220041a7
+      changeCount:
+        type: integer
+        format: int32
+        description: number of changes contained in scenario
+      jobCount:
+        type: integer
+        format: int32
+        description: number of job changes contained in scenario
+      access:
+        type: array
+        description: access information on the user for the entity
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      canChange:
+        type: boolean
+        description: whether user can edit the scenario
+      cost:
+        description: summary of cost impact on scenario
+        $ref: '#/definitions/CostImpact'
+      budgetImpacts:
+        type: array
+        description: summary of scenario impact on budgets
+        items:
+          $ref: '#/definitions/ScenarioBudgetImpact'
+      changeAt:
+        type: string
+        description: most recent time the scenario was changed
+        example: '2017-01-24T13:57:52Z'
+      calcEndAt:
+        type: string
+        description: most recent summary calculation ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  CreateScenario:
+    type: object
+    required:
+    - name
+    - startDateFixed
+    properties:
+      name:
+        type: string
+        description: scenario name
+        example: Q4 Conservative Plan
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: scenario description
+        example: Q4 Conservative Plan
+        minItems: 0
+        maxItems: 2000
+      startDate:
+        type: string
+        format: date
+        description: date that this scenario diverges from primary
+        example: '2017-01-15'
+      status:
+        type: string
+        description: status of scenario
+        enum:
+        - OPEN
+        - INACTIVE
+        - MERGED
+        - DRAFT
+        - ARCHIVED
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this scenario
+        items:
+          $ref: '#/definitions/ShareAccess'
+      type:
+        type: string
+        description: Type of scenario to be created
+        enum:
+        - GENERAL
+        - COMP
+        - PROMOTION
+        - TERMINATE
+        - CREATE_JOB
+        - UPDATE_JOB
+        - BUDGET
+        - BACKFILL
+      startDateFixed:
+        type: string
+        description: whether or not the start date should stay fixed in time, or update to today's date as time passes
+        enum:
+        - FIXED
+        - TODAY
+      query:
+        type: string
+        description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
+      validJobIdSet:
+        type: array
+        description: This scenario changes are restricted to the following jobIds
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: The entity this scenario is associated with
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: The type of entity associated with this scenario
+        enum:
+        - COMP_REVIEW
+      sharedViewConfig:
+        type: array
+        description: View configurations associated with this scenario
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ScenarioSharedViewConfig'
+      budget:
+        description: Total budget associated with the scenario
+        $ref: '#/definitions/Money'
+  ScenarioSharedViewConfig:
+    type: object
+    properties:
+      customColumnNames:
+        type: array
+        description: list of column names to display
+        items:
+          type: string
+      columnWidths:
+        type: object
+        description: map of column names to widths
+        additionalProperties:
+          type: integer
+          format: int32
+      type:
+        type: string
+        description: type of view
+        enum:
+        - ALL_CHANGES_GROUPED
+        - CREATE
+        - HIRE
+        - DELETE
+        - DEPART
+        - COMP
+        - UPDATE
+        - MOVE
+      updateId:
+        type: string
+        description: update id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: update at
+  UpdateScenario:
+    type: object
+    properties:
+      name:
+        type: string
+        description: scenario name
+        example: Q4 Conservative Plan
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: scenario description
+        example: Q4 Conservative Plan
+        minItems: 0
+        maxItems: 2000
+      startDate:
+        type: string
+        format: date
+        description: date that this scenario diverges from primary
+        example: '2017-01-15'
+      status:
+        type: string
+        description: status of scenario
+        enum:
+        - OPEN
+        - INACTIVE
+        - MERGED
+        - DRAFT
+        - ARCHIVED
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this scenario
+        items:
+          $ref: '#/definitions/ShareAccess'
+      startDateFixed:
+        type: string
+        description: whether or not the start date should stay fixed in time, or update to today's date as time passes
+        enum:
+        - FIXED
+        - TODAY
+      validJobIdSet:
+        type: array
+        description: This scenario changes are restricted to the following jobIds
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: The entity this scenario is associated with
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: The type of entity associated with this scenario
+        enum:
+        - COMP_REVIEW
+      sharedViewConfig:
+        type: array
+        description: View configurations associated with this scenario
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ScenarioSharedViewConfig'
+      budget:
+        description: Total budget associated with the scenario
+        $ref: '#/definitions/Money'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  AdjustScenarioDateRequest:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date
+        description: date to use as new start date
+      days:
+        type: integer
+        format: int32
+        description: number of days to adjust forward
+  CombineScenarioRequest:
+    type: object
+    required:
+    - scenarioIds
+    properties:
+      scenarioIds:
+        type: array
+        description: scenarios to combine
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      copyOnly:
+        type: boolean
+      useScenarioDateForChanges:
+        type: boolean
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  ResultsScenario:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Scenario'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ResultsEvent:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  Scenario:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - startDate
+    - status
+    - shareAccess
+    - createId
+    - createAt
+    - updateId
+    - updateAt
+    - startDateFixed
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: scenario name
+        example: Q4 Conservative Plan
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: scenario description
+        example: Q4 Conservative Plan
+        minItems: 0
+        maxItems: 2000
+      startDate:
+        type: string
+        format: date
+        description: date that this scenario diverges from primary
+        example: '2017-01-15'
+      status:
+        type: string
+        description: status of scenario
+        enum:
+        - OPEN
+        - INACTIVE
+        - MERGED
+        - DRAFT
+        - ARCHIVED
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this scenario
+        items:
+          $ref: '#/definitions/ShareAccess'
+      cost:
+        description: full summary of cost impact on scenario
+        $ref: '#/definitions/CostImpact'
+      changeCount:
+        type: integer
+        format: int32
+        description: number of changes contained in scenario
+      changeCounts:
+        type: object
+        description: number of changes of each type contained in scenario
+        additionalProperties:
+          type: integer
+          format: int32
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      mergeId:
+        type: string
+        description: merged by user id
+        example: 588f7ee98f138b19220041a7
+      mergeAt:
+        type: string
+        description: merged timestamp
+        example: '2017-01-24T13:57:52Z'
+      calcStartAt:
+        type: string
+        description: most recent summary calculation started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      calcEndAt:
+        type: string
+        description: most recent summary calculation ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      changeAt:
+        type: string
+        description: timestamp of most recent changes made to scenario
+        example: '2017-01-24T13:57:52Z'
+      changeId:
+        type: string
+        description: user who made the most recent change to scenario
+        example: '2017-01-24T13:57:52Z'
+      type:
+        type: string
+        description: Type of scenario to be created
+        enum:
+        - GENERAL
+        - COMP
+        - PROMOTION
+        - TERMINATE
+        - CREATE_JOB
+        - UPDATE_JOB
+        - BUDGET
+        - BACKFILL
+      startDateFixed:
+        type: string
+        description: whether or not the start date should stay fixed in time, or update to today's date as time passes
+        enum:
+        - FIXED
+        - TODAY
+      query:
+        type: string
+        description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
+      validJobIdSet:
+        type: array
+        description: This scenario changes are restricted to the following jobIds
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      approvalRequestId:
+        type: string
+        description: Approval request id, if the scenario has been submitted for approval
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: The entity this scenario is associated with
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: The type of entity associated with this scenario
+        enum:
+        - COMP_REVIEW
+      sharedViewConfig:
+        type: array
+        description: View configurations associated with this scenario
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ScenarioSharedViewConfig'
+      budget:
+        description: Total budget associated with the scenario
+        $ref: '#/definitions/Money'
+  Event:
+    type: object
+    required:
+    - id
+    - userId
+    - type
+    - entityType
+    - entityId
+    - at
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id who caused the event
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of event
+        enum:
+        - APP
+        - APPROVE
+        - CANCEL
+        - COMBINE
+        - CREATE
+        - DELETE
+        - DONE
+        - ERROR
+        - EXPORT
+        - EXPORT_CSV
+        - EXPORT_ORG_CHART
+        - GENERATE
+        - GEOIP
+        - INCOMING
+        - INSTALL
+        - INVITE
+        - INBOUND
+        - LOGIN
+        - MERGE
+        - MESSAGE
+        - OUTBOUND
+        - PREVIEW_AS
+        - READ
+        - READ_EXTERNAL
+        - READ_SENSITIVE
+        - READ_ATS
+        - READ_ATS_WEBHOOK
+        - READ_FULL_NAME
+        - READ_FUTURE_DATE
+        - READ_METADATA
+        - READ_COMP
+        - READ_BILLING
+        - READ_PENDING
+        - READ_PAYROLL
+        - READ_SENSITIVE_FILTERS
+        - WRITE_EXTERNAL
+        - REASSIGN
+        - REJECT
+        - RELEASE
+        - REMIND
+        - REMOVE_PASSWORD
+        - REQUEST
+        - RESTORE
+        - RESUME
+        - REVOKE
+        - RUN
+        - RUN_ATS
+        - SECURITY
+        - SHARE
+        - SHOW_DASHBOARD_DAYS_AHEAD
+        - SHOW_OPEN_JOBS
+        - STEP
+        - SUBMIT
+        - SYNC
+        - TEST
+        - TOKEN
+        - UNINSTALL
+        - UPDATE
+        - UPDATE_PASSWORD
+        - UPLOAD_CSV
+        - WRITE
+        - VIEW_AS
+      entityType:
+        type: string
+        description: type of target entity
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: id of target entity
+        example: 588f7ee98f138b19220041a7
+      behalfUserId:
+        type: string
+        description: id of the original user this app user is acting on behalf of
+        example: 588f7ee98f138b19220041a7
+      agentUserId:
+        type: string
+        description: id of the agent (app user) if this event was performed by an agent on behalf of a user
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        description: id of the AI chat that this event derives from
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+        description: AI chat tool use identifier that ties this event to a specific tool invocation
+      jobId:
+        type: string
+        description: jobId of the entity, if the entity is a job or closely connected to a single job
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: personId of the entity, if the entity is a person or closely connected to a single person
+        example: 588f7ee98f138b19220041a7
+      tableId:
+        type: string
+        description: id of table, if entity is a table row
+        example: 588f7ee98f138b19220041a7
+      subtype:
+        type: string
+        description: subtype of entity
+      payload:
+        type: object
+        description: event-specific payload containing information about the change that took place
+        additionalProperties:
+          type: object
+      at:
+        type: string
+        description: timestamp of event
+      processId:
+        type: string
+        description: id of process
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+        description: effective date, if in use
+      scenarioId:
+        type: string
+        description: id of scenario
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: id of associated entity, such as comp cycle
+        example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: set of fields that were updated by the event
+        uniqueItems: true
+        items:
+          type: string
+      code:
+        type: string
+        description: event code, for example job.update
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title

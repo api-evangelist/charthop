@@ -1,0 +1,750 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access Time off ledger API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: Time off ledger
+paths:
+  /v1/org/{orgId}/timeoff-ledger:
+    post:
+      tags:
+      - Time off ledger
+      summary: Create a time off ledger entry
+      operationId: createLedgerEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTimeOffLedgerEntry'
+      responses:
+        '201':
+          description: ledger entry created
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: forbidden
+  /v1/org/{orgId}/timeoff-ledger/data:
+    get:
+      tags:
+      - Time off ledger
+      summary: Query time off ledger entries in the organization, returning particular time off, job, and person data fields
+      operationId: queryTimeOff
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: fromDate
+        in: query
+        description: From date, inclusive
+        required: true
+        type: string
+        format: date
+      - name: untilDate
+        in: query
+        description: Until date, exclusive
+        required: true
+        type: string
+        format: date
+      - name: filter
+        in: query
+        description: Filter to apply on the person
+        required: false
+        type: string
+      - name: personId
+        in: query
+        description: If retrieving from specific people, their personIds, comma-separated
+        required: false
+        type: string
+      - name: policyId
+        in: query
+        description: If retrieving for specific time off policies, the policyIds, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: ledger entries found
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+  /v1/org/{orgId}/timeoff-ledger/export:
+    post:
+      tags:
+      - Time off ledger
+      summary: Payroll export of time off ledger
+      operationId: exportTimeOffLedger
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TimeOffLedgerExportOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/timeoff-ledger/{entryId}:
+    get:
+      tags:
+      - Time off ledger
+      summary: Get a time off ledger entry by ID
+      operationId: getLedgerEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entryId
+        in: path
+        description: Ledger entry id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TimeOffLedgerEntry'
+    delete:
+      tags:
+      - Time off ledger
+      summary: Delete a time off ledger entry
+      operationId: deleteLedgerEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entryId
+        in: path
+        description: Ledger entry id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: ledger entry deleted
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  TimeOffLedgerExportOptions:
+    type: object
+    properties:
+      fromDate:
+        type: string
+        format: date
+      untilDate:
+        type: string
+        format: date
+      columns:
+        type: string
+      filter:
+        type: string
+      format:
+        type: string
+      splitColumns:
+        type: boolean
+      personIds:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      policyIds:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  CreateTimeOffLedgerEntry:
+    type: object
+    required:
+    - orgId
+    - personId
+    - entryType
+    - date
+    - days
+    - entryAction
+    properties:
+      orgId:
+        type: string
+        description: org that the time off belongs to
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: person taking the time off
+        example: 588f7ee98f138b19220041a7
+      timeOffPolicyId:
+        type: string
+        description: Time off policy to which this entry pertains.
+        example: 588f7ee98f138b19220041a7
+      entryType:
+        type: string
+        description: Ledger entry type
+        enum:
+        - EXPIRATION
+        - BALANCE_RESET
+        - CARRYOVER
+        - UPFRONT_BALANCE
+        - ACCRUAL
+        - ADJUSTMENT
+        - TIME_OFF
+      externalId:
+        type: string
+        description: external identifier, if this entry exists in an external system
+      fromDate:
+        type: string
+        format: date
+        description: For time off, from date of time off, inclusive
+      fromDatePartialDay:
+        type: number
+        description: For time off, portion of the from date to take
+      fromDatePartialDayPeriod:
+        type: string
+        description: Portion of the from day requested (e.g. AM or PM)
+        enum:
+        - AM
+        - PM
+      untilDate:
+        type: string
+        format: date
+        description: For time off, until date of time off, exclusive
+      endDatePartialDay:
+        type: number
+        description: For time off, portion of the end date (day before the until date) to take
+      endDatePartialDayPeriod:
+        type: string
+        description: Portion of the end day requested (e.g. AM or PM)
+        enum:
+        - AM
+        - PM
+      date:
+        type: string
+        format: date
+        description: date on which this entry appears in the ledger
+      days:
+        type: number
+        description: Change to the balance made by this ledger entry. This value is always nonnegative; it is interpreted in the context of entryAction.
+      hours:
+        type: number
+        description: For time off, number of hours taken
+      entryAction:
+        type: string
+        description: Action this entry takes on the balance.
+        enum:
+        - SET
+        - MIN
+        - EXPIRE
+        - CARRYOVER
+        - ADD
+        - ADD_CLAMP
+        - SUBTRACT
+      typeDescription:
+        type: string
+        description: type of time off
+      note:
+        type: string
+        description: notes on the time off
+      approval:
+        type: string
+        description: approval status of the time off
+        enum:
+        - APPROVED
+        - PENDING
+        - CANCELLED
+        - REJECTED
+        - SUPERSEDED
+      approvalAt:
+        type: string
+        description: timestamp of approval
+        example: '2017-01-24T13:57:52Z'
+      approvalUserId:
+        type: string
+        description: user who either is the next one requesting approval, or the user who did the final approval or rejection
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      requestAt:
+        type: string
+        description: requested at timestamp -- often the same as createAt
+        example: '2017-01-24T13:57:52Z'
+    description: Time off ledger entry
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object
+  CarryOverBalanceEntry:
+    type: object
+    required:
+    - balance
+    properties:
+      balance:
+        type: number
+      fromDate:
+        type: string
+        format: date
+      expireDate:
+        type: string
+        format: date
+  TimeOffLedgerEntry:
+    type: object
+    required:
+    - id
+    - orgId
+    - personId
+    - entryType
+    - date
+    - entryAction
+    properties:
+      id:
+        type: string
+        description: Globally unique id of this ledger entry
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org that the time off belongs to
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: person taking the time off
+        example: 588f7ee98f138b19220041a7
+      timeOffPolicyId:
+        type: string
+        description: Time off policy to which this entry pertains.
+        example: 588f7ee98f138b19220041a7
+      entryType:
+        type: string
+        description: Ledger entry type
+        enum:
+        - EXPIRATION
+        - BALANCE_RESET
+        - CARRYOVER
+        - UPFRONT_BALANCE
+        - ACCRUAL
+        - ADJUSTMENT
+        - TIME_OFF
+      externalId:
+        type: string
+        description: external identifier, if this entry exists in an external system
+      fromDate:
+        type: string
+        format: date
+        description: For time off, from date of time off, inclusive
+      fromDatePartialDay:
+        type: number
+        description: For time off, portion of the from date to take
+      fromDatePartialDayPeriod:
+        type: string
+        description: Portion of the from day requested (e.g. AM or PM)
+        enum:
+        - AM
+        - PM
+      untilDate:
+        type: string
+        format: date
+        description: For time off, until date of time off, exclusive
+      endDatePartialDay:
+        type: number
+        description: For time off, portion of the end date (day before the until date) to take
+      endDatePartialDayPeriod:
+        type: string
+        description: Portion of the end day requested (e.g. AM or PM)
+        enum:
+        - AM
+        - PM
+      date:
+        type: string
+        format: date
+        description: date on which this entry appears in the ledger
+      days:
+        type: number
+        description: Change to the balance made by this ledger entry. This value is always nonnegative; it is interpreted in the context of entryAction.
+      hours:
+        type: number
+        description: For time off, number of hours taken
+      entryAction:
+        type: string
+        description: Action this entry takes on the balance.
+        enum:
+        - SET
+        - MIN
+        - EXPIRE
+        - CARRYOVER
+        - ADD
+        - ADD_CLAMP
+        - SUBTRACT
+      typeDescription:
+        type: string
+        description: type of time off
+      note:
+        type: string
+        description: notes on the time off
+      approval:
+        type: string
+        description: approval status of the time off
+        enum:
+        - APPROVED
+        - PENDING
+        - CANCELLED
+        - REJECTED
+        - SUPERSEDED
+      approvalAt:
+        type: string
+        description: timestamp of approval
+        example: '2017-01-24T13:57:52Z'
+      approvalUserId:
+        type: string
+        description: user who either is the next one requesting approval, or the user who did the final approval or rejection
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      requestAt:
+        type: string
+        description: requested at timestamp -- often the same as createAt
+        example: '2017-01-24T13:57:52Z'
+      carryOverBalance:
+        type: array
+        description: Carry over balance after this ledger entry. Already included in balance.
+        items:
+          $ref: '#/definitions/CarryOverBalanceEntry'
+      balance:
+        type: number
+        description: Balance after this ledger entry.
+      changeFromPrevious:
+        type: number
+        description: Balance change from previous entry.
+    description: Time off ledger entry

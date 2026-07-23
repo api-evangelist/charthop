@@ -1,0 +1,670 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access guideline API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: guideline
+paths:
+  /v1/org/{orgId}/guideline:
+    get:
+      tags:
+      - guideline
+      summary: Get all guidelines for a given comp review
+      operationId: findGuidelinesForCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: query
+        description: comp review id
+        required: true
+        type: string
+      - name: includeDeleted
+        in: query
+        description: include deleted guidelines
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGuideline'
+    post:
+      tags:
+      - guideline
+      summary: Create a new guideline
+      operationId: createGuideline
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGuideline'
+      responses:
+        '201':
+          description: Created
+  /v1/org/{orgId}/guideline/{id}:
+    get:
+      tags:
+      - guideline
+      summary: Get a specific guideline
+      operationId: findGuideline
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired guideline
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Guideline'
+    patch:
+      tags:
+      - guideline
+      summary: Update a guideline
+      operationId: updateGuideline
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        type: string
+      - name: id
+        in: path
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGuideline'
+      responses:
+        '204':
+          description: No Content
+    delete:
+      tags:
+      - guideline
+      summary: Delete a guideline
+      operationId: deleteGuideline
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        type: string
+      - name: id
+        in: path
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content
+  /v1/org/{orgId}/guideline/{id}/calculate:
+    get:
+      tags:
+      - guideline
+      summary: Calculate the matrix values for a specific guideline (which may apply to multiple scenarios in the comp review)
+      operationId: calculateGuideline
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired guideline
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGuidelineCalculation'
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  CreateGuideline:
+    type: object
+    required:
+    - compReviewId
+    - label
+    - appliedField
+    - sourceField
+    - calculationType
+    - flagMode
+    - enablePopulateValue
+    - basisType
+    properties:
+      compReviewId:
+        type: string
+        description: comp review id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: guideline name
+        example: Merit Guideline
+        minItems: 1
+        maxItems: 80
+      budgetPoolId:
+        type: string
+        description: the budget pool the guideline is allocated from
+        example: 588f7ee98f138b19220041a7
+      participantsExpr:
+        type: string
+        description: CQL filter to determine which employees the guideline applies to
+        example: is:person and tenure>=12
+      appliedField:
+        type: string
+        description: the field the guideline applies to
+        example: '''base'' or ''grantShares'''
+      sourceField:
+        type: string
+        description: the field the guideline is calculated from
+        example: '''base'' or ''grantShares'''
+      calculationType:
+        type: string
+        description: how does the guideline calculate the target value? e.g. is there a range (min/max) or only a target
+        example: TARGET
+        enum:
+        - RANGE
+        - TARGET
+      flagMode:
+        type: string
+        description: how does the guideline indicate deviations from the target amount
+        example: NONE
+        enum:
+        - DEVIATION_THRESHOLD
+        - NONE
+      flagDeviationThreshold:
+        type: number
+        description: the threshold (percent) against which deviations from the guideline are flagged
+        example: '0.75'
+      enablePopulateValue:
+        type: boolean
+        description: whether or not the target values from the guidelines are pre-populated in the given columns
+        example: 'false'
+      basisType:
+        type: string
+        description: how an individual guideline value itself is calculated, e.g. percentage of the appliedField, fixed amount, or custom CQL
+        example: CUSTOM
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      basisExpr:
+        type: string
+        description: if basisType.CUSTOM, the custom CQL expression used to generate the guideline value
+        example: 'tenure>12 ? (base * 0.04) : (base * 0.02)'
+      basisFieldMatrix:
+        description: if the guideline is calculated based on given field(s)
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedAmountRange:
+        description: the value range if basisType.FIXED, the appliedField is of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/MoneyRange'
+      fixedValueRange:
+        description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/ValueRange'
+  MoneyRange:
+    type: object
+    properties:
+      max:
+        description: the maximum value in the range (type = Money)
+        $ref: '#/definitions/Money'
+      min:
+        description: the minimum value in the range (type = Money)
+        $ref: '#/definitions/Money'
+      target:
+        description: the target value for the range (type = Money)
+        $ref: '#/definitions/Money'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  UpdateGuideline:
+    type: object
+    properties:
+      label:
+        type: string
+        description: guideline name
+        example: Merit Guideline
+        minItems: 1
+        maxItems: 80
+      budgetPoolId:
+        type: string
+        description: the budget pool the guideline is allocated from
+        example: 588f7ee98f138b19220041a7
+      participantsExpr:
+        type: string
+        description: CQL filter to determine which employees the guideline applies to
+        example: is:person and tenure>=12
+      appliedField:
+        type: string
+        description: the field the guideline applies to
+        example: '''base'' or ''grantShares'''
+      sourceField:
+        type: string
+        description: the field the guideline is calculated from
+        example: '''base'' or ''grantShares'''
+      calculationType:
+        type: string
+        description: how does the guideline calculate the target value? e.g. is there a range (min/max) or only a target
+        example: TARGET
+        enum:
+        - RANGE
+        - TARGET
+      flagMode:
+        type: string
+        description: how does the guideline indicate deviations from the target amount
+        example: NONE
+        enum:
+        - DEVIATION_THRESHOLD
+        - NONE
+      flagDeviationThreshold:
+        type: number
+        description: the threshold (percent) against which deviations from the guideline are flagged
+        example: '0.75'
+      enablePopulateValue:
+        type: boolean
+        description: whether or not the target values from the guidelines are pre-populated in the given columns
+        example: 'false'
+      basisType:
+        type: string
+        description: how an individual guideline value itself is calculated, e.g. percentage of the appliedField, fixed amount, or custom CQL
+        example: CUSTOM
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      basisExpr:
+        type: string
+        description: if basisType.CUSTOM, the custom CQL expression used to generate the guideline value
+        example: 'tenure>12 ? (base * 0.04) : (base * 0.02)'
+      basisFieldMatrix:
+        description: if the guideline is calculated based on given field(s)
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedAmountRange:
+        description: the value range if basisType.FIXED, the appliedField is of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/MoneyRange'
+      fixedValueRange:
+        description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/ValueRange'
+  GuidelineCalculation:
+    type: object
+    required:
+    - guidelineId
+    - jobId
+    - compReviewId
+    - guidelineLabel
+    - appliedField
+    - flagMode
+    - isDeviated
+    - deviation
+    - fields
+    properties:
+      guidelineId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      jobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      compReviewId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      budgetPoolId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      guidelineLabel:
+        type: string
+      min:
+        type: object
+      max:
+        type: object
+      target:
+        type: object
+      appliedField:
+        type: string
+      flagMode:
+        type: string
+        enum:
+        - DEVIATION_THRESHOLD
+        - NONE
+      flagDeviationThreshold:
+        type: number
+      isDeviated:
+        type: boolean
+      deviation:
+        $ref: '#/definitions/Deviation'
+      fields:
+        type: object
+        additionalProperties:
+          type: object
+  Guideline:
+    type: object
+    required:
+    - id
+    - orgId
+    - compReviewId
+    - label
+    - appliedField
+    - sourceField
+    - calculationType
+    - flagMode
+    - enablePopulateValue
+    - basisType
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      compReviewId:
+        type: string
+        description: comp review id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: guideline name
+        example: Merit Guideline
+        minItems: 1
+        maxItems: 80
+      budgetPoolId:
+        type: string
+        description: the budget pool the guideline is allocated from
+        example: 588f7ee98f138b19220041a7
+      participantsExpr:
+        type: string
+        description: CQL filter to determine which employees the guideline applies to
+        example: is:person and tenure>=12
+      appliedField:
+        type: string
+        description: the field the guideline applies to
+        example: '''base'' or ''grantShares'''
+      sourceField:
+        type: string
+        description: the field the guideline is calculated from
+        example: '''base'' or ''grantShares'''
+      calculationType:
+        type: string
+        description: how does the guideline calculate the target value? e.g. is there a range (min/max) or only a target
+        example: TARGET
+        enum:
+        - RANGE
+        - TARGET
+      flagMode:
+        type: string
+        description: how does the guideline indicate deviations from the target amount
+        example: NONE
+        enum:
+        - DEVIATION_THRESHOLD
+        - NONE
+      flagDeviationThreshold:
+        type: number
+        description: the threshold (percent) against which deviations from the guideline are flagged
+        example: '0.75'
+      enablePopulateValue:
+        type: boolean
+        description: whether or not the target values from the guidelines are pre-populated in the given columns
+        example: 'false'
+      basisType:
+        type: string
+        description: how an individual guideline value itself is calculated, e.g. percentage of the appliedField, fixed amount, or custom CQL
+        example: CUSTOM
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      basisExpr:
+        type: string
+        description: if basisType.CUSTOM, the custom CQL expression used to generate the guideline value
+        example: 'tenure>12 ? (base * 0.04) : (base * 0.02)'
+      basisFieldMatrix:
+        description: if the guideline is calculated based on given field(s)
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedAmountRange:
+        description: the value range if basisType.FIXED, the appliedField is of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/MoneyRange'
+      fixedValueRange:
+        description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/ValueRange'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  Deviation:
+    type: object
+    properties:
+      min:
+        type: object
+      max:
+        type: object
+  BasisCondition:
+    type: object
+    required:
+    - conditionExpr
+    properties:
+      conditionExpr:
+        type: string
+      amountRange:
+        $ref: '#/definitions/MoneyRange'
+      valueRange:
+        $ref: '#/definitions/ValueRange'
+  ValueRange:
+    type: object
+    properties:
+      max:
+        type: number
+        description: the maximum value in the range (type = BigDecimal)
+      min:
+        type: number
+        description: the minimum value in the range (type = BigDecimal)
+      target:
+        type: number
+        description: the target value for the range (type = BigDecimal)
+  ResultsGuidelineCalculation:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GuidelineCalculation'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  BasisFieldMatrix:
+    type: object
+    required:
+    - includedFields
+    - conditions
+    properties:
+      includedFields:
+        type: array
+        items:
+          type: string
+      conditions:
+        type: array
+        items:
+          $ref: '#/definitions/BasisCondition'
+  ResultsGuideline:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Guideline'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

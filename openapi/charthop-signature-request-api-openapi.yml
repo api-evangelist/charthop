@@ -1,0 +1,852 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access signature-request API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: signature-request
+paths:
+  /v1/org/{orgId}/signature-request:
+    get:
+      tags:
+      - signature-request
+      summary: Return signature requests
+      operationId: findSignatureRequests
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: requestUserId
+        in: query
+        description: Filter by signature requests requested by an individual
+        required: false
+        type: string
+      - name: signUserId
+        in: query
+        description: Filter by signature requests requested for signature of an individual
+        required: false
+        type: string
+      - name: fromCreateAt
+        in: query
+        description: Filter by signature requests requested from a particular timestamp
+        required: false
+        type: string
+      - name: untilCreateAt
+        in: query
+        description: Filter by signature requests requested up until a particular timestamp
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Signature request id to start from, when paginating
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsSignatureRequest'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/file/{fileId}:
+    get:
+      tags:
+      - signature-request
+      summary: Retrieve an individual signature request on an existing file
+      operationId: getSignatureRequestForFile
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fileId
+        in: path
+        description: File identifier
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/SignatureRequest'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - signature-request
+      summary: Create a new signature request on a file
+      operationId: createSignatureRequestForFile
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fileId
+        in: path
+        description: File identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateSignatureRequestRequest'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/usage:
+    get:
+      tags:
+      - signature-request
+      summary: Retrieve current signature request usage for the organization
+      operationId: getSignatureRequestUsage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/SignatureRequestUsageResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/{id}:
+    get:
+      tags:
+      - signature-request
+      summary: Retrieve an individual signature request
+      operationId: getSignatureRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: Filter by signature requests requested by an individual
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/SignatureRequest'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/{id}/cancel:
+    post:
+      tags:
+      - signature-request
+      summary: Cancel an existing signature request
+      operationId: cancelSignatureRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: The signature request id to cancel
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/{id}/decline:
+    post:
+      tags:
+      - signature-request
+      summary: Decline to sign a signature request
+      operationId: declineSignatureRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: The signature request id to decline
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/SignRequest'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/{id}/external-url:
+    get:
+      tags:
+      - signature-request
+      summary: Retrieve an individual signature request's signing URL if using an external service
+      operationId: getSignatureRequestExternalUrl
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: Signature request ID
+        required: true
+        type: string
+      - name: redirectPath
+        in: query
+        description: Redirect path to send user to when signature is complete
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ExternalSignUrlResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/{id}/sign:
+    post:
+      tags:
+      - signature-request
+      summary: Sign a signature request
+      operationId: signSignatureRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: The signature request id to sign
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/SignRequest'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/signature-request/{id}/signature:
+    get:
+      tags:
+      - signature-request
+      summary: Retrieve all of the signatures relating to a signature request
+      operationId: findSignaturesOnSignatureRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: Filter by signature requests requested by an individual
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsSignature'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  SignatureSigner:
+    type: object
+    required:
+    - userId
+    - status
+    - order
+    properties:
+      userId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        enum:
+        - PENDING
+        - SIGNED
+        - DECLINED
+        - CANCELED
+      order:
+        type: integer
+        format: int32
+  Address:
+    type: object
+    required:
+    - country
+    properties:
+      street1:
+        type: string
+        description: street address, line 1
+        example: 123 Anywhere Street
+        minItems: 0
+        maxItems: 200
+      street2:
+        type: string
+        description: street address, line 2
+        example: Apt 6L
+        minItems: 0
+        maxItems: 200
+      street3:
+        type: string
+        description: street address, line 3
+        example: Sixth Floor
+        minItems: 0
+        maxItems: 200
+      city:
+        type: string
+        description: city
+        example: New York
+        minItems: 0
+        maxItems: 80
+      state:
+        type: string
+        description: state
+        example: NY
+        minItems: 0
+        maxItems: 80
+      country:
+        type: string
+        description: country (two-digit ISO code)
+        example: NY
+        pattern: ^[A-Z]{2}$
+      postal:
+        type: string
+        description: postal code
+        example: '10001'
+        minItems: 0
+        maxItems: 10
+      geo:
+        description: geopoint location
+        $ref: '#/definitions/Geopoint'
+      approxGeo:
+        description: approximate geopoint location (suitable for a map placement, but not exact location)
+        $ref: '#/definitions/Geopoint'
+  CreateSignatureRequestRequest:
+    type: object
+    required:
+    - signerUserIds
+    properties:
+      signerUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      message:
+        type: string
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+      isSequential:
+        type: boolean
+  ExternalSignUrlResponse:
+    type: object
+    required:
+    - url
+    properties:
+      url:
+        type: string
+        format: uri
+  ResultsSignature:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Signature'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  SignatureRequest:
+    type: object
+    required:
+    - id
+    - orgId
+    - fileId
+    - fileHash
+    - fileEntityId
+    - fileEntityType
+    - status
+    - signers
+    - requestAt
+    - requestUserId
+    properties:
+      id:
+        type: string
+        description: globally unique id of signature request
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      fileId:
+        type: string
+        description: file id that is being signed
+        example: 588f7ee98f138b19220041a7
+      fileVersionId:
+        type: string
+        description: file version id that is being signed
+        example: 588f7ee98f138b19220041a7
+      fileHash:
+        type: string
+        description: SHA-256 hash of the contents of the file
+      fileTemplateId:
+        type: string
+        description: template id that was used to generate the file, if applicable
+        example: 588f7ee98f138b19220041a7
+      externalId:
+        type: string
+        description: external id, if an external signature service is used
+      externalService:
+        type: string
+        description: external signature service name (e.g. boldsign)
+      standard:
+        type: string
+        description: signature standard used, defaults to SES if not specified
+        enum:
+        - QES
+      fileEntityId:
+        type: string
+        description: the entity that stores the signed file
+        example: 588f7ee98f138b19220041a7
+      fileEntityType:
+        type: string
+        description: the entity that stores the signed file
+        enum:
+        - PERSON
+        - USER
+        - ORG
+      status:
+        type: string
+        description: the overall status of this signature request
+        enum:
+        - PENDING
+        - SIGNED
+        - DECLINED
+        - CANCELED
+      signers:
+        type: array
+        description: the signers of this signature request
+        items:
+          $ref: '#/definitions/SignatureSigner'
+      requestAt:
+        type: string
+        description: the timestamp that the request was made
+      requestUserId:
+        type: string
+        description: the user who made the request to sign
+        example: 588f7ee98f138b19220041a7
+      notifyUserIds:
+        type: array
+        description: additional user ids to notify on signature events
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      signAt:
+        type: string
+        description: the timestamp that it was signed, if it was signed
+      cancelAt:
+        type: string
+        description: the timestamp that it was canceled, if it was canceled
+      declineAt:
+        type: string
+        description: the timestamp that it was declined, if it was declined
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+  SignRequest:
+    type: object
+    required:
+    - fileHash
+    properties:
+      signatureName:
+        type: string
+      fileHash:
+        type: string
+      comment:
+        type: string
+  Geopoint:
+    type: object
+    required:
+    - type
+    - coordinates
+    properties:
+      type:
+        type: string
+        description: Type of point
+        readOnly: true
+      coordinates:
+        type: array
+        description: The longitude and latitude of the point
+        readOnly: true
+        items:
+          type: number
+          format: double
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  SignatureBlock:
+    type: object
+    required:
+    - signature
+    - key
+    - algorithm
+    - timestamp
+    - fileHash
+    - version
+    properties:
+      signature:
+        type: string
+      key:
+        type: string
+      algorithm:
+        type: string
+      timestamp:
+        type: string
+      fileHash:
+        type: string
+      version:
+        type: integer
+        format: int32
+  SignatureRequestUsageResponse:
+    type: object
+    required:
+    - signatureRequestCount
+    - qesSignatureRequestCount
+    - qesSignatureRequestsLimit
+    - nextPeriodStartDate
+    properties:
+      signatureRequestCount:
+        type: integer
+        format: int32
+      qesSignatureRequestCount:
+        type: integer
+        format: int32
+      qesSignatureRequestsLimit:
+        type: integer
+        format: int32
+      nextPeriodStartDate:
+        type: string
+        format: date
+  Signature:
+    type: object
+    required:
+    - id
+    - orgId
+    - signatureRequestId
+    - fileId
+    - status
+    - userId
+    properties:
+      id:
+        type: string
+        description: globally unique id of signature
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      signatureRequestId:
+        type: string
+        description: signature request that this signature belongs to
+        example: 588f7ee98f138b19220041a7
+      fileId:
+        type: string
+        description: the file entity that contains this signature
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: the status of this signature (either SIGNED or DECLINED)
+        enum:
+        - SIGNED
+        - DECLINED
+      comment:
+        type: string
+        description: comment given by the user for signing or not signing
+      name:
+        type: string
+        description: full name of the signature
+      title:
+        type: string
+        description: job title used in the signature
+      userId:
+        type: string
+        description: the user who signed or declined
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: the personId of the user who signed or declined
+        example: 588f7ee98f138b19220041a7
+      email:
+        type: string
+        description: the email address that was used by the user who signed or declined
+      at:
+        type: string
+        description: timestamp that the signature occurred
+      userAgent:
+        type: string
+        description: browser user-agent used by the signing user
+      remoteIp:
+        type: string
+        description: IP address used by the signing user
+      remoteIpAddress:
+        description: Geolocation of the signing user
+        $ref: '#/definitions/Address'
+      loginAt:
+        type: string
+        description: timestamp that the user logged in on their particular token session
+      authMechanism:
+        type: string
+        description: mechanism that was used to authenticate the user
+        enum:
+        - INTERNAL
+        - GENERATED
+        - TOKEN
+        - ESCALATION
+        - PASSWORD
+        - GOOGLE
+        - MICROSOFT
+        - ADP
+        - SAML
+        - UNIVERSAL_SSO
+        - OAUTH_PKCE
+        - LOGIN_TOKEN
+      signatureBlock:
+        description: details on the signing to validate the signature
+        $ref: '#/definitions/SignatureBlock'
+  ResultsSignatureRequest:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/SignatureRequest'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

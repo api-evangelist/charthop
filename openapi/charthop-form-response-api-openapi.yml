@@ -1,0 +1,1211 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access form-response API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: form-response
+paths:
+  /v1/org/{orgId}/form-response:
+    get:
+      tags:
+      - form-response
+      summary: Return form responses by form
+      operationId: findFormResponses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formId
+        in: query
+        description: Form id to filter by
+        required: false
+        type: string
+      - name: assessmentId
+        in: query
+        description: Assessment id to filter by
+        required: false
+        type: string
+      - name: submitPersonId
+        in: query
+        description: Person id to filter by (person who submitted the form)
+        required: false
+        type: string
+      - name: targetId
+        in: query
+        description: Target id to filter by
+        required: false
+        type: string
+      - name: submitPersonFilter
+        in: query
+        description: Filter to apply on the submitter
+        required: false
+        type: string
+      - name: targetFilter
+        in: query
+        description: Filter to apply on the target
+        required: false
+        type: string
+      - name: fromId
+        in: query
+        description: FormResponse id to start paginating from
+        required: false
+        type: string
+      - name: fromSubmitAt
+        in: query
+        description: Submit timestamp to start from (inclusive)
+        required: false
+        type: string
+      - name: untilSubmitAt
+        in: query
+        description: Submit timestamp to go until (exclusive)
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: desc
+        in: query
+        description: Whether to return results sorted in descending timestamp order
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: returnFormVersions
+        in: query
+        description: Return form versions (question ids / text) alongside the responses
+        required: false
+        type: boolean
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsWithFormVersions'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/count:
+    get:
+      tags:
+      - form-response
+      summary: Return the total count of form responses
+      operationId: getFormResponseCount
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formId
+        in: query
+        description: Form id to filter by
+        required: false
+        type: string
+      - name: assessmentId
+        in: query
+        description: Assessment id to filter by
+        required: false
+        type: string
+      - name: submitPersonFilter
+        in: query
+        description: Filter to apply on the submitter
+        required: false
+        type: string
+      - name: targetFilter
+        in: query
+        description: Filter to apply on the target
+        required: false
+        type: string
+      - name: fromSubmitAt
+        in: query
+        description: Submit timestamp to start from (inclusive)
+        required: false
+        type: string
+      - name: untilSubmitAt
+        in: query
+        description: Submit timestamp to go until (exclusive)
+        required: false
+        type: string
+      - name: questionId
+        in: query
+        description: Question id to filter by
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FormResponseCount'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/export:
+    post:
+      tags:
+      - form-response
+      summary: Export form responses
+      operationId: exportFormResponses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FormResponsesExportOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/import:
+    post:
+      tags:
+      - form-response
+      summary: Import form response data from CSV file
+      operationId: importCsv
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formId
+        in: query
+        description: Form id to update
+        required: false
+        type: string
+      - name: skipErrors
+        in: query
+        description: Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: true
+        type: boolean
+      - name: createEnumValues
+        in: query
+        description: Whether to create enum values on the fly on questions if they don't previously exist
+        required: true
+        type: boolean
+      - name: importFromProcessId
+        in: query
+        description: Import a file from another process, instead of directly uploading it
+        required: false
+        type: string
+      - name: parentProcessId
+        in: query
+        description: Parent process id to attach to
+        required: false
+        type: string
+      responses:
+        '200':
+          description: import started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/form-response/import/download-template:
+    get:
+      tags:
+      - form-response
+      summary: Download a CSV template for a form import
+      operationId: downloadImportCsvTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formId
+        in: query
+        description: Form id
+        required: false
+        type: string
+      responses:
+        '200':
+          description: success
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/{formResponseId}:
+    get:
+      tags:
+      - form-response
+      summary: Return a particular form response by id
+      operationId: getFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: FormResponse id
+        required: true
+        type: string
+      - name: format
+        in: query
+        description: Data format to use for answers; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/FormResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - form-response
+      summary: Update an existing form response's metadata, such as shareAccess information
+      operationId: updateFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: FormResponse id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: FormResponse data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateFormResponse'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    post:
+      tags:
+      - form-response
+      summary: Update an existing form response's answers without re-submitting
+      operationId: updateFormResponseAnswers
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: FormResponse id
+        required: true
+        type: string
+      - name: submit
+        in: query
+        description: If true, will re-submit the form response
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: FormResponse data to update
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - form-response
+      summary: Delete a form response
+      operationId: deleteFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: FormResponse id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/{formResponseId}/approve:
+    post:
+      tags:
+      - form-response
+      summary: Approve a form response
+      operationId: approveFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: Form response id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Approval details
+        required: false
+        schema:
+          $ref: '#/definitions/FormResponseApproval'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/{formResponseId}/export:
+    get:
+      tags:
+      - form-response
+      summary: Export a particular form response as a PDF document
+      operationId: exportFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: Form response id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/{formResponseId}/reject:
+    post:
+      tags:
+      - form-response
+      summary: Reject a form response
+      operationId: rejectFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: Form response id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Approval details
+        required: false
+        schema:
+          $ref: '#/definitions/FormResponseApproval'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/{formResponseId}/release:
+    post:
+      tags:
+      - form-response
+      summary: Release a form response
+      operationId: releaseFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: Form response id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/form-response/{formResponseId}/request-changes:
+    post:
+      tags:
+      - form-response
+      summary: Request changes for a form response
+      operationId: requestChangesOnFormResponse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: formResponseId
+        in: path
+        description: Form response id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Approval details
+        required: false
+        schema:
+          $ref: '#/definitions/FormResponseApproval'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: bad request
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  FormResponseCount:
+    type: object
+    required:
+    - totalCount
+    - filteredCount
+    properties:
+      totalCount:
+        type: integer
+        format: int32
+      filteredCount:
+        type: integer
+        format: int32
+  FormResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      externalId:
+        type: string
+        description: if the response was imported from an external system, the unique identifier of the response from that system
+        example: google:1234567890
+      formId:
+        type: string
+        description: form id that the response is a response for
+        example: 588f7ee98f138b19220041a7
+      formVersionId:
+        type: string
+        description: form version id that the response is a response for
+        example: 588f7ee98f138b19220041a7
+      submitPersonId:
+        type: string
+        description: person id who filled out the form response (null if anonymous)
+        example: 588f7ee98f138b19220041a7
+      submitUserId:
+        type: string
+        description: user id who filled out the form response (can be null if anonymous or imported data)
+        example: 588f7ee98f138b19220041a7
+      submitAttribution:
+        description: attribution information, if an agent completed the form on behalf of a principal
+        $ref: '#/definitions/Attribution'
+      changeId:
+        type: string
+        description: change id, if the form response is linked to a DATA change
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment id, if the form response is related to an assesment
+        example: 588f7ee98f138b19220041a7
+      createProcessId:
+        type: string
+        description: process id, if the form response was created from an import process
+        example: 588f7ee98f138b19220041a7
+      updateProcessId:
+        type: string
+        description: process id, if the form response was updated from an import process
+        example: 588f7ee98f138b19220041a7
+      shareAccess:
+        type: array
+        description: list of share access, if the form response has been shared with anyone
+        items:
+          $ref: '#/definitions/ShareAccess'
+      authorSensitive:
+        type: string
+        description: sensitivity level of the author of the form response, if it differs from the form response
+        enum:
+        - ANONYMOUS
+        - PRIVATE
+        - HIGH
+        - MANAGER
+      authorData:
+        type: object
+        description: demographic field data connected with the author of the form response
+        additionalProperties:
+          type: object
+      targetEntityId:
+        type: string
+        description: target entity id -- the entity that the form response is about
+        example: 588f7ee98f138b19220041a7
+      targetEntityType:
+        type: string
+        description: target entity type -- the entity that the form response is about
+        enum:
+        - NONE
+        - PERSON
+      answers:
+        type: array
+        description: list of answers in the form response
+        items:
+          $ref: '#/definitions/FormResponseAnswer'
+      submitAt:
+        type: string
+        description: timestamp that the form response was submitted
+      approvalAt:
+        type: string
+        description: timestamp that the form response was approved
+      approvalId:
+        type: string
+        description: user id who approved the form response
+        example: 588f7ee98f138b19220041a7
+      approvalNote:
+        type: string
+        description: note left by the user who approved -- this is for backwards compatibility with the old approval system
+      releaseAt:
+        type: string
+        description: timestamp that the form response was released
+      releaseId:
+        type: string
+        description: user id who released the form response
+        example: 588f7ee98f138b19220041a7
+      fileId:
+        type: string
+        description: if the form response was exported into a file for signature, the id of that file
+        example: 588f7ee98f138b19220041a7
+      signAt:
+        type: string
+        description: timestamp that the form response's associated file was fully signed
+      signerUserIds:
+        type: array
+        description: user ids who signed the form response, if it was signed
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: status of form response
+        enum:
+        - ACTIVE
+        - PROPOSED
+        - REJECTED
+        - AWAITING_CHANGES
+        - UNRELEASED
+      commentCount:
+        type: integer
+        format: int32
+        description: number of comments
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  FormResponsesExportOptions:
+    type: object
+    properties:
+      formId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      submitPersonFilter:
+        type: string
+      targetPersonFilter:
+        type: string
+      fromSubmitAt:
+        type: string
+      untilSubmitAt:
+        type: string
+      submitPersonFields:
+        type: array
+        items:
+          type: string
+      targetPersonFields:
+        type: array
+        items:
+          type: string
+      format:
+        type: string
+      splitColumns:
+        type: boolean
+  FormQuestionInfo:
+    type: object
+    required:
+    - id
+    - question
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      question:
+        type: string
+      questionTr:
+        $ref: '#/definitions/Translations'
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  UpdateFormResponse:
+    type: object
+    properties:
+      shareAccess:
+        type: array
+        description: list of share access, if the form response has been shared with anyone
+        items:
+          $ref: '#/definitions/ShareAccess'
+  ResultsWithFormVersions:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/FormResponse'
+      next:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      formVersions:
+        type: array
+        items:
+          $ref: '#/definitions/FormVersionInfo'
+  FormVersionInfo:
+    type: object
+    required:
+    - id
+    - label
+    - displayName
+    - questions
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+      displayName:
+        type: string
+      displayNameTr:
+        $ref: '#/definitions/Translations'
+      questions:
+        type: array
+        items:
+          $ref: '#/definitions/FormQuestionInfo'
+  FormResponseAnswer:
+    type: object
+    required:
+    - id
+    - questionId
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      questionId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      value:
+        type: object
+      type:
+        type: string
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+  FormResponseApproval:
+    type: object
+    properties:
+      message:
+        type: string

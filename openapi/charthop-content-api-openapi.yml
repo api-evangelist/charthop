@@ -1,0 +1,705 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access content API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: content
+paths:
+  /v1/org/{orgId}/content:
+    get:
+      tags:
+      - content
+      summary: Return all content in the organization paginated
+      operationId: findContent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Content id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: includeBlocks
+        in: query
+        description: Include content blocks in results
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsContent'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - content
+      summary: Create a new piece of content
+      operationId: createContent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Content data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateContent'
+      responses:
+        '201':
+          description: content created
+          schema:
+            $ref: '#/definitions/Content'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/content/homepage:
+    patch:
+      tags:
+      - content
+      summary: Update the homepage content
+      operationId: updateHomepage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateContent'
+      responses:
+        '204':
+          description: No Content
+  /v1/org/{orgId}/content/homepage/render:
+    get:
+      tags:
+      - content
+      summary: Render the contents of the homepage
+      operationId: renderHomepage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/HomepageContentRender'
+  /v1/org/{orgId}/content/path/{path}:
+    get:
+      tags:
+      - content
+      summary: Return a particular content by path
+      operationId: getContentByPath
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: path
+        in: path
+        description: Path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Content'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/content/path/{path}/render:
+    get:
+      tags:
+      - content
+      summary: Return a particular content by path, and render its contents
+      operationId: renderContentByPath
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: path
+        in: path
+        description: Path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ContentRender'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/content/{contentId}:
+    get:
+      tags:
+      - content
+      summary: Return a particular content by id
+      operationId: getContent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: contentId
+        in: path
+        description: Content id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Content'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - content
+      summary: Update an existing piece of content
+      operationId: updateContent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: contentId
+        in: path
+        description: Content id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Content data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateContent'
+      responses:
+        '204':
+          description: content updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - content
+      summary: Delete a content
+      operationId: deleteContent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: contentId
+        in: path
+        description: Content id
+        required: true
+        type: string
+      - name: deleteChildren
+        in: query
+        description: Whether to delete the children resources
+        required: false
+        type: boolean
+      responses:
+        '204':
+          description: content deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsContent:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Content'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateContent:
+    type: object
+    properties:
+      parentContentId:
+        type: string
+        description: parent content id in the hierarchy
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: title of the content page
+        example: Benefits Policies
+      titleTr:
+        description: translations of the title
+        $ref: '#/definitions/Translations'
+      path:
+        type: string
+        description: full path to the content, if not set, defaults to an id/slug generated URL
+        example: employee-info/benefits-policies
+      blocks:
+        type: array
+        description: content blocks
+        items:
+          $ref: '#/definitions/ContentBlock'
+      imagePath:
+        type: string
+        description: path to the image for the page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the page
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      coverImagePath:
+        type: string
+        description: path to the cover image for the content page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      sensitive:
+        type: string
+        description: sensitivity level (ORG public, HIGHly sensitive, or PRIVATE)
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: current status of the content page
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+      sort:
+        type: integer
+        format: int32
+        description: sort index within parent content
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  CreateContent:
+    type: object
+    required:
+    - title
+    properties:
+      parentContentId:
+        type: string
+        description: parent content id in the hierarchy
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: title of the content page
+        example: Benefits Policies
+      titleTr:
+        description: translations of the title
+        $ref: '#/definitions/Translations'
+      path:
+        type: string
+        description: full path to the content, if not set, defaults to an id/slug generated URL
+        example: employee-info/benefits-policies
+      blocks:
+        type: array
+        description: content blocks
+        items:
+          $ref: '#/definitions/ContentBlock'
+      imagePath:
+        type: string
+        description: path to the image for the page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the page
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      coverImagePath:
+        type: string
+        description: path to the cover image for the content page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      sensitive:
+        type: string
+        description: sensitivity level (ORG public, HIGHly sensitive, or PRIVATE)
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: current status of the content page
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+  HomepageContentRender:
+    type: object
+    required:
+    - content
+    properties:
+      content:
+        type: string
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  ContentRender:
+    type: object
+    required:
+    - title
+    - blocks
+    properties:
+      title:
+        type: string
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/ContentBlock'
+  ContentBlock:
+    type: object
+    required:
+    - content
+    properties:
+      content:
+        type: string
+      contentTr:
+        $ref: '#/definitions/Translations'
+  Content:
+    type: object
+    required:
+    - id
+    - orgId
+    - title
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      parentContentId:
+        type: string
+        description: parent content id in the hierarchy
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: title of the content page
+        example: Benefits Policies
+      titleTr:
+        description: translations of the title
+        $ref: '#/definitions/Translations'
+      path:
+        type: string
+        description: full path to the content, if not set, defaults to an id/slug generated URL
+        example: employee-info/benefits-policies
+      blocks:
+        type: array
+        description: content blocks
+        items:
+          $ref: '#/definitions/ContentBlock'
+      imagePath:
+        type: string
+        description: path to the image for the page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the page
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      coverImagePath:
+        type: string
+        description: path to the cover image for the content page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      sensitive:
+        type: string
+        description: sensitivity level (ORG public, HIGHly sensitive, or PRIVATE)
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: current status of the content page
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+      sort:
+        type: integer
+        format: int32
+        description: sort index within parent content
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'

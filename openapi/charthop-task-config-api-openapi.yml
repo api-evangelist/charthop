@@ -1,0 +1,492 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access task-config API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: task-config
+paths:
+  /v1/org/{orgId}/task-config:
+    get:
+      tags:
+      - task-config
+      summary: Get all task configs for an org
+      operationId: findTaskConfigs
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: TaskConfig id to start paginating from
+        required: false
+        type: string
+      - name: parentEntityId
+        in: query
+        description: ParentEntityId to query for
+        required: false
+        type: string
+      - name: assessmentId
+        in: query
+        description: AssessmentId to query for
+        required: false
+        type: string
+      - name: entityId
+        in: query
+        description: EntityId to query for
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTaskConfig'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - task-config
+      summary: Create a new task config
+      operationId: createTaskConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Task config to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTaskConfig'
+      responses:
+        '201':
+          description: task config created
+          schema:
+            $ref: '#/definitions/TaskConfig'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/task-config/{id}:
+    get:
+      tags:
+      - task-config
+      summary: Get a specific task config
+      operationId: getTaskConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired task config
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TaskConfig'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - task-config
+      summary: Update an existing task config
+      operationId: updateTaskConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired task config
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Task config to create
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTaskConfig'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  CreateTaskConfig:
+    type: object
+    required:
+    - entityId
+    - type
+    - pastDueAction
+    properties:
+      assessmentId:
+        type: string
+        description: parent assessment id that this task config belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this task config belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: the primary entity being referenced by the task config
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of task generated by the task config
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      dueDate:
+        description: date object for tasks, can be relative or exact
+        $ref: '#/definitions/DueDate'
+      pastDueAction:
+        type: string
+        description: sets pastDueAction on the task when it's generated
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: sets isSkippable on the task
+      label:
+        type: string
+        description: human-readable label that should be used for all tasks associated with the config as the task name
+      description:
+        type: string
+        description: description for all tasks associated with the config that should be used in notifications
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ResultsTaskConfig:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/TaskConfig'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateTaskConfig:
+    type: object
+    properties:
+      type:
+        type: string
+        description: type of task generated by the task config
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      dueDate:
+        description: date object for tasks, can be relative or exact
+        $ref: '#/definitions/DueDate'
+      pastDueAction:
+        type: string
+        description: sets pastDueAction on the task when it's generated
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: sets isSkippable on the task
+      label:
+        type: string
+        description: human-readable label that should be used for all tasks associated with the config as the task name
+      description:
+        type: string
+        description: description for all tasks associated with the config that should be used in notifications
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  TaskConfig:
+    type: object
+    required:
+    - id
+    - orgId
+    - entityId
+    - slug
+    - type
+    - pastDueAction
+    properties:
+      id:
+        type: string
+        description: unique id of task config
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: parent assessment id that this task config belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this task config belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: the primary entity being referenced by the task config
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: System generated identifying name so that actions can be triggered as a result of task completion
+      type:
+        type: string
+        description: type of task generated by the task config
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      dueDate:
+        description: date object for tasks, can be relative or exact
+        $ref: '#/definitions/DueDate'
+      pastDueAction:
+        type: string
+        description: sets pastDueAction on the task when it's generated
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: sets isSkippable on the task
+      label:
+        type: string
+        description: human-readable label that should be used for all tasks associated with the config as the task name
+      description:
+        type: string
+        description: description for all tasks associated with the config that should be used in notifications
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  DueDate:
+    type: object
+    required:
+    - type
+    - dueDay
+    - dueTime
+    properties:
+      type:
+        type: string
+        enum:
+        - EXACT
+        - RELATIVE
+      dueDay:
+        type: string
+        description: due day, in either relative (-7d) or exact (YYYY-MM-DD) format
+      dueTime:
+        type: string
+        description: due time, which is a LocalTime

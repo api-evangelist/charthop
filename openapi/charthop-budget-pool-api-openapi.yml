@@ -1,0 +1,1128 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access budget-pool API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: budget-pool
+paths:
+  /v1/org/{orgId}/budget-pool:
+    get:
+      tags:
+      - budget-pool
+      summary: Get all budget pools for an org
+      operationId: findBudgetPools
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: query
+        description: Comp Review Id to filter on
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsBudgetPool'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - budget-pool
+      summary: Create a new budget pool
+      operationId: createBudgetPool
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBudgetPool'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/budget-pool/{id}:
+    get:
+      tags:
+      - budget-pool
+      summary: Get a specific budget pool
+      operationId: findBudgetPool
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired budget pool
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/BudgetPool'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - budget-pool
+      summary: Update a budget pool
+      operationId: updateBudgetPool
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired budget pool
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateBudgetPool'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - budget-pool
+      summary: Delete a budget pool
+      operationId: deleteBudgetPool
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired budget pool
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/budget-pool/{id}/guidelines:
+    get:
+      tags:
+      - budget-pool
+      summary: Get the guidelines associated with a budget pool
+      operationId: getGuidelinesForBudgetPool
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired budget pool
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGuideline'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/budget-pool/{id}/preview:
+    get:
+      tags:
+      - budget-pool
+      summary: Generate tiering & preview with the given budget calculated for the compensation review
+      operationId: previewBudget
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the desired budget pool
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/BudgetTiersResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  ResultsBudgetPool:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/BudgetPool'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateBudgetPool:
+    type: object
+    properties:
+      label:
+        type: string
+        description: unique label
+        example: Merit
+      participantsExpr:
+        type: string
+        description: expression that determines if a particular job is included in this budget pool
+      appliedField:
+        type: string
+        description: the field this budget pool applies to
+        example: base
+      sourceField:
+        type: string
+        description: the field this budget pool is calculated from
+        example: base
+      basisType:
+        type: string
+        description: the method for calculating the amount in the budget
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      fixedAmount:
+        description: a fixed monetary amount for the budget (used with basisType=FIXED)
+        $ref: '#/definitions/Money'
+      fixedValue:
+        type: number
+        description: a fixed amount for the budget (used with basisType=FIXED || basisType=PERCENTAGE)
+      basisFieldMatrix:
+        description: a matrix of conditions to determine the amount each job contributes to the budget (used with basisType=FIXED or PERCENTAGE
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedBudgetMap:
+        type: object
+        description: a map of reviewer job IDs to fixed budget money amounts
+        additionalProperties:
+          $ref: '#/definitions/Money'
+      basisExpr:
+        type: string
+        description: expression that calculates how much each job contributes to the budget (used with basisType=CUSTOM)
+      defaultCurrency:
+        type: string
+        description: Default currency used when calculating budget pool, falls back to org primary currency if not set
+      visibilityType:
+        type: string
+        description: Controls who can view this budget
+        enum:
+        - DEFAULT
+        - ROLE_SELECTION
+        - SPECIFIC_PEOPLE
+        - CUSTOM_CQL
+      visibilityExpr:
+        type: string
+        description: CQL expression evaluated on the user to determine visibility (used with visibilityType=CUSTOM_CQL)
+      visibilityPersonIds:
+        type: array
+        description: Set of person IDs who can view this budget (used with visibilityType=SPECIFIC_PEOPLE)
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      visibilityRoles:
+        description: Comp cycle roles this budget is visible to (used with visibilityType=ROLE_SELECTION)
+        $ref: '#/definitions/InCycleViewFeatures'
+      sort:
+        type: integer
+        format: int32
+        description: sort order for sequential budget allocation priority
+  JobRelationship:
+    type: object
+    required:
+    - jobId
+    - type
+    properties:
+      jobId:
+        type: string
+        description: destination job id
+        example: 5887a7718f138b6a2a0041a7
+      type:
+        type: string
+        description: type of relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE
+  BasisCondition:
+    type: object
+    required:
+    - conditionExpr
+    properties:
+      conditionExpr:
+        type: string
+      amountRange:
+        $ref: '#/definitions/MoneyRange'
+      valueRange:
+        $ref: '#/definitions/ValueRange'
+  BasisFieldMatrix:
+    type: object
+    required:
+    - includedFields
+    - conditions
+    properties:
+      includedFields:
+        type: array
+        items:
+          type: string
+      conditions:
+        type: array
+        items:
+          $ref: '#/definitions/BasisCondition'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  InCycleViewFeatures:
+    type: object
+    required:
+    - isFinalApprover
+    - isProposer
+    - isApprover
+    - isOwner
+    - isCollaborator
+    properties:
+      isFinalApprover:
+        type: boolean
+      isProposer:
+        type: boolean
+      isApprover:
+        type: boolean
+      isOwner:
+        type: boolean
+      isCollaborator:
+        type: boolean
+      isRoot:
+        type: boolean
+  PayInterval:
+    type: object
+    required:
+    - interval
+    - pay
+    properties:
+      interval:
+        type: string
+        description: Interval (annual or hourly)
+        enum:
+        - YEARLY
+        - MONTHLY
+        - WEEKLY
+        - DAILY
+        - HOURLY
+      pay:
+        description: Pay over the given interval
+        $ref: '#/definitions/Money'
+      hoursPerWeek:
+        type: integer
+        format: int32
+        description: working hours per week if interval=hourly
+        example: '40'
+      weeksPerYear:
+        type: integer
+        format: int32
+        description: working weeks per year if interval=hourly
+        example: '52'
+      monthsPerYear:
+        type: integer
+        format: int32
+        description: months per year if interval=month
+        example: '52'
+      daysPerYear:
+        type: integer
+        format: int32
+        description: days per year if interval=day
+        example: '250'
+  BudgetPool:
+    type: object
+    required:
+    - id
+    - orgId
+    - compReviewId
+    - label
+    - appliedField
+    - sourceField
+    - basisType
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if built-in)
+        example: 588f7ee98f138b19220041a7
+      compReviewId:
+        type: string
+        description: the ID of the comp review this budget is for
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: unique label
+        example: Merit
+      participantsExpr:
+        type: string
+        description: expression that determines if a particular job is included in this budget pool
+      appliedField:
+        type: string
+        description: the field this budget pool applies to
+        example: base
+      sourceField:
+        type: string
+        description: the field this budget pool is calculated from
+        example: base
+      basisType:
+        type: string
+        description: the method for calculating the amount in the budget
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      fixedAmount:
+        description: a fixed monetary amount for the budget (used with basisType=FIXED)
+        $ref: '#/definitions/Money'
+      fixedValue:
+        type: number
+        description: a fixed amount for the budget (used with basisType=FIXED || basisType=PERCENTAGE)
+      basisFieldMatrix:
+        description: a matrix of conditions to determine the amount each job contributes to the budget (used with basisType=FIXED or PERCENTAGE
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedBudgetMap:
+        type: object
+        description: a map of reviewer job IDs to fixed budget money amounts
+        additionalProperties:
+          $ref: '#/definitions/Money'
+      basisExpr:
+        type: string
+        description: expression that calculates how much each job contributes to the budget (used with basisType=CUSTOM)
+      defaultCurrency:
+        type: string
+        description: Default currency used when calculating budget pool, falls back to org primary currency if not set
+      visibilityType:
+        type: string
+        description: Controls who can view this budget
+        enum:
+        - DEFAULT
+        - ROLE_SELECTION
+        - SPECIFIC_PEOPLE
+        - CUSTOM_CQL
+      visibilityExpr:
+        type: string
+        description: CQL expression evaluated on the user to determine visibility (used with visibilityType=CUSTOM_CQL)
+      visibilityPersonIds:
+        type: array
+        description: Set of person IDs who can view this budget (used with visibilityType=SPECIFIC_PEOPLE)
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      visibilityRoles:
+        description: Comp cycle roles this budget is visible to (used with visibilityType=ROLE_SELECTION)
+        $ref: '#/definitions/InCycleViewFeatures'
+      sort:
+        type: integer
+        format: int32
+        description: sort order for sequential budget allocation priority
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  MoneyRange:
+    type: object
+    properties:
+      max:
+        description: the maximum value in the range (type = Money)
+        $ref: '#/definitions/Money'
+      min:
+        description: the minimum value in the range (type = Money)
+        $ref: '#/definitions/Money'
+      target:
+        description: the target value for the range (type = Money)
+        $ref: '#/definitions/Money'
+  Guideline:
+    type: object
+    required:
+    - id
+    - orgId
+    - compReviewId
+    - label
+    - appliedField
+    - sourceField
+    - calculationType
+    - flagMode
+    - enablePopulateValue
+    - basisType
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      compReviewId:
+        type: string
+        description: comp review id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: guideline name
+        example: Merit Guideline
+        minItems: 1
+        maxItems: 80
+      budgetPoolId:
+        type: string
+        description: the budget pool the guideline is allocated from
+        example: 588f7ee98f138b19220041a7
+      participantsExpr:
+        type: string
+        description: CQL filter to determine which employees the guideline applies to
+        example: is:person and tenure>=12
+      appliedField:
+        type: string
+        description: the field the guideline applies to
+        example: '''base'' or ''grantShares'''
+      sourceField:
+        type: string
+        description: the field the guideline is calculated from
+        example: '''base'' or ''grantShares'''
+      calculationType:
+        type: string
+        description: how does the guideline calculate the target value? e.g. is there a range (min/max) or only a target
+        example: TARGET
+        enum:
+        - RANGE
+        - TARGET
+      flagMode:
+        type: string
+        description: how does the guideline indicate deviations from the target amount
+        example: NONE
+        enum:
+        - DEVIATION_THRESHOLD
+        - NONE
+      flagDeviationThreshold:
+        type: number
+        description: the threshold (percent) against which deviations from the guideline are flagged
+        example: '0.75'
+      enablePopulateValue:
+        type: boolean
+        description: whether or not the target values from the guidelines are pre-populated in the given columns
+        example: 'false'
+      basisType:
+        type: string
+        description: how an individual guideline value itself is calculated, e.g. percentage of the appliedField, fixed amount, or custom CQL
+        example: CUSTOM
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      basisExpr:
+        type: string
+        description: if basisType.CUSTOM, the custom CQL expression used to generate the guideline value
+        example: 'tenure>12 ? (base * 0.04) : (base * 0.02)'
+      basisFieldMatrix:
+        description: if the guideline is calculated based on given field(s)
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedAmountRange:
+        description: the value range if basisType.FIXED, the appliedField is of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/MoneyRange'
+      fixedValueRange:
+        description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
+        $ref: '#/definitions/ValueRange'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  VariableComp:
+    type: object
+    required:
+    - type
+    - interval
+    properties:
+      type:
+        type: string
+        description: compensation type
+        enum:
+        - BONUS
+        - COMMISSION
+      interval:
+        type: string
+        description: compensation interval
+        enum:
+        - YEARLY
+    description: 'variable compensation
+
+      Implementations: VariableCompPercent, VariableCompPercent'
+    discriminator: compType
+  ValueRange:
+    type: object
+    properties:
+      max:
+        type: number
+        description: the maximum value in the range (type = BigDecimal)
+      min:
+        type: number
+        description: the minimum value in the range (type = BigDecimal)
+      target:
+        type: number
+        description: the target value for the range (type = BigDecimal)
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  BudgetTiersResponse:
+    type: object
+    required:
+    - reviews
+    - finalApprovers
+    properties:
+      reviews:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/BudgetTierRepresentationResponse'
+      finalApprovers:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  BudgetTierRepresentationResponse:
+    type: object
+    required:
+    - reviewer
+    - reviewees
+    - eligible
+    properties:
+      reviewer:
+        $ref: '#/definitions/Job'
+      reviewees:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      parentReviewerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      eligible:
+        type: boolean
+      budget:
+        type: object
+  UpcomingChange:
+    type: object
+    required:
+    - date
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+      announceDate:
+        type: string
+        format: date
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  Job:
+    type: object
+    required:
+    - jobId
+    - orgId
+    - title
+    - groupIds
+    - fields
+    properties:
+      jobId:
+        type: string
+        description: globally unique job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title
+        example: Senior Engineer
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: compensation
+        $ref: '#/definitions/Comp'
+      sensitive:
+        type: string
+        description: view sensitive of the job while open
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      relationships:
+        type: array
+        description: relationship to other jobs
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      managerIds:
+        type: array
+        description: list of managers, from immediate manager upwards
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: groups that this job is a member of
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      placement:
+        type: string
+        description: guidance on placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      startDate:
+        type: string
+        format: date
+        description: for empty jobs, expected start date - for filled jobs, confirmed start date
+      startDatePlanned:
+        type: string
+        format: date
+        description: expected start date whether job is open or has been filled - doesn't change when job is filled
+      personStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the org after the latest departure (if any)
+      personEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing, the last day of that person in the org
+      personJobStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the job
+      personJobEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing or moving out, the last day of that person in the job
+      personId:
+        type: string
+        description: the person holding this job -- either currently in the job, or upcoming announced hire
+        example: 588f7ee98f138b19220041a7
+      upcoming:
+        type: array
+        description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+        items:
+          $ref: '#/definitions/UpcomingChange'
+      scenarioId:
+        type: string
+        description: scenario that the job was created in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      backfillPersonId:
+        type: string
+        description: the person who most recently held the job, who this represents a backfill for
+        example: 588f7ee98f138b19220041a7
+  CreateBudgetPool:
+    type: object
+    required:
+    - compReviewId
+    - label
+    - appliedField
+    - sourceField
+    - basisType
+    - visibilityType
+    properties:
+      compReviewId:
+        type: string
+        description: the ID of the comp review this budget is for
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: unique label
+        example: Merit
+      participantsExpr:
+        type: string
+        description: expression that determines if a particular job is included in this budget pool
+      appliedField:
+        type: string
+        description: the field this budget pool applies to
+        example: base
+      sourceField:
+        type: string
+        description: the field this budget pool is calculated from
+        example: base
+      basisType:
+        type: string
+        description: the method for calculating the amount in the budget
+        enum:
+        - CUSTOM
+        - FIXED
+        - CUSTOM_FIXED
+        - PERCENTAGE
+        - CUSTOM_PERCENTAGE
+      fixedAmount:
+        description: a fixed monetary amount for the budget (used with basisType=FIXED)
+        $ref: '#/definitions/Money'
+      fixedValue:
+        type: number
+        description: a fixed amount for the budget (used with basisType=FIXED || basisType=PERCENTAGE)
+      basisFieldMatrix:
+        description: a matrix of conditions to determine the amount each job contributes to the budget (used with basisType=FIXED or PERCENTAGE
+        $ref: '#/definitions/BasisFieldMatrix'
+      fixedBudgetMap:
+        type: object
+        description: a map of reviewer job IDs to fixed budget money amounts
+        additionalProperties:
+          $ref: '#/definitions/Money'
+      basisExpr:
+        type: string
+        description: expression that calculates how much each job contributes to the budget (used with basisType=CUSTOM)
+      defaultCurrency:
+        type: string
+        description: Default currency used when calculating budget pool, falls back to org primary currency if not set
+      visibilityType:
+        type: string
+        description: Controls who can view this budget
+        enum:
+        - DEFAULT
+        - ROLE_SELECTION
+        - SPECIFIC_PEOPLE
+        - CUSTOM_CQL
+      visibilityExpr:
+        type: string
+        description: CQL expression evaluated on the user to determine visibility (used with visibilityType=CUSTOM_CQL)
+      visibilityPersonIds:
+        type: array
+        description: Set of person IDs who can view this budget (used with visibilityType=SPECIFIC_PEOPLE)
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      visibilityRoles:
+        description: Comp cycle roles this budget is visible to (used with visibilityType=ROLE_SELECTION)
+        $ref: '#/definitions/InCycleViewFeatures'
+      sort:
+        type: integer
+        format: int32
+        description: sort order for sequential budget allocation priority
+  Comp:
+    type: object
+    properties:
+      baseComp:
+        description: base pay (money) with interval (annual or hourly)
+        $ref: '#/definitions/PayInterval'
+      variableTargets:
+        type: array
+        description: variable compensation (money or percent)
+        items:
+          $ref: '#/definitions/VariableComp'
+      grantShares:
+        type: integer
+        format: int32
+        description: planned stock grant, in shares
+        example: '5000'
+      grantValue:
+        type: integer
+        format: int32
+        description: planned stock grant, in value (based on the stock's currency, not the comp)
+        example: '5000'
+      grantType:
+        type: string
+        description: planned stock grant type
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+  ResultsGuideline:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Guideline'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

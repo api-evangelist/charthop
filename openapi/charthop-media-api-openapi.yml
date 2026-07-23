@@ -1,0 +1,227 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access media API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: media
+paths:
+  /v1/media:
+    post:
+      tags:
+      - media
+      summary: Upload a new piece of media
+      operationId: uploadGlobalMedia
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: true
+        type: file
+      - name: syncVersions
+        in: query
+        description: Comma-separated list of image versions to resize synchronously (e.g. 50x50,250x250)
+        required: false
+        type: string
+      responses:
+        '201':
+          description: Media created
+          schema:
+            $ref: '#/definitions/Media'
+        '400':
+          description: Invalid type or bad request
+        '401':
+          description: Not authorized
+  /v1/media/{mediaId}:
+    get:
+      tags:
+      - media
+      summary: Returns metadata about a piece of media
+      operationId: getGlobalMedia
+      produces:
+      - application/json
+      parameters:
+      - name: mediaId
+        in: path
+        description: Media id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Media'
+        '401':
+          description: Not authorized
+        '403':
+          description: Permission denied
+        '404':
+          description: Media not found
+  /v1/org/{orgId}/media:
+    post:
+      tags:
+      - media
+      summary: Upload a new piece of media
+      operationId: uploadMedia
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: true
+        type: file
+      - name: syncVersions
+        in: query
+        description: Comma-separated list of image versions to resize synchronously (e.g. 50x50,250x250)
+        required: false
+        type: string
+      responses:
+        '201':
+          description: Media created
+          schema:
+            $ref: '#/definitions/Media'
+        '400':
+          description: Invalid type or bad request
+        '401':
+          description: Not authorized
+  /v1/org/{orgId}/media/{mediaId}:
+    get:
+      tags:
+      - media
+      summary: Returns metadata about a piece of media
+      operationId: getMedia
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: mediaId
+        in: path
+        description: Media id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Media'
+        '401':
+          description: Not authorized
+        '403':
+          description: Permission denied
+        '404':
+          description: Media not found
+definitions:
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  Media:
+    type: object
+    required:
+    - id
+    - path
+    - type
+    - versions
+    - createId
+    - createAt
+    properties:
+      id:
+        type: string
+        description: globally unique id of media
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id, if the media belongs to an organization
+        example: 588f7ee98f138b19220041a7
+      path:
+        type: string
+        description: path to the file in media S3 bucket
+        example: 588f7ee98f138b19220041a7/2017/02/21/588f7ee98f138b19220041a7/avatar.png
+      type:
+        type: string
+        description: mime type of file
+        example: image/jpeg
+      bytes:
+        type: integer
+        format: int64
+        description: size of file in bytes
+        example: '102342'
+      width:
+        type: integer
+        format: int32
+        description: width of image in pixels
+        example: '600'
+      height:
+        type: integer
+        format: int32
+        description: height of image in pixels
+        example: '300'
+      versions:
+        type: array
+        description: versions/sizes available
+        uniqueItems: true
+        items:
+          type: string
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'

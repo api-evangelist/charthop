@@ -1,0 +1,631 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access event API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: event
+paths:
+  /v1/org/{orgId}/event:
+    get:
+      tags:
+      - event
+      summary: Return past events, paginated, without payloads present
+      operationId: findEvents
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: userId
+        in: query
+        description: User id
+        required: false
+        type: string
+      - name: agentUserId
+        in: query
+        description: Agent user id (filter to events done by a specific agent)
+        required: false
+        type: string
+      - name: entityId
+        in: query
+        description: Entity id
+        required: false
+        type: string
+      - name: entityType
+        in: query
+        description: Entity type
+        required: false
+        type: string
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      - name: parentEntityId
+        in: query
+        description: Parent entity id
+        required: false
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id
+        required: false
+        type: string
+      - name: processId
+        in: query
+        description: Process id
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Fields that were modified
+        required: false
+        type: string
+      - name: code
+        in: query
+        description: Event code to search for
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Timestamp to start search at
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsEvent'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/event/notify/inbound/{appId}/{inboundId}:
+    post:
+      tags:
+      - event
+      summary: Create an inbound event
+      operationId: createAppInboundEvent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      - name: inboundId
+        in: path
+        description: Inbound id
+        required: true
+        type: string
+      - name: processId
+        in: query
+        description: Process id
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Inbound body to create event
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/event/notify/outbound/app/{appId}:
+    post:
+      tags:
+      - event
+      summary: Create an outbound event
+      operationId: createAppOutboundEvent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      - name: processId
+        in: query
+        description: Process id
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Outbound body to create event
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/event/{eventId}:
+    get:
+      tags:
+      - event
+      summary: Return individual event, including payload
+      operationId: getEvent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: eventId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Event'
+  /v1/org/{orgId}/event/{eventId}/notify:
+    post:
+      tags:
+      - event
+      summary: Resend all associated notifications for a previous event (superusers only)
+      operationId: replayEvent
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: eventId
+        in: path
+        description: Event id
+        required: true
+        type: string
+      - name: app
+        in: query
+        description: App name to restrict notifications to
+        required: false
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Event:
+    type: object
+    required:
+    - id
+    - userId
+    - type
+    - entityType
+    - entityId
+    - at
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id who caused the event
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of event
+        enum:
+        - APP
+        - APPROVE
+        - CANCEL
+        - COMBINE
+        - CREATE
+        - DELETE
+        - DONE
+        - ERROR
+        - EXPORT
+        - EXPORT_CSV
+        - EXPORT_ORG_CHART
+        - GENERATE
+        - GEOIP
+        - INCOMING
+        - INSTALL
+        - INVITE
+        - INBOUND
+        - LOGIN
+        - MERGE
+        - MESSAGE
+        - OUTBOUND
+        - PREVIEW_AS
+        - READ
+        - READ_EXTERNAL
+        - READ_SENSITIVE
+        - READ_ATS
+        - READ_ATS_WEBHOOK
+        - READ_FULL_NAME
+        - READ_FUTURE_DATE
+        - READ_METADATA
+        - READ_COMP
+        - READ_BILLING
+        - READ_PENDING
+        - READ_PAYROLL
+        - READ_SENSITIVE_FILTERS
+        - WRITE_EXTERNAL
+        - REASSIGN
+        - REJECT
+        - RELEASE
+        - REMIND
+        - REMOVE_PASSWORD
+        - REQUEST
+        - RESTORE
+        - RESUME
+        - REVOKE
+        - RUN
+        - RUN_ATS
+        - SECURITY
+        - SHARE
+        - SHOW_DASHBOARD_DAYS_AHEAD
+        - SHOW_OPEN_JOBS
+        - STEP
+        - SUBMIT
+        - SYNC
+        - TEST
+        - TOKEN
+        - UNINSTALL
+        - UPDATE
+        - UPDATE_PASSWORD
+        - UPLOAD_CSV
+        - WRITE
+        - VIEW_AS
+      entityType:
+        type: string
+        description: type of target entity
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: id of target entity
+        example: 588f7ee98f138b19220041a7
+      behalfUserId:
+        type: string
+        description: id of the original user this app user is acting on behalf of
+        example: 588f7ee98f138b19220041a7
+      agentUserId:
+        type: string
+        description: id of the agent (app user) if this event was performed by an agent on behalf of a user
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        description: id of the AI chat that this event derives from
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+        description: AI chat tool use identifier that ties this event to a specific tool invocation
+      jobId:
+        type: string
+        description: jobId of the entity, if the entity is a job or closely connected to a single job
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: personId of the entity, if the entity is a person or closely connected to a single person
+        example: 588f7ee98f138b19220041a7
+      tableId:
+        type: string
+        description: id of table, if entity is a table row
+        example: 588f7ee98f138b19220041a7
+      subtype:
+        type: string
+        description: subtype of entity
+      payload:
+        type: object
+        description: event-specific payload containing information about the change that took place
+        additionalProperties:
+          type: object
+      at:
+        type: string
+        description: timestamp of event
+      processId:
+        type: string
+        description: id of process
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+        description: effective date, if in use
+      scenarioId:
+        type: string
+        description: id of scenario
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: id of associated entity, such as comp cycle
+        example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: set of fields that were updated by the event
+        uniqueItems: true
+        items:
+          type: string
+      code:
+        type: string
+        description: event code, for example job.update
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  ResultsEvent:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

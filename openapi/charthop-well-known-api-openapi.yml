@@ -1,0 +1,140 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access well-known API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: well-known
+paths:
+  /.well-known/oauth-authorization-server:
+    get:
+      tags:
+      - well-known
+      summary: OAuth authorization server metadata (RFC 8414)
+      operationId: authorizationServerMetadata
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+  /.well-known/oauth-authorization-server/mcp/{agent}:
+    get:
+      tags:
+      - well-known
+      summary: OAuth authorization server metadata for an org-less agent MCP server (RFC 8414)
+      operationId: mcpAuthorizationServerMetadataNoOrg
+      produces:
+      - application/json
+      parameters:
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+  /.well-known/oauth-authorization-server/mcp/{agent}/{orgId}:
+    get:
+      tags:
+      - well-known
+      summary: OAuth authorization server metadata for an agent MCP server (RFC 8414)
+      operationId: mcpAuthorizationServerMetadata
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+  /.well-known/oauth-protected-resource/mcp/{agent}:
+    get:
+      tags:
+      - well-known
+      summary: OAuth protected resource metadata for an org-less agent MCP server (RFC 9728)
+      operationId: mcpProtectedResourceMetadataNoOrg
+      produces:
+      - application/json
+      parameters:
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+  /.well-known/oauth-protected-resource/mcp/{agent}/{orgId}:
+    get:
+      tags:
+      - well-known
+      summary: OAuth protected resource metadata for an agent MCP server (RFC 9728)
+      operationId: mcpProtectedResourceMetadata
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+  /.well-known/security.txt:
+    get:
+      tags:
+      - well-known
+      summary: security.txt (RFC 9116)
+      operationId: getSecurityTxt
+      produces:
+      - text/plain
+      responses:
+        '200':
+          description: successful operation

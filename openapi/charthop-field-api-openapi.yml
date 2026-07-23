@@ -1,0 +1,2748 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access field API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: field
+paths:
+  /v1/org/{orgId}/field:
+    get:
+      tags:
+      - field
+      summary: Return all fields in the organization paginated
+      operationId: findFields
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Field id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: ids
+        in: query
+        description: Comma separated Field Ids to find
+        required: false
+        type: string
+      - name: table
+        in: query
+        description: Retrieve fields from a particular table (id or name); if not passed, returns non-table fields
+        required: false
+        type: string
+      - name: tableType
+        in: query
+        description: Retrieve fields from a particular table type; ignored if table not passed
+        required: false
+        type: string
+      - name: form
+        in: query
+        description: Retrieve fields relating to a particular form
+        required: false
+        type: string
+      - name: builtin
+        in: query
+        description: Include built-in (builtin), custom (custom) or all fields - defaults to custom
+        required: false
+        type: string
+      - name: includeTtst
+        in: query
+        description: Include custom ttst fields - defaults to false
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsField'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - field
+      summary: Create a field
+      operationId: createField
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: tableType
+        in: query
+        description: table type to add the field to
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Field data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateField'
+      responses:
+        '201':
+          description: field created
+          schema:
+            $ref: '#/definitions/Field'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/field/built-in:
+    get:
+      tags:
+      - field
+      summary: Get built-in fields
+      operationId: getBuiltinFields
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsPartialField'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/category:
+    get:
+      tags:
+      - field
+      summary: Return uncategorized fields
+      operationId: getUncategorizedFields
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsField'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/category/{categoryId}:
+    get:
+      tags:
+      - field
+      summary: Return fields in a particular category
+      operationId: getFieldsInCategory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: categoryId
+        in: path
+        description: Category id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsField'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/delete:
+    delete:
+      tags:
+      - field
+      summary: Delete fields
+      operationId: deleteFields
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Field ids
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '204':
+          description: fields deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/remove-category:
+    post:
+      tags:
+      - field
+      summary: Remove field from all associated categories
+      operationId: removeFieldCategory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Fields to set as uncategorized
+        required: true
+        schema:
+          $ref: '#/definitions/FieldRemoveCategoryRequest'
+      responses:
+        '204':
+          description: field removed from category
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/remove-overrides:
+    post:
+      tags:
+      - field
+      summary: Remove overrides from fields
+      operationId: removeFieldOverrides
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Fields for which to remove overrides
+        required: true
+        schema:
+          $ref: '#/definitions/FieldRemoveOverrideRequest'
+      responses:
+        '204':
+          description: field overrides removed
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/status:
+    post:
+      tags:
+      - field
+      summary: Update status for existing fields
+      operationId: updateFieldStatus
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Field data to update
+        required: true
+        schema:
+          $ref: '#/definitions/FieldStatusUpdateRequest'
+      responses:
+        '204':
+          description: field status updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/{fieldId}:
+    get:
+      tags:
+      - field
+      summary: Return a particular field by id
+      operationId: getField
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fieldId
+        in: path
+        description: Field id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Field'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - field
+      summary: Update an existing field
+      operationId: updateField
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fieldId
+        in: path
+        description: Field id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Field data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateField'
+      responses:
+        '204':
+          description: field updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - field
+      summary: Delete a field
+      operationId: deleteField
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fieldId
+        in: path
+        description: Field id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: field deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/field/{fieldId}/dryrun:
+    patch:
+      tags:
+      - field
+      summary: Perform a dry-run of an update to an existing field that will require migrations
+      operationId: updateFieldDryRun
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fieldId
+        in: path
+        description: Field id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Field data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateField'
+      responses:
+        '204':
+          description: dry run update of field
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  TableRef:
+    type: object
+    properties:
+      tableId:
+        type: string
+        description: the table id this field references
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+        description: the table name this field references
+  FieldRemoveCategoryRequest:
+    type: object
+    required:
+    - fieldIds
+    properties:
+      fieldIds:
+        type: array
+        description: Field ids
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  FieldRemoveOverrideRequest:
+    type: object
+    required:
+    - fieldIds
+    properties:
+      fieldIds:
+        type: array
+        description: Field ids
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  Field:
+    type: object
+    required:
+    - id
+    - name
+    - label
+    - type
+    - plural
+    - isUnique
+    - isRequired
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      groupTypeId:
+        type: string
+        description: if this is a group membership field, the group type ID it's for
+        example: 588f7ee98f138b19220041a7
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      categoryId:
+        type: string
+        description: the category the field belongs to
+        example: 588f7ee98f138b19220041a7
+      categoryIds:
+        type: array
+        description: the categories the field belongs to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      tableId:
+        type: string
+        description: the table id this field applies to, only applicable when EntityType equals TABLE
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      readonly:
+        type: boolean
+      builtIn:
+        type: boolean
+      canOverrideSensitivity:
+        type: boolean
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for money values
+      isAutoIncrement:
+        type: boolean
+        description: whenther this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+      overrideRevert:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/DtValue'
+      overrideName:
+        type: string
+      hasSubfields:
+        type: boolean
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  AutoIncFieldPart:
+    type: object
+    required:
+    - type
+    - value
+    properties:
+      type:
+        type: string
+        enum:
+        - LITERAL_STRING
+        - GROUP_CODE
+      value:
+        type: object
+      defaultValue:
+        type: string
+  UpdateField:
+    type: object
+    properties:
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      sort:
+        type: integer
+        format: int32
+        description: sort order within a table
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      dataFetchTypes:
+        type: array
+        description: set of data fetch types
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - BASIC
+          - UPDATE
+          - CHANGE
+          - RELATIONSHIP_MANAGER
+          - RELATIONSHIP_ALL
+          - TITLE
+          - PROMOTION
+          - GROUP
+          - COMP
+          - COMP_HISTORY
+          - GRANT
+          - TIMEOFF
+          - PERSON_JOIN
+          - ALL_DATA
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      categoryId:
+        type: string
+        description: ID of the category to which this field belongs, if any
+        example: 588f7ee98f138b19220041a7
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for numeric values
+      isAutoIncrement:
+        type: boolean
+        description: whether this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+  CreateField:
+    type: object
+    required:
+    - name
+    - label
+    - type
+    - entityType
+    - sensitive
+    - isUnique
+    - isRequired
+    properties:
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      tableId:
+        type: string
+        description: the table id this field applies to, only applicable when EntityType equals TABLE
+        example: 588f7ee98f138b19220041a7
+      sort:
+        type: integer
+        format: int32
+        description: sort order within a table
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      dataFetchTypes:
+        type: array
+        description: set of data fetch types
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - BASIC
+          - UPDATE
+          - CHANGE
+          - RELATIONSHIP_MANAGER
+          - RELATIONSHIP_ALL
+          - TITLE
+          - PROMOTION
+          - GROUP
+          - COMP
+          - COMP_HISTORY
+          - GRANT
+          - TIMEOFF
+          - PERSON_JOIN
+          - ALL_DATA
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      groupTypeId:
+        type: string
+        description: if this is a group membership field, the group type ID it's for
+        example: 588f7ee98f138b19220041a7
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      categoryId:
+        type: string
+        description: ID of the category to which this field belongs, if any
+        example: 588f7ee98f138b19220041a7
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for numeric values
+      isAutoIncrement:
+        type: boolean
+        description: whether this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+  DtValue:
+    type: object
+    properties:
+      value:
+        type: object
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  PartialField:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      tableId:
+        type: string
+        description: the table id this field applies to, only applicable when EntityType equals TABLE
+        example: 588f7ee98f138b19220041a7
+      sort:
+        type: integer
+        format: int32
+        description: sort order within a table
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      dataFetchTypes:
+        type: array
+        description: set of data fetch types
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - BASIC
+          - UPDATE
+          - CHANGE
+          - RELATIONSHIP_MANAGER
+          - RELATIONSHIP_ALL
+          - TITLE
+          - PROMOTION
+          - GROUP
+          - COMP
+          - COMP_HISTORY
+          - GRANT
+          - TIMEOFF
+          - PERSON_JOIN
+          - ALL_DATA
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      groupTypeId:
+        type: string
+        description: if this is a group membership field, the group type ID it's for
+        example: 588f7ee98f138b19220041a7
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      categoryId:
+        type: string
+        description: ID of the category to which this field belongs, if any
+        example: 588f7ee98f138b19220041a7
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for numeric values
+      isAutoIncrement:
+        type: boolean
+        description: whether this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  FieldOptions:
+    type: object
+    properties:
+      min:
+        type: string
+        description: minimum value, for numeric and date fields
+      max:
+        type: string
+        description: maximum value, for numeric and date fields
+      minItems:
+        type: integer
+        format: int32
+      maxItems:
+        type: integer
+        format: int32
+      stackRank:
+        type: boolean
+      step:
+        type: number
+      enableEditDialog:
+        type: boolean
+      requiredJobField:
+        type: boolean
+      excludeTargetPersonId:
+        type: boolean
+      maxLength:
+        type: integer
+        format: int32
+      readOnly:
+        type: boolean
+      includeFormer:
+        type: boolean
+      effectiveDated:
+        type: boolean
+      unique:
+        type: boolean
+      required:
+        type: boolean
+  ResultsField:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      next:
+        type: string
+  FieldStatusUpdateRequest:
+    type: object
+    required:
+    - updateStatus
+    - fieldIds
+    - reservedFieldNames
+    properties:
+      updateStatus:
+        type: string
+        description: New status to update
+        enum:
+        - ACTIVE
+        - HIDDEN
+      fieldIds:
+        type: array
+        description: Field ids to apply status to
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      reservedFieldNames:
+        type: array
+        description: Reserved field names to apply status to
+        items:
+          type: string
+  AutoIncFieldConfig:
+    type: object
+    required:
+    - upperCase
+    - padDigits
+    - separator
+    - prefixParts
+    properties:
+      upperCase:
+        type: boolean
+        description: convert any lower-case characters in the value to upper case
+      padDigits:
+        type: integer
+        format: int32
+        description: length of the numeric part of the value (left-padded with zeroes)
+      separator:
+        type: string
+        description: separator character to use between parts of the value
+        enum:
+        - HYPHEN
+        - UNDERSCORE
+        - SPACE
+        - NONE
+      prefixParts:
+        type: array
+        items:
+          $ref: '#/definitions/AutoIncFieldPart'
+  ResultsPartialField:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PartialField'
+      next:
+        type: string

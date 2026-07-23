@@ -1,0 +1,558 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access comment API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: comment
+paths:
+  /v1/org/{orgId}/comment:
+    post:
+      tags:
+      - comment
+      summary: Post a comment
+      operationId: createComment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Comment data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateComment'
+      responses:
+        '201':
+          description: comment created
+          schema:
+            $ref: '#/definitions/Comment'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/comment/comp-review/{compReviewId}:
+    get:
+      tags:
+      - comment
+      summary: Return comments on changes within a comp review, paginated
+      operationId: findCompReviewComments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: query
+        description: Approval request id
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Comment id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: desc
+        in: query
+        description: Descending (default false)
+        required: false
+        type: boolean
+      - name: isPreview
+        in: query
+        description: Whether comments are viewed in preview mode, defaults false
+        required: false
+        type: boolean
+      - name: jobId
+        in: query
+        description: Optional preview user jobId
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsComment'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comment/entity/{entityId}:
+    get:
+      tags:
+      - comment
+      summary: Return comments on a particular entity paginated
+      operationId: findComments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entityId
+        in: path
+        description: Entity id
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Comment id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: desc
+        in: query
+        description: Descending (default false)
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsComment'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comment/scenario/{scenarioId}:
+    get:
+      tags:
+      - comment
+      summary: Return comments on a scenario and the changes within, paginated
+      operationId: findScenarioComments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: path
+        description: Scenario id
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Comment id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: desc
+        in: query
+        description: Descending (default false)
+        required: false
+        type: boolean
+      - name: includeChangeComments
+        in: query
+        description: Whether to also include comments on changes within the scenario (default false)
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsComment'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comment/{commentId}:
+    get:
+      tags:
+      - comment
+      summary: Return a particular comment by id
+      operationId: getComment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: commentId
+        in: path
+        description: Comment id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - comment
+      summary: Update a comment
+      operationId: updateComment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: commentId
+        in: path
+        description: Comment id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Comment data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateComment'
+      responses:
+        '204':
+          description: comment updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - comment
+      summary: Delete a comment
+      operationId: deleteComment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: commentId
+        in: path
+        description: Comment id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: comment deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  ResultsComment:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Comment'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  CreateComment:
+    type: object
+    required:
+    - entityId
+    - entityType
+    - content
+    properties:
+      parentEntityId:
+        type: string
+        description: parent entity id that this comment belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: entity the comment was posted on
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: type of entity the comment was posted on
+        enum:
+        - CHANGE
+        - ASSESSMENT
+        - SCENARIO
+        - FORM_RESPONSE
+        - APPROVAL_APPROVE
+        - APPROVAL_REJECT
+        - APPROVAL_REASSIGN
+        - APPROVAL_WITHDRAW
+      commentAction:
+        type: string
+        description: action that happened together with the comment
+        enum:
+        - APPROVE
+        - REJECT
+        - REQUEST_CHANGES
+      content:
+        description: content of comment
+        $ref: '#/definitions/Markup'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  Markup:
+    type: object
+    required:
+    - type
+    - value
+    properties:
+      type:
+        type: string
+        description: Type of markup
+        enum:
+        - HTML
+        - MARKDOWN
+        - TEXT
+      value:
+        type: string
+        description: Markup content in its source format
+  Comment:
+    type: object
+    required:
+    - id
+    - orgId
+    - entityId
+    - entityType
+    - content
+    - createAt
+    - createId
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id the comment belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this comment belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: entity the comment was posted on
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: type of entity the comment was posted on
+        enum:
+        - CHANGE
+        - ASSESSMENT
+        - SCENARIO
+        - FORM_RESPONSE
+        - APPROVAL_APPROVE
+        - APPROVAL_REJECT
+        - APPROVAL_REASSIGN
+        - APPROVAL_WITHDRAW
+      commentAction:
+        type: string
+        description: action that happened together with the comment
+        enum:
+        - APPROVE
+        - REJECT
+        - REQUEST_CHANGES
+      content:
+        description: content of comment
+        $ref: '#/definitions/Markup'
+      createAt:
+        type: string
+        description: timestamp that the comment was posted
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: user id who posted the comment
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: timestamp that the comment was edited
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: user id who edited the comment
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: user who deleted the comment
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+  UpdateComment:
+    type: object
+    properties:
+      content:
+        description: content of comment
+        $ref: '#/definitions/Markup'

@@ -1,0 +1,4155 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access preload API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: preload
+paths:
+  /v1/org/{orgId}/preload:
+    get:
+      tags:
+      - preload
+      summary: Return a set of pre-loaded data required by the web app
+      operationId: getPreloadData
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PreloadResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+definitions:
+  OrgAccess:
+    type: object
+    required:
+    - orgId
+    - access
+    properties:
+      orgId:
+        type: string
+        description: org id
+        example: 5887a7718f138b6a2a0041a7
+      personId:
+        type: string
+        description: person id, if this user directly corresponds with a person
+        example: 5887a7718f138b6a2a0041a7
+      access:
+        type: string
+        description: legacy access permission level
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      groupIds:
+        type: array
+        description: group ids that the above access applies to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      expr:
+        type: string
+        description: expression that the above access applies to
+      expireAt:
+        type: string
+        description: timestamp that this org access will expire
+      roleId:
+        type: string
+        description: the role id that defines the users access
+        example: 5887a7718f138b6a2a0041a7
+      status:
+        type: string
+        description: Onboarding status of the user in this org
+        enum:
+        - INACTIVE
+        - PREBOARDING
+        - ACTIVATION
+        - ACTIVE
+        - OFFBOARDED
+      homeEmail:
+        type: string
+        description: Personal email address of user, while they are preboarding
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      workEmail:
+        type: string
+        description: Work email address of user, once they have started
+        example: robert.doe@example.com
+        minItems: 0
+        maxItems: 120
+      workRoleId:
+        type: string
+        description: Active role ID that defines the user's access once they have started
+        example: 67c851da3dd1668c2fdd7e44
+  Address:
+    type: object
+    required:
+    - country
+    properties:
+      street1:
+        type: string
+        description: street address, line 1
+        example: 123 Anywhere Street
+        minItems: 0
+        maxItems: 200
+      street2:
+        type: string
+        description: street address, line 2
+        example: Apt 6L
+        minItems: 0
+        maxItems: 200
+      street3:
+        type: string
+        description: street address, line 3
+        example: Sixth Floor
+        minItems: 0
+        maxItems: 200
+      city:
+        type: string
+        description: city
+        example: New York
+        minItems: 0
+        maxItems: 80
+      state:
+        type: string
+        description: state
+        example: NY
+        minItems: 0
+        maxItems: 80
+      country:
+        type: string
+        description: country (two-digit ISO code)
+        example: NY
+        pattern: ^[A-Z]{2}$
+      postal:
+        type: string
+        description: postal code
+        example: '10001'
+        minItems: 0
+        maxItems: 10
+      geo:
+        description: geopoint location
+        $ref: '#/definitions/Geopoint'
+      approxGeo:
+        description: approximate geopoint location (suitable for a map placement, but not exact location)
+        $ref: '#/definitions/Geopoint'
+  TargetedInstruction:
+    type: object
+    required:
+    - filter
+    - instructions
+    properties:
+      filter:
+        type: string
+        description: filter expression matched against the current viewer's person record
+      instructions:
+        type: string
+        description: instructions injected into the chat prompt when filter matches
+  PolicyRuleTarget:
+    type: object
+    properties:
+      userId:
+        type: string
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      channel:
+        type: string
+      email:
+        type: string
+  OrgConfig:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      hiddenFieldIds:
+        type: array
+        description: set of hidden field ids of an org
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      builtinCategoryMap:
+        type: array
+        description: set of maps of the custom fields that belongs to a built-in category
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/BuiltInCategoryMap'
+      builtinFieldConfig:
+        type: array
+        description: Org configuration for built-in fields
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/BuiltInFieldConfig'
+      compensationBandsConfig:
+        description: Org configuration for compensation bands tiers, multipliers, and job levels
+        $ref: '#/definitions/CompensationBandsConfig'
+      smartCurrencyOptions:
+        type: array
+        description: Options for where to source a currency to use when currency is unknown. order specific
+        example: PERSON_HOME_ADDRESS_COUNTRY
+        items:
+          $ref: '#/definitions/SmartCurrencyOption'
+      smartCurrencyDefault:
+        type: string
+        description: The default currency to use when currency is unknown and there are no options set in smartCurrencyOptions
+        example: USD
+      requiredJobFields:
+        type: array
+        description: Org configuration for required job fields
+        uniqueItems: true
+        items:
+          type: string
+      scenarioApprovalChains:
+        type: object
+        description: Configures which approval chains to use with specific scenario types
+        additionalProperties:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      isOpenJobRoleApprovalEnabled:
+        type: boolean
+        description: Whether to show open job approval on Open Job Profile page
+      isNotifySubmitterPerStage:
+        type: boolean
+        description: Whether to notify the scenario submitter each time an approval stage completes
+      jobCodeFieldIds:
+        type: array
+        description: The set of field IDs that job codes can be set up to auto-fill
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      grantConfiguration:
+        type: array
+        description: Org Grant Configuration
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/GrantAlias'
+  InternalOrgOptions:
+    type: object
+    properties:
+      adpOrganizationOID:
+        type: string
+      assessmentCount:
+        type: integer
+        format: int32
+      dashboardGettingStartedHidden:
+        type: boolean
+      dashboardNeedHelpHidden:
+        type: boolean
+      enableUniversalSso:
+        type: boolean
+      sequoiaOrgId:
+        type: string
+      tosAgreement:
+        type: boolean
+      fileUploadLimit:
+        type: integer
+        format: int64
+      maxFileUploadSize:
+        type: integer
+        format: int64
+      lowPriorityReports:
+        type: boolean
+      isInitialDataSynced:
+        type: boolean
+      maxReportDatapoints:
+        type: integer
+        format: int64
+      disableImportEvents:
+        type: boolean
+        description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
+      useAlphaSlackApp:
+        type: boolean
+        description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
+      extraFields:
+        type: object
+        additionalProperties:
+          type: object
+  ExchangeRate:
+    type: object
+    required:
+    - id
+    - date
+    - currency
+    - rates
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id, if an org-specific exchange rate is in use
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+        description: date
+      currency:
+        type: string
+        description: base currency
+      rates:
+        type: object
+        description: exchange rates, per currency - the multiplier to convert the base currency into the foreign currency
+        additionalProperties:
+          type: number
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+  StartingSalaryConfig:
+    type: object
+    required:
+    - type
+    - effectiveDate
+    properties:
+      type:
+        type: string
+        description: Starting salary calculation type
+        enum:
+        - BAND_MINIMUM
+        - BAND_QUARTER
+        - BAND_MIDPOINT
+        - CUSTOM_PERCENTILE
+      customPercentile:
+        type: integer
+        format: int32
+        description: Custom percentile value (0-100) when type is CUSTOM_PERCENTILE
+      effectiveDate:
+        type: string
+        format: date
+        description: Effective date for this configuration
+      includeEquityTarget:
+        type: boolean
+        description: Whether to include equity target in starting compensation
+      includeVariableComp:
+        type: boolean
+        description: Whether to include variable compensation in starting compensation
+  GrantAlias:
+    type: object
+    required:
+    - grantType
+    - enabled
+    properties:
+      alias:
+        type: string
+      grantType:
+        type: string
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+      enabled:
+        type: boolean
+  Customer:
+    type: object
+    required:
+    - id
+    - name
+    - status
+    properties:
+      id:
+        type: string
+        description: unique id of customer
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: name of customer
+      email:
+        type: string
+        description: email address for billing purposes
+      billAddress:
+        description: mailing address for billing purposes
+        $ref: '#/definitions/Address'
+      industry:
+        type: string
+        description: industry that customer is in
+      source:
+        type: string
+        description: source of customer signup
+        enum:
+        - ADP_MARKETPLACE
+        - SELF_SERVE
+        - SELF_SERVE_TEST
+        - SEQUOIA_ONE
+        - CONNECT
+      status:
+        type: string
+        description: current status
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - TRIAL
+        - CHURN
+        - PAYMENT_ERROR
+      stripeCustomerId:
+        type: string
+        description: stripe customer id
+      salesforceAccountId:
+        type: string
+        description: salesforce account id
+        pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+      products:
+        type: array
+        description: products that this customer has purchased
+        items:
+          $ref: '#/definitions/ProductItem'
+      trialProducts:
+        type: array
+        description: products this customer has temporary trial access to, each bounded by a date range
+        items:
+          $ref: '#/definitions/TrialProduct'
+      restrictedFeatures:
+        type: array
+        description: features that are restricted for the customer
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      featureOptionOverrides:
+        type: array
+        description: override feature options for the customer
+        items:
+          $ref: '#/definitions/FeatureAccessOption'
+      startDate:
+        type: string
+        format: date
+        description: initial date of billing
+      endDate:
+        type: string
+        format: date
+        description: end of service date for churning customers -- on or after this date, service should be disabled
+      nextInvoiceDate:
+        type: string
+        format: date
+        description: date of next invoice
+      orgCount:
+        type: integer
+        format: int32
+        description: number of orgs covered by this customer
+      primaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      secondaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      tertiaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      primaryHeadCountFilter:
+        type: string
+        description: primary headcount filter - used for billing purposes
+      secondaryHeadCountFilter:
+        type: string
+        description: secondary headcount filter - used for billing purposes
+      tertiaryHeadCountFilter:
+        type: string
+        description: tertiary headcount filter - used for billing purposes
+      arr:
+        type: number
+        description: current ARR of the customer based on most recent invoice
+      trialStartDate:
+        type: string
+        format: date
+        description: date this customer begins their trial period
+      trialEndDate:
+        type: string
+        format: date
+        description: date this customer ends their trial period
+      stripeSubscriptionSync:
+        type: string
+        description: Stripe subscription settings
+        enum:
+        - SYNC
+        - DELETE
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+  LayoutRow:
+    type: object
+    required:
+    - columns
+    - format
+    properties:
+      columns:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutColumn'
+      format:
+        type: string
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  FieldOptions:
+    type: object
+    properties:
+      min:
+        type: string
+        description: minimum value, for numeric and date fields
+      max:
+        type: string
+        description: maximum value, for numeric and date fields
+      minItems:
+        type: integer
+        format: int32
+      maxItems:
+        type: integer
+        format: int32
+      stackRank:
+        type: boolean
+      step:
+        type: number
+      enableEditDialog:
+        type: boolean
+      requiredJobField:
+        type: boolean
+      excludeTargetPersonId:
+        type: boolean
+      maxLength:
+        type: integer
+        format: int32
+      readOnly:
+        type: boolean
+      includeFormer:
+        type: boolean
+      effectiveDated:
+        type: boolean
+      unique:
+        type: boolean
+      required:
+        type: boolean
+  Role:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of role
+        example: Engineering People Manager
+        minItems: 3
+        maxItems: 80
+      description:
+        type: string
+        description: description of role
+        example: This role is able to create and update new job data for the engineering department.
+        minItems: 0
+        maxItems: 1000
+      policyIds:
+        type: array
+        description: the policies that define the role
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      policies:
+        type: array
+        description: the policies attached to the role
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Policy'
+      users:
+        type: array
+        description: the users the role is attached to
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/User'
+      userCount:
+        type: integer
+        format: int32
+        description: number of users the role is attached to; populated when expand=true on the list endpoint
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  User:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      appId:
+        type: string
+        description: if the user is an app user, the id of the app
+        example: 588f7ee98f138b19220041a7
+      name:
+        description: full name of user
+        $ref: '#/definitions/Name'
+      email:
+        type: string
+        description: email address of user
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      password:
+        type: string
+        description: password of user (encrypted)
+        minItems: 0
+        maxItems: 120
+      orgs:
+        type: array
+        description: list of member orgs with permission levels
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/OrgAccess'
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of user
+        enum:
+        - SUPERUSER
+        - NORMAL
+        - INACTIVE
+        - UNINSTALLED
+      type:
+        type: string
+        description: type of user
+        enum:
+        - USER
+        - APP
+      options:
+        type: object
+        description: for apps, options (specific options are specific to the particular app); for users, user-set preferences
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+      bundleInstall:
+        description: if this user represents an installed bundle, details on what was installed
+        $ref: '#/definitions/BundleInstall'
+      secrets:
+        type: object
+        description: write-only secrets; the content of these secrets are not retrievable via the external-facing API
+      activeAt:
+        type: string
+        description: last activity timestamp
+        example: '2017-01-24T13:57:52Z'
+      loginAt:
+        type: string
+        description: last login timestamp
+        example: '2017-01-24T13:57:52Z'
+      appRunCheckAt:
+        type: string
+        description: for apps, last time the app was checked for a scheduled sync
+        example: '2024-02-29T09:30:00Z'
+      loginCount:
+        type: integer
+        format: int32
+        description: number of lifetime successful logins
+        example: '3'
+      sessionCount:
+        type: integer
+        format: int32
+        description: number of lifetime sessions
+        example: '3'
+      loginFailCount:
+        type: integer
+        format: int32
+        description: number of consecutive failed logins
+        example: '3'
+      title:
+        type: string
+        description: job title, if available
+        example: CEO
+      remoteIp:
+        type: string
+        description: last IP address used
+        example: 127.0.0.1
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      verifyAt:
+        type: string
+        description: email verified timestamp, if the email has been verified
+        example: '2017-01-24T13:57:52Z'
+      mfas:
+        type: array
+        description: list of registered 2FA registered credentials
+        items:
+          $ref: '#/definitions/WebRegisteredCredential'
+      emailSettings:
+        type: array
+        description: Email settings for the user
+        items:
+          $ref: '#/definitions/UserEmailSetting'
+      sensitive:
+        type: string
+        description: sensitivity level of the user's configuration; only applicable to APP users
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users and groups who have access to configure this user; only applicable to APP users
+        items:
+          $ref: '#/definitions/ShareAccess'
+      agentConfig:
+        description: per-user agent configuration overrides
+        $ref: '#/definitions/AiAgentConfig'
+  FeatureAccessOption:
+    type: object
+    required:
+    - name
+    - type
+    properties:
+      name:
+        type: string
+        description: The name of the feature option tied to the feature access
+        example: smart_fields
+        enum:
+        - CONFIGURED_ROLES
+        - SMART_FIELDS
+        - APP_FIELD_MAPPERS
+        - MULTI_PAYROLL_INSTALLS
+      description:
+        type: string
+        description: The description of the feature option
+      type:
+        type: string
+        description: The feature option type
+        enum:
+        - LIMIT
+        - FULL_ACCESS
+      limit:
+        type: integer
+        format: int32
+        description: The feature option limit
+  ProductItem:
+    type: object
+    required:
+    - productId
+    - stripePriceId
+    properties:
+      productId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      stripePriceId:
+        type: string
+  AiAgentConfig:
+    type: object
+    properties:
+      personality:
+        type: string
+      instructions:
+        type: string
+      guardrails:
+        type: string
+      enableMemory:
+        type: boolean
+      enableMcpServer:
+        type: boolean
+        description: whether this agent exposes an MCP server endpoint for per-user OAuth access
+      enableMcpWrite:
+        type: boolean
+        description: 'whether this agent''s MCP server may invoke write/mutating tools (e.g. a non-read-only AskAgent delegation). Read-only by default: when unset or false, a tool that mutates on the call is rejected at the MCP edge regardless of the agent''s role/policy. This is defense in depth layered on top of the role, never a grant beyond it.'
+      isExternal:
+        type: boolean
+        description: 'whether this agent is an external (non-ChartHop) client, e.g. Claude Code or ChatGPT. External agents have no ChartHop-side prompt/behavior config: only permissions, MCP, and activity are configurable.'
+      approvedPolicyRules:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyRule'
+      approvalGuidelines:
+        type: string
+      managerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      messagingConfig:
+        $ref: '#/definitions/MessagingConfig'
+      contentIds:
+        type: array
+        description: pinned content document IDs; when merging user and app configs, both lists are unioned (not replaced); validate with validateContentIds before persisting
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      modelTier:
+        type: string
+        description: requested model tier for the agent; defaults to MEDIUM when not set
+        enum:
+        - HIGH
+        - MEDIUM
+        - LOW
+      targetedInstructions:
+        type: array
+        description: audience-scoped instruction snippets injected into the chat prompt when the filter matches the current viewer's person record; size and filter syntax are checked by AgentValidationService before persisting
+        items:
+          $ref: '#/definitions/TargetedInstruction'
+  CustomerDetails:
+    type: object
+    required:
+    - actionRequired
+    properties:
+      actionRequired:
+        type: array
+        description: Action required by the client
+        items:
+          type: string
+      partnershipApp:
+        type: string
+        description: Partnership App
+  BundleInstallEntity:
+    type: object
+    required:
+    - entityType
+    - entityId
+    - originalId
+    properties:
+      entityType:
+        type: string
+        enum:
+        - ACTION
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - FIELD
+        - FORM
+        - GROUP
+        - PROFILE_TAB
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - TASK_CONFIG
+        - TEMPLATE
+        - TIME_OFF_POLICY
+        - CONTENT
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      originalId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  TableRef:
+    type: object
+    properties:
+      tableId:
+        type: string
+        description: the table id this field references
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+        description: the table name this field references
+  PayInterval:
+    type: object
+    required:
+    - interval
+    - pay
+    properties:
+      interval:
+        type: string
+        description: Interval (annual or hourly)
+        enum:
+        - YEARLY
+        - MONTHLY
+        - WEEKLY
+        - DAILY
+        - HOURLY
+      pay:
+        description: Pay over the given interval
+        $ref: '#/definitions/Money'
+      hoursPerWeek:
+        type: integer
+        format: int32
+        description: working hours per week if interval=hourly
+        example: '40'
+      weeksPerYear:
+        type: integer
+        format: int32
+        description: working weeks per year if interval=hourly
+        example: '52'
+      monthsPerYear:
+        type: integer
+        format: int32
+        description: months per year if interval=month
+        example: '52'
+      daysPerYear:
+        type: integer
+        format: int32
+        description: days per year if interval=day
+        example: '250'
+  FormEditAccess:
+    type: object
+    properties:
+      allow:
+        type: string
+        enum:
+        - ALWAYS
+        - WHILE_PROPOSED
+        - UNTIL_ACTIVE
+        - WHILE_ASSESSMENT_ACTIVE
+        - TIME_LIMIT
+      timeLimitSecs:
+        type: integer
+        format: int64
+  OrgStockData:
+    type: object
+    properties:
+      strikePrice:
+        type: number
+      grantPrice:
+        type: number
+      totalShares:
+        type: integer
+        format: int64
+  Layout:
+    type: object
+    required:
+    - rows
+    properties:
+      rows:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutRow'
+  Field:
+    type: object
+    required:
+    - id
+    - name
+    - label
+    - type
+    - plural
+    - isUnique
+    - isRequired
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      groupTypeId:
+        type: string
+        description: if this is a group membership field, the group type ID it's for
+        example: 588f7ee98f138b19220041a7
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      categoryId:
+        type: string
+        description: the category the field belongs to
+        example: 588f7ee98f138b19220041a7
+      categoryIds:
+        type: array
+        description: the categories the field belongs to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      tableId:
+        type: string
+        description: the table id this field applies to, only applicable when EntityType equals TABLE
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      readonly:
+        type: boolean
+      builtIn:
+        type: boolean
+      canOverrideSensitivity:
+        type: boolean
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for money values
+      isAutoIncrement:
+        type: boolean
+        description: whenther this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+      overrideRevert:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/DtValue'
+      overrideName:
+        type: string
+      hasSubfields:
+        type: boolean
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  FormSignatureConfig:
+    type: object
+    required:
+    - signers
+    properties:
+      signers:
+        type: array
+        items:
+          type: string
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+      message:
+        type: string
+      dueDate:
+        $ref: '#/definitions/DueDate'
+      isSkippable:
+        type: boolean
+      fieldId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  Geopoint:
+    type: object
+    required:
+    - type
+    - coordinates
+    properties:
+      type:
+        type: string
+        description: Type of point
+        readOnly: true
+      coordinates:
+        type: array
+        description: The longitude and latitude of the point
+        readOnly: true
+        items:
+          type: number
+          format: double
+  FormBlock:
+    type: object
+    required:
+    - type
+    properties:
+      id:
+        type: string
+        description: unique id for the block
+        example: 588f7ee98f138b19220041a7
+      fieldName:
+        type: string
+        description: field code name
+      type:
+        type: string
+        description: Type of Form Block
+        enum:
+        - QUESTION
+        - CONTENT
+      content:
+        type: string
+        description: Content of Content Block
+      contentTr:
+        description: Translations for content block
+        $ref: '#/definitions/Translations'
+      required:
+        type: boolean
+        description: whether field is required or not
+      questionId:
+        type: string
+        description: question id, for questions
+        example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: Filter to apply on visibility of this block
+  CompensationBandsConfig:
+    type: object
+    required:
+    - annualizedSalaries
+    - hourlySalaries
+    - hoursPerWeek
+    - weeksPerYear
+    - hasTargetSalary
+    - hasLocationMultiplier
+    - currencyRounding
+    properties:
+      annualizedSalaries:
+        type: boolean
+        description: whether annualized salaries are used
+      annualizedSalariesType:
+        type: string
+        description: how annualized salaries are represented
+      hourlySalaries:
+        type: boolean
+        description: whether hourly salaries are used
+      hourlySalariesType:
+        type: string
+        description: how hourly salaries are represented
+      hoursPerWeek:
+        type: number
+        description: how many hours per week to use when calculating comp bands
+      weeksPerYear:
+        type: number
+        description: how many weeks per year to use when calculating comp bands
+      hasTargetSalary:
+        type: boolean
+        description: target salary within a comp band
+      targetSalaryType:
+        type: string
+        description: how target salaries are represented
+      equityFormat:
+        type: string
+        description: equity format
+      refreshEquityFormat:
+        type: string
+        description: refresh grant equity format
+      variableBonusFormat:
+        type: string
+        description: variable bonus format
+      tiersNotMappedToCodes:
+        type: boolean
+        description: whether or not the tiers are mapped to fields. after we migrate all the tiers to be mapped, this flag can be removed
+      firstTier:
+        type: string
+        description: the org's first tier for their comp bands
+      secondTier:
+        type: string
+        description: the org's second tier for their comp bands
+      thirdTier:
+        type: string
+        description: the org's third tier for their comp bands
+      hasLocationMultiplier:
+        type: boolean
+        description: whether the org's location data is used as multipliers
+      jobLevelSource:
+        type: string
+        description: the source for the band job levels
+      marketJobLevelSystem:
+        type: string
+        description: comparable market job level system
+      currencyRounding:
+        type: array
+        description: currency rounding settings in the UI
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Money'
+      hasMigratedBands:
+        type: boolean
+        description: has migrated V1 bands
+      startingSalaryConfig:
+        description: Starting salary configuration for all comp bands in the org
+        $ref: '#/definitions/StartingSalaryConfig'
+  DtValue:
+    type: object
+    properties:
+      value:
+        type: object
+  LayoutButton:
+    type: object
+    required:
+    - url
+    - label
+    properties:
+      url:
+        type: string
+      label:
+        type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  CategorySort:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if built-in)
+        example: 588f7ee98f138b19220041a7
+      categoryIds:
+        type: array
+        description: ordered list of category ids of an org
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  BundleInstall:
+    type: object
+    required:
+    - entities
+    properties:
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/BundleInstallEntity'
+  DueDate:
+    type: object
+    required:
+    - type
+    - dueDay
+    - dueTime
+    properties:
+      type:
+        type: string
+        enum:
+        - EXACT
+        - RELATIVE
+      dueDay:
+        type: string
+        description: due day, in either relative (-7d) or exact (YYYY-MM-DD) format
+      dueTime:
+        type: string
+        description: due time, which is a LocalTime
+  BuiltInFieldConfig:
+    type: object
+    required:
+    - name
+    - hidden
+    properties:
+      name:
+        type: string
+        description: reserved codename for the native field
+      hidden:
+        type: boolean
+        description: hidden state of the native field (specific to org)
+      places:
+        type: integer
+        format: int32
+        description: decimal places to round native Money fields
+  VariableComp:
+    type: object
+    required:
+    - type
+    - interval
+    properties:
+      type:
+        type: string
+        description: compensation type
+        enum:
+        - BONUS
+        - COMMISSION
+      interval:
+        type: string
+        description: compensation interval
+        enum:
+        - YEARLY
+    description: 'variable compensation
+
+      Implementations: VariableCompPercent, VariableCompPercent'
+    discriminator: compType
+  AutoShare:
+    type: object
+    required:
+    - access
+    - shareWith
+    properties:
+      access:
+        type: string
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      shareWith:
+        type: string
+  AutoIncFieldConfig:
+    type: object
+    required:
+    - upperCase
+    - padDigits
+    - separator
+    - prefixParts
+    properties:
+      upperCase:
+        type: boolean
+        description: convert any lower-case characters in the value to upper case
+      padDigits:
+        type: integer
+        format: int32
+        description: length of the numeric part of the value (left-padded with zeroes)
+      separator:
+        type: string
+        description: separator character to use between parts of the value
+        enum:
+        - HYPHEN
+        - UNDERSCORE
+        - SPACE
+        - NONE
+      prefixParts:
+        type: array
+        items:
+          $ref: '#/definitions/AutoIncFieldPart'
+  Policy:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of policy
+        example: View Compensation
+        minItems: 3
+        maxItems: 80
+      description:
+        type: string
+        description: description of policy
+        example: This policy allows compensation to be viewed.
+        minItems: 0
+        maxItems: 1000
+      rules:
+        type: array
+        description: the rules that define the policy
+        items:
+          $ref: '#/definitions/PolicyRule'
+      roles:
+        type: array
+        description: the roles the policy is attached to
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Role'
+      users:
+        type: array
+        description: the users the policy is attached to
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/User'
+      userCount:
+        type: integer
+        format: int32
+        description: number of users the policy is attached to; populated when expand=true on the list endpoint
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  BuiltInCategoryMap:
+    type: object
+    required:
+    - categoryId
+    - fieldIds
+    properties:
+      categoryId:
+        type: string
+        description: id of the built-in category
+        example: 588f7ee98f138b19220041a7
+      fieldIds:
+        type: array
+        description: set of custom field ids that belongs to the built-in category
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  Block:
+    type: object
+    properties:
+      type:
+        type: string
+        description: the type of this block, or null if legacy
+        enum:
+        - CONTENT
+        - TASK
+        - CALENDAR
+      label:
+        type: string
+        description: human readable label for this block
+      height:
+        type: object
+        description: fixed height in px, or expand if “stretch”, or fit to contents if null
+      targetFilter:
+        type: string
+        description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
+      readFilter:
+        type: string
+        description: filter condition expression applied to this block, relative to the viewer
+      formIds:
+        type: array
+        description: form ids to surface responses in this block
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: fields retrieved in this block
+        items:
+          type: string
+      title:
+        type: string
+        description: title to show in block header
+      content:
+        type: string
+        description: template content returned in this block
+      contentTr:
+        description: template content returned in this block, translated
+        $ref: '#/definitions/Translations'
+      primaryButton:
+        description: primary CTA button
+        $ref: '#/definitions/LayoutButton'
+      secondaryButton:
+        description: secondary CTA button
+        $ref: '#/definitions/LayoutButton'
+  Comp:
+    type: object
+    properties:
+      baseComp:
+        description: base pay (money) with interval (annual or hourly)
+        $ref: '#/definitions/PayInterval'
+      variableTargets:
+        type: array
+        description: variable compensation (money or percent)
+        items:
+          $ref: '#/definitions/VariableComp'
+      grantShares:
+        type: integer
+        format: int32
+        description: planned stock grant, in shares
+        example: '5000'
+      grantValue:
+        type: integer
+        format: int32
+        description: planned stock grant, in value (based on the stock's currency, not the comp)
+        example: '5000'
+      grantType:
+        type: string
+        description: planned stock grant type
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+  GroupPosition:
+    type: object
+    required:
+    - name
+    - allowMultiple
+    properties:
+      name:
+        type: string
+      allowMultiple:
+        type: boolean
+      eligibilityFilter:
+        type: string
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  PreloadResponse:
+    type: object
+    required:
+    - org
+    - orgs
+    - user
+    - groupTypes
+    - fields
+    - forms
+    - featureAccess
+    - categories
+    properties:
+      org:
+        $ref: '#/definitions/Org'
+      orgs:
+        type: array
+        items:
+          $ref: '#/definitions/Org'
+      user:
+        $ref: '#/definitions/User'
+      role:
+        $ref: '#/definitions/Role'
+      viewUser:
+        $ref: '#/definitions/User'
+      viewRole:
+        $ref: '#/definitions/Role'
+      groupTypes:
+        type: array
+        items:
+          $ref: '#/definitions/GroupType'
+      fields:
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      forms:
+        type: array
+        items:
+          $ref: '#/definitions/Form'
+      exchangeRate:
+        $ref: '#/definitions/ExchangeRate'
+      stock:
+        $ref: '#/definitions/OrgStockData'
+      job:
+        $ref: '#/definitions/Job'
+      customer:
+        $ref: '#/definitions/Customer'
+      customerDetails:
+        $ref: '#/definitions/CustomerDetails'
+      featureAccess:
+        type: array
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      enabledFeatureOptions:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureAccessOption'
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/Category'
+      categorySort:
+        $ref: '#/definitions/CategorySort'
+      orgConfig:
+        $ref: '#/definitions/OrgConfig'
+      uiAccess:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  MessagingConfig:
+    type: object
+    properties:
+      slackAppId:
+        type: string
+      slackClientId:
+        type: string
+      slackBotUserId:
+        type: string
+  Form:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - status
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of form
+        example: 'Health Index: Q2'
+        minItems: 1
+        maxItems: 255
+      displayName:
+        type: string
+        description: display name of form during completion
+        example: Health Index
+        minItems: 1
+        maxItems: 255
+      displayNameTr:
+        description: display name of form, translated
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of form
+        example: The Engineering department, where engineers develop new technology and products.
+        minItems: 0
+        maxItems: 1000
+      blocks:
+        type: array
+        description: ordered list of blocks being collected in this form
+        items:
+          $ref: '#/definitions/FormBlock'
+      status:
+        type: string
+        description: status of the form
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - ARCHIVED
+      type:
+        type: string
+        description: type of the form
+        enum:
+        - BUILT_IN
+        - CUSTOM
+      targetType:
+        type: string
+        description: target type that the form can be filled out about
+        enum:
+        - NONE
+        - PERSON
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      submitFilter:
+        type: string
+        description: filter that controls which respondents can submit this form. The form:submit permission, if present, overrides this filter
+      responseReadFilter:
+        type: string
+        description: filter that controls who can read the form responses. The formResponse:read permission, if present, overrides this filter
+      approval:
+        type: string
+        description: approval needed, if any approval is required
+        enum:
+        - MANAGER
+        - GRAND_MANAGER
+      release:
+        type: string
+        description: whether a release step is involved (subsequent to approval if any)
+        enum:
+        - SUBMITTER
+        - ADMIN
+      releaseMessageChannel:
+        description: the message channel to be used for release notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      share:
+        type: string
+        description: whether sharing form responses is allowed
+        enum:
+        - SUBMITTER
+        - ADMIN
+      shareMessageChannel:
+        description: the message channel to be used for sharing notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      autoShare:
+        type: array
+        description: list of automatic sharing to be done after submission
+        items:
+          $ref: '#/definitions/AutoShare'
+      autoShareMessageChannel:
+        description: the message channel to be used for automatic sharing notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      submitterEdit:
+        description: post-submission editing permissions for the submitter
+        $ref: '#/definitions/FormEditAccess'
+      approverEdit:
+        description: post-submission editing permissions for the approver
+        $ref: '#/definitions/FormEditAccess'
+      signature:
+        description: if the form response should generate a PDF which should be sent for signature, these settings are used
+        $ref: '#/definitions/FormSignatureConfig'
+      authorSensitive:
+        type: string
+        description: view sensitivity for the author of this form - the level of view access required to view the createId and updateId fields. If null, the author's identity is always visible as long as the viewer can read the form response. If set to PRIVATE, the author's identity is stored in ChartHop, but protected such that even users with sensitive access cannot access the data. If set to ANONYMOUS, the author's identity is not stored in ChartHop at all.
+        enum:
+        - ANONYMOUS
+        - PRIVATE
+        - HIGH
+        - MANAGER
+      options:
+        description: options, such as notification settings
+        $ref: '#/definitions/FormOptions'
+      completeMode:
+        type: string
+        description: appearance of the form during completion
+        enum:
+        - MODAL
+        - FULLSCREEN
+      ai:
+        description: AI form completion and assistance settings
+        $ref: '#/definitions/FormAiConfig'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: 2017-01-24T13:52Z
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  SmartCurrencyOption:
+    type: object
+    required:
+    - name
+    - enabled
+    properties:
+      name:
+        type: string
+        description: codename for the option
+        enum:
+        - PERSON_HOME_ADDRESS_COUNTRY
+        - JOB_LOCATION_COUNTRY
+        - JOB_CURRENCY
+      enabled:
+        type: boolean
+        description: determines if this option should be used
+  FormAiConfig:
+    type: object
+    required:
+    - enableRead
+    - enableWrite
+    properties:
+      enableRead:
+        type: boolean
+      enableWrite:
+        type: boolean
+      agentUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      instructions:
+        type: string
+      label:
+        type: string
+      agentSubmit:
+        type: string
+        description: 'whether AI agents are allowed to submit this form: null/absent (never), CHAT (only when in an interactive chat with a human), AUTO (also when running autonomously). Defaults to never.'
+        enum:
+        - CHAT
+        - AUTO
+  Job:
+    type: object
+    required:
+    - jobId
+    - orgId
+    - title
+    - groupIds
+    - fields
+    properties:
+      jobId:
+        type: string
+        description: globally unique job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title
+        example: Senior Engineer
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: compensation
+        $ref: '#/definitions/Comp'
+      sensitive:
+        type: string
+        description: view sensitive of the job while open
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      relationships:
+        type: array
+        description: relationship to other jobs
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      managerIds:
+        type: array
+        description: list of managers, from immediate manager upwards
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: groups that this job is a member of
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      placement:
+        type: string
+        description: guidance on placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      startDate:
+        type: string
+        format: date
+        description: for empty jobs, expected start date - for filled jobs, confirmed start date
+      startDatePlanned:
+        type: string
+        format: date
+        description: expected start date whether job is open or has been filled - doesn't change when job is filled
+      personStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the org after the latest departure (if any)
+      personEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing, the last day of that person in the org
+      personJobStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the job
+      personJobEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing or moving out, the last day of that person in the job
+      personId:
+        type: string
+        description: the person holding this job -- either currently in the job, or upcoming announced hire
+        example: 588f7ee98f138b19220041a7
+      upcoming:
+        type: array
+        description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+        items:
+          $ref: '#/definitions/UpcomingChange'
+      scenarioId:
+        type: string
+        description: scenario that the job was created in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      backfillPersonId:
+        type: string
+        description: the person who most recently held the job, who this represents a backfill for
+        example: 588f7ee98f138b19220041a7
+  LayoutColumn:
+    type: object
+    required:
+    - blocks
+    properties:
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/Block'
+  UpcomingChange:
+    type: object
+    required:
+    - date
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+      announceDate:
+        type: string
+        format: date
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  TrialProduct:
+    type: object
+    required:
+    - productId
+    - startDate
+    - endDate
+    properties:
+      productId:
+        type: string
+        description: id of the product the customer is trialing
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+        description: first date the trial grants access (inclusive)
+      endDate:
+        type: string
+        format: date
+        description: last date the trial grants access (inclusive)
+  GroupType:
+    type: object
+    required:
+    - id
+    - name
+    - fieldName
+    - membershipType
+    - assignmentType
+    - parentTypesAllowed
+    - enableApprovals
+    - defaultSensitivity
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name of group
+        example: Engineering
+        minItems: 1
+        maxItems: 80
+      fieldName:
+        type: string
+        description: field name for field representing membership in this type of group
+        example: engineering
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+      code:
+        type: string
+        description: external code identifier of the group type
+        example: D123
+      requirePositions:
+        type: boolean
+        description: whether the group requires members to be positions
+      description:
+        type: string
+        description: description of the group type
+        minItems: 0
+        maxItems: 1000
+      membershipType:
+        type: string
+        description: whether members can be in multiple groups or only a single group of this type
+        enum:
+        - SINGLE
+        - MULTIPLE
+      assignmentType:
+        type: string
+        description: whether members are added by manual assignment or by matching a filter expression (or both)
+        enum:
+        - ASSIGNED
+        - EXPR
+        - COMBINATION
+      parentTypesAllowed:
+        type: string
+        description: group types allowed for parent groups
+        enum:
+        - SAME
+        - OTHER
+        - BOTH
+        - NONE
+      otherGroupTypeId:
+        type: string
+        description: if parents can be another group type the ID of that group type
+        example: 588f7ee98f138b19220041a7
+      sourceGroupTypeId:
+        type: string
+        description: for a portfolio mirror, the child org group type this type was replicated from
+        example: 588f7ee98f138b19220041a7
+      enableApprovals:
+        type: boolean
+        description: whether approvals can be used when changing membership
+      hidden:
+        type: boolean
+        description: when true, hides groups of this type from the Org Chart Groups view and from profile tags; null is treated as visible
+      defaultSensitivity:
+        type: string
+        description: default sensitivity for groups of this type
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      positions:
+        type: array
+        description: list of positions (e.g. 'lead') that exist on groups of this type
+        items:
+          $ref: '#/definitions/GroupPosition'
+      membershipFieldId:
+        type: string
+        description: ID of the field that indicates membership in groups of this type
+        example: 588f7ee98f138b19220041a7
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  WebRegisteredCredential:
+    type: object
+    required:
+    - credentialId
+    - publicKeyBase64
+    - userHandleBase64
+    - signatureCount
+    - createdAt
+    properties:
+      credentialId:
+        type: string
+        description: Credential id
+      publicKeyBase64:
+        type: string
+        description: The public key we're saving
+      userHandleBase64:
+        type: string
+        description: The user handle - a random 64 bits of data
+      signatureCount:
+        type: integer
+        format: int64
+        description: This is used to protect against duplicated key attacks
+      createdAt:
+        type: string
+        description: When was this created
+  FormOptions:
+    type: object
+    properties:
+      notifySubmitter:
+        type: boolean
+      notifySubmitterManager:
+        type: boolean
+      notifySelf:
+        type: boolean
+      notifyManager:
+        type: boolean
+      notifyUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fillValues:
+        type: boolean
+      enableDraft:
+        type: boolean
+      peersField:
+        type: string
+      enableExport:
+        type: boolean
+      timeToEdit:
+        type: string
+      endDate:
+        type: string
+  Org:
+    type: object
+    required:
+    - id
+    - name
+    - slug
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      customerId:
+        type: string
+        description: customer for billing processing
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: name of organization
+        example: Acme Corp
+      slug:
+        type: string
+        description: unique slug of organization
+        example: acme-corp
+      type:
+        type: string
+        description: type of organization
+        example: PRIVATE
+        enum:
+        - PRIVATE
+        - PUBLIC
+        - EDU
+        - GOV
+        - NONPROFIT
+        - DEMO
+        - TEST
+        - PORTFOLIO
+      industry:
+        type: string
+        description: industry
+        example: Software and Internet
+      estEmployees:
+        type: integer
+        format: int32
+        description: approximate number of employees
+      estRevenue:
+        type: integer
+        format: int32
+        description: approximate amount of revenue
+      foundedYear:
+        type: string
+        description: year of founding
+        example: '1998'
+      address:
+        description: street address
+        $ref: '#/definitions/Address'
+      phone:
+        type: string
+        description: company phone number in E.164 format
+        pattern: ^\+?[1-9]\d{1,14}$
+      email:
+        type: string
+        description: primary contact email
+        example: bob@example.com
+      url:
+        type: string
+        format: uri
+        description: website URL
+      domains:
+        type: array
+        description: domains used by this org
+        items:
+          $ref: '#/definitions/OrgDomain'
+      status:
+        type: string
+        description: current status of organization
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - DISABLED
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      currencies:
+        type: array
+        description: types of currencies in use, with the first currency the primary currency
+        items:
+          type: string
+        minItems: 1
+        maxItems: 100
+      locales:
+        type: array
+        description: locales supported within the org based on user selection, with the first locale the primary locale (e.g., en_US, en_GB, fr_FR, fr_CA)
+        items:
+          type: string
+      dataResidency:
+        type: string
+        description: data residency of the org - the db cluster where this org's data resides
+        enum:
+        - GLOBAL
+        - US
+        - EU
+      stock:
+        type: string
+        description: stock symbol
+        example: GOOG
+      timezone:
+        type: string
+        description: timezone in use
+        example: America/New_York
+      appTimes:
+        type: array
+        description: approximate times of day in the org timezone for daily app syncs to run (if unset, syncs will run 2am-8am US Eastern Time)
+        example: 09:00
+        items:
+          type: string
+      fiscalStart:
+        type: integer
+        format: int32
+        description: number of months into the calendar year that the fiscal year starts (1 = February, 2 = March)
+      headJobId:
+        type: string
+        description: head of the organization
+        example: 588f7ee98f138b19220041a7
+      unassignedManagerJobId:
+        type: string
+        description: Job ID that all jobs with missing manager report to in the organization
+        example: 588f7ee98f138b19220041a7
+      portfolioParentOrgId:
+        type: string
+        description: portfolio parent org ID
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+        description: start date of history
+      options:
+        description: org-public options
+        $ref: '#/definitions/OrgOptions'
+      internalOptions:
+        description: internal (ChartHop controlled) options
+        $ref: '#/definitions/InternalOrgOptions'
+      onboarding:
+        type: boolean
+        description: current onboarding status of an organization, allowing clearing of org
+      selfServeImporting:
+        type: boolean
+        description: completion status of initial import for orgs signed up via self serve
+      headCount:
+        type: integer
+        format: int32
+        description: number of total headcount currently in the org
+      userCount:
+        type: integer
+        format: int32
+        description: number of non-ChartHop, non-app users in the org
+      activeUserCount:
+        type: integer
+        format: int32
+        description: number of non-ChartHop, non-app users in the org active in the past month
+      activeAt:
+        type: string
+        description: last timestamp that any user was active in the org
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      destroyAt:
+        type: string
+        description: timestamp that the org is marked for data destruction
+        readOnly: true
+        example: '2017-01-24T13:57:52Z'
+      destroyId:
+        type: string
+        description: user who marked the org for data destruction
+        readOnly: true
+        example: 588f7ee98f138b19220041a7
+      destroyedAt:
+        type: string
+        description: date at which this org was destroyed, can not be modified
+        readOnly: true
+  OrgOptions:
+    type: object
+    properties:
+      costMultiplier:
+        type: number
+        description: Blanket multiplier to apply to all headcount costs, to account for blanket costs such as taxes and benefits
+      orgEngineIncrementalBackDays:
+        type: integer
+        format: int32
+        description: Org engine incremental back day option
+      stockPriceRollingAverage:
+        type: integer
+        format: int32
+      bannerMessageExpireDays:
+        type: integer
+        format: int32
+      dashboardChangeDaysAhead:
+        type: integer
+        format: int32
+        description: How many days ahead to look for changes on home screen
+      dashboardChangeDaysBack:
+        type: integer
+        format: int32
+        description: How many days back to look for changes on home screen
+      dashboardChangeDaysAheadMembers:
+        type: integer
+        format: int32
+        description: How many days ahead to look for changes, for members only — i.e. set this to 0 to disallow regular people seeing in the future
+      dashboardAnniversariesDaysBack:
+        type: integer
+        format: int32
+      dashboardAnniversariesDaysAhead:
+        type: integer
+        format: int32
+      maxDateYears:
+        type: integer
+        format: int32
+        description: The max number of years ahead shown in date inputs, defaults to 20 years
+      dashboardGlobal:
+        type: boolean
+        description: If you want employees to see all jobs regardless of location set this to true
+      dashboardHidePeopleMoves:
+        type: boolean
+      dashboardHideOpenJobs:
+        type: boolean
+      dashboardRestrictOpenJobs:
+        type: boolean
+      dashboardHideAnniversaries:
+        type: boolean
+      dashboardHideWeeklyCalendar:
+        type: boolean
+        description: Hides the weekly calendar widget on the home screen
+      dashboardWeeklyCalendarIncludeWeekends:
+        type: boolean
+        description: Includes weekends in the weekly calendar widget
+      placesDecimal:
+        type: integer
+        format: int32
+      placesMoney:
+        type: integer
+        format: int32
+      placesPercent:
+        type: integer
+        format: int32
+      placesPayYearly:
+        type: integer
+        format: int32
+      placesPayHourly:
+        type: integer
+        format: int32
+      placesVariableAmount:
+        type: integer
+        format: int32
+      placesVariablePercent:
+        type: integer
+        format: int32
+      disableCompReviewV2Emails:
+        type: boolean
+      disableDataAggregation:
+        type: boolean
+      disableDataImportTypes:
+        type: boolean
+      disableLiveQuery:
+        type: boolean
+      disableWelcomeEmail:
+        type: boolean
+      disableOrgExportLimit:
+        type: boolean
+        description: Allows powerpoint exports of over 1000 jobs
+      disableApproverScenarioEdits:
+        type: boolean
+        description: Disables ability of approvers to modify scenario data
+      enableActions:
+        type: boolean
+      enableAdp:
+        type: boolean
+      enableAzure:
+        type: boolean
+      enableBackwardsCompatibleCompBandRead:
+        type: boolean
+        description: Backwards compatibility flags for bands UAC
+      enableColumnCacheLogging:
+        type: boolean
+      enableColumnCacheInRedis:
+        type: boolean
+      enableTimeOffCacheInRedis:
+        type: boolean
+      enableStockGrantCacheInRedis:
+        type: boolean
+      enableMapForScenarios:
+        type: boolean
+      enablePositionEligibilityFilter:
+        type: boolean
+        description: Enables the CQL eligibility filter input on Group Type position rows
+      enableCompChangeCacheInRedis:
+        type: boolean
+      enableCompReviewV2LaunchFlag:
+        type: boolean
+      enableExperimentalScreenshotLayoutChanges:
+        type: boolean
+      enableGoogle:
+        type: boolean
+      enableMicrosoft:
+        type: boolean
+      enableOkta:
+        type: boolean
+      enableOneLogin:
+        type: boolean
+      enablePassword:
+        type: boolean
+      enableStartingSalary:
+        type: boolean
+        description: Enable starting salary configuration for comp bands
+      enableDynamicFields:
+        type: boolean
+        description: Enable dynamic fields configuration for job codes
+      enableDynamicJobDialog:
+        type: boolean
+        description: Enable dynamic fields configuration in the job modal
+      enableDynamicOrgChartCardHeight:
+        type: boolean
+        description: Enables dynamic card height on the org chart to optimize layout based on card content
+      linkedJobUpdateExcludedCategories:
+        type: array
+        description: Field categories excluded from linked field updates on filled jobs. Defaults to compensation categories if null.
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      jobDialogFilterJobCodeFieldId:
+        type: string
+        description: Determines which field to filter job codes by in the job dialog, defaults to department
+        example: 588f7ee98f138b19220041a7
+      enablePerOrgAuth:
+        type: boolean
+      enableRickrollLogin:
+        type: boolean
+      enableSaml:
+        type: boolean
+      disableSamlLoginToken:
+        type: boolean
+      enableTemplatesRichTextEditorV2:
+        type: boolean
+      enableOrgEngineRequiredFields:
+        type: boolean
+        description: Configures Org Engine to respect required fields
+      enableLongLivedCache:
+        type: boolean
+        description: Enables a managed service that, on API startup, primes those orgs' caches, for both column cache, as well as the primary org cache. These keys should also last for 24+ hours and therefore be always kept warm.
+      grantValueDefault:
+        type: boolean
+        description: If enabled, then by default grants are in value, not shares
+      orgEnginePromoteCustomIdsAsTrueIds:
+        type: boolean
+        description: This field promotes the alternate id to the true id and allows HRIS to be updated
+      preventAtsEmailNotifications:
+        type: boolean
+        description: Sync History V2 Option to prevent ATS notifications
+      scenarioCols:
+        type: string
+        description: The default set of comma separated columns to show in the scenario changes screen
+      enablePowerpointScreenshot:
+        type: boolean
+        description: Enables the powerpoint screenshot export feature, on by default
+      enableDelightedSurvey:
+        type: boolean
+        description: Enables the delighted survey popup
+      enableOrgChartIndicators:
+        type: boolean
+        description: Shows the +XX job sibling indicators on the org chart
+      enableHideEquityCalculator:
+        type: boolean
+        description: Hides the value calculator on the equity section of the profile
+      enableTransformFieldMapper:
+        type: boolean
+        description: Enables the ability to configure the One to One field mapper with a Charthop Default Value
+      enableFullNamesTitlesLegacy:
+        type: boolean
+        description: Shows full names in powerpoint exports
+      disableSiblingIndicators:
+        type: boolean
+        description: Disables the sibling indicators on the org chart
+      enableGrantCustomization:
+        type: boolean
+        description: Enables grant aliases in the financial settings
+      enableScenarioChangesV2:
+        type: boolean
+        description: Enables new scenario changes screen
+      enableScenarioAuditLog:
+        type: boolean
+        description: Enables the audit log tab for scenarios
+      showErrorRows:
+        type: boolean
+      hideEquityValuation:
+        type: boolean
+        description: Hides the company valuation component of the calculation in the Equity profile tab (stock price will still be shown)
+      hideProfileCompensationVesting:
+        type: boolean
+        description: Hides the vesting section of the compensation profile tab
+      hideScenarioTotalRows:
+        type: boolean
+        description: Hide total rows in scenario change summary tables
+      generateApprovalRequestsForTimeOffImport:
+        type: boolean
+      recalculateDaysForTimeOffImport:
+        type: boolean
+      positionIdField:
+        type: string
+        description: Name of the job field that holds the org's Position ID for display in pickers
+      enableCompBandPrefetchByJobCode:
+        type: boolean
+      legacyManagerFieldVisibility:
+        type: boolean
+      restrictReports:
+        type: boolean
+      restrictScenarios:
+        type: boolean
+      restrictSensitiveFilters:
+        type: boolean
+      restrictVariableView:
+        type: boolean
+      restrictVestingView:
+        type: boolean
+      restrictPersonHistory:
+        type: boolean
+      restrictSelfEdit:
+        type: boolean
+      skipSyncNotify:
+        type: boolean
+      hideCompensationTab:
+        type: boolean
+      hideEquityTab:
+        type: boolean
+      hideTasksTab:
+        type: boolean
+      hideTimeOffTab:
+        type: boolean
+      hideProfileCurrencyConversion:
+        type: boolean
+        description: Hides profile currency conversion on compensation tab
+      enableCalendarExport:
+        type: boolean
+      enableChangeExport:
+        type: boolean
+      deidentifiedMinSampleSize:
+        type: integer
+        format: int32
+      deidentifiedFieldIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      enableAi:
+        type: boolean
+        description: Enable AI features like chart analysis and review calibrations
+      enableAiSummaries:
+        type: boolean
+        description: Enable AI form response summaries
+      enableAiChatButtons:
+        type: boolean
+        description: Enables the AI Ask ChartHop chatbot feature via interaction buttons
+      enableMobileAiVoice:
+        type: boolean
+        description: Enables the AI Voice feature in ChartHop mobile
+      limitAiChatButtonsUserIds:
+        type: array
+        description: Limits the usage of the buttons to a set of User IDs
+        items:
+          type: string
+      enableAiChatAsk:
+        type: boolean
+        description: Enables the open-ended AI Ask ChartHop chatbot feature
+      enableAiHomePage:
+        type: boolean
+        description: Enables the AI-centric home page
+      limitAiChatbotUserIds:
+        type: array
+        description: Limits the usage of the AI chatbot feature to a set of User IDs
+        items:
+          type: string
+      enableAiScenarioPlanning:
+        type: boolean
+        description: Enables the AI scenario planning feature
+      limitAiScenarioPlanningUserIds:
+        type: array
+        description: Limits the usage of the AI chatbot scenario planning feature to a set of User IDs
+        items:
+          type: string
+      aiChatDisableStreaming:
+        type: boolean
+        description: Disable streaming for ai chat messages
+      enableAiTerminationGuardrail:
+        type: boolean
+        description: Disable ability for AI to recommend terminations in scenarios
+      aiChatAgentUserId:
+        type: string
+        description: Which agent is used by default in chat, instead of the ChartHop AI
+        example: 588f7ee98f138b19220041a7
+      enableAiAgents:
+        type: boolean
+        description: Enable the use of AI agents
+      enableAiForms:
+        type: boolean
+        description: Enable the use of AI form completions
+      enableAiActions:
+        type: boolean
+        description: Enable the use of AI agentic actions
+      enableAiChatWrite:
+        type: boolean
+        description: Enable AI chat write tools (create, update, delete entities)
+      enableDataExplorer:
+        type: boolean
+        description: Enables the Data Explorer feature
+      enableFinanceImpactDashboard:
+        type: boolean
+        description: Enables the finance-oriented impact dashboard
+      limitDataExplorerUserIds:
+        type: array
+        description: Limits the usage of the Data Explorer to a set of User IDs
+        items:
+          type: string
+      limitInfiniteDataSheetGroupingUserIds:
+        type: array
+        description: Limits the usage of the new Infinite Data Sheet with grouping to a set of User IDs
+        items:
+          type: string
+      enableUserSettingsV2:
+        type: boolean
+      enableCalendarScreen:
+        type: boolean
+      enableCompensationBands:
+        type: boolean
+        description: Enables Comp bands V2 (on by default for Premium customers)
+      enableCompBandsSetupSpreadsheet:
+        type: boolean
+        description: Enables the new comp bands setup spreadsheet UI (AG Grid). Absent/false = legacy path.
+      easyAppInstallConfigManageEnabled:
+        type: boolean
+        description: Enables easy app install (on by default for self-serve & standard orgs)
+      enableGeoip:
+        type: boolean
+      enableNewHireManagement:
+        type: boolean
+      enableOutboundPayroll:
+        type: boolean
+      enableRefreshedReportsV2:
+        type: boolean
+      enableLanguageSwitching:
+        type: boolean
+      hideNextYearTabPolicyTimeOffDisplay:
+        type: boolean
+      enableInfiniteDataSheet:
+        type: boolean
+        description: Enables infinite scrolling with server-side sorting and pagination in Data Sheet
+      infiniteDataSheetPageSize:
+        type: integer
+        format: int32
+        description: 'Number of rows to load per page in infinite scrolling Data Sheet (default: 100)'
+      enableDataSheetGrouping:
+        type: boolean
+        description: Enables grouping functionality in Data Sheet
+      userTablePaginated:
+        type: boolean
+        description: Enables server-side paginated user table with search, filter, and sort via findUsers
+      enableTables:
+        type: boolean
+      enableTeamOrgChart:
+        type: boolean
+        description: Enables groups with positions feature
+      enableDepartedPersonAccessDirection:
+        type: boolean
+      enableForceChangeGroupingOrgCacheReload:
+        type: boolean
+      enableGroupTypes:
+        type: boolean
+      enablePreboarding:
+        type: boolean
+        description: Enables preboarding features
+      allowedIpsPasswordLogin:
+        type: array
+        description: IP Allow-list for Password based logins
+        items:
+          type: string
+      jobDetailPanelFields:
+        type: array
+        description: Customize which fields are displayed in the job details panel in the Org Chart and their order.
+        items:
+          type: string
+      notifyUserIds:
+        type: array
+        description: Sends notification to org users when new Users are assigned
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      orgEngineCustomIdCustomFieldNameList:
+        type: array
+        description: This is an array of fields that an org can use to indicate that one or more fields should be used as alternate id
+        items:
+          type: string
+      highlightMenuPreferredFields:
+        type: array
+        items:
+          type: string
+      impactGroupByExcludedFieldIds:
+        type: array
+        description: Field IDs excluded from the Impact Dashboard Group By picker
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      profileGroupTypeTagIds:
+        type: array
+        description: The types of groups that should be shown as tags in the profile header, defaults to department and location
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      pptThemes:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      editJobFieldOrder:
+        type: object
+        description: Allows ordering of fields within tabs of the edit job dialog
+        additionalProperties:
+          type: array
+          items:
+            type: string
+      profileCompensationChartFields:
+        type: array
+        description: Controls comp fields show in profile tab
+        items:
+          type: string
+      orgMinDate:
+        type: string
+        description: min Date for all DateInput across Org except Groups in format YYYY-MM-DD
+      aboutEquityMessage:
+        type: string
+        description: Message to show in place of the default About equity compensation... message on profile tab
+      atsReqField:
+        type: string
+        description: If an org has an ATS integration, use their atsReqField instead of greenhouseId
+      bannerMessage:
+        type: string
+      bannerHeader:
+        type: string
+      brandColor:
+        type: string
+        description: The org's primary brand color
+      brandSecondaryColor:
+        type: string
+        description: The org's secondary brand color
+      brandLogo:
+        type: string
+        description: Show brand logo in header of home page
+      customSsoImage:
+        type: string
+        description: Customizes the SSO button image on the login screen
+      customSsoLabel:
+        type: string
+        description: Customizes the SSO button label on the login screen
+      dashboardAnnouncementMessage:
+        type: string
+      dashboardCalendarTypes:
+        type: object
+        description: Comma-separated types of calendar events to show in milestones panel
+      dashboardChangeTypes:
+        type: object
+        description: Which change types to show on home screen and calendar, uses ChangeDao.ChangeType as enum
+      dateFormat:
+        type: string
+      defaultNoTimeOffMessage:
+        type: string
+        description: Message to show if no time off policies apply to the org member
+      greenhouseDomain:
+        type: string
+        description: Allows customization of greenhouse subdomain for XHOP app
+      country:
+        type: string
+      language:
+        type: string
+      limitTeamOrgChartUserIds:
+        type: array
+        description: A list of users ids that are allowed to see the team org chart when enableTeamOrgChart is true
+        items:
+          type: string
+      orgDefaultData:
+        type: string
+        description: Controls what data field will be shown in the Visualize option on the Org Chart by default (default is department)
+      loginRedirectUrl:
+        type: string
+      newHireOpenJobMatchingFieldName:
+        type: string
+        description: Custom field for fallback open job matching in org engine
+      restrictExportOrgChart:
+        type: string
+        description: Prevent non-sensitive users to export company org chart
+      restrictExportCsv:
+        type: string
+        description: Prevent non-sensitive users to export company data in CSV files
+      teamOrgChartTypes:
+        type: array
+        description: A filter that can show/hide what toggle options are available on the team org chart, when null everything is shown
+        items:
+          type: string
+      timeOffDaysAhead:
+        type: integer
+        format: int32
+        description: The number of days ahead which PTO becomes org public. Anything outside of this range will be treated as effectively manager shared
+      userSessionDuration:
+        type: string
+      userSessionInactiveDuration:
+        type: string
+      userInviteDuration:
+        type: string
+      turnoverFormula:
+        type: string
+        description: Turnover rate calculation formula - 'monthlyEnd' for end-of-month sampling
+      welcomeEmailButtonLabel:
+        type: string
+      welcomeEmailSubject:
+        type: string
+      customWelcomeMessage:
+        type: string
+      preboardingWelcomeEmailButtonLabel:
+        type: string
+      preboardingWelcomeEmailSubject:
+        type: string
+      preboardingCustomWelcomeHeader:
+        type: string
+      preboardingCustomWelcomeMessage:
+        type: string
+      orgDefaultFilter:
+        type: string
+      sheetDefaultFilter:
+        type: string
+      preboardingFilter:
+        type: string
+      onboardingFilter:
+        type: string
+      offboardingFilter:
+        type: string
+      preboardingColNames:
+        type: string
+      onboardingColNames:
+        type: string
+      offboardingColNames:
+        type: string
+      defaultMessageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+      allowCharthopMobileApp:
+        type: boolean
+      timeOffPolicyTypeOrder:
+        type: array
+        description: The order in which time off policies should be sorted by type (types not included here are sorted at the end)
+        items:
+          type: string
+          enum:
+          - PTO
+          - TOIL
+          - VACATION
+          - SICK
+          - MEDICAL
+          - JURY
+          - OFFSITE
+          - PARENTAL
+          - UNPAID
+          - DISABILITY_SHORT
+          - DISABILITY_LONG
+          - BEREAVEMENT
+          - MILITARY
+          - RELIGIOUS
+          - VOTING
+          - VOLUNTEER
+          - UNKNOWN
+      enableFormRejections:
+        type: boolean
+        description: Enables form rejections instead of request changes, for backwards compatiblity
+      enableCalibration:
+        type: boolean
+        description: Enables the calibration feature for performance reviews
+      useStandardizedTitle:
+        type: string
+        description: Whether to suggest or enforce standardized titles
+      enableProfilePageV2:
+        type: boolean
+        description: Enables the redesigned profile page
+      enableHomeCustomLayout:
+        type: boolean
+        description: Enables using a custom layout for the home page
+      homeCustomLayout:
+        description: The custom layout for the home page
+        $ref: '#/definitions/Layout'
+      enableSkipSignatureConfirmationEmail:
+        type: boolean
+        description: Temporary option to turn on skipping emails for signatures, until we have a better solution for miller-cooper
+      disableSignatureTitles:
+        type: boolean
+        description: When set to true, do not include job titles in signatures
+      enableHiddenRolesAndPolicies:
+        type: boolean
+      enableAlphaApps:
+        type: boolean
+        description: Allows this org to access applications in alpha
+      csvImportMaxNumRows:
+        type: integer
+        format: int32
+        description: The maximum number of rows for CSV imports
+      enableGoals:
+        type: boolean
+        description: Enable goal-setting features in the org
+      disableAiMemory:
+        type: boolean
+        description: Disable AI agent persistent memory in the org
+      enableLegacyBands:
+        type: boolean
+        description: Enable bands V1 feature in the org
+      enableApprovalDelegates:
+        type: boolean
+        description: Enable Approval Delegates feature in the org
+      useImporterV3:
+        type: boolean
+        description: Whether to use the v3 job importer
+      logImportErrorsUsingJavaLogger:
+        type: boolean
+        description: Whether the v3 job importer should log errors to the java logger in addition to the log file
+      enableIdentitySyncLogging:
+        type: boolean
+        description: Emit verbose identity sync deactivation diagnostics to the process log
+      scenarioCostExpr:
+        type: string
+        description: Cost calculation used for scenarios by default, if not set defaults to annualized cost with multiplier
+      scenarioCostLabel:
+        type: string
+        description: Label to show for cost in scenarios, if not set defaults to 'Annual Cost'
+      scenarioCostDescription:
+        type: string
+        description: Description to show for cost in scenarios,
+      disableAiKnowledgeBase:
+        type: boolean
+        description: Global option to disable AI knowledge base usage (typically for AWS outages)
+      qesFilter:
+        type: string
+        description: filter expression evaluated on each signer for whether to use qualified electronic signature (if it evaluates to true for any signer, QES will be used)
+      disableQes:
+        type: boolean
+        description: disable QES usage while still using external vendor, purely for testing
+      enableBudgets:
+        type: boolean
+        description: enable budgets feature
+      enableEndOfYearTimeOffBalanceDisplay:
+        type: boolean
+        description: display end-of-year balance (roughly) on the time off profile page even for accrued policies
+      timeOffCustomBalanceDescription:
+        type: string
+        description: custom time off balance description (if blank, shows default message)
+      csvImportSetAdjustCreateDate:
+        type: boolean
+        description: Set the adjustCreateDate import option needed for turbo
+      csvImportCreateJobsWithMissingManager:
+        type: boolean
+        description: Set the createJobsWithMissingManager import option
+      csvImportReassignDirectReportsOnMove:
+        type: boolean
+        description: Set the reassignDirectReportsOnMove import option (reassign a moved manager's reports to the target job)
+      defaultBackfillJobSensitivity:
+        type: string
+        description: Default sensitivity for backfill jobs (defaults to HIGH if not set)
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      jobCodeMatchMaxCatalogSize:
+        type: integer
+        format: int32
+        description: 'Maximum number of job codes allowed for AI job-code matching (default: 1000)'
+  UserEmailSetting:
+    type: object
+    required:
+    - category
+    - subscribed
+    properties:
+      category:
+        type: string
+        description: Category of emails
+        example: ADMINISTRATIVE
+        enum:
+        - ADMINISTRATIVE
+        - BILLING
+        - DATA_IMPORT_AND_SYNC_STATUS
+        - TRIAL_REMINDERS
+        - APPROVAL_NOTIFICATIONS
+      subscribed:
+        type: boolean
+        description: Is user subscribed to the category of emails
+  AutoIncFieldPart:
+    type: object
+    required:
+    - type
+    - value
+    properties:
+      type:
+        type: string
+        enum:
+        - LITERAL_STRING
+        - GROUP_CODE
+      value:
+        type: object
+      defaultValue:
+        type: string
+  Category:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if built-in)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label of category
+        example: Performance
+        minItems: 3
+        maxItems: 80
+      fieldIds:
+        type: array
+        description: set of field ids included in this category
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      nativeFields:
+        type: array
+        description: set of native field names included in this category
+        uniqueItems: true
+        items:
+          type: string
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  PolicyRule:
+    type: object
+    properties:
+      allow:
+        type: array
+        description: allow rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      deny:
+        type: array
+        description: deny rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      categories:
+        type: array
+        description: categories the rule is limited to
+        example: '[''Compensation'', ''Stock Grants'']'
+        items:
+          type: string
+      fields:
+        type: array
+        description: fields the rule is limited to
+        example: '[''base'']'
+        items:
+          type: string
+      departmentIds:
+        type: array
+        description: departments the rule is limited to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: custom filter the rule is limited to
+        example: department:engineering and under:me
+      directions:
+        type: array
+        description: directions that the rule applies to -- either self or under
+        items:
+          type: string
+      types:
+        type: array
+        description: types that the rule applies to
+        items:
+          type: string
+      targets:
+        type: array
+        description: targets allowed for messaging (email addresses, chat channels, user ids)
+        items:
+          $ref: '#/definitions/PolicyRuleTarget'
+      visibleSensitive:
+        type: array
+        description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+      fieldsSensitive:
+        type: array
+        description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+  Name:
+    type: object
+    required:
+    - last
+    properties:
+      first:
+        type: string
+        description: first name
+        example: Jane
+        minItems: 0
+        maxItems: 80
+      middle:
+        type: string
+        description: middle name
+        example: Quidditch
+        minItems: 0
+        maxItems: 80
+      last:
+        type: string
+        description: last name
+        example: Public
+        minItems: 0
+        maxItems: 80
+      pref:
+        type: string
+        description: preferred first name
+        example: JQ
+        minItems: 0
+        maxItems: 80
+      prefLast:
+        type: string
+        description: preferred last name
+        example: Smith
+        minItems: 0
+        maxItems: 80
+  OrgDomain:
+    type: object
+    required:
+    - domain
+    - aliases
+    properties:
+      domain:
+        type: string
+      aliases:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  JobRelationship:
+    type: object
+    required:
+    - jobId
+    - type
+    properties:
+      jobId:
+        type: string
+        description: destination job id
+        example: 5887a7718f138b6a2a0041a7
+      type:
+        type: string
+        description: type of relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE

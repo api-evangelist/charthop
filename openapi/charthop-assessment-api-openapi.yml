@@ -1,0 +1,1914 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access assessment API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: assessment
+paths:
+  /v1/org/{orgId}/assessment:
+    get:
+      tags:
+      - assessment
+      summary: Return all assessments in the organization paginated
+      operationId: findAssessments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Type of assessment to filter by
+        required: false
+        type: string
+        enum:
+        - REVIEW
+        - COMP_REVIEW
+        - SURVEY
+      - name: from
+        in: query
+        description: Assessment id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: ids
+        in: query
+        description: List of ids to filter by
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsAssessment'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - assessment
+      summary: Create a assessment
+      operationId: createAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Assessment data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAssessment'
+      responses:
+        '201':
+          description: assessment created
+          schema:
+            $ref: '#/definitions/Assessment'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/bulk/delete:
+    post:
+      tags:
+      - assessment
+      summary: Delete a set of assessments
+      operationId: bulkDeleteAssessments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of assessment ids to delete
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/assessment/bulk/duplicate:
+    post:
+      tags:
+      - assessment
+      summary: Duplicate a set of assessments
+      operationId: bulkDuplicateAssessments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of assessment ids to duplicate
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/assessment/bulk/move:
+    post:
+      tags:
+      - assessment
+      summary: Update the types of a set of assessments
+      operationId: bulkChangeAssessmentTypes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of assessment ids to update and the new type
+        required: true
+        schema:
+          $ref: '#/definitions/BulkChangeAssessmentTypesBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/assessment/{assessmentId}:
+    get:
+      tags:
+      - assessment
+      summary: Return a particular assessment by id
+      operationId: getAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Assessment'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - assessment
+      summary: Update an existing assessment
+      operationId: updateAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      - name: silent
+        in: query
+        description: Suppress notification emails
+        required: true
+        type: boolean
+      - name: body
+        in: body
+        description: Assessment data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAssessment'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - assessment
+      summary: Delete a assessment
+      operationId: deleteAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/assessment/{assessmentId}/approve:
+    post:
+      tags:
+      - assessment
+      summary: Release all un-approved responses for a form of an assessment
+      operationId: approveFormResponses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      - name: formId
+        in: query
+        description: Form id
+        required: false
+        type: string
+      - name: body
+        in: body
+        required: false
+        schema:
+          $ref: '#/definitions/BulkFormResponsesOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/{assessmentId}/calibration/person:
+    get:
+      tags:
+      - assessment
+      summary: Retrieve all persons who were targets of form submissions, retrieving both fields as well as question responses. This endpoint is typically used for calibrations.
+      operationId: findCalibrationPersons
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      - name: filter
+        in: query
+        description: Filter to apply
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve
+        required: false
+        type: string
+      - name: questionIds
+        in: query
+        description: Question ids to retrieve
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/{assessmentId}/complete:
+    post:
+      tags:
+      - assessment
+      summary: Complete a assessment
+      operationId: completeAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Assessment'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/{assessmentId}/form/{formId}/expire:
+    post:
+      tags:
+      - assessment
+      summary: Expire all pending tasks for a form of an assessment
+      operationId: expireAssessmentFormTasks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      - name: formId
+        in: path
+        description: Form id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/{assessmentId}/forms-questions:
+    get:
+      tags:
+      - assessment
+      summary: Return an overview of the forms and questions used in the assessment. If the user has read access to the assessment, then the forms and questions are visible, even if they would not otherwise be visible on their own
+      operationId: getAssessmentFormsAndQuestions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AssessmentFormsAndQuestions'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/assessment/{assessmentId}/reactivate:
+    post:
+      tags:
+      - assessment
+      summary: Reactivate a assessment
+      operationId: reactivateAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Assessment'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/{assessmentId}/release:
+    post:
+      tags:
+      - assessment
+      summary: Release all un-released responses for a form of an assessment
+      operationId: releaseFormResponses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      - name: formId
+        in: query
+        description: Form id
+        required: false
+        type: string
+      - name: body
+        in: body
+        required: false
+        schema:
+          $ref: '#/definitions/BulkFormResponsesOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/assessment/{assessmentId}/task-summary:
+    get:
+      tags:
+      - assessment
+      summary: Return a summary of the tasks for a given assessment
+      operationId: getAssessmentTaskSummary
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AssessmentTaskSummary'
+        '401':
+          description: unauthorized
+definitions:
+  AssessmentTaskFormSummary:
+    type: object
+    required:
+    - submitTaskDoneCount
+    - submitTaskPendingCount
+    - submitTaskSkippedCount
+    - submitTaskExpiredCount
+    - formResponseProposedCount
+    - formResponseAwaitingChangesCount
+    - formResponseUnreleasedCount
+    - formResponseRejectedCount
+    - formResponseActiveCount
+    - formResponseActiveDoneCount
+    - formResponseActiveApprovedCount
+    - formResponseActiveReleasedCount
+    - submitUserCount
+    - targetPersonCount
+    - uniqueUserCount
+    properties:
+      submitTaskDoneCount:
+        type: integer
+        format: int32
+        description: Number of FORM_SUBMIT tasks that are marked as DONE
+      submitTaskPendingCount:
+        type: integer
+        format: int32
+        description: Number FORM_SUBMIT tasks that are PENDING
+      submitTaskSkippedCount:
+        type: integer
+        format: int32
+        description: Number FORM_SUBMIT tasks that are SKIPPED
+      submitTaskExpiredCount:
+        type: integer
+        format: int32
+        description: Number FORM_SUBMIT tasks that are EXPIRED
+      formResponseProposedCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are proposed and awaiting approval
+      formResponseAwaitingChangesCount:
+        type: integer
+        format: int32
+        description: Number of form responses that have had changes requested and are awaiting changes
+      formResponseUnreleasedCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are unreleased
+      formResponseRejectedCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are rejected
+      formResponseActiveCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are active
+      formResponseActiveDoneCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are active (but neither released or approved)
+      formResponseActiveApprovedCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are active and approved (but weren't released)
+      formResponseActiveReleasedCount:
+        type: integer
+        format: int32
+        description: Number of form responses that are active and released
+      submitUserCount:
+        type: integer
+        format: int32
+        description: Number of unique submitter users
+      targetPersonCount:
+        type: integer
+        format: int32
+        description: Number of unique target persons
+      uniqueUserCount:
+        type: integer
+        format: int32
+        description: Number of total users involved, between submitters and targets
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  FieldOptions:
+    type: object
+    properties:
+      min:
+        type: string
+        description: minimum value, for numeric and date fields
+      max:
+        type: string
+        description: maximum value, for numeric and date fields
+      minItems:
+        type: integer
+        format: int32
+      maxItems:
+        type: integer
+        format: int32
+      stackRank:
+        type: boolean
+      step:
+        type: number
+      enableEditDialog:
+        type: boolean
+      requiredJobField:
+        type: boolean
+      excludeTargetPersonId:
+        type: boolean
+      maxLength:
+        type: integer
+        format: int32
+      readOnly:
+        type: boolean
+      includeFormer:
+        type: boolean
+      effectiveDated:
+        type: boolean
+      unique:
+        type: boolean
+      required:
+        type: boolean
+  AssessmentFormsAndQuestions:
+    type: object
+    required:
+    - forms
+    - questions
+    properties:
+      forms:
+        type: array
+        items:
+          $ref: '#/definitions/Form'
+      questions:
+        type: array
+        items:
+          $ref: '#/definitions/Question'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  FormBlock:
+    type: object
+    required:
+    - type
+    properties:
+      id:
+        type: string
+        description: unique id for the block
+        example: 588f7ee98f138b19220041a7
+      fieldName:
+        type: string
+        description: field code name
+      type:
+        type: string
+        description: Type of Form Block
+        enum:
+        - QUESTION
+        - CONTENT
+      content:
+        type: string
+        description: Content of Content Block
+      contentTr:
+        description: Translations for content block
+        $ref: '#/definitions/Translations'
+      required:
+        type: boolean
+        description: whether field is required or not
+      questionId:
+        type: string
+        description: question id, for questions
+        example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: Filter to apply on visibility of this block
+  FormSignatureConfig:
+    type: object
+    required:
+    - signers
+    properties:
+      signers:
+        type: array
+        items:
+          type: string
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+      message:
+        type: string
+      dueDate:
+        $ref: '#/definitions/DueDate'
+      isSkippable:
+        type: boolean
+      fieldId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  Assessment:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - slug
+    - type
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label of assessment
+        example: Engineering Budget Q2 2019
+        minItems: 1
+        maxItems: 255
+      slug:
+        type: string
+        description: unique slug of assessment
+        example: engineering-budget-q2-2019
+        minItems: 1
+        maxItems: 40
+      type:
+        type: string
+        description: type of assessment
+        enum:
+        - REVIEW
+        - COMP_REVIEW
+        - SURVEY
+      fields:
+        type: object
+        description: assessment fields (description)
+        additionalProperties:
+          type: object
+      shareAccess:
+        type: array
+        description: users who have been granted access to this assessment
+        items:
+          $ref: '#/definitions/ShareAccess'
+      sensitive:
+        type: string
+        description: view sensitivity of this assessment
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      color:
+        type: string
+        description: color of assessment
+        pattern: ^#[a-f0-9]{6}$
+      startDate:
+        type: string
+        format: date
+        description: Date this assessment begins. In the context of REVIEW goals, the date the review cycle begins.
+      endDate:
+        type: string
+        format: date
+        description: Date this assessment ends, or is completed. In the context of REVIEW assessment, the date the review cycle ends.
+      status:
+        type: string
+        description: status of this assessment - DRAFT, ACTIVE, DONE
+        enum:
+        - DRAFT
+        - ACTIVE
+        - DONE
+      doneAt:
+        type: string
+        description: timestamp when the status of this assessment was set to done
+        example: '2017-01-24T13:57:52Z'
+      taskCount:
+        type: integer
+        format: int32
+        description: number of tasks associated with this assessment
+        example: '12'
+      taskDoneCount:
+        type: integer
+        format: int32
+        description: number of tasks associated with this assessment that are done
+        example: '3'
+      peopleIncludedCount:
+        type: integer
+        format: int32
+        description: number of people included in this assessment
+        example: '12'
+      query:
+        type: string
+        description: Query for which people/jobs can be included in the review.
+      showDatesInCalendar:
+        type: boolean
+        description: True if user wants dates to show on company calendar
+        example: 'true'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  DueDate:
+    type: object
+    required:
+    - type
+    - dueDay
+    - dueTime
+    properties:
+      type:
+        type: string
+        enum:
+        - EXACT
+        - RELATIVE
+      dueDay:
+        type: string
+        description: due day, in either relative (-7d) or exact (YYYY-MM-DD) format
+      dueTime:
+        type: string
+        description: due time, which is a LocalTime
+  CreateAssessment:
+    type: object
+    required:
+    - label
+    - type
+    properties:
+      label:
+        type: string
+        description: human-readable label of assessment
+        example: Engineering Budget Q2 2019
+        minItems: 1
+        maxItems: 255
+      slug:
+        type: string
+        description: unique slug of assessment
+        example: engineering-budget-q2-2019
+        minItems: 1
+        maxItems: 40
+      type:
+        type: string
+        description: type of assessment
+        enum:
+        - REVIEW
+        - COMP_REVIEW
+        - SURVEY
+      fields:
+        type: object
+        description: assessment fields (description)
+        additionalProperties:
+          type: object
+      shareAccess:
+        type: array
+        description: users who have been granted access to this assessment
+        items:
+          $ref: '#/definitions/ShareAccess'
+      sensitive:
+        type: string
+        description: view sensitivity of this assessment
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      color:
+        type: string
+        description: color of assessment
+        pattern: ^#[a-f0-9]{6}$
+      startDate:
+        type: string
+        format: date
+        description: Date this assessment begins. In the context of REVIEW goals, the date the review cycle begins.
+      endDate:
+        type: string
+        format: date
+        description: Date this assessment ends, or is completed. In the context of REVIEW assessment, the date the review cycle ends.
+      status:
+        type: string
+        description: status of this assessment - DRAFT, ACTIVE, DONE
+        enum:
+        - DRAFT
+        - ACTIVE
+        - DONE
+      doneAt:
+        type: string
+        description: timestamp when the status of this assessment was set to done
+        example: '2017-01-24T13:57:52Z'
+      taskCount:
+        type: integer
+        format: int32
+        description: number of tasks associated with this assessment
+        example: '12'
+      taskDoneCount:
+        type: integer
+        format: int32
+        description: number of tasks associated with this assessment that are done
+        example: '3'
+      peopleIncludedCount:
+        type: integer
+        format: int32
+        description: number of people included in this assessment
+        example: '12'
+      query:
+        type: string
+        description: Query for which people/jobs can be included in the review.
+      showDatesInCalendar:
+        type: boolean
+        description: True if user wants dates to show on company calendar
+        example: 'true'
+  AutoShare:
+    type: object
+    required:
+    - access
+    - shareWith
+    properties:
+      access:
+        type: string
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      shareWith:
+        type: string
+  BulkFormResponsesOptions:
+    type: object
+    properties:
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+  AssessmentTaskSummary:
+    type: object
+    required:
+    - summaryMap
+    properties:
+      summaryMap:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/AssessmentTaskFormSummary'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  Question:
+    type: object
+    required:
+    - id
+    - question
+    - type
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      question:
+        type: string
+        description: text of the question
+        example: What is your favorite color?
+      questionTr:
+        description: translations for the question text
+        $ref: '#/definitions/Translations'
+      fieldId:
+        type: string
+        description: if the question is linked to a field, the id of that field. Any question responses will be automatically saved to the field
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: datatype of the question
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the question datatype (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for numeric values
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Form:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - status
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of form
+        example: 'Health Index: Q2'
+        minItems: 1
+        maxItems: 255
+      displayName:
+        type: string
+        description: display name of form during completion
+        example: Health Index
+        minItems: 1
+        maxItems: 255
+      displayNameTr:
+        description: display name of form, translated
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of form
+        example: The Engineering department, where engineers develop new technology and products.
+        minItems: 0
+        maxItems: 1000
+      blocks:
+        type: array
+        description: ordered list of blocks being collected in this form
+        items:
+          $ref: '#/definitions/FormBlock'
+      status:
+        type: string
+        description: status of the form
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - ARCHIVED
+      type:
+        type: string
+        description: type of the form
+        enum:
+        - BUILT_IN
+        - CUSTOM
+      targetType:
+        type: string
+        description: target type that the form can be filled out about
+        enum:
+        - NONE
+        - PERSON
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      submitFilter:
+        type: string
+        description: filter that controls which respondents can submit this form. The form:submit permission, if present, overrides this filter
+      responseReadFilter:
+        type: string
+        description: filter that controls who can read the form responses. The formResponse:read permission, if present, overrides this filter
+      approval:
+        type: string
+        description: approval needed, if any approval is required
+        enum:
+        - MANAGER
+        - GRAND_MANAGER
+      release:
+        type: string
+        description: whether a release step is involved (subsequent to approval if any)
+        enum:
+        - SUBMITTER
+        - ADMIN
+      releaseMessageChannel:
+        description: the message channel to be used for release notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      share:
+        type: string
+        description: whether sharing form responses is allowed
+        enum:
+        - SUBMITTER
+        - ADMIN
+      shareMessageChannel:
+        description: the message channel to be used for sharing notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      autoShare:
+        type: array
+        description: list of automatic sharing to be done after submission
+        items:
+          $ref: '#/definitions/AutoShare'
+      autoShareMessageChannel:
+        description: the message channel to be used for automatic sharing notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      submitterEdit:
+        description: post-submission editing permissions for the submitter
+        $ref: '#/definitions/FormEditAccess'
+      approverEdit:
+        description: post-submission editing permissions for the approver
+        $ref: '#/definitions/FormEditAccess'
+      signature:
+        description: if the form response should generate a PDF which should be sent for signature, these settings are used
+        $ref: '#/definitions/FormSignatureConfig'
+      authorSensitive:
+        type: string
+        description: view sensitivity for the author of this form - the level of view access required to view the createId and updateId fields. If null, the author's identity is always visible as long as the viewer can read the form response. If set to PRIVATE, the author's identity is stored in ChartHop, but protected such that even users with sensitive access cannot access the data. If set to ANONYMOUS, the author's identity is not stored in ChartHop at all.
+        enum:
+        - ANONYMOUS
+        - PRIVATE
+        - HIGH
+        - MANAGER
+      options:
+        description: options, such as notification settings
+        $ref: '#/definitions/FormOptions'
+      completeMode:
+        type: string
+        description: appearance of the form during completion
+        enum:
+        - MODAL
+        - FULLSCREEN
+      ai:
+        description: AI form completion and assistance settings
+        $ref: '#/definitions/FormAiConfig'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: 2017-01-24T13:52Z
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  UpdateAssessment:
+    type: object
+    properties:
+      label:
+        type: string
+        description: human-readable label of assessment
+        example: Engineering Budget Q2 2019
+        minItems: 1
+        maxItems: 255
+      slug:
+        type: string
+        description: unique slug of assessment
+        example: engineering-budget-q2-2019
+        minItems: 1
+        maxItems: 40
+      type:
+        type: string
+        description: type of assessment
+        enum:
+        - REVIEW
+        - COMP_REVIEW
+        - SURVEY
+      fields:
+        type: object
+        description: assessment fields (description)
+        additionalProperties:
+          type: object
+      shareAccess:
+        type: array
+        description: users who have been granted access to this assessment
+        items:
+          $ref: '#/definitions/ShareAccess'
+      sensitive:
+        type: string
+        description: view sensitivity of this assessment
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      color:
+        type: string
+        description: color of assessment
+        pattern: ^#[a-f0-9]{6}$
+      startDate:
+        type: string
+        format: date
+        description: Date this assessment begins. In the context of REVIEW goals, the date the review cycle begins.
+      endDate:
+        type: string
+        format: date
+        description: Date this assessment ends, or is completed. In the context of REVIEW assessment, the date the review cycle ends.
+      status:
+        type: string
+        description: status of this assessment - DRAFT, ACTIVE, DONE
+        enum:
+        - DRAFT
+        - ACTIVE
+        - DONE
+      doneAt:
+        type: string
+        description: timestamp when the status of this assessment was set to done
+        example: '2017-01-24T13:57:52Z'
+      taskCount:
+        type: integer
+        format: int32
+        description: number of tasks associated with this assessment
+        example: '12'
+      taskDoneCount:
+        type: integer
+        format: int32
+        description: number of tasks associated with this assessment that are done
+        example: '3'
+      peopleIncludedCount:
+        type: integer
+        format: int32
+        description: number of people included in this assessment
+        example: '12'
+      query:
+        type: string
+        description: Query for which people/jobs can be included in the review.
+      showDatesInCalendar:
+        type: boolean
+        description: True if user wants dates to show on company calendar
+        example: 'true'
+  FormAiConfig:
+    type: object
+    required:
+    - enableRead
+    - enableWrite
+    properties:
+      enableRead:
+        type: boolean
+      enableWrite:
+        type: boolean
+      agentUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      instructions:
+        type: string
+      label:
+        type: string
+      agentSubmit:
+        type: string
+        description: 'whether AI agents are allowed to submit this form: null/absent (never), CHAT (only when in an interactive chat with a human), AUTO (also when running autonomously). Defaults to never.'
+        enum:
+        - CHAT
+        - AUTO
+  BulkChangeAssessmentTypesBody:
+    type: object
+    required:
+    - ids
+    - type
+    properties:
+      ids:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - REVIEW
+        - COMP_REVIEW
+        - SURVEY
+  ResultsAssessment:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Assessment'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  FormOptions:
+    type: object
+    properties:
+      notifySubmitter:
+        type: boolean
+      notifySubmitterManager:
+        type: boolean
+      notifySelf:
+        type: boolean
+      notifyManager:
+        type: boolean
+      notifyUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fillValues:
+        type: boolean
+      enableDraft:
+        type: boolean
+      peersField:
+        type: string
+      enableExport:
+        type: boolean
+      timeToEdit:
+        type: string
+      endDate:
+        type: string
+  FormEditAccess:
+    type: object
+    properties:
+      allow:
+        type: string
+        enum:
+        - ALWAYS
+        - WHILE_PROPOSED
+        - UNTIL_ACTIVE
+        - WHILE_ASSESSMENT_ACTIVE
+        - TIME_LIMIT
+      timeLimitSecs:
+        type: integer
+        format: int64

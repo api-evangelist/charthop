@@ -1,0 +1,1185 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access task API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: task
+paths:
+  /v1/org/{orgId}/task:
+    get:
+      tags:
+      - task
+      summary: Return all existing tasks
+      operationId: findTasks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: userId
+        in: query
+        description: Task User id
+        required: false
+        type: string
+      - name: assessmentId
+        in: query
+        description: Assessment id
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Task.Status. (PENDING/DONE)
+        required: false
+        type: string
+        enum:
+        - PENDING
+        - DONE
+        - EXPIRED
+        - SKIPPED
+      - name: type
+        in: query
+        description: Task.Type of task (form)
+        required: false
+        type: string
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      - name: entityId
+        in: query
+        description: Entity Id
+        required: false
+        type: string
+      - name: targetId
+        in: query
+        description: Target Id
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTask'
+        '401':
+          description: unauthorized
+    post:
+      tags:
+      - task
+      summary: Create a task
+      operationId: createTask
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Task data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTask'
+      responses:
+        '201':
+          description: task created
+          schema:
+            $ref: '#/definitions/Task'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/task/bulk-delete:
+    delete:
+      tags:
+      - task
+      summary: Bulk delete tasks
+      operationId: bulkDeleteTasks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of task ids to delete
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/task/me:
+    get:
+      tags:
+      - task
+      summary: Return the tasks for the current user
+      operationId: getMyTasks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: query
+        description: Assessment id
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Task.Status. (PENDING/ACTIVE)
+        required: false
+        type: string
+        enum:
+        - PENDING
+        - DONE
+        - EXPIRED
+        - SKIPPED
+      - name: type
+        in: query
+        description: Task.Type of task (form)
+        required: false
+        type: string
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      - name: entityId
+        in: query
+        description: Entity Id
+        required: false
+        type: string
+      - name: targetId
+        in: query
+        description: Target Id
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTask'
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/task/query:
+    get:
+      tags:
+      - task
+      summary: Query tasks for assessments in the organization
+      operationId: queryTasks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: userId
+        in: query
+        description: Task User id
+        required: false
+        type: string
+      - name: assessmentId
+        in: query
+        description: Assessment id
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Task.Status. (PENDING/DONE)
+        required: false
+        type: string
+        enum:
+        - PENDING
+        - DONE
+        - EXPIRED
+        - SKIPPED
+      - name: type
+        in: query
+        description: Task.Type. (FORM_SUBMIT/CHANGE_APPROVE)
+        required: false
+        type: string
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      - name: entityId
+        in: query
+        description: Entity Id
+        required: false
+        type: string
+      - name: targetId
+        in: query
+        description: Target Id
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Job id to start paginating from
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: returnFormCompletionLinks
+        in: query
+        description: Return links that employees would use to complete a task if true else return links that direct to the form settings
+        required: false
+        type: boolean
+      - name: taskId
+        in: query
+        description: Task id
+        required: false
+        type: string
+      - name: createAtFrom
+        in: query
+        description: Created at from (inclusive)
+        required: false
+        type: string
+      - name: createAtUntil
+        in: query
+        description: Created at until (exclusive)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Return tasks for assessments in the organization
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/task/remind:
+    post:
+      tags:
+      - task
+      summary: Send a reminder notification for a particular task
+      operationId: remindTasks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Request body
+        required: true
+        schema:
+          $ref: '#/definitions/TaskRemindRequest'
+      responses:
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/task/{assessmentId}/{formId}:
+    delete:
+      tags:
+      - task
+      summary: Delete task
+      operationId: removeFormFromAssessment
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: assessmentId
+        in: path
+        description: Assessment id
+        required: true
+        type: string
+      - name: formId
+        in: path
+        description: Form id
+        required: true
+        type: string
+      responses:
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/task/{taskId}:
+    patch:
+      tags:
+      - task
+      summary: Update an existing task
+      operationId: updateTask
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: taskId
+        in: path
+        description: Task id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Task data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTask'
+      responses:
+        '204':
+          description: task updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - task
+      summary: Delete task
+      operationId: deleteTask
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: taskId
+        in: path
+        description: Task id
+        required: true
+        type: string
+      responses:
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/task/{taskId}/mark-done:
+    patch:
+      tags:
+      - task
+      summary: Mark task done
+      operationId: markTaskDone
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: taskId
+        in: path
+        description: Task id
+        required: true
+        type: string
+      responses:
+        '401':
+          description: unauthorized
+  /v1/org/{orgId}/task/{taskId}/reassign:
+    post:
+      tags:
+      - task
+      summary: Reassign an existing task to a different user
+      operationId: reassignTask
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: taskId
+        in: path
+        description: Task id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Reassign information
+        required: true
+        schema:
+          $ref: '#/definitions/TaskReassignRequest'
+      responses:
+        '204':
+          description: task updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/task/{taskId}/skip:
+    patch:
+      tags:
+      - task
+      summary: Skip task
+      operationId: skipTask
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: taskId
+        in: path
+        description: Task id
+        required: true
+        type: string
+      responses:
+        '401':
+          description: unauthorized
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  UpdateTask:
+    type: object
+    properties:
+      status:
+        type: string
+        description: status of this task
+        enum:
+        - PENDING
+        - DONE
+        - EXPIRED
+        - SKIPPED
+      label:
+        type: string
+        description: The user-visible label for the task; if not set, will automatically default based on the task type
+      message:
+        type: string
+        description: The message attached to this task
+        example: this is the best task ever
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this task
+        items:
+          $ref: '#/definitions/ShareAccess'
+      taskConfigId:
+        type: string
+        description: id of the TaskConfig
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: slug used to reference tasks in events
+        example: onboardingForm
+      dueAt:
+        type: string
+        description: due date for the task
+      pastDueAction:
+        type: string
+        description: what action to take when the task is past its due date
+        example: NONE
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: check for if the task can be skipped
+  CreateTask:
+    type: object
+    required:
+    - orgId
+    - userId
+    - type
+    - entityId
+    - status
+    properties:
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user who is responsible for the task
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: parent assessment id that this task belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this task belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of task
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      entityId:
+        type: string
+        description: the primary entity being referenced by the task - for example for a FORM_SUBMIT, this will be the form
+        example: 588f7ee98f138b19220041a7
+      targetId:
+        type: string
+        description: the optional target entity being referenced by the task - for example for a FORM_SUBMIT, this will be the person
+        example: 588f7ee98f138b19220041a7
+      categoryId:
+        type: string
+        description: the data category that the task belongs to
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: status of this task
+        enum:
+        - PENDING
+        - DONE
+        - EXPIRED
+        - SKIPPED
+      label:
+        type: string
+        description: The user-visible label for the task; if not set, will automatically default based on the task type
+      message:
+        type: string
+        description: The message attached to this task
+        example: this is the best task ever
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this task
+        items:
+          $ref: '#/definitions/ShareAccess'
+      path:
+        type: string
+        description: the optional path of this task (only applies to Type == ORG_IMPORT)
+      taskConfigId:
+        type: string
+        description: id of the TaskConfig
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: slug used to reference tasks in events
+        example: onboardingForm
+      dueAt:
+        type: string
+        description: due date for the task
+      pastDueAction:
+        type: string
+        description: what action to take when the task is past its due date
+        example: NONE
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: check for if the task can be skipped
+  Task:
+    type: object
+    required:
+    - id
+    - orgId
+    - userId
+    - type
+    - entityId
+    - status
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user who is responsible for the task
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: parent assessment id that this task belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this task belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of task
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      entityId:
+        type: string
+        description: the primary entity being referenced by the task - for example for a FORM_SUBMIT, this will be the form
+        example: 588f7ee98f138b19220041a7
+      targetId:
+        type: string
+        description: the optional target entity being referenced by the task - for example for a FORM_SUBMIT, this will be the person
+        example: 588f7ee98f138b19220041a7
+      categoryId:
+        type: string
+        description: the data category that the task belongs to
+        example: 588f7ee98f138b19220041a7
+      actionId:
+        type: string
+        description: the action that created the task, if the task was generated from an action
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: status of this task
+        enum:
+        - PENDING
+        - DONE
+        - EXPIRED
+        - SKIPPED
+      doneAt:
+        type: string
+        description: timestamp that the task was done, if it was done
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      label:
+        type: string
+        description: The user-visible label for the task; if not set, will automatically default based on the task type
+      message:
+        type: string
+        description: The message attached to this task
+        example: this is the best task ever
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this task
+        items:
+          $ref: '#/definitions/ShareAccess'
+      path:
+        type: string
+        description: the optional path of this task (only applies to Type == ORG_IMPORT)
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      taskConfigId:
+        type: string
+        description: id of the TaskConfig
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: slug used to reference tasks in events
+        example: onboardingForm
+      dueAt:
+        type: string
+        description: due date for the task
+      pastDueAction:
+        type: string
+        description: what action to take when the task is past its due date
+        example: NONE
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: check for if the task can be skipped
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ResultsTask:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Task'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  TaskReassignRequest:
+    type: object
+    required:
+    - userId
+    properties:
+      userId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      message:
+        type: string
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+  TaskRemindRequest:
+    type: object
+    required:
+    - taskIds
+    properties:
+      taskIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      message:
+        type: string
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object

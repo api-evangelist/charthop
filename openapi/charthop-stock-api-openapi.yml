@@ -1,0 +1,320 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access stock API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: stock
+paths:
+  /v1/stock:
+    get:
+      tags:
+      - stock
+      summary: Return the history of stock prices
+      operationId: findStockPrices
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: symbol
+        in: query
+        description: Symbol to query
+        required: false
+        type: string
+      - name: type
+        in: query
+        description: Types of valuations to retrieve
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Date to start from
+        required: false
+        type: string
+        format: date
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsStockPrice'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/stock/{id}:
+    delete:
+      tags:
+      - stock
+      summary: Delete a stock price
+      operationId: deleteStockPrice
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Stock entry id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: stock price deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/stock/{symbol}/{date}/{type}:
+    get:
+      tags:
+      - stock
+      summary: Get a stock price as of a particular date
+      operationId: getStockPrice
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: symbol
+        in: path
+        description: Stock symbol
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to update information for
+        required: true
+        type: string
+        format: date
+      - name: type
+        in: path
+        description: Type of stock price to retrieve (for example 'public')
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/StockPrice'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+    put:
+      tags:
+      - stock
+      summary: Upsert a stock price
+      operationId: upsertStock
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: symbol
+        in: path
+        description: Stock symbol
+        required: true
+        type: string
+      - name: date
+        in: path
+        description: Date to update information for
+        required: true
+        type: string
+        format: date
+      - name: type
+        in: path
+        description: Type of stock price to upsert
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Stock price data to create
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateStockPrice'
+      responses:
+        '201':
+          description: stock price created
+          schema:
+            $ref: '#/definitions/StockPrice'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  UpdateStockPrice:
+    type: object
+    properties:
+      orgId:
+        type: string
+        description: org id that this stock price derives from
+        example: 588f7ee98f138b19220041a7
+      price:
+        type: number
+        description: price per share
+      total:
+        type: integer
+        format: int64
+        description: total shares outstanding
+  StockPrice:
+    type: object
+    required:
+    - id
+    - stock
+    - date
+    - price
+    - type
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id that this stock price derives from
+        example: 588f7ee98f138b19220041a7
+      stock:
+        type: string
+        description: ticker symbol of this stock
+        example: GOOG
+      date:
+        type: string
+        format: date
+        description: date
+      price:
+        type: number
+        description: price per share
+      type:
+        type: string
+        description: type of valuation
+        enum:
+        - COMMON_FMV
+        - FUNDRAISE
+        - GRANT
+        - PUBLIC
+      total:
+        type: integer
+        format: int64
+        description: total shares outstanding
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by person
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+  ResultsStockPrice:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/StockPrice'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP

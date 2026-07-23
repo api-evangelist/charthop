@@ -1,0 +1,1479 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access calendar API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: calendar
+paths:
+  /v1/org/{orgId}/calendar:
+    get:
+      tags:
+      - calendar
+      summary: Return calendar entries in a given time period
+      operationId: findCalendarEntries
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: start
+        in: query
+        description: Start date
+        required: false
+        type: string
+      - name: end
+        in: query
+        description: End date
+        required: false
+        type: string
+      - name: type
+        in: query
+        description: Type of calendar entries to retrieve (timeoff, anniversary, birthday)
+        required: false
+        type: string
+      - name: q
+        in: query
+        description: Query filter to filter for part of the organization
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Format to return data in
+        required: false
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/calendar:
+    get:
+      tags:
+      - calendar
+      summary: Return calendars visible to the current user
+      operationId: getCalendars
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarIds
+        in: query
+        description: Calendar IDs to filter by, comma-separated
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Optional status to filter by
+        required: false
+        type: string
+        enum:
+        - ACTIVE
+        - INACTIVE
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCalendar'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - calendar
+      summary: Create a new calendar
+      operationId: createCalendar
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Calendar data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCalendar'
+      responses:
+        '201':
+          description: Created a new calendar
+          schema:
+            $ref: '#/definitions/Calendar'
+  /v2/org/{orgId}/calendar-event:
+    get:
+      tags:
+      - calendar
+      summary: Returns calendar events visible to the current user with exclusive end dates
+      operationId: findCalendarEntries
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Date to get events from, inclusive
+        required: true
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: Date to get events until, inclusive
+        required: true
+        type: string
+        format: date
+      - name: filter
+        in: query
+        description: Optional CQL filter to apply to employee events
+        required: false
+        type: string
+      - name: calendarIds
+        in: query
+        description: Calendar IDs to filter by, comma-separated
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCalendarEntry'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - calendar
+      summary: Create a new calendar entry
+      operationId: createCalendarEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Calendar entry data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCalendarEntry'
+      responses:
+        '201':
+          description: Created
+  /v2/org/{orgId}/calendar-event/condensed:
+    get:
+      tags:
+      - calendar
+      summary: Returns calendar events, condensed when there are too many of a single entry on a particular day
+      operationId: findCalendarEntriesCondensed
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Date to get events from, inclusive
+        required: true
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: Date to get events until, inclusive
+        required: true
+        type: string
+        format: date
+      - name: filter
+        in: query
+        description: Optional CQL filter to apply to employee events
+        required: false
+        type: string
+      - name: calendarIds
+        in: query
+        description: Calendar IDs to filter by, comma-separated
+        required: false
+        type: string
+      - name: maxEntriesPerCalendarPerDay
+        in: query
+        description: Maximum number of individual entries to show for a particular calendar on any given day (default 6)
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCalendarEntryCondensed'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/calendar-event/icalendar:
+    get:
+      tags:
+      - calendar
+      summary: Returns calendar events in iCalendar format
+      operationId: getCalendarEntriesAsIcalendar
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Date to get events from, inclusive
+        required: true
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: Date to get events until, inclusive
+        required: true
+        type: string
+        format: date
+      - name: filter
+        in: query
+        description: Optional CQL filter to apply to employee events
+        required: false
+        type: string
+      - name: calendarIds
+        in: query
+        description: Calendar IDs to filter by, comma-separated
+        required: false
+        type: string
+      - name: label
+        in: query
+        description: Calendar label
+        required: false
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/calendar-event/import:
+    post:
+      tags:
+      - calendar
+      summary: Import calendar events from CSV file
+      operationId: importCsv
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarId
+        in: query
+        description: Calendar id to import events into
+        required: true
+        type: string
+      - name: importFromProcessId
+        in: query
+        description: Import a file from another process, instead of directly uploading it
+        required: false
+        type: string
+      - name: parentProcessId
+        in: query
+        description: Parent process id to attach to
+        required: false
+        type: string
+      responses:
+        '200':
+          description: import started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v2/org/{orgId}/calendar-event/import/download-template:
+    get:
+      tags:
+      - calendar
+      summary: Download a CSV template for calendar event import
+      operationId: downloadImportCsvTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: success
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/calendar-event/{calendarEntryId}:
+    get:
+      tags:
+      - calendar
+      summary: Return a particular calendar entry by id
+      operationId: getCalendarEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarEntryId
+        in: path
+        description: Calendar entry id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CalendarEntry'
+    patch:
+      tags:
+      - calendar
+      summary: Update an existing calendar entry
+      operationId: updateCalendarEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarEntryId
+        in: path
+        description: Calendar entry id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Calendar entry data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCalendarEntry'
+      responses:
+        '204':
+          description: No Content
+    delete:
+      tags:
+      - calendar
+      summary: Delete a calendar entry
+      operationId: deleteCalendarEntry
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarEntryId
+        in: path
+        description: Calendar entry id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content
+  /v2/org/{orgId}/calendar/{calendarId}:
+    get:
+      tags:
+      - calendar
+      summary: Return a particular calendar by id
+      operationId: getCalendar
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarId
+        in: path
+        description: Calendar id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Calendar'
+    patch:
+      tags:
+      - calendar
+      summary: Update an existing calendar
+      operationId: updateCalendar
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarId
+        in: path
+        description: Calendar id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Calendar data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCalendar'
+      responses:
+        '204':
+          description: No Content
+    delete:
+      tags:
+      - calendar
+      summary: Delete a calendar
+      operationId: deleteCalendar
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarId
+        in: path
+        description: Calendar id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content
+  /v2/org/{orgId}/calendar/{calendarId}/events:
+    get:
+      tags:
+      - calendar
+      summary: Returns calendar events visible to the current user in a calendar
+      operationId: findEntriesByCalendarId
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: calendarId
+        in: path
+        description: Calendar id
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Date to get events from, inclusive
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: Date to get events until, inclusive
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCalendarEntry'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsCalendarEntry:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CalendarEntry'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateCalendar:
+    type: object
+    properties:
+      type:
+        type: string
+        description: type of calendar
+        enum:
+        - ANNIVERSARY
+        - BIRTHDAY
+        - COMP_REVIEW
+        - REVIEW
+        - SURVEY
+        - TASK
+        - TIMEOFF
+        - START_DATE
+        - END_DATE
+        - CUSTOM
+        - HOLIDAY
+      label:
+        type: string
+        description: human-readable label for calendar
+      description:
+        type: string
+      color:
+        type: string
+      imagePath:
+        type: string
+        pattern: ^[a-zA-Z0-9._/-]*$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the calendar
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      sensitive:
+        type: string
+        description: base sensitivity of this calendar and entities in it -- should be PRIVATE, ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: whether the calendar is active or not
+        enum:
+        - ACTIVE
+        - INACTIVE
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  UpdateCalendarEntry:
+    type: object
+    properties:
+      label:
+        type: string
+        description: human-readable label for event
+      description:
+        type: string
+      from:
+        type: string
+        format: date
+        description: start date for event (inclusive)
+        example: '2024-02-29'
+      until:
+        type: string
+        format: date
+        description: end date for event (exclusive)
+        example: '2024-04-01'
+  CalendarEntryCondensed:
+    type: object
+    required:
+    - id
+    - orgId
+    - calendarId
+    - calendarType
+    - label
+    - from
+    - entryCount
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      calendarId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      calendarType:
+        type: string
+        enum:
+        - ANNIVERSARY
+        - BIRTHDAY
+        - COMP_REVIEW
+        - REVIEW
+        - SURVEY
+        - TASK
+        - TIMEOFF
+        - START_DATE
+        - END_DATE
+        - CUSTOM
+        - HOLIDAY
+      label:
+        type: string
+      from:
+        type: string
+        format: date
+      until:
+        type: string
+        format: date
+      singleEntry:
+        $ref: '#/definitions/CalendarEntry'
+      entryCount:
+        type: integer
+        format: int32
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  Calendar:
+    type: object
+    required:
+    - id
+    - type
+    - label
+    - color
+    - sensitive
+    - status
+    - isBuiltIn
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 665f3aabe88164e4ef6c3a22
+      orgId:
+        type: string
+        description: parent organization id
+        example: 665f3ad1e47a82bf1d3d180b
+      type:
+        type: string
+        description: type of calendar
+        enum:
+        - ANNIVERSARY
+        - BIRTHDAY
+        - COMP_REVIEW
+        - REVIEW
+        - SURVEY
+        - TASK
+        - TIMEOFF
+        - START_DATE
+        - END_DATE
+        - CUSTOM
+        - HOLIDAY
+      label:
+        type: string
+        description: human-readable label for calendar
+      description:
+        type: string
+      color:
+        type: string
+      imagePath:
+        type: string
+        pattern: ^[a-zA-Z0-9._/-]*$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the calendar
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      sensitive:
+        type: string
+        description: base sensitivity of this calendar and entities in it -- should be PRIVATE, ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: whether the calendar is active or not
+        enum:
+        - ACTIVE
+        - INACTIVE
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      isBuiltIn:
+        type: boolean
+        readOnly: true
+  CalendarEntry:
+    type: object
+    required:
+    - id
+    - calendarId
+    - label
+    - from
+    - until
+    properties:
+      id:
+        type: string
+        description: globally unique id, or zero-id if the entry is a virtual entry
+        example: 665f68b537795e0cb768bb74
+      orgId:
+        type: string
+        description: parent organization id
+        example: 665f3ad1e47a82bf1d3d180b
+      calendarId:
+        type: string
+        description: calendar to which this event pertains
+        example: 665f3aabe88164e4ef6c3a22
+      label:
+        type: string
+        description: human-readable label for event
+      description:
+        type: string
+      from:
+        type: string
+        format: date
+        description: start date for event (inclusive)
+        example: '2024-02-29'
+      until:
+        type: string
+        format: date
+        description: end date for event (exclusive)
+        example: '2024-04-01'
+      entityType:
+        type: string
+        description: type of associated entity
+        example: PERSON
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: associated entity
+        example: 665f6952552f7e3e5beea7c9
+      personId:
+        type: string
+        description: person id for person-related calendar entries
+        example: 665f6952552f7e3e5beea7c9
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  CreateCalendar:
+    type: object
+    required:
+    - type
+    - label
+    - color
+    - sensitive
+    - status
+    properties:
+      type:
+        type: string
+        description: type of calendar
+        enum:
+        - ANNIVERSARY
+        - BIRTHDAY
+        - COMP_REVIEW
+        - REVIEW
+        - SURVEY
+        - TASK
+        - TIMEOFF
+        - START_DATE
+        - END_DATE
+        - CUSTOM
+        - HOLIDAY
+      label:
+        type: string
+        description: human-readable label for calendar
+      description:
+        type: string
+      color:
+        type: string
+      imagePath:
+        type: string
+        pattern: ^[a-zA-Z0-9._/-]*$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the calendar
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      sensitive:
+        type: string
+        description: base sensitivity of this calendar and entities in it -- should be PRIVATE, ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: whether the calendar is active or not
+        enum:
+        - ACTIVE
+        - INACTIVE
+  ResultsCalendar:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Calendar'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ResultsCalendarEntryCondensed:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CalendarEntryCondensed'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  CreateCalendarEntry:
+    type: object
+    required:
+    - calendarId
+    - label
+    - from
+    - until
+    properties:
+      orgId:
+        type: string
+        description: parent organization id
+        example: 665f3ad1e47a82bf1d3d180b
+      calendarId:
+        type: string
+        description: calendar to which this event pertains
+        example: 665f3aabe88164e4ef6c3a22
+      label:
+        type: string
+        description: human-readable label for event
+      description:
+        type: string
+      from:
+        type: string
+        format: date
+        description: start date for event (inclusive)
+        example: '2024-02-29'
+      until:
+        type: string
+        format: date
+        description: end date for event (exclusive)
+        example: '2024-04-01'
+      entityType:
+        type: string
+        description: type of associated entity
+        example: PERSON
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: associated entity
+        example: 665f6952552f7e3e5beea7c9
+      personId:
+        type: string
+        description: person id for person-related calendar entries
+        example: 665f6952552f7e3e5beea7c9

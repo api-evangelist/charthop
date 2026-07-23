@@ -1,0 +1,1350 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access group API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: group
+paths:
+  /v2/org/{orgId}/group:
+    get:
+      tags:
+      - group
+      summary: Find groups in the organization of a certain type
+      operationId: findGroups
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Group type
+        required: false
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: from
+        in: query
+        description: Group id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: jobFields
+        in: query
+        description: job fields to return, comma-separated
+        required: false
+        type: string
+      - name: timeFilter
+        in: query
+        description: 'Temporal filter for groups: CURRENT (default, groups existing on date), ARCHIVED (deleted groups), FUTURE (future-dated groups), ALL (all groups)'
+        required: false
+        type: string
+        enum:
+        - CURRENT
+        - ARCHIVED
+        - FUTURE
+        - ALL
+      - name: includeAll
+        in: query
+        description: 'Deprecated: use timeFilter=ALL instead. Include all groups, including deleted groups.'
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: search
+        in: query
+        description: Search string to filter on code & name
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: ids
+        in: query
+        description: Comma-separated list of group ids to look up
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/bulk-delete:
+    post:
+      tags:
+      - group
+      summary: Mark multiple groups as deleted
+      operationId: deleteGroups
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the group in
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Group ids of groups to bulk delete
+        required: true
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      - name: date
+        in: query
+        description: Effective date of group deletion
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/count:
+    get:
+      tags:
+      - group
+      summary: Get organized group counts
+      operationId: countGroups
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: scenario id to query
+        required: false
+        type: string
+      - name: groupFilter
+        in: query
+        description: query string to filter group by
+        required: false
+        type: string
+      - name: groupType
+        in: query
+        description: groupType
+        required: false
+        type: string
+      - name: groupTypeId
+        in: query
+        description: groupTypeId
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: date to count as of
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GroupCount'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '501':
+          description: not implemented
+  /v2/org/{orgId}/group/graph:
+    get:
+      tags:
+      - group
+      summary: Find groups in the organization of a certain type
+      operationId: findGroupGraph
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: start
+        in: query
+        description: group id to use as the starting point
+        required: false
+        type: string
+      - name: depth
+        in: query
+        description: number of levels down
+        required: false
+        type: integer
+        format: int32
+      - name: groupApproxLimit
+        in: query
+        description: limit number of groups
+        required: false
+        type: integer
+        format: int32
+      - name: jobLimit
+        in: query
+        description: limit number of jobs
+        required: false
+        type: integer
+        format: int32
+      - name: scenarioId
+        in: query
+        description: scenario id to query
+        required: false
+        type: string
+      - name: jobFilter
+        in: query
+        description: query string to filter jobs by
+        required: false
+        type: string
+      - name: groupFilter
+        in: query
+        description: query string to filter group by
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: date to search as of
+        required: false
+        type: string
+        format: date
+      - name: groupFields
+        in: query
+        description: group fields to return
+        required: false
+        type: string
+      - name: jobFields
+        in: query
+        description: job/person fields to return
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: groupType
+        in: query
+        description: groupType
+        required: false
+        type: string
+      - name: groupTypeId
+        in: query
+        description: groupTypeId
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GroupGraphResults'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '501':
+          description: not implemented
+  /v2/org/{orgId}/group/import:
+    post:
+      tags:
+      - group
+      summary: Import data from CSV file
+      operationId: importCsv
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: file
+        in: formData
+        required: false
+        type: file
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to update as of
+        required: false
+        type: string
+        format: date
+      - name: skipErrors
+        in: query
+        description: Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)
+        required: false
+        type: boolean
+      responses:
+        '202':
+          description: start import process
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid manifest data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v2/org/{orgId}/group/import/download-template:
+    get:
+      tags:
+      - group
+      summary: Download a CSV template for group import
+      operationId: downloadImportCsvTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: success
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v2/org/{orgId}/group/undelete:
+    post:
+      tags:
+      - group
+      summary: Undelete groups
+      operationId: undeleteGroups
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the group in
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Group ids of groups to undelete
+        required: true
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '501':
+          description: not implemented
+  /v2/org/{orgId}/group/{groupId}:
+    get:
+      tags:
+      - group
+      summary: Return a particular group by id
+      operationId: getGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Group type
+        required: false
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: jobFields
+        in: query
+        description: job fields to return, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: limit
+        in: query
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties: {}
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    delete:
+      tags:
+      - group
+      summary: Delete a group
+      operationId: deleteGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the group in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of group deletion
+        required: false
+        type: string
+        format: date
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '501':
+          description: not implemented
+  /v2/org/{orgId}/group/{groupId}/addmembers:
+    patch:
+      tags:
+      - group
+      summary: Add members to a grouip
+      operationId: addMembers
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the group in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of member additions
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        description: Members to add to the group
+        required: true
+        schema:
+          $ref: '#/definitions/AddRmvGroupMemberRequest'
+      responses:
+        '204':
+          description: members updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{groupId}/can-purge:
+    get:
+      tags:
+      - group
+      summary: Check whether a group is eligible to be deleted from history
+      operationId: canDeleteGroupFromHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: eligibility computed
+          schema:
+            $ref: '#/definitions/DeleteFromHistoryEligibility'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{groupId}/combine:
+    post:
+      tags:
+      - group
+      summary: Combine two groups together, including updating the historical record so that the two groups were never different
+      operationId: combineGroups
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CombineGroupRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{groupId}/history:
+    get:
+      tags:
+      - group
+      summary: Get the history of changes for each field on a group
+      operationId: getGroupHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GroupHistoryRecord'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{groupId}/purge:
+    delete:
+      tags:
+      - group
+      summary: Permanently delete a group from history
+      operationId: deleteGroupFromHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: guard failed (see errorCode in payload)
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{groupId}/removemembers:
+    patch:
+      tags:
+      - group
+      summary: Remove members from a grouip
+      operationId: removeMembers
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the group in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of member removals
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        description: Members to remove from the group
+        required: true
+        schema:
+          $ref: '#/definitions/AddRmvGroupMemberRequest'
+      responses:
+        '204':
+          description: members updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{groupId}/render:
+    get:
+      tags:
+      - group
+      summary: Render the group description, resolving Carrot template expressions to live data
+      operationId: renderGroupDescription
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Group type
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GroupDescriptionRender'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v2/org/{orgId}/group/{type}:
+    post:
+      tags:
+      - group
+      summary: Create a group
+      operationId: createGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Group type
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to create the group in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of group creation
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '501':
+          description: not implemented
+  /v2/org/{orgId}/group/{type}/{groupId}:
+    patch:
+      tags:
+      - group
+      summary: Update a group
+      operationId: updateGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Group type
+        required: true
+        type: string
+      - name: groupId
+        in: path
+        description: Group id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the group in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of group update
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '501':
+          description: not implemented
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  GroupGraphCount:
+    type: object
+    required:
+    - jobCount
+    - personCount
+    - groupCountByGroupTypeId
+    - groupCount
+    properties:
+      jobCount:
+        type: integer
+        format: int32
+        description: number of jobs
+      personCount:
+        type: integer
+        format: int32
+        description: number of persons
+      groupCountByGroupTypeId:
+        type: object
+        description: number of groups by group type id
+        additionalProperties:
+          type: integer
+          format: int32
+      groupCount:
+        type: integer
+        format: int32
+        description: total number of groups
+  GroupParent:
+    type: object
+    required:
+    - id
+    - type
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of the parent
+        example: GROUP
+        enum:
+        - GROUP
+        - JOB
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  AddRmvGroupMemberRequest:
+    type: object
+    required:
+    - jobIds
+    properties:
+      jobIds:
+        type: array
+        description: job IDs to add to or remove from the group
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  GroupGraphResult:
+    type: object
+    required:
+    - group
+    - jobs
+    - groupPositions
+    - underCount
+    properties:
+      group:
+        type: object
+        description: group data
+        additionalProperties:
+          type: object
+      jobs:
+        type: array
+        description: job data
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      groupPositions:
+        type: array
+        description: positions available within the group
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      parent:
+        description: parent group or job
+        $ref: '#/definitions/GroupParent'
+      underCount:
+        description: number of groups/jobs "below" this group
+        $ref: '#/definitions/GroupGraphCount'
+  GroupHistoryValue:
+    type: object
+    required:
+    - date
+    - userId
+    properties:
+      date:
+        type: string
+        format: date
+        description: date of value change
+      value:
+        type: object
+        description: value
+      userId:
+        type: string
+        description: user who changed the value
+        example: 588f7ee98f138b19220041a7
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  GroupTypeRef:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+  CombineGroupRequest:
+    type: object
+    required:
+    - fromGroupId
+    properties:
+      fromGroupId:
+        type: string
+        description: combine from group id
+        example: 588f7ee98f138b19220041a7
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  GroupDescriptionRender:
+    type: object
+    required:
+    - content
+    properties:
+      content:
+        type: string
+  GroupHistoryRecord:
+    type: object
+    required:
+    - id
+    - name
+    - type
+    - history
+    properties:
+      id:
+        type: string
+        description: group ID
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: group name
+      type:
+        description: group type
+        $ref: '#/definitions/GroupTypeRef'
+      history:
+        type: object
+        description: history of changes for each field
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/GroupHistoryValue'
+  GroupCount:
+    type: object
+    required:
+    - totalGroupCount
+    - relationshipGroupCount
+    - orphanedGroupCount
+    properties:
+      totalGroupCount:
+        type: integer
+        format: int32
+        description: total number of groups
+      relationshipGroupCount:
+        type: integer
+        format: int32
+        description: number of groups that are part of a larger group tree
+      orphanedGroupCount:
+        type: integer
+        format: int32
+        description: number of orphaned groups that do not belong to any group tree
+  DeleteFromHistoryEligibility:
+    type: object
+    required:
+    - canDeleteFromHistory
+    - reasons
+    properties:
+      canDeleteFromHistory:
+        type: boolean
+      reasons:
+        type: array
+        items:
+          type: string
+          enum:
+          - NOT_FOUND
+          - HAS_JOBS
+          - HAS_CHILD_GROUPS
+          - REFERENCED_BY_GOAL
+          - REFERENCED_BY_BUDGET
+          - REFERENCED_BY_POLICY
+          - REFERENCED_BY_USER_ACCESS
+          - REFERENCED_BY_SCENARIO
+          - REFERENCED_BY_COMP_REVIEW
+          - REFERENCED_BY_TIMEOFF_POLICY
+  GroupGraphResults:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GroupGraphResult'
+      nextId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object

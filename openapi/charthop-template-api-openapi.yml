@@ -1,0 +1,1147 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access template API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: template
+paths:
+  /v1/org/{orgId}/template:
+    get:
+      tags:
+      - template
+      summary: Return all templates in the organization paginated
+      operationId: findTemplates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Type of template to filter by
+        required: false
+        type: string
+        enum:
+        - DOCUMENT
+        - EMAIL
+      - name: from
+        in: query
+        description: Template id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTemplate'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - template
+      summary: Create a template
+      operationId: createTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Template data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTemplate'
+      responses:
+        '201':
+          description: template created
+          schema:
+            $ref: '#/definitions/Template'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/template/bulk/delete:
+    post:
+      tags:
+      - template
+      summary: Delete a set of templates
+      operationId: bulkDeleteTemplates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of template ids to delete
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/bulk/duplicate:
+    post:
+      tags:
+      - template
+      summary: Duplicate a set of templates
+      operationId: bulkDuplicateTemplates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of template ids to duplicate
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/email:
+    post:
+      tags:
+      - template
+      summary: Create a template
+      operationId: createEmailTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Template data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTemplate'
+      responses:
+        '201':
+          description: template created
+          schema:
+            $ref: '#/definitions/Template'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/template/email/{templateName}:
+    get:
+      tags:
+      - template
+      summary: Return a particular email template by name
+      operationId: getEmailTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: templateName
+        in: path
+        description: Template name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Template'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    delete:
+      tags:
+      - template
+      summary: Delete a template
+      operationId: deleteEmailTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: templateName
+        in: path
+        description: Template name
+        required: true
+        type: string
+      responses:
+        '204':
+          description: template deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    patch:
+      tags:
+      - template
+      summary: Update an existing template
+      operationId: updateEmailTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: templateName
+        in: path
+        description: Template name
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Template data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTemplate'
+      responses:
+        '204':
+          description: template updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/{templateId}:
+    get:
+      tags:
+      - template
+      summary: Return a particular template by id
+      operationId: getTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: templateId
+        in: path
+        description: Template id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Template'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - template
+      summary: Update an existing template
+      operationId: updateTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: templateId
+        in: path
+        description: Template id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Template data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTemplate'
+      responses:
+        '204':
+          description: template updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - template
+      summary: Delete a template
+      operationId: deleteTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: templateId
+        in: path
+        description: Template id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: template deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/{templateId}/download:
+    get:
+      tags:
+      - template
+      summary: If the template is a file template, download the file
+      operationId: downloadTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: templateId
+        in: path
+        description: Template id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/{templateId}/generate:
+    post:
+      tags:
+      - template
+      summary: Automatically generate PDFs of the templates, and distribute emails to managers and people to download
+      operationId: generateTemplates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: templateId
+        in: path
+        description: Template id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/GenerateTemplateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/{templateId}/preview:
+    post:
+      tags:
+      - template
+      summary: Preview template content without saving it
+      operationId: previewTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: query
+        description: Job id
+        required: false
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: format
+        in: query
+        description: Format
+        required: true
+        type: string
+        default: TEXT
+        enum:
+        - TEXT
+        - HTML
+        - PDF
+      - name: changeGroupingType
+        in: query
+        description: Type of change grouping
+        required: false
+        type: string
+        enum:
+        - PRIMARY
+        - SCENARIO
+        - COMP_REVIEW
+      - name: changeGroupingId
+        in: query
+        description: Change grouping id to query (null for primary)
+        required: false
+        type: string
+      - name: useScenarioChanges
+        in: query
+        description: Generate documents for only the changes that are in the scenario. This option also allows you to reference the change within the template, which is otherwise not allowed
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TemplatePreviewRequest'
+      responses:
+        '204':
+          description: template previewed
+          schema:
+            $ref: '#/definitions/TemplateRenderResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/template/{templateId}/render:
+    post:
+      tags:
+      - template
+      summary: Render a template by evaluating it against an existing job
+      operationId: renderTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: templateId
+        in: path
+        description: Template id
+        required: true
+        type: string
+      - name: jobId
+        in: query
+        description: Job id
+        required: false
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: format
+        in: query
+        description: Format
+        required: true
+        type: string
+        default: TEXT
+        enum:
+        - TEXT
+        - HTML
+        - PDF
+      - name: changeGroupingType
+        in: query
+        description: Type of change grouping
+        required: false
+        type: string
+        enum:
+        - PRIMARY
+        - SCENARIO
+        - COMP_REVIEW
+      - name: changeGroupingId
+        in: query
+        description: Change grouping id to query (null for primary)
+        required: false
+        type: string
+      - name: useScenarioChanges
+        in: query
+        description: Generate documents for only the changes that are in the scenario. This option also allows you to reference the change within the template, which is otherwise not allowed
+        required: false
+        type: boolean
+      responses:
+        '201':
+          description: template rendered
+          schema:
+            $ref: '#/definitions/TemplateRenderResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Template:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - type
+    - tags
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: template name, must be unique to organization
+      description:
+        type: string
+        description: description of template
+      content:
+        type: string
+        description: template content
+      stylesheet:
+        type: string
+        description: template inline stylesheet
+      fileId:
+        type: string
+        description: file identifier, if the template is based on a PDF file instead of a CQLT template
+        example: 588f7ee98f138b19220041a7
+      placements:
+        type: array
+        description: signature zone placements for a file-based template; only valid when fileId is set
+        items:
+          $ref: '#/definitions/SignaturePlacement'
+      type:
+        type: string
+        description: type of template
+        enum:
+        - DOCUMENT
+        - EMAIL
+      tags:
+        type: array
+        description: tags to organize the purpose of the template
+        items:
+          type: string
+      filename:
+        type: string
+        description: document filename CQL
+      fieldId:
+        type: string
+        description: the field id that will be used to store documents generated by this template
+        example: 588f7ee98f138b19220041a7
+      qesFilter:
+        type: string
+        description: filter expression evaluated on each signer for whether to use qualified electronic signature (if it evalutes to true for any signer, QES will be used). If null, defaults to org `qesFilter` setting
+      isSequential:
+        type: boolean
+        description: whether signers must sign in sequential order; false (the default) means simultaneous signing
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  TemplatePreviewRequest:
+    type: object
+    required:
+    - content
+    properties:
+      content:
+        type: string
+      stylesheet:
+        type: string
+  GenerateTemplateRequest:
+    type: object
+    required:
+    - saveToFiles
+    - sendToManagers
+    - sendToPersons
+    - sendForSignature
+    - useScenarioChanges
+    properties:
+      filter:
+        type: string
+      emailSubject:
+        type: string
+      emailMessage:
+        type: string
+      saveToFiles:
+        type: boolean
+      fileSensitive:
+        type: string
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      fileField:
+        type: string
+      sendToManagers:
+        type: boolean
+      sendToPersons:
+        type: boolean
+      sendForSignature:
+        type: boolean
+      scenarioId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+      useScenarioChanges:
+        type: boolean
+      changeGroupingType:
+        type: string
+        enum:
+        - PRIMARY
+        - SCENARIO
+        - COMP_REVIEW
+      changeGroupingId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ResultsTemplate:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Template'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  SignaturePlacement:
+    type: object
+    required:
+    - type
+    - x
+    - y
+    - pageNumber
+    properties:
+      type:
+        type: string
+        description: the kind of placement
+        enum:
+        - SIGNATURE
+        - NAME
+        - TITLE
+        - DATE
+        - EXPR
+      x:
+        type: number
+        format: float
+        description: horizontal position as a fraction (0..1) of page width, from the left edge
+      y:
+        type: number
+        format: float
+        description: vertical position as a fraction (0..1) of page height, from the top edge
+      pageNumber:
+        type: integer
+        format: int32
+        description: 1-based page number the placement is anchored to
+      width:
+        type: number
+        format: float
+        description: optional width as a fraction (0..1) of page width, reserved for future use
+      height:
+        type: number
+        format: float
+        description: optional height as a fraction (0..1) of page height, reserved for future use
+      expr:
+        type: string
+        description: carrot expression evaluated against the document's person; required for EXPR placements
+      signerNumber:
+        type: integer
+        format: int32
+        description: 1-based signer this placement binds to; when null, the placement is assigned to a signer by position
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  TemplateRenderResponse:
+    type: object
+    required:
+    - content
+    properties:
+      content:
+        type: string
+  UpdateTemplate:
+    type: object
+    properties:
+      name:
+        type: string
+        description: template name, must be unique to organization
+      description:
+        type: string
+        description: description of template
+      content:
+        type: string
+        description: template content
+      stylesheet:
+        type: string
+        description: template inline stylesheet
+      fileId:
+        type: string
+        description: file identifier, if the template is based on a PDF file instead of a CQLT template
+        example: 588f7ee98f138b19220041a7
+      placements:
+        type: array
+        description: signature zone placements for a file-based template; only valid when fileId is set
+        items:
+          $ref: '#/definitions/SignaturePlacement'
+      type:
+        type: string
+        description: type of template
+        enum:
+        - DOCUMENT
+        - EMAIL
+      tags:
+        type: array
+        description: tags to organize the purpose of the template
+        items:
+          type: string
+      filename:
+        type: string
+        description: document filename CQL
+      fieldId:
+        type: string
+        description: the field id that will be used to store documents generated by this template
+        example: 588f7ee98f138b19220041a7
+      qesFilter:
+        type: string
+        description: filter expression evaluated on each signer for whether to use qualified electronic signature (if it evalutes to true for any signer, QES will be used). If null, defaults to org `qesFilter` setting
+      isSequential:
+        type: boolean
+        description: whether signers must sign in sequential order; false (the default) means simultaneous signing
+  CreateTemplate:
+    type: object
+    required:
+    - name
+    properties:
+      name:
+        type: string
+        description: template name, must be unique to organization
+      description:
+        type: string
+        description: description of template
+      content:
+        type: string
+        description: template content
+      stylesheet:
+        type: string
+        description: template inline stylesheet
+      fileId:
+        type: string
+        description: file identifier, if the template is based on a PDF file instead of a CQLT template
+        example: 588f7ee98f138b19220041a7
+      placements:
+        type: array
+        description: signature zone placements for a file-based template; only valid when fileId is set
+        items:
+          $ref: '#/definitions/SignaturePlacement'
+      type:
+        type: string
+        description: type of template
+        enum:
+        - DOCUMENT
+        - EMAIL
+      tags:
+        type: array
+        description: tags to organize the purpose of the template
+        items:
+          type: string
+      filename:
+        type: string
+        description: document filename CQL
+      fieldId:
+        type: string
+        description: the field id that will be used to store documents generated by this template
+        example: 588f7ee98f138b19220041a7
+      qesFilter:
+        type: string
+        description: filter expression evaluated on each signer for whether to use qualified electronic signature (if it evalutes to true for any signer, QES will be used). If null, defaults to org `qesFilter` setting
+      isSequential:
+        type: boolean
+        description: whether signers must sign in sequential order; false (the default) means simultaneous signing

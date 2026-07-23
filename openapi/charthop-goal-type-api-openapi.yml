@@ -1,0 +1,576 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access goal-type API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: goal-type
+paths:
+  /v1/org/{orgId}/goal-type:
+    get:
+      tags:
+      - goal-type
+      summary: Find goal types
+      operationId: findGoalTypes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: fromId
+        in: query
+        description: Starting goal type id for pagination
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGoalType'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - goal-type
+      summary: Create a new goal type
+      operationId: createGoalType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Goal type data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGoalType'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/GoalType'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/goal-type/{goalTypeId}:
+    get:
+      tags:
+      - goal-type
+      summary: Get a goal type by id
+      operationId: getGoalType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalTypeId
+        in: path
+        description: Goal type id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/GoalType'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - goal-type
+      summary: Update an existing goal type
+      operationId: updateGoalType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalTypeId
+        in: path
+        description: Goal type id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Goal type data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGoalType'
+      responses:
+        '200':
+          description: updated
+          schema:
+            $ref: '#/definitions/GoalType'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - goal-type
+      summary: Delete a goal type
+      operationId: deleteGoalType
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalTypeId
+        in: path
+        description: Goal type id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  GoalType:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id, org null if platform-wide
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: name of goal type
+      comments:
+        type: string
+        description: whether or not comments are enabled or required
+        enum:
+        - REQUIRED
+        - OPTIONAL
+        - DISABLED
+      doneLevels:
+        type: array
+        description: definition of done for DONE goal
+        items:
+          $ref: '#/definitions/EnumValue'
+      confidenceLevels:
+        type: array
+        description: if confidence updates are enabled, what types of confidence levels are supported
+        items:
+          $ref: '#/definitions/EnumValue'
+      completionLevels:
+        type: array
+        description: if milestones are enabled, what types of completion statuses are supported
+        items:
+          $ref: '#/definitions/EnumValue'
+      forecastTypes:
+        type: array
+        description: if forecasting is enabled, what types of forecasts are supported
+        items:
+          $ref: '#/definitions/GoalForecastType'
+      targetValues:
+        type: array
+        description: stretch target types
+        items:
+          $ref: '#/definitions/GoalTargetValueType'
+      progressUpdateConfig:
+        description: configuration for automated progress update reminders
+        $ref: '#/definitions/GoalProgressUpdateConfig'
+      isPersonal:
+        type: boolean
+        description: whether this goal type is for personal goals (as opposed to organizational goals)
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ResultsGoalType:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GoalType'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  UpdateGoalType:
+    type: object
+    properties:
+      label:
+        type: string
+        description: name of goal type
+      comments:
+        type: string
+        description: whether or not comments are enabled or required
+        enum:
+        - REQUIRED
+        - OPTIONAL
+        - DISABLED
+      doneLevels:
+        type: array
+        description: definition of done for DONE goal
+        items:
+          $ref: '#/definitions/EnumValue'
+      confidenceLevels:
+        type: array
+        description: if confidence updates are enabled, what types of confidence levels are supported
+        items:
+          $ref: '#/definitions/EnumValue'
+      completionLevels:
+        type: array
+        description: if milestones are enabled, what types of completion statuses are supported
+        items:
+          $ref: '#/definitions/EnumValue'
+      forecastTypes:
+        type: array
+        description: if forecasting is enabled, what types of forecasts are supported
+        items:
+          $ref: '#/definitions/GoalForecastType'
+      targetValues:
+        type: array
+        description: stretch target types
+        items:
+          $ref: '#/definitions/GoalTargetValueType'
+      progressUpdateConfig:
+        description: configuration for automated progress update reminders
+        $ref: '#/definitions/GoalProgressUpdateConfig'
+      isPersonal:
+        type: boolean
+        description: whether this goal type is for personal goals (as opposed to organizational goals)
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  CreateGoalType:
+    type: object
+    required:
+    - label
+    properties:
+      label:
+        type: string
+        description: name of goal type
+      comments:
+        type: string
+        description: whether or not comments are enabled or required
+        enum:
+        - REQUIRED
+        - OPTIONAL
+        - DISABLED
+      doneLevels:
+        type: array
+        description: definition of done for DONE goal
+        items:
+          $ref: '#/definitions/EnumValue'
+      confidenceLevels:
+        type: array
+        description: if confidence updates are enabled, what types of confidence levels are supported
+        items:
+          $ref: '#/definitions/EnumValue'
+      completionLevels:
+        type: array
+        description: if milestones are enabled, what types of completion statuses are supported
+        items:
+          $ref: '#/definitions/EnumValue'
+      forecastTypes:
+        type: array
+        description: if forecasting is enabled, what types of forecasts are supported
+        items:
+          $ref: '#/definitions/GoalForecastType'
+      targetValues:
+        type: array
+        description: stretch target types
+        items:
+          $ref: '#/definitions/GoalTargetValueType'
+      progressUpdateConfig:
+        description: configuration for automated progress update reminders
+        $ref: '#/definitions/GoalProgressUpdateConfig'
+      isPersonal:
+        type: boolean
+        description: whether this goal type is for personal goals (as opposed to organizational goals)
+  GoalProgressUpdateConfig:
+    type: object
+    required:
+    - schedule
+    properties:
+      schedule:
+        type: string
+        description: schedule to send progress reminders, in crontab format
+        example: 5 4 * * *
+      messageChannel:
+        description: the channel to send progress reminders to
+        $ref: '#/definitions/MessageChannelConfig'
+      message:
+        type: string
+        description: custom message, if any, to include with progress reminders
+  GoalTargetValueType:
+    type: object
+    required:
+    - label
+    - color
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+      labelTr:
+        $ref: '#/definitions/Translations'
+      color:
+        type: string
+  GoalForecastType:
+    type: object
+    required:
+    - type
+    - label
+    - color
+    properties:
+      type:
+        type: string
+        enum:
+        - WORST
+        - COMMIT
+        - CALL
+        - LIKELY
+        - BEST
+      label:
+        type: string
+      labelTr:
+        $ref: '#/definitions/Translations'
+      color:
+        type: string

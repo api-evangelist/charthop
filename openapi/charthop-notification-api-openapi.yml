@@ -1,0 +1,144 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access notification API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: notification
+paths:
+  /v1/org/{orgId}/notification:
+    post:
+      tags:
+      - notification
+      summary: Send a email or in-app notification
+      operationId: sendNotifications
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Notification request
+        required: true
+        schema:
+          $ref: '#/definitions/NotificationRequest'
+      responses:
+        '204':
+          description: notification sent
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  NotificationRequest:
+    type: object
+    required:
+    - templateName
+    - toUserIds
+    - jobData
+    properties:
+      templateName:
+        type: string
+        description: name of message template
+      toUserIds:
+        type: array
+        description: user ids for users to be notified
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      jobData:
+        description: Job data variables used for email templates
+        $ref: '#/definitions/NotificationJobData'
+      atsName:
+        type: string
+        description: name of the ATS system
+      orgName:
+        type: string
+        description: name of the organization
+      userName:
+        type: string
+        description: preferred name of the user
+      syncSummary:
+        type: string
+        description: summary of reason for email
+      processId:
+        type: string
+        description: id of the sync history process
+        example: 588f7ee98f138b19220041a7
+  NotificationJobData:
+    type: object
+    properties:
+      jobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+      jobUrl:
+        type: string
+        format: uri
+      jobProfileUrl:
+        type: string
+        format: uri
+      atsJobUrl:
+        type: string
+        format: uri
+      atsJobId:
+        type: string
+      atsJobReq:
+        type: string
+      atsJobReqField:
+        type: string
+      openJobsUrl:
+        type: string
+        format: uri
+      department:
+        type: string
+      location:
+        type: string
+      manager:
+        type: string
+      backfill:
+        type: string
+      hireMgr:
+        type: string
+      recruiter:
+        type: string
+      recruitPriority:
+        type: string
+      recruit:
+        type: string
+      sensitive:
+        type: string
+      startDate:
+        type: string
+        format: date
+      estStartDate:
+        type: string
+        format: date
+      announceDate:
+        type: string
+        format: date
+      hireName:
+        type: string

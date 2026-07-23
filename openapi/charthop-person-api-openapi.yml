@@ -1,0 +1,770 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access person API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: person
+paths:
+  /v2/org/{orgId}/person:
+    get:
+      tags:
+      - person
+      summary: Find persons in the organization
+      operationId: findPersons
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if retrieving persons employed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if retrieving persons employed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: ids
+        in: query
+        description: Comma-separated list of person ids to look up
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Person id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: Sort by fields, comma-separated. For descending sort, prepend a -
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: fieldsList
+        in: query
+        description: Fields to retrieve, list syntax
+        required: false
+        type: array
+        items:
+          type: string
+      - name: includeAll
+        in: query
+        description: Include all persons in the system, including ex-employees or persons who were never in jobs
+        required: false
+        type: boolean
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: persons found
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - person
+      summary: Create a person
+      operationId: createPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to create the person in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of person creation
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '201':
+          description: person created
+          schema:
+            type: object
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/count:
+    get:
+      tags:
+      - person
+      summary: Count persons in an org
+      operationId: countPersons
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if counting persons employed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if counting persons employed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: includeAll
+        in: query
+        description: Include all persons in the system, including ex-employees or persons who were never in jobs
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/OrgCount'
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/count-invite-users:
+    get:
+      tags:
+      - person
+      summary: Count persons in the organization available to invite as users
+      operationId: countPersonsWithoutUser
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: isPreboarding
+        in: query
+        description: Whether you are searching for preboarding or activated users
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: count returned
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/group-by:
+    get:
+      tags:
+      - person
+      summary: Find persons in the organization, grouped by an expression
+      operationId: findPersonsGrouped
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: startDate
+        in: query
+        description: Start date, if retrieving persons that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if retrieving persons that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: columns
+        in: query
+        description: Fields to retrieve with their aggregation function, comma-separated
+        required: false
+        type: string
+      - name: groupBy
+        in: query
+        description: Expression to group by
+        required: false
+        type: string
+      - name: sort
+        in: query
+        description: Sort by fields, comma-separated. For descending sort, prepend a -
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/query-invite-users:
+    get:
+      tags:
+      - person
+      summary: Find persons in the organization to invite as users
+      operationId: findPersonsWithoutUser
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: isPreboarding
+        in: query
+        description: Whether you are searching for preboarding or activated users
+        required: false
+        type: boolean
+      - name: from
+        in: query
+        description: Person id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: sort
+        in: query
+        description: Sort field, prefix with - for descending (e.g. name, -name, startDate, -startDate)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: persons found
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/subcounts:
+    get:
+      tags:
+      - person
+      summary: Compute top-N + Other subcounts for one or more fields, for persons in the organization
+      operationId: getPersonSubcounts
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if counting persons employed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if counting persons employed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Comma-separated list of fields to compute subcounts for
+        required: true
+        type: string
+      - name: topN
+        in: query
+        description: Number of top values to return per field; remainder is rolled into an Other bucket (default 10, max 25)
+        required: false
+        type: integer
+        format: int32
+      - name: includeAll
+        in: query
+        description: Include all persons in the system, including ex-employees or persons who were never in jobs
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/SubcountsResponse'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/total:
+    get:
+      tags:
+      - person
+      summary: Compute aggregated totals for persons matching a query
+      operationId: getPersonTotals
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if retrieving persons that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if retrieving persons that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: includeAll
+        in: query
+        description: Include all persons in the system, including ex-employees or persons who were never in jobs
+        required: false
+        type: boolean
+      - name: columns
+        in: query
+        description: Fields to aggregate with their aggregation function, comma-separated
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/person/{personId}:
+    get:
+      tags:
+      - person
+      summary: Return a particular person by id
+      operationId: getPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: person found
+          schema:
+            type: object
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - person
+      summary: Update a person
+      operationId: updatePerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the person in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of person update
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - person
+      summary: Delete a person
+      operationId: deletePerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  FieldSubcount:
+    type: object
+    required:
+    - count
+    - isOther
+    properties:
+      key:
+        type: object
+      count:
+        type: integer
+        format: int64
+      isOther:
+        type: boolean
+  OrgCount:
+    type: object
+    required:
+    - jobCount
+    - personCount
+    - startingCount
+    - departingCount
+    properties:
+      jobCount:
+        type: integer
+        format: int64
+      personCount:
+        type: integer
+        format: int64
+      startingCount:
+        type: integer
+        format: int64
+      departingCount:
+        type: integer
+        format: int64
+      groupCount:
+        type: integer
+        format: int64
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  SubcountsResponse:
+    type: object
+    required:
+    - counts
+    properties:
+      counts:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/FieldSubcount'
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object

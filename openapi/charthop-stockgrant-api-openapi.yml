@@ -1,0 +1,290 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access stockgrant API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: stockgrant
+paths:
+  /v1/org/{orgId}/stockgrant:
+    get:
+      tags:
+      - stockgrant
+      summary: Retrieve stock grants
+      operationId: findStockGrants
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: query
+        description: Person id to filter by
+        required: false
+        type: string
+      - name: fromDate
+        in: query
+        description: From date, inclusive
+        required: false
+        type: string
+        format: date
+      - name: untilDate
+        in: query
+        description: Until date, exclusive
+        required: false
+        type: string
+        format: date
+      - name: from
+        in: query
+        description: Stock grant id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsStockGrantEntity'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+  /v1/org/{orgId}/stockgrant/{stockGrantId}:
+    get:
+      tags:
+      - stockgrant
+      summary: Return a particular stock grant by id
+      operationId: getStockGrant
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: stockGrantId
+        in: path
+        description: Stock grant id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/StockGrantEntity'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  ResultsStockGrantEntity:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/StockGrantEntity'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  StockGrantEntity:
+    type: object
+    required:
+    - id
+    - orgId
+    - personId
+    - stock
+    - date
+    - shares
+    - price
+    - type
+    - vestSchedule
+    properties:
+      id:
+        type: string
+        description: globally unique id of stock grant
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org that the stock grant belongs to
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: person granted the stock
+        example: 588f7ee98f138b19220041a7
+      externalId:
+        type: string
+        description: external identifier, if grant synced from external system
+        example: 588f7ee98f138b19220041a7
+      stock:
+        type: string
+        description: ticker symbol of this stock
+        example: GOOG
+      date:
+        type: string
+        format: date
+        description: date of grant
+      vestStartDate:
+        type: string
+        format: date
+        description: vesting start date of grant
+      expireDate:
+        type: string
+        format: date
+        description: expiration date of grant
+      shares:
+        type: number
+        description: number of shares granted
+      price:
+        type: number
+        description: per share strike price
+      type:
+        type: string
+        description: type of grant
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+      vestSchedule:
+        type: string
+        description: vesting schedule
+      originalPrice:
+        type: number
+        description: original per share value of stock (grant price at time of issue)
+      currentPrice:
+        type: number
+        description: current per share value of stock
+      vestedShares:
+        type: number
+        description: current number of shares vested
+      vestedSharesNextYear:
+        type: number
+        description: number of shares vested one year from today
+      vestedSharesByDate:
+        type: object
+        description: number of shares vested, by future date
+        additionalProperties:
+          type: number
+      vestEndDate:
+        type: string
+        format: date
+        description: vesting end date
+      cancelDate:
+        type: string
+        format: date
+        description: cancellation date
+      terminationDate:
+        type: string
+        format: date
+        description: termination date — vesting freezes on this date when the holder separates
+      lastExercisableDate:
+        type: string
+        format: date
+        description: last date on which vested shares can be exercised; after this the grant is forfeited
+      details:
+        type: string
+        description: details of the grant (arbitrary text)
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'

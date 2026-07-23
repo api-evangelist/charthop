@@ -1,0 +1,329 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access query API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: query
+paths:
+  /v1/org/{orgId}/query:
+    get:
+      tags:
+      - query
+      summary: Get a list of query tokens
+      operationId: listQueryTokens
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Action id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsQueryToken'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - query
+      summary: Create a live query token
+      operationId: createQuery
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateQueryToken'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/QueryToken'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/query/{queryToken}:
+    delete:
+      tags:
+      - query
+      summary: Expire a previously created live query immediately
+      operationId: expire
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: queryToken
+        in: path
+        description: Query token (either id or token string)
+        required: true
+        type: string
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    get:
+      tags:
+      - query
+      summary: Return the results of a previously created live query
+      operationId: query
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      - text/html
+      - text/plain
+      - application/xml
+      - text/csv
+      - text/calendar
+      - text/x-ms-iqy
+      - application/octet-stream
+      - application/vnd.apple.pkpass
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: queryToken
+        in: path
+        description: Query token
+        required: true
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex-datatype columns
+        required: false
+        type: boolean
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/query/{queryToken}/iqy:
+    get:
+      tags:
+      - query
+      summary: Download an IQY file for a previously created live query
+      operationId: downloadIqyFile
+      consumes:
+      - application/json
+      produces:
+      - text/x-ms-iqy
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: queryToken
+        in: path
+        description: Query token
+        required: true
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is html-display, can also use html-export
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex-datatype columns
+        required: false
+        type: boolean
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  CreateQueryToken:
+    type: object
+    required:
+    - type
+    - params
+    properties:
+      type:
+        type: string
+        description: query type
+      params:
+        type: object
+        description: query params
+        additionalProperties:
+          type: object
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  ResultsQueryToken:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/QueryToken'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  QueryToken:
+    type: object
+    required:
+    - id
+    - token
+    - orgId
+    - userId
+    - type
+    - params
+    properties:
+      id:
+        type: string
+        description: globally unique id for query token
+        example: 588f7ee98f138b19220041a7
+      token:
+        type: string
+        description: globally unique random token string
+      orgId:
+        type: string
+        description: id of org
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: id of user
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: query details on data that is being synced
+      type:
+        type: string
+        description: query type
+      path:
+        type: string
+        description: query path (deprecated)
+      params:
+        type: object
+        description: query params
+        additionalProperties:
+          type: object
+      accessCount:
+        type: integer
+        format: int64
+        description: total number of uses
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2016-11-16T13:40:47Z'
+      expireAt:
+        type: string
+        description: expire timestamp
+        example: '2016-11-16T13:40:47Z'
+      activeAt:
+        type: string
+        description: last active timestamp
+        example: '2016-11-16T13:40:47Z'

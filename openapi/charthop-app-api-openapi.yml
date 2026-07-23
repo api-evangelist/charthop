@@ -1,0 +1,6623 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access app API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: app
+paths:
+  /v1/app:
+    get:
+      tags:
+      - app
+      summary: Return all publicly visible global apps
+      operationId: findGlobalApps
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: tag
+        in: query
+        description: Tag to filter by
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: App id to start from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApp'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    post:
+      tags:
+      - app
+      summary: Create a new app
+      operationId: createApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: App data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateApp'
+      responses:
+        '201':
+          description: app created
+          schema:
+            $ref: '#/definitions/App'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/app/install/{appId}:
+    get:
+      tags:
+      - app
+      summary: Get all active installs of this app
+      operationId: getActiveAppInstalls
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      - name: orgTypes
+        in: query
+        description: Comma-separated list of org types to include. Defaults to all org types.
+        required: false
+        type: string
+      - name: hasRunProcess
+        in: query
+        description: Whether to require that the app has run at least one process. Defaults to true.
+        required: false
+        type: boolean
+      - name: internalOptions
+        in: query
+        description: Filter app users by internal option key-value pair
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsUser'
+  /v1/app/name/{appName}:
+    get:
+      tags:
+      - app
+      summary: Return a particular app by name
+      operationId: getAppByName
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appName
+        in: path
+        description: App name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/App'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/app/notify:
+    post:
+      tags:
+      - app
+      summary: Send an email notification to the configured notify users, on behalf of an app
+      operationId: sendNotification
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/NotifyRequest'
+      responses:
+        '204':
+          description: notification sent
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}:
+    get:
+      tags:
+      - app
+      summary: Return all active apps available for a particular org
+      operationId: findApps
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: type
+        in: query
+        description: Filter by type (app, bundle)
+        required: false
+        type: string
+      - name: tags
+        in: query
+        description: Filter by tags
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: App id to start from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApp'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install:
+    get:
+      tags:
+      - app
+      summary: Find installed app users
+      operationId: findInstalledApps
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: type
+        in: query
+        description: Filter by type (app, bundle)
+        required: false
+        type: string
+      - name: tags
+        in: query
+        description: Filter by tag
+        required: false
+        type: string
+      - name: statuses
+        in: query
+        description: 'Filter by App User statuses, comma-separated. Accepted values: [''NORMAL'', ''INACTIVE'', ''UNINSTALLED'']'
+        required: false
+        type: string
+      - name: includeFormer
+        in: query
+        description: Whether to include app users with NONE access to orgs they pertain to.  Default is false
+        required: false
+        type: boolean
+      - name: from
+        in: query
+        description: App id to start from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsUser'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    post:
+      tags:
+      - app
+      summary: Install an app for a particular org
+      operationId: installApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: App user data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateUser'
+      responses:
+        '201':
+          description: app installed
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/app/org/{orgId}/install/name/{appName}:
+    get:
+      tags:
+      - app
+      summary: Get an installed app by name
+      operationId: getInstalledAppByName
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appName
+        in: path
+        description: App name
+        required: true
+        type: string
+      - name: includeInactive
+        in: query
+        description: If the installed appUser is inactive, load inactive instead
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/validate:
+    post:
+      tags:
+      - app
+      summary: Validate the installation of an app for a particular org
+      operationId: validateInstallApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: App user data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateUser'
+      responses:
+        '201':
+          description: app validated
+          schema:
+            $ref: '#/definitions/BundleInstallValidate'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/app/org/{orgId}/install/{appUserId}:
+    get:
+      tags:
+      - app
+      summary: Get an installed app
+      operationId: getInstalledApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    patch:
+      tags:
+      - app
+      summary: Update the settings of an installed app
+      operationId: updateInstalledApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: App user data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUser'
+      - name: includeInactive
+        in: query
+        description: If the installed appUser is inactive, load inactive instead
+        required: false
+        type: boolean
+      responses:
+        '204':
+          description: app updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - app
+      summary: Uninstall an app
+      operationId: uninstallApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: keepEntityIds
+        in: query
+        description: Comma-separated list of bundle-installed entities to delete -- if this parameter is omitted, all bundle-installed entities will be deleted
+        required: false
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/api-operation/{operation}:
+    post:
+      tags:
+      - app
+      summary: Execute one configured external API operation against the live external service (the app config 'Test' action). Requires readExternal for a read-only operation, writeExternal otherwise; a non-read-only operation runs against the live API and may create, change, or delete real data.
+      operationId: testApiOperation
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: operation
+        in: path
+        description: Operation id
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Pagination cursor (opaque 'next' from a prior result)
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Maximum number of records to return
+        required: false
+        type: integer
+        format: int32
+      - name: tokenLevel
+        in: query
+        description: 'OAuth identity to call as: USER (caller''s own connection) or ORG (shared connection). Defaults to the installation''s mode.'
+        required: false
+        type: string
+        enum:
+        - ORG
+        - USER
+      - name: body
+        in: body
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '200':
+          description: operation executed (inspect the result for the API's status/body)
+          schema:
+            $ref: '#/definitions/ExternalApiExecutionResult'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/code:
+    post:
+      tags:
+      - app
+      summary: Retrieve an Oauth2 authorization code for this app, which can be exchanged for an access token
+      operationId: getAuthorizationCode
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: scope
+        in: query
+        description: Scopes
+        required: false
+        type: string
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/connections:
+    get:
+      tags:
+      - app
+      summary: List an installed agent's active MCP connections (one per connected user token)
+      operationId: listMcpConnections
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - app
+      summary: Revoke MCP connections for an installed agent
+      operationId: revokeMcpConnections
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/RevokeMcpConnectionsRequest'
+      responses:
+        '204':
+          description: revoked
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/disable-sync:
+    post:
+      tags:
+      - app
+      summary: Disable automatic sync for an app installation whose credentials are failing
+      operationId: disableSync
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DisableSyncRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/DisableSyncResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/installdata/{installDataName}:
+    get:
+      tags:
+      - app
+      summary: Retrieve the current token for this app
+      operationId: getAppInstallData
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: installDataName
+        in: path
+        description: Name
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/oauth-token/refresh:
+    post:
+      tags:
+      - app
+      summary: Force-refresh the vendor OAuth token for an app installation
+      operationId: refreshOauthToken
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/OauthRefreshRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/OauthRefreshResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: no active token / refresh failed — re-authorization required
+  /v1/app/org/{orgId}/install/{appUserId}/run:
+    post:
+      tags:
+      - app
+      summary: Run an installed app
+      operationId: runInstalledApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '200':
+          description: app started
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/org/{orgId}/install/{appUserId}/token:
+    get:
+      tags:
+      - app
+      summary: Retrieve the current token for this app
+      operationId: getAccessToken
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    post:
+      tags:
+      - app
+      summary: Generate or regenerate a long-lived access token for the app
+      operationId: generateAccessToken
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ScopeRequest'
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/app/{appId}:
+    get:
+      tags:
+      - app
+      summary: Return a particular app by id
+      operationId: getApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/App'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - app
+      summary: Update an existing app
+      operationId: updateApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: App data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateApp'
+      responses:
+        '204':
+          description: app updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - app
+      summary: Delete an app
+      operationId: deleteApp
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  ActionStep:
+    type: object
+    required:
+    - type
+    properties:
+      stepId:
+        type: string
+        description: unique id for action step
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: The type of action to run
+        enum:
+        - FORM
+        - MESSAGE
+        - HTTP
+        - TASK
+        - SIGNATURE
+        - AI
+      formId:
+        type: string
+        description: If the action is FORM, the id of the form to fill out
+        example: 588f7ee98f138b19220041a7
+      target:
+        type: string
+        description: If the action is MESSAGE, the target to send the message to. If the action is FORM/TASK, the person who should have the form filled out on/complete the task
+      assignee:
+        type: string
+        description: If the action is FORM/TASK, the user who should fill out the form/complete the task (default is, same as target)
+      notifyTarget:
+        type: string
+        description: If the action is SIGNATURE, an additional target expression resolving to users who should receive notifications about signature events
+      templateId:
+        type: string
+        description: If the action is SIGNATURE, the id of the template to generate a document for signature
+        example: 588f7ee98f138b19220041a7
+      aiAgentUserId:
+        type: string
+        description: If the action is AI, the agent id to use, otherwise defaults to org default
+        example: 588f7ee98f138b19220041a7
+      aiEnableMemory:
+        type: boolean
+        description: If the action is AI, whether or not a per-action memory storage is supported
+      aiApprovedPolicyRules:
+        type: array
+        description: If the action is AI, the policy rules that the AI agent should follow. If not provided, will use the default policy rules for the AI agent.
+        items:
+          $ref: '#/definitions/PolicyRule'
+      modelTier:
+        type: string
+        description: If the action is AI, the requested model tier; defaults to LOW when not set
+        enum:
+        - HIGH
+        - MEDIUM
+        - LOW
+      message:
+        type: string
+        description: The message that will be sent -- supports CQLT templates
+      messageChannel:
+        description: The preferred message channel(s) to send via
+        $ref: '#/definitions/MessageChannelConfig'
+      emailSubject:
+        type: string
+        description: The email subject line that will be used -- supports CQLT templates. If not provided, will use 'Notification'
+      taskLabel:
+        type: string
+        description: If the action is FORM, the task label that will be displayed to the user -- supports CQLT templates
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not - if this is left blank, will default to the sensitive setting of the Action
+      httpUrl:
+        type: string
+        format: uri
+        description: If the action is HTTP, the url that will receive the HTTP request
+      httpMethod:
+        type: string
+        description: If the action is HTTP, the method used by the HTTP request (defaults to POST)
+      httpHeaders:
+        type: object
+        description: If the action is HTTP, the headers to add to the HTTP request
+        additionalProperties:
+          type: string
+      httpContent:
+        type: object
+        description: If the action is HTTP, the payload contained in the HTTP request
+  PaginationConfig:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        enum:
+        - NONE
+        - NEXT_URL
+        - LINK_HEADER
+        - CURSOR
+        - OFFSET
+        - PAGE_NUMBER
+      itemsPath:
+        type: string
+      nextPath:
+        type: string
+      hasMorePath:
+        type: string
+      endOfStreamPath:
+        type: string
+      totalPath:
+        type: string
+      linkRel:
+        type: string
+      pageParam:
+        type: string
+      sizeParam:
+        type: string
+      pageSize:
+        type: integer
+        format: int32
+      startValue:
+        type: integer
+        format: int32
+  GroupPositionAssignments:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+  BundleReport:
+    type: object
+    required:
+    - report
+    properties:
+      report:
+        description: report of this bundle
+        $ref: '#/definitions/PartialReport'
+      charts:
+        type: array
+        description: list of charts used in the report
+        items:
+          $ref: '#/definitions/PartialReportChart'
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  HiringTeamAssignment:
+    type: object
+    required:
+    - assign
+    properties:
+      assign:
+        $ref: '#/definitions/ApiOperationCall'
+      remove:
+        $ref: '#/definitions/ApiOperationCall'
+  AccrualConfig:
+    type: object
+    required:
+    - frequency
+    - accrualOffsetFromStartDate
+    properties:
+      frequency:
+        type: string
+        enum:
+        - SEMI_MONTHLY
+        - MONTHLY
+        - WEEKLY
+      monthlyDaysOfMonth:
+        type: array
+        items:
+          type: integer
+          format: int32
+      weeklyStartDate:
+        type: string
+        format: date
+      weeklyIncrement:
+        type: integer
+        format: int32
+      balanceCapInWholeDays:
+        type: integer
+        format: int32
+      accrualOffsetFromStartDate:
+        type: integer
+        format: int32
+  Calendar:
+    type: object
+    required:
+    - id
+    - type
+    - label
+    - color
+    - sensitive
+    - status
+    - isBuiltIn
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 665f3aabe88164e4ef6c3a22
+      orgId:
+        type: string
+        description: parent organization id
+        example: 665f3ad1e47a82bf1d3d180b
+      type:
+        type: string
+        description: type of calendar
+        enum:
+        - ANNIVERSARY
+        - BIRTHDAY
+        - COMP_REVIEW
+        - REVIEW
+        - SURVEY
+        - TASK
+        - TIMEOFF
+        - START_DATE
+        - END_DATE
+        - CUSTOM
+        - HOLIDAY
+      label:
+        type: string
+        description: human-readable label for calendar
+      description:
+        type: string
+      color:
+        type: string
+      imagePath:
+        type: string
+        pattern: ^[a-zA-Z0-9._/-]*$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the calendar
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      sensitive:
+        type: string
+        description: base sensitivity of this calendar and entities in it -- should be PRIVATE, ORG or HIGH
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: whether the calendar is active or not
+        enum:
+        - ACTIVE
+        - INACTIVE
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      isBuiltIn:
+        type: boolean
+        readOnly: true
+  User:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      appId:
+        type: string
+        description: if the user is an app user, the id of the app
+        example: 588f7ee98f138b19220041a7
+      name:
+        description: full name of user
+        $ref: '#/definitions/Name'
+      email:
+        type: string
+        description: email address of user
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      password:
+        type: string
+        description: password of user (encrypted)
+        minItems: 0
+        maxItems: 120
+      orgs:
+        type: array
+        description: list of member orgs with permission levels
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/OrgAccess'
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of user
+        enum:
+        - SUPERUSER
+        - NORMAL
+        - INACTIVE
+        - UNINSTALLED
+      type:
+        type: string
+        description: type of user
+        enum:
+        - USER
+        - APP
+      options:
+        type: object
+        description: for apps, options (specific options are specific to the particular app); for users, user-set preferences
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+      bundleInstall:
+        description: if this user represents an installed bundle, details on what was installed
+        $ref: '#/definitions/BundleInstall'
+      secrets:
+        type: object
+        description: write-only secrets; the content of these secrets are not retrievable via the external-facing API
+      activeAt:
+        type: string
+        description: last activity timestamp
+        example: '2017-01-24T13:57:52Z'
+      loginAt:
+        type: string
+        description: last login timestamp
+        example: '2017-01-24T13:57:52Z'
+      appRunCheckAt:
+        type: string
+        description: for apps, last time the app was checked for a scheduled sync
+        example: '2024-02-29T09:30:00Z'
+      loginCount:
+        type: integer
+        format: int32
+        description: number of lifetime successful logins
+        example: '3'
+      sessionCount:
+        type: integer
+        format: int32
+        description: number of lifetime sessions
+        example: '3'
+      loginFailCount:
+        type: integer
+        format: int32
+        description: number of consecutive failed logins
+        example: '3'
+      title:
+        type: string
+        description: job title, if available
+        example: CEO
+      remoteIp:
+        type: string
+        description: last IP address used
+        example: 127.0.0.1
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      verifyAt:
+        type: string
+        description: email verified timestamp, if the email has been verified
+        example: '2017-01-24T13:57:52Z'
+      mfas:
+        type: array
+        description: list of registered 2FA registered credentials
+        items:
+          $ref: '#/definitions/WebRegisteredCredential'
+      emailSettings:
+        type: array
+        description: Email settings for the user
+        items:
+          $ref: '#/definitions/UserEmailSetting'
+      sensitive:
+        type: string
+        description: sensitivity level of the user's configuration; only applicable to APP users
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users and groups who have access to configure this user; only applicable to APP users
+        items:
+          $ref: '#/definitions/ShareAccess'
+      agentConfig:
+        description: per-user agent configuration overrides
+        $ref: '#/definitions/AiAgentConfig'
+  ReportFilter:
+    type: object
+    required:
+    - label
+    - filter
+    properties:
+      label:
+        type: string
+        description: human-readable label for the filter
+      filter:
+        type: string
+        description: filter expression
+  PolicyEvent:
+    type: object
+    required:
+    - dateExpr
+    - action
+    properties:
+      dateExpr:
+        type: string
+      action:
+        $ref: '#/definitions/PolicyAction'
+      noteExpr:
+        type: string
+      groupId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: Display name for the milestone group this event belongs to
+        example: Tenure milestones
+        minItems: 1
+        maxItems: 80
+  PartialField:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      tableId:
+        type: string
+        description: the table id this field applies to, only applicable when EntityType equals TABLE
+        example: 588f7ee98f138b19220041a7
+      sort:
+        type: integer
+        format: int32
+        description: sort order within a table
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      dataFetchTypes:
+        type: array
+        description: set of data fetch types
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - BASIC
+          - UPDATE
+          - CHANGE
+          - RELATIONSHIP_MANAGER
+          - RELATIONSHIP_ALL
+          - TITLE
+          - PROMOTION
+          - GROUP
+          - COMP
+          - COMP_HISTORY
+          - GRANT
+          - TIMEOFF
+          - PERSON_JOIN
+          - ALL_DATA
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      groupTypeId:
+        type: string
+        description: if this is a group membership field, the group type ID it's for
+        example: 588f7ee98f138b19220041a7
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      categoryId:
+        type: string
+        description: ID of the category to which this field belongs, if any
+        example: 588f7ee98f138b19220041a7
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for numeric values
+      isAutoIncrement:
+        type: boolean
+        description: whether this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  TimeOffPolicy:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - status
+    - filter
+    properties:
+      id:
+        type: string
+        description: Globally unique id of time off policy
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: Org that the time off belongs to
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: Internal policy name
+        example: US Part-Time/Intern
+        minItems: 1
+        maxItems: 80
+      displayName:
+        type: string
+        description: External policy name displayed to users
+        example: PTO
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: Policy description
+        example: Annual sick days allotted to employees
+        minItems: 0
+        maxItems: 2000
+      guidelines:
+        type: string
+        description: Policy guidelines
+        minItems: 0
+        maxItems: 2000
+      type:
+        type: string
+        description: Type of policy to be created
+        enum:
+        - PTO
+        - TOIL
+        - VACATION
+        - SICK
+        - MEDICAL
+        - JURY
+        - OFFSITE
+        - PARENTAL
+        - UNPAID
+        - DISABILITY_SHORT
+        - DISABILITY_LONG
+        - BEREAVEMENT
+        - MILITARY
+        - RELIGIOUS
+        - VOTING
+        - VOLUNTEER
+        - UNKNOWN
+      status:
+        type: string
+        description: Status of the policy
+        enum:
+        - ACTIVE
+        - INACTIVE
+      allocationType:
+        type: string
+        description: Whether the time off is accrued, received upfront, or is an unlimited policy
+        enum:
+        - UPFRONT
+        - UNLIMITED
+        - ACCRUAL
+      annualAllocation:
+        type: number
+        description: Number of days allocated annually
+      accrualConfig:
+        description: Configuration for how time off is accrued.
+        $ref: '#/definitions/AccrualConfig'
+      maxConsecutiveDaysPerRequest:
+        type: number
+        description: An optional max number of days allowed per request
+      minBalance:
+        type: number
+        description: An optional minimum balance
+      enableCarryOverBalance:
+        type: boolean
+        description: Enable carry over balance.
+      maxCarryOverBalance:
+        type: number
+        description: An optional maximum carry over balance
+      carryOverExpirationDate:
+        type: string
+        description: Month and day of carry over expiration.
+      carryOverExpirationMonths:
+        type: integer
+        format: int32
+        description: Months after carry over date that carry over expires.
+      enablePartialDayRequests:
+        type: boolean
+        description: Allow half day requests
+      partialDayGranularity:
+        type: number
+        description: Partial day requests can only be made down to this level of granularity (i.e. request % granularity == 0)
+      enablePartialDayPeriod:
+        type: boolean
+        description: Allow specifying periods of time (e.g. AM, PM) for partial days
+      disableRequests:
+        type: boolean
+        description: Whether to disable time off requests for this policy
+      noteRequired:
+        type: boolean
+        description: Whether a note is required for time off requests
+      filter:
+        type: string
+        description: CQL used to determine which jobs the policy applies to
+      holidayCalendarId:
+        type: string
+        description: an associated holiday calendar, days on this calendar are not deducted from the time off balance
+        example: 588f7ee98f138b19220041a7
+      disableProratedAllocation:
+        type: boolean
+        description: whether limited allocation policies are prorated based on person start date
+      prorationRounding:
+        type: string
+        description: rounding method for prorating calculations
+        enum:
+        - UP
+        - NEAREST
+        - HALF
+      yearStartDate:
+        type: string
+        description: Month and day of policy year rollover. Defaults to January 1.
+      policyFromDate:
+        type: string
+        format: date
+        description: The date on which this policy's balance/accrual settings come into effect. The policy may have entries before this date, but it will not generate e.g. accrual entries.
+      policyUntilDate:
+        type: string
+        format: date
+        description: The first date after this policy's balance/accrual settings end (i.e. the exclusive end date). The policy may have entries after this date, but it will not generate e.g. accrual entries.
+      workDays:
+        type: array
+        description: Days of the week that count against the time off balance. Defaults to Monday through Friday if not set.
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      policyEvents:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyEvent'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  PolicyAction:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        enum:
+        - OPEN
+        - CLOSE
+        - MOD_ALLOCATION
+        - ADJUST
+        - TRANSFER
+        - PRORATED_MOD
+        - FULL_MOD
+      exprString:
+        type: string
+  BundleInstall:
+    type: object
+    required:
+    - entities
+    properties:
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/BundleInstallEntity'
+  BundleCalendar:
+    type: object
+    required:
+    - calendar
+    properties:
+      calendar:
+        description: calendar of this bundle
+        $ref: '#/definitions/Calendar'
+      entries:
+        type: array
+        description: list of calendar entries used in the calendar
+        items:
+          $ref: '#/definitions/CalendarEntry'
+  CalendarEntry:
+    type: object
+    required:
+    - id
+    - calendarId
+    - label
+    - from
+    - until
+    properties:
+      id:
+        type: string
+        description: globally unique id, or zero-id if the entry is a virtual entry
+        example: 665f68b537795e0cb768bb74
+      orgId:
+        type: string
+        description: parent organization id
+        example: 665f3ad1e47a82bf1d3d180b
+      calendarId:
+        type: string
+        description: calendar to which this event pertains
+        example: 665f3aabe88164e4ef6c3a22
+      label:
+        type: string
+        description: human-readable label for event
+      description:
+        type: string
+      from:
+        type: string
+        format: date
+        description: start date for event (inclusive)
+        example: '2024-02-29'
+      until:
+        type: string
+        format: date
+        description: end date for event (exclusive)
+        example: '2024-04-01'
+      entityType:
+        type: string
+        description: type of associated entity
+        example: PERSON
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: associated entity
+        example: 665f6952552f7e3e5beea7c9
+      personId:
+        type: string
+        description: person id for person-related calendar entries
+        example: 665f6952552f7e3e5beea7c9
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  AutoIncFieldConfig:
+    type: object
+    required:
+    - upperCase
+    - padDigits
+    - separator
+    - prefixParts
+    properties:
+      upperCase:
+        type: boolean
+        description: convert any lower-case characters in the value to upper case
+      padDigits:
+        type: integer
+        format: int32
+        description: length of the numeric part of the value (left-padded with zeroes)
+      separator:
+        type: string
+        description: separator character to use between parts of the value
+        enum:
+        - HYPHEN
+        - UNDERSCORE
+        - SPACE
+        - NONE
+      prefixParts:
+        type: array
+        items:
+          $ref: '#/definitions/AutoIncFieldPart'
+  UpdateApp:
+    type: object
+    properties:
+      name:
+        type: string
+        description: short unique name
+        example: slack-import
+        pattern: ^[a-z0-9-]+$
+        minItems: 3
+        maxItems: 30
+      redirectUris:
+        type: array
+        description: list of acceptable Oauth2 redirect URIs, if Oauth2 is supported for this app
+        items:
+          type: string
+          format: uri
+      oauthClientIds:
+        type: array
+        description: OAuth client identities allowed to connect as this agent over MCP. Each entry is either a full Client ID Metadata Document (CIMD) URL (matched exactly, e.g. Claude Code's fixed URL) or a bare host (matched against the client_id's host, e.g. chatgpt.com, for clients whose CIMD URL varies per server).
+        example: '["https://claude.ai/oauth/claude-code-client-metadata", "chatgpt.com"]'
+        items:
+          type: string
+      mcpInstructions:
+        type: string
+        description: Connection instructions shown on the agent's MCP tab (e.g. how to add this MCP server to a client like Claude Code). The literal token {{mcpUrl}} is replaced with the org-specific MCP server URL when displayed.
+        example: 'Run: claude mcp add --transport http charthop {{mcpUrl}}
+
+          Then run /mcp and sign in.'
+      allowedIps:
+        type: array
+        description: allowlist of IPs or IP ranges that are allowed to make API calls on behalf of this app
+        items:
+          type: string
+      configFields:
+        type: array
+        description: list of configuration fields
+        items:
+          $ref: '#/definitions/AppConfigField'
+      title:
+        type: string
+        description: human-readable name of app
+        example: Slack
+        minItems: 4
+        maxItems: 50
+      summary:
+        type: string
+        description: short summary of app
+        example: The Slack app does X Y and Z
+        minItems: 5
+        maxItems: 140
+      description:
+        type: string
+        description: full description of app, in Markdown
+        example: The Slack app does X Y and Z
+      setupInstructions:
+        type: string
+        description: setup instructions, in Markdown
+        example: To install the Slack, use your API key from X and Y
+      cronOrder:
+        type: integer
+        format: int32
+        description: execution order of the cron (lower numbers execute earlier)
+      cronSchedule:
+        type: string
+        description: cron schedule
+        enum:
+        - DAILY
+        - WEEKLY
+      cronDayOfWeek:
+        type: string
+        description: Day of week if cronSchedule is WEEKLY
+        enum:
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
+        - SUNDAY
+      imagePath:
+        type: string
+        description: path to avatar profile image, should be approximately square dimensions and show logo
+        pattern: ^[a-zA-Z0-9._/-]+$
+      wordmarkImagePath:
+        type: string
+        description: path to larger profile logo image containing brand wordmark, does not need to be square dimensions
+        pattern: ^[a-zA-Z0-9._/-]+$
+      poweredByImagePath:
+        type: string
+        description: path to powered by image, should be approximately square dimensions and show logo
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of app
+        enum:
+        - GLOBAL
+        - ACTIVE
+        - INACTIVE
+        - DEVELOPMENT
+      minAccess:
+        type: string
+        description: minimum access level requested by app
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      roleId:
+        type: string
+        description: roleId requested by app
+        example: 588f7ee98f138b19220041a7
+      eventNotifyUrl:
+        type: string
+        format: uri
+        description: URL that should be notified on events
+      payload:
+        type: object
+        description: custom payload to send in lieu of regular payload
+        additionalProperties:
+          type: string
+      events:
+        type: array
+        description: set of events to notify on
+        uniqueItems: true
+        items:
+          type: string
+      type:
+        type: string
+        description: APP, BUNDLE, or INTERNAL
+        enum:
+        - AGENT
+        - APP
+        - BUNDLE
+        - INTERNAL
+      bundle:
+        description: for apps of type BUNDLE, the contents included in the bundle
+        $ref: '#/definitions/Bundle'
+      agentConfig:
+        description: for apps of type AGENT, the configuration of the agent
+        $ref: '#/definitions/AiAgentConfig'
+      externalApiConfig:
+        description: for apps with external API capabilities, the API configuration
+        $ref: '#/definitions/ExternalApiConfig'
+      webhookConfig:
+        description: for apps that receive inbound webhooks, the webhook configuration
+        $ref: '#/definitions/WebhookConfig'
+      secrets:
+        description: write-only app-level secrets
+        $ref: '#/definitions/AppSecrets'
+      scopes:
+        type: array
+        description: access scopes that the app is requesting
+        items:
+          type: string
+      tags:
+        type: array
+        description: tags/categories the app belongs to
+        items:
+          type: string
+      requiredFeatures:
+        type: array
+        description: The product features that are required in order to install the app or bundle
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+  EntityRef:
+    type: object
+    required:
+    - entity
+    properties:
+      entity:
+        type: string
+      alias:
+        type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  ResultsApp:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/App'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  GroupRef:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+      type:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  MessagingConfig:
+    type: object
+    properties:
+      slackAppId:
+        type: string
+      slackClientId:
+        type: string
+      slackBotUserId:
+        type: string
+  LayoutColumn:
+    type: object
+    required:
+    - blocks
+    properties:
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/Block'
+  LabelOverride:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        description: The unique identifier to use to locate the key to override. For entities and enum values, this will be an id. For numbers, this will be the normalized numeric representation. For others, this will be the string
+      label:
+        type: string
+        description: If set, overrides this label
+      color:
+        type: string
+        description: If set, overrides the default color
+      sort:
+        type: integer
+        format: int32
+        description: If set, overrides the sorting order
+  Category:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if built-in)
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label of category
+        example: Performance
+        minItems: 3
+        maxItems: 80
+      fieldIds:
+        type: array
+        description: set of field ids included in this category
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      nativeFields:
+        type: array
+        description: set of native field names included in this category
+        uniqueItems: true
+        items:
+          type: string
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ScopeRequest:
+    type: object
+    required:
+    - scope
+    properties:
+      scope:
+        type: string
+        description: scope being requested
+  Content:
+    type: object
+    required:
+    - id
+    - orgId
+    - title
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      parentContentId:
+        type: string
+        description: parent content id in the hierarchy
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: title of the content page
+        example: Benefits Policies
+      titleTr:
+        description: translations of the title
+        $ref: '#/definitions/Translations'
+      path:
+        type: string
+        description: full path to the content, if not set, defaults to an id/slug generated URL
+        example: employee-info/benefits-policies
+      blocks:
+        type: array
+        description: content blocks
+        items:
+          $ref: '#/definitions/ContentBlock'
+      imagePath:
+        type: string
+        description: path to the image for the page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      emoji:
+        type: string
+        description: emoji, if an emoji is used to represent the page
+        example: 💥
+        minItems: 0
+        maxItems: 64
+      coverImagePath:
+        type: string
+        description: path to the cover image for the content page
+        example: path/to/image.jpg
+        pattern: ^[a-zA-Z0-9._/-]+$
+      sensitive:
+        type: string
+        description: sensitivity level (ORG public, HIGHly sensitive, or PRIVATE)
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: list of users and groups who have the content shared with them
+        items:
+          $ref: '#/definitions/ShareAccess'
+      status:
+        type: string
+        description: current status of the content page
+        enum:
+        - DRAFT
+        - ACTIVE
+        - ARCHIVED
+      sort:
+        type: integer
+        format: int32
+        description: sort index within parent content
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Name:
+    type: object
+    required:
+    - last
+    properties:
+      first:
+        type: string
+        description: first name
+        example: Jane
+        minItems: 0
+        maxItems: 80
+      middle:
+        type: string
+        description: middle name
+        example: Quidditch
+        minItems: 0
+        maxItems: 80
+      last:
+        type: string
+        description: last name
+        example: Public
+        minItems: 0
+        maxItems: 80
+      pref:
+        type: string
+        description: preferred first name
+        example: JQ
+        minItems: 0
+        maxItems: 80
+      prefLast:
+        type: string
+        description: preferred last name
+        example: Smith
+        minItems: 0
+        maxItems: 80
+  FormSignatureConfig:
+    type: object
+    required:
+    - signers
+    properties:
+      signers:
+        type: array
+        items:
+          type: string
+      messageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+      message:
+        type: string
+      dueDate:
+        $ref: '#/definitions/DueDate'
+      isSkippable:
+        type: boolean
+      fieldId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  OauthRefreshResponse:
+    type: object
+    required:
+    - refreshed
+    properties:
+      refreshed:
+        type: boolean
+        description: True when the token was refreshed and the new value is available in S3
+        readOnly: true
+  PartialProfileTab:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable name of profile tab
+        example: Performance
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      blocks:
+        type: array
+        description: ordered list of blocks contained by profile tab
+        items:
+          $ref: '#/definitions/Block'
+      layout:
+        description: block layout configuration
+        $ref: '#/definitions/Layout'
+      status:
+        type: string
+        description: status of the profile tab
+        enum:
+        - ACTIVE
+        - INACTIVE
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      readFilter:
+        type: string
+        description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  PartialReport:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: report label
+        example: Headcount Report
+        minItems: 1
+        maxItems: 255
+      description:
+        type: string
+        description: report description
+        example: This is a report on headcount etd
+        minItems: 0
+        maxItems: 2000
+      filter:
+        type: string
+        description: filter automatically applied to every chart in this report
+        example: department:engineering
+      share:
+        type: string
+        description: sharing settings of report
+        enum:
+        - NORMAL
+        - FULL
+      sensitive:
+        type: string
+        description: sensitivity level of report
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this report
+        items:
+          $ref: '#/definitions/ShareAccess'
+      chartIds:
+        type: array
+        description: list of charts in this report
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  OpeningConfig:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        enum:
+        - NESTED
+        - LINKED_BY_CODE
+        - SINGLE
+      namespace:
+        type: string
+      list:
+        $ref: '#/definitions/ApiOperationCall'
+      create:
+        $ref: '#/definitions/ApiOperationCall'
+      update:
+        $ref: '#/definitions/ApiOperationCall'
+      delete:
+        $ref: '#/definitions/ApiOperationCall'
+  OutboundFieldMapper:
+    type: object
+    required:
+    - charthopExpr
+    properties:
+      key:
+        type: string
+        description: 'stable semantic name for this value: the op-call references it as {{key}}, the diff joins it to the inbound read of the same key, and per-install AppConfig overrides/disables key off it. Defaults to charthopExpr (so it must be set when charthopExpr is a formula).'
+      charthopExpr:
+        type: string
+        description: CQL expression evaluated against the ChartHop entity, producing the value to write
+      writeAs:
+        type: string
+        description: remote write path for a value routed through a generic collector (e.g. "custom_fields.employment_type"); omitted for fields the op-call params name directly. Dotted paths nest into the request body.
+      transform:
+        type: string
+        description: optional named transform applied to the value before it is bound
+      transformArgs:
+        type: object
+        description: optional static configuration passed to the transform (e.g. codelist domain/name)
+        additionalProperties:
+          type: string
+      gate:
+        type: string
+        description: optional CQL boolean; when it resolves to false the mapper is skipped
+      refEntity:
+        type: string
+        description: optional entities-catalog type (e.g. "department", "office", "user") to match the value against -> remote id(s); absent passes the value through. Cardinality follows the body property's type.
+  App:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - title
+    - summary
+    - status
+    - minAccess
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short unique name
+        example: slack-import
+        pattern: ^[a-z0-9-]+$
+        minItems: 3
+        maxItems: 30
+      redirectUris:
+        type: array
+        description: list of acceptable Oauth2 redirect URIs, if Oauth2 is supported for this app
+        items:
+          type: string
+          format: uri
+      oauthClientIds:
+        type: array
+        description: OAuth client identities allowed to connect as this agent over MCP. Each entry is either a full Client ID Metadata Document (CIMD) URL (matched exactly, e.g. Claude Code's fixed URL) or a bare host (matched against the client_id's host, e.g. chatgpt.com, for clients whose CIMD URL varies per server).
+        example: '["https://claude.ai/oauth/claude-code-client-metadata", "chatgpt.com"]'
+        items:
+          type: string
+      mcpInstructions:
+        type: string
+        description: Connection instructions shown on the agent's MCP tab (e.g. how to add this MCP server to a client like Claude Code). The literal token {{mcpUrl}} is replaced with the org-specific MCP server URL when displayed.
+        example: 'Run: claude mcp add --transport http charthop {{mcpUrl}}
+
+          Then run /mcp and sign in.'
+      allowedIps:
+        type: array
+        description: allowlist of IPs or IP ranges that are allowed to make API calls on behalf of this app
+        items:
+          type: string
+      configFields:
+        type: array
+        description: list of configuration fields
+        items:
+          $ref: '#/definitions/AppConfigField'
+      title:
+        type: string
+        description: human-readable name of app
+        example: Slack
+        minItems: 4
+        maxItems: 50
+      summary:
+        type: string
+        description: short summary of app
+        example: The Slack app does X Y and Z
+        minItems: 5
+        maxItems: 140
+      description:
+        type: string
+        description: full description of app, in Markdown
+        example: The Slack app does X Y and Z
+      setupInstructions:
+        type: string
+        description: setup instructions, in Markdown
+        example: To install the Slack, use your API key from X and Y
+      cronOrder:
+        type: integer
+        format: int32
+        description: execution order of the cron (lower numbers execute earlier)
+      cronSchedule:
+        type: string
+        description: cron schedule
+        enum:
+        - DAILY
+        - WEEKLY
+      cronDayOfWeek:
+        type: string
+        description: Day of week if cronSchedule is WEEKLY
+        enum:
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
+        - SUNDAY
+      imagePath:
+        type: string
+        description: path to avatar profile image, should be approximately square dimensions and show logo
+        pattern: ^[a-zA-Z0-9._/-]+$
+      wordmarkImagePath:
+        type: string
+        description: path to larger profile logo image containing brand wordmark, does not need to be square dimensions
+        pattern: ^[a-zA-Z0-9._/-]+$
+      poweredByImagePath:
+        type: string
+        description: path to powered by image, should be approximately square dimensions and show logo
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of app
+        enum:
+        - GLOBAL
+        - ACTIVE
+        - INACTIVE
+        - DEVELOPMENT
+      minAccess:
+        type: string
+        description: minimum access level requested by app
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      roleId:
+        type: string
+        description: roleId requested by app
+        example: 588f7ee98f138b19220041a7
+      eventNotifyUrl:
+        type: string
+        format: uri
+        description: URL that should be notified on events
+      payload:
+        type: object
+        description: custom payload to send in lieu of regular payload
+        additionalProperties:
+          type: string
+      events:
+        type: array
+        description: set of events to notify on
+        uniqueItems: true
+        items:
+          type: string
+      type:
+        type: string
+        description: APP, BUNDLE, or INTERNAL
+        enum:
+        - AGENT
+        - APP
+        - BUNDLE
+        - INTERNAL
+      bundle:
+        description: for apps of type BUNDLE, the contents included in the bundle
+        $ref: '#/definitions/Bundle'
+      agentConfig:
+        description: for apps of type AGENT, the configuration of the agent
+        $ref: '#/definitions/AiAgentConfig'
+      externalApiConfig:
+        description: for apps with external API capabilities, the API configuration
+        $ref: '#/definitions/ExternalApiConfig'
+      webhookConfig:
+        description: for apps that receive inbound webhooks, the webhook configuration
+        $ref: '#/definitions/WebhookConfig'
+      secrets:
+        description: write-only app-level secrets
+        $ref: '#/definitions/AppSecrets'
+      scopes:
+        type: array
+        description: access scopes that the app is requesting
+        items:
+          type: string
+      tags:
+        type: array
+        description: tags/categories the app belongs to
+        items:
+          type: string
+      requiredFeatures:
+        type: array
+        description: The product features that are required in order to install the app or bundle
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Template:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - type
+    - tags
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: template name, must be unique to organization
+      description:
+        type: string
+        description: description of template
+      content:
+        type: string
+        description: template content
+      stylesheet:
+        type: string
+        description: template inline stylesheet
+      fileId:
+        type: string
+        description: file identifier, if the template is based on a PDF file instead of a CQLT template
+        example: 588f7ee98f138b19220041a7
+      placements:
+        type: array
+        description: signature zone placements for a file-based template; only valid when fileId is set
+        items:
+          $ref: '#/definitions/SignaturePlacement'
+      type:
+        type: string
+        description: type of template
+        enum:
+        - DOCUMENT
+        - EMAIL
+      tags:
+        type: array
+        description: tags to organize the purpose of the template
+        items:
+          type: string
+      filename:
+        type: string
+        description: document filename CQL
+      fieldId:
+        type: string
+        description: the field id that will be used to store documents generated by this template
+        example: 588f7ee98f138b19220041a7
+      qesFilter:
+        type: string
+        description: filter expression evaluated on each signer for whether to use qualified electronic signature (if it evalutes to true for any signer, QES will be used). If null, defaults to org `qesFilter` setting
+      isSequential:
+        type: boolean
+        description: whether signers must sign in sequential order; false (the default) means simultaneous signing
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Bundle:
+    type: object
+    properties:
+      categories:
+        type: array
+        description: list of categories included in this bundle
+        items:
+          $ref: '#/definitions/Category'
+      fields:
+        type: array
+        description: list of fields included in this bundle
+        items:
+          $ref: '#/definitions/PartialField'
+      forms:
+        type: array
+        description: list of forms included in this bundle
+        items:
+          $ref: '#/definitions/PartialForm'
+      questions:
+        type: array
+        description: list of questions included in this bundle
+        items:
+          $ref: '#/definitions/Question'
+      profileTabs:
+        type: array
+        description: list of profile tabs included in this bundle
+        items:
+          $ref: '#/definitions/PartialProfileTab'
+      groups:
+        type: array
+        description: list of content groups included in this bundle
+        items:
+          $ref: '#/definitions/PartialGroup'
+      reports:
+        type: array
+        description: list of reports included in this bundle
+        items:
+          $ref: '#/definitions/BundleReport'
+      actions:
+        type: array
+        description: list of actions included in this bundle
+        items:
+          $ref: '#/definitions/PartialAction'
+      templates:
+        type: array
+        description: list of templates included in this bundle
+        items:
+          $ref: '#/definitions/Template'
+      contents:
+        type: array
+        description: list of resource content included in this bundle
+        items:
+          $ref: '#/definitions/Content'
+      taskConfigs:
+        type: array
+        description: list of task configs included in this bundle
+        items:
+          $ref: '#/definitions/PartialTaskConfig'
+      calendars:
+        type: array
+        description: list of calendars included in this bundle
+        items:
+          $ref: '#/definitions/BundleCalendar'
+      timeOffPolicies:
+        type: array
+        description: list of time off policies included in this bundle
+        items:
+          $ref: '#/definitions/TimeOffPolicy'
+  AutoShare:
+    type: object
+    required:
+    - access
+    - shareWith
+    properties:
+      access:
+        type: string
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      shareWith:
+        type: string
+  ExternalApiExecutionResult:
+    type: object
+    required:
+    - success
+    - statusCode
+    properties:
+      success:
+        type: boolean
+      statusCode:
+        type: integer
+        format: int32
+      body:
+        type: object
+      error:
+        type: string
+      requestLog:
+        $ref: '#/definitions/ExternalApiRequestLog'
+      next:
+        type: string
+  ApiBodyProperty:
+    type: object
+    required:
+    - name
+    - description
+    - type
+    - required
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      type:
+        type: string
+      items:
+        type: string
+      required:
+        type: boolean
+      shape:
+        type: string
+      const:
+        type: object
+      default:
+        type: object
+  Block:
+    type: object
+    properties:
+      type:
+        type: string
+        description: the type of this block, or null if legacy
+        enum:
+        - CONTENT
+        - TASK
+        - CALENDAR
+      label:
+        type: string
+        description: human readable label for this block
+      height:
+        type: object
+        description: fixed height in px, or expand if “stretch”, or fit to contents if null
+      targetFilter:
+        type: string
+        description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
+      readFilter:
+        type: string
+        description: filter condition expression applied to this block, relative to the viewer
+      formIds:
+        type: array
+        description: form ids to surface responses in this block
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: fields retrieved in this block
+        items:
+          type: string
+      title:
+        type: string
+        description: title to show in block header
+      content:
+        type: string
+        description: template content returned in this block
+      contentTr:
+        description: template content returned in this block, translated
+        $ref: '#/definitions/Translations'
+      primaryButton:
+        description: primary CTA button
+        $ref: '#/definitions/LayoutButton'
+      secondaryButton:
+        description: secondary CTA button
+        $ref: '#/definitions/LayoutButton'
+  TextRef:
+    type: object
+    properties:
+      textId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      text:
+        type: string
+  FormAiConfig:
+    type: object
+    required:
+    - enableRead
+    - enableWrite
+    properties:
+      enableRead:
+        type: boolean
+      enableWrite:
+        type: boolean
+      agentUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      instructions:
+        type: string
+      label:
+        type: string
+      agentSubmit:
+        type: string
+        description: 'whether AI agents are allowed to submit this form: null/absent (never), CHAT (only when in an interactive chat with a human), AUTO (also when running autonomously). Defaults to never.'
+        enum:
+        - CHAT
+        - AUTO
+  WebRegisteredCredential:
+    type: object
+    required:
+    - credentialId
+    - publicKeyBase64
+    - userHandleBase64
+    - signatureCount
+    - createdAt
+    properties:
+      credentialId:
+        type: string
+        description: Credential id
+      publicKeyBase64:
+        type: string
+        description: The public key we're saving
+      userHandleBase64:
+        type: string
+        description: The user handle - a random 64 bits of data
+      signatureCount:
+        type: integer
+        format: int64
+        description: This is used to protect against duplicated key attacks
+      createdAt:
+        type: string
+        description: When was this created
+  TranscriptAppConfig:
+    type: object
+    required:
+    - listRecordings
+    - source
+    properties:
+      listRecordings:
+        $ref: '#/definitions/ApiOperationCall'
+      source:
+        type: string
+      defaultSensitive:
+        type: string
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      webhookRecordingIdPath:
+        type: string
+  UserEmailSetting:
+    type: object
+    required:
+    - category
+    - subscribed
+    properties:
+      category:
+        type: string
+        description: Category of emails
+        example: ADMINISTRATIVE
+        enum:
+        - ADMINISTRATIVE
+        - BILLING
+        - DATA_IMPORT_AND_SYNC_STATUS
+        - TRIAL_REMINDERS
+        - APPROVAL_NOTIFICATIONS
+      subscribed:
+        type: boolean
+        description: Is user subscribed to the category of emails
+  CreateUser:
+    type: object
+    required:
+    - orgs
+    properties:
+      appId:
+        type: string
+        description: if the user is an app user, the id of the app
+        example: 588f7ee98f138b19220041a7
+      name:
+        description: full name of user
+        $ref: '#/definitions/Name'
+      email:
+        type: string
+        description: email address of user
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      orgs:
+        type: array
+        description: list of member orgs with permission levels
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/OrgAccess'
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of user
+        enum:
+        - SUPERUSER
+        - NORMAL
+        - INACTIVE
+        - UNINSTALLED
+      type:
+        type: string
+        description: type of user
+        enum:
+        - USER
+        - APP
+      options:
+        type: object
+        description: for apps, options (specific options are specific to the particular app); for users, user-set preferences
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+      secrets:
+        type: object
+        description: write-only secrets; the content of these secrets are not retrievable via the external-facing API
+      emailSettings:
+        type: array
+        description: Email settings for the user
+        items:
+          $ref: '#/definitions/UserEmailSetting'
+      sensitive:
+        type: string
+        description: sensitivity level of the user's configuration; only applicable to APP users
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users and groups who have access to configure this user; only applicable to APP users
+        items:
+          $ref: '#/definitions/ShareAccess'
+      agentConfig:
+        description: per-user agent configuration overrides
+        $ref: '#/definitions/AiAgentConfig'
+  DisableSyncResponse:
+    type: object
+    required:
+    - disabled
+    properties:
+      disabled:
+        type: boolean
+        description: True when this call disabled a previously-enabled sync; false if it was already off
+        readOnly: true
+  PullAppConfig:
+    type: object
+    properties:
+      entities:
+        type: array
+        items:
+          type: string
+  BundleInstallValidate:
+    type: object
+    required:
+    - ok
+    properties:
+      ok:
+        type: boolean
+      duplicateEntities:
+        type: array
+        items:
+          $ref: '#/definitions/BundleInstallEntity'
+      errors:
+        type: array
+        items:
+          type: string
+  PolicyRule:
+    type: object
+    properties:
+      allow:
+        type: array
+        description: allow rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      deny:
+        type: array
+        description: deny rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      categories:
+        type: array
+        description: categories the rule is limited to
+        example: '[''Compensation'', ''Stock Grants'']'
+        items:
+          type: string
+      fields:
+        type: array
+        description: fields the rule is limited to
+        example: '[''base'']'
+        items:
+          type: string
+      departmentIds:
+        type: array
+        description: departments the rule is limited to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: custom filter the rule is limited to
+        example: department:engineering and under:me
+      directions:
+        type: array
+        description: directions that the rule applies to -- either self or under
+        items:
+          type: string
+      types:
+        type: array
+        description: types that the rule applies to
+        items:
+          type: string
+      targets:
+        type: array
+        description: targets allowed for messaging (email addresses, chat channels, user ids)
+        items:
+          $ref: '#/definitions/PolicyRuleTarget'
+      visibleSensitive:
+        type: array
+        description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+      fieldsSensitive:
+        type: array
+        description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+  LayoutRow:
+    type: object
+    required:
+    - columns
+    - format
+    properties:
+      columns:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutColumn'
+      format:
+        type: string
+  OauthRefreshRequest:
+    type: object
+    properties:
+      oauthUserId:
+        type: string
+        description: Per-user OAuth connection id; omit to refresh the shared org connection
+      rejectedAccessToken:
+        type: string
+        description: The access token the provider just rejected; dedups concurrent refreshes
+  SuccessPredicate:
+    type: object
+    required:
+    - path
+    - condition
+    properties:
+      path:
+        type: string
+      condition:
+        type: string
+        enum:
+        - ABSENT
+        - PRESENT
+        - EQUALS
+      expected:
+        type: object
+  AppSecrets:
+    type: object
+    properties:
+      slackClientSecret:
+        type: string
+      slackSigningSecret:
+        type: string
+      oauthClientSecret:
+        type: string
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  ResultsUser:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  DisableSyncRequest:
+    type: object
+    properties:
+      reason:
+        type: string
+        description: Human-readable reason sync was disabled; shown to admins and recorded on the installation
+  FieldOptions:
+    type: object
+    properties:
+      min:
+        type: string
+        description: minimum value, for numeric and date fields
+      max:
+        type: string
+        description: maximum value, for numeric and date fields
+      minItems:
+        type: integer
+        format: int32
+      maxItems:
+        type: integer
+        format: int32
+      stackRank:
+        type: boolean
+      step:
+        type: number
+      enableEditDialog:
+        type: boolean
+      requiredJobField:
+        type: boolean
+      excludeTargetPersonId:
+        type: boolean
+      maxLength:
+        type: integer
+        format: int32
+      readOnly:
+        type: boolean
+      includeFormer:
+        type: boolean
+      effectiveDated:
+        type: boolean
+      unique:
+        type: boolean
+      required:
+        type: boolean
+  ReportSeriesQuery:
+    type: object
+    required:
+    - label
+    - color
+    - y
+    properties:
+      label:
+        type: string
+        description: label to use
+      color:
+        type: string
+        description: color to use
+      y:
+        type: string
+        description: y-value to calculate
+        example: sum{headcount, gender:f} / sum{headcount}
+      groupByConfigs:
+        type: array
+        description: Configuration for aggregations performed by the groupBy operator
+        items:
+          $ref: '#/definitions/GroupByConfig'
+  PartialGroup:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: unique name of group
+        example: Engineering
+        minItems: 1
+        maxItems: 80
+      description:
+        description: description of the group
+        $ref: '#/definitions/TextRef'
+      slug:
+        type: string
+        description: unique slug of group
+        example: engineering
+      code:
+        type: string
+        description: code of group
+        example: research
+      type:
+        description: group type of group
+        $ref: '#/definitions/GroupTypeRef'
+      parent:
+        description: parent group of group
+        $ref: '#/definitions/GroupRef'
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      image:
+        type: string
+        description: path to group image
+        pattern: ^[a-zA-Z0-9._/-]*$
+      color:
+        type: string
+        description: color of group
+        pattern: ^#[a-f0-9]{6}$
+      aliases:
+        type: array
+        description: aliases for group
+        items:
+          type: string
+      address:
+        description: address of the group, for LOCATION type only
+        $ref: '#/definitions/Address'
+      level:
+        type: integer
+        format: int32
+        description: level of the group, for BAND type only
+      func:
+        description: Job function category of the group, for DEPARTMENT type only
+        $ref: '#/definitions/EnumValue'
+      locationType:
+        description: Type of the location, for LOCATION type only
+        $ref: '#/definitions/EnumValue'
+      minBase:
+        description: compensation range minimums
+        $ref: '#/definitions/Money'
+      maxBase:
+        description: compensation range maximums
+        $ref: '#/definitions/Money'
+      assignments:
+        description: group position assignments
+        $ref: '#/definitions/GroupPositionAssignments'
+      expr:
+        type: string
+        description: CQL filter expression that determines group membership; only meaningful when the GroupType assignmentType is EXPR
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      createDate:
+        type: string
+        format: date
+        description: when this entity starts existing in org history
+      deleteDate:
+        type: string
+        format: date
+        description: when this entity stops existing in org history
+  AiAgentConfig:
+    type: object
+    properties:
+      personality:
+        type: string
+      instructions:
+        type: string
+      guardrails:
+        type: string
+      enableMemory:
+        type: boolean
+      enableMcpServer:
+        type: boolean
+        description: whether this agent exposes an MCP server endpoint for per-user OAuth access
+      enableMcpWrite:
+        type: boolean
+        description: 'whether this agent''s MCP server may invoke write/mutating tools (e.g. a non-read-only AskAgent delegation). Read-only by default: when unset or false, a tool that mutates on the call is rejected at the MCP edge regardless of the agent''s role/policy. This is defense in depth layered on top of the role, never a grant beyond it.'
+      isExternal:
+        type: boolean
+        description: 'whether this agent is an external (non-ChartHop) client, e.g. Claude Code or ChatGPT. External agents have no ChartHop-side prompt/behavior config: only permissions, MCP, and activity are configurable.'
+      approvedPolicyRules:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyRule'
+      approvalGuidelines:
+        type: string
+      managerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      messagingConfig:
+        $ref: '#/definitions/MessagingConfig'
+      contentIds:
+        type: array
+        description: pinned content document IDs; when merging user and app configs, both lists are unioned (not replaced); validate with validateContentIds before persisting
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      modelTier:
+        type: string
+        description: requested model tier for the agent; defaults to MEDIUM when not set
+        enum:
+        - HIGH
+        - MEDIUM
+        - LOW
+      targetedInstructions:
+        type: array
+        description: audience-scoped instruction snippets injected into the chat prompt when the filter matches the current viewer's person record; size and filter syntax are checked by AgentValidationService before persisting
+        items:
+          $ref: '#/definitions/TargetedInstruction'
+  PartialReportChart:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      reportId:
+        type: string
+        description: parent report id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: chart label
+        example: Headcount Report
+        minItems: 1
+        maxItems: 255
+      type:
+        type: string
+        description: chart type
+        enum:
+        - LINE
+        - AREA
+        - STACKED
+        - BAR
+        - VERTICAL_BAR
+        - HORIZONTAL_BAR
+        - PIE
+        - TABLE
+        - TABLE_CROSSTAB
+        - SINGLE_METRIC
+        - BUBBLE
+        - HEADER
+        - TEXT
+        - GAUGE
+        - WATERFALL
+        - WATERFALL_TIMESERIES
+        - HEATMAP
+        - GEO
+        - GEO_HEATMAP
+        - GEO_SCATTER
+        - RADAR
+        - N_GRID
+        - NETWORK
+        - COMBO
+        - COMBO_TIMESERIES
+        - DONUT
+        - FUNNEL
+        - FUNNEL_TIMESERIES
+        - SANKEY
+        - SANKEY_TIMESERIES
+        - WORDCLOUD
+        - EMOJI_CLOUD
+        - CALENDAR_HEATMAP
+        - GANTT
+      filter:
+        type: string
+        description: filter that applies to this chart
+        example: department='Engineering'
+      filterOverride:
+        type: boolean
+        description: whether the chart filter overrides the global filter
+      query:
+        description: query for all series in the chart
+        $ref: '#/definitions/ReportQuery'
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      isAdvancedQueryMode:
+        type: boolean
+        description: whether the chart configuration is using advanced mode
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ExternalApiRequestLog:
+    type: object
+    required:
+    - url
+    - method
+    - reqHeaders
+    - resHeaders
+    - code
+    properties:
+      url:
+        type: string
+      method:
+        type: string
+      reqHeaders:
+        type: array
+        items:
+          type: string
+      reqBody:
+        type: string
+      resHeaders:
+        type: array
+        items:
+          type: string
+      resBody:
+        type: string
+      code:
+        type: integer
+        format: int32
+  AppConfigField:
+    type: object
+    required:
+    - name
+    - label
+    - type
+    properties:
+      name:
+        type: string
+      label:
+        type: string
+      type:
+        type: string
+        enum:
+        - STRING
+        - SUBDOMAIN
+        - URL
+        - SECRET
+        - XML
+        - OAUTH
+        - INSTRUCTION
+        - BOOLEAN
+      details:
+        type: string
+      subdomain:
+        type: string
+      optional:
+        type: boolean
+      configSection:
+        type: string
+      oauthUrl:
+        type: string
+        format: uri
+      requiredFields:
+        type: array
+        items:
+          type: string
+  TableRef:
+    type: object
+    properties:
+      tableId:
+        type: string
+        description: the table id this field references
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+        description: the table name this field references
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  HmacConfig:
+    type: object
+    properties:
+      algorithm:
+        type: string
+        description: HMAC hash algorithm. Default=SHA256
+        enum:
+        - SHA1
+        - SHA256
+        - SHA512
+      timestampFormat:
+        type: string
+        description: format of the timestamp header value. Null means the signing input is just the request body (no timestamp included).
+        enum:
+        - EPOCH_SECONDS
+        - ISO_8601
+      payloadSeparator:
+        type: string
+        description: string inserted between the timestamp and the body when timestampFormat is set (e.g. "." for stripe-style, ":" for slack-style). Default=""
+      signatureEncoding:
+        type: string
+        description: encoding of the HMAC output. Default=HEX
+        enum:
+        - HEX
+        - BASE64
+  RevokeMcpConnectionsRequest:
+    type: object
+    properties:
+      tokenIds:
+        type: array
+        items:
+          type: string
+  ForEach:
+    type: object
+    properties:
+      optionKey:
+        type: string
+      parsePattern:
+        type: string
+  Layout:
+    type: object
+    required:
+    - rows
+    properties:
+      rows:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutRow'
+  Geopoint:
+    type: object
+    required:
+    - type
+    - coordinates
+    properties:
+      type:
+        type: string
+        description: Type of point
+        readOnly: true
+      coordinates:
+        type: array
+        description: The longitude and latitude of the point
+        readOnly: true
+        items:
+          type: number
+          format: double
+  LayoutButton:
+    type: object
+    required:
+    - url
+    - label
+    properties:
+      url:
+        type: string
+      label:
+        type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ApiParameter:
+    type: object
+    required:
+    - name
+    - location
+    - description
+    - required
+    - schema
+    properties:
+      name:
+        type: string
+      location:
+        type: string
+      description:
+        type: string
+      required:
+        type: boolean
+      schema:
+        type: object
+        additionalProperties:
+          type: object
+      dateFormat:
+        type: string
+        enum:
+        - ISO_INSTANT
+        - ISO_DATE
+        - EPOCH_SECONDS
+        - EPOCH_MILLIS
+      const:
+        type: object
+      default:
+        type: object
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  Question:
+    type: object
+    required:
+    - id
+    - question
+    - type
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      question:
+        type: string
+        description: text of the question
+        example: What is your favorite color?
+      questionTr:
+        description: translations for the question text
+        $ref: '#/definitions/Translations'
+      fieldId:
+        type: string
+        description: if the question is linked to a field, the id of that field. Any question responses will be automatically saved to the field
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: datatype of the question
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the question datatype (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for numeric values
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ApiRequestBody:
+    type: object
+    required:
+    - required
+    - properties
+    properties:
+      required:
+        type: boolean
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/ApiBodyProperty'
+  ReportQuery:
+    type: object
+    required:
+    - options
+    properties:
+      series:
+        type: array
+        description: series to evaluate
+        items:
+          $ref: '#/definitions/ReportSeriesQuery'
+      filters:
+        type: array
+        description: filters to crosstab all results by (deprecated in reports V2, should use groupBy instead)
+        items:
+          $ref: '#/definitions/ReportFilter'
+      content:
+        type: string
+        description: content block to evaluate as a Carrot Template, as an alternative to using series
+      startDate:
+        type: string
+        description: start date, in either relative (-7d) or exact (YYYY-MM-DD) format
+      endDate:
+        type: string
+        description: end date, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+      interval:
+        type: string
+        description: interval, if the query is a timeseries; if no interval, query is crosstabbed
+        enum:
+        - DAY
+        - WEEK
+        - MONTH
+        - QUARTER
+        - FISCAL_QUARTER
+        - YEAR
+        - FISCAL_YEAR
+      intervalDates:
+        type: array
+        description: interval dates, if a specific set of irregular dates are being queried in a timeseries
+        items:
+          type: string
+          format: date
+      options:
+        type: object
+        description: options, including format, filter, scenarioId, projectHires, and numerous display options
+  ApiOperation:
+    type: object
+    required:
+    - operation
+    - summary
+    - method
+    - path
+    - responseType
+    properties:
+      operation:
+        type: string
+      summary:
+        type: string
+      method:
+        type: string
+      path:
+        type: string
+      parameters:
+        type: array
+        items:
+          $ref: '#/definitions/ApiParameter'
+      requestBody:
+        $ref: '#/definitions/ApiRequestBody'
+      pagination:
+        $ref: '#/definitions/PaginationConfig'
+      responseType:
+        type: string
+      responseExtract:
+        type: string
+      readOnly:
+        type: boolean
+      successPredicate:
+        $ref: '#/definitions/SuccessPredicate'
+      graphqlQuery:
+        type: string
+  PartialTaskConfig:
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique id of task config
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: parent assessment id that this task config belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this task config belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: the primary entity being referenced by the task config
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: System generated identifying name so that actions can be triggered as a result of task completion
+      type:
+        type: string
+        description: type of task generated by the task config
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      dueDate:
+        description: date object for tasks, can be relative or exact
+        $ref: '#/definitions/DueDate'
+      pastDueAction:
+        type: string
+        description: sets pastDueAction on the task when it's generated
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: sets isSkippable on the task
+      label:
+        type: string
+        description: human-readable label that should be used for all tasks associated with the config as the task name
+      description:
+        type: string
+        description: description for all tasks associated with the config that should be used in notifications
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  GroupByConfig:
+    type: object
+    properties:
+      overrides:
+        type: array
+        description: Overrides by label of label, color, or sort order
+        items:
+          $ref: '#/definitions/LabelOverride'
+      limit:
+        type: integer
+        format: int32
+        description: Maximum number of results to display
+      includeOther:
+        type: boolean
+        description: When combined with limit, whether to include an 'Other' group
+      includeNone:
+        type: boolean
+        description: Whether to include a 'None' group (null values aggregated)
+      includeAllValues:
+        type: boolean
+        description: When combined with fieldId or questionId, will include all values from that fieldId or questionId, even if none of them were used
+      fieldId:
+        type: string
+        description: The field to use to retrieve values, when includeAllValues is in use
+        example: 588f7ee98f138b19220041a7
+      questionId:
+        type: string
+        description: The question to use to retrieve values, when includeAllValues is in use
+        example: 588f7ee98f138b19220041a7
+      sortBy:
+        type: string
+        description: Whether to sort the results -- by default, will sort by label if there is no limit, will sort by value descending if there is a limit
+        enum:
+        - LABEL
+        - KEY
+        - VALUE
+        - COUNT
+      sortDirection:
+        type: string
+        description: The direction to sort the results
+        enum:
+        - ASC
+        - DESC
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  FormEditAccess:
+    type: object
+    properties:
+      allow:
+        type: string
+        enum:
+        - ALWAYS
+        - WHILE_PROPOSED
+        - UNTIL_ACTIVE
+        - WHILE_ASSESSMENT_ACTIVE
+        - TIME_LIMIT
+      timeLimitSecs:
+        type: integer
+        format: int64
+  OrgAccess:
+    type: object
+    required:
+    - orgId
+    - access
+    properties:
+      orgId:
+        type: string
+        description: org id
+        example: 5887a7718f138b6a2a0041a7
+      personId:
+        type: string
+        description: person id, if this user directly corresponds with a person
+        example: 5887a7718f138b6a2a0041a7
+      access:
+        type: string
+        description: legacy access permission level
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      groupIds:
+        type: array
+        description: group ids that the above access applies to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      expr:
+        type: string
+        description: expression that the above access applies to
+      expireAt:
+        type: string
+        description: timestamp that this org access will expire
+      roleId:
+        type: string
+        description: the role id that defines the users access
+        example: 5887a7718f138b6a2a0041a7
+      status:
+        type: string
+        description: Onboarding status of the user in this org
+        enum:
+        - INACTIVE
+        - PREBOARDING
+        - ACTIVATION
+        - ACTIVE
+        - OFFBOARDED
+      homeEmail:
+        type: string
+        description: Personal email address of user, while they are preboarding
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      workEmail:
+        type: string
+        description: Work email address of user, once they have started
+        example: robert.doe@example.com
+        minItems: 0
+        maxItems: 120
+      workRoleId:
+        type: string
+        description: Active role ID that defines the user's access once they have started
+        example: 67c851da3dd1668c2fdd7e44
+  Address:
+    type: object
+    required:
+    - country
+    properties:
+      street1:
+        type: string
+        description: street address, line 1
+        example: 123 Anywhere Street
+        minItems: 0
+        maxItems: 200
+      street2:
+        type: string
+        description: street address, line 2
+        example: Apt 6L
+        minItems: 0
+        maxItems: 200
+      street3:
+        type: string
+        description: street address, line 3
+        example: Sixth Floor
+        minItems: 0
+        maxItems: 200
+      city:
+        type: string
+        description: city
+        example: New York
+        minItems: 0
+        maxItems: 80
+      state:
+        type: string
+        description: state
+        example: NY
+        minItems: 0
+        maxItems: 80
+      country:
+        type: string
+        description: country (two-digit ISO code)
+        example: NY
+        pattern: ^[A-Z]{2}$
+      postal:
+        type: string
+        description: postal code
+        example: '10001'
+        minItems: 0
+        maxItems: 10
+      geo:
+        description: geopoint location
+        $ref: '#/definitions/Geopoint'
+      approxGeo:
+        description: approximate geopoint location (suitable for a map placement, but not exact location)
+        $ref: '#/definitions/Geopoint'
+  ApiEntity:
+    type: object
+    required:
+    - list
+    - idField
+    properties:
+      list:
+        $ref: '#/definitions/ApiOperationCall'
+      listUpdatedSince:
+        $ref: '#/definitions/ApiOperationCall'
+      updatedAtField:
+        type: string
+      get:
+        $ref: '#/definitions/ApiOperationCall'
+      idField:
+        type: string
+      nameField:
+        type: string
+      refs:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/EntityRef'
+  TargetedInstruction:
+    type: object
+    required:
+    - filter
+    - instructions
+    properties:
+      filter:
+        type: string
+        description: filter expression matched against the current viewer's person record
+      instructions:
+        type: string
+        description: instructions injected into the chat prompt when filter matches
+  PolicyRuleTarget:
+    type: object
+    properties:
+      userId:
+        type: string
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      channel:
+        type: string
+      email:
+        type: string
+  GroupTypeRef:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+  ExternalApiAuthConfig:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        enum:
+        - QUERY_PARAM
+        - HEADER_BEARER
+        - HEADER_BASIC
+        - HEADER_API_KEY
+        - AWS_SIGV4
+        - OAUTH
+      queryParams:
+        type: object
+        additionalProperties:
+          type: string
+      headerName:
+        type: string
+      tokenTemplate:
+        type: string
+      awsRegion:
+        type: string
+      awsService:
+        type: string
+      awsAccessKeyIdTemplate:
+        type: string
+      awsSecretAccessKeyTemplate:
+        type: string
+      awsSessionTokenTemplate:
+        type: string
+      enableUserConnection:
+        type: boolean
+      enableOrgConnection:
+        type: boolean
+      oauthAuthorizeUrl:
+        type: string
+      oauthTokenUrl:
+        type: string
+      oauthClientId:
+        type: string
+      oauthClientAuthMethod:
+        type: string
+        enum:
+        - BASIC
+        - POST
+  ContentBlock:
+    type: object
+    required:
+    - content
+    properties:
+      content:
+        type: string
+      contentTr:
+        $ref: '#/definitions/Translations'
+  BundleInstallEntity:
+    type: object
+    required:
+    - entityType
+    - entityId
+    - originalId
+    properties:
+      entityType:
+        type: string
+        enum:
+        - ACTION
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - FIELD
+        - FORM
+        - GROUP
+        - PROFILE_TAB
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - TASK_CONFIG
+        - TEMPLATE
+        - TIME_OFF_POLICY
+        - CONTENT
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      originalId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  AtsAppConfig:
+    type: object
+    required:
+    - reqField
+    - createJob
+    - updateJob
+    properties:
+      reqField:
+        type: string
+      jobEntity:
+        type: string
+      userEntity:
+        type: string
+      departmentEntity:
+        type: string
+      locationEntity:
+        type: string
+      teamEntity:
+        type: string
+      listJobsUpdatedSince:
+        $ref: '#/definitions/ApiOperationCall'
+      listJobsByCode:
+        $ref: '#/definitions/ApiOperationCall'
+      createJob:
+        $ref: '#/definitions/ApiOperationCall'
+      updateJob:
+        $ref: '#/definitions/ApiOperationCall'
+      deleteJob:
+        $ref: '#/definitions/ApiOperationCall'
+      hiringManager:
+        $ref: '#/definitions/HiringTeamAssignment'
+      recruiter:
+        $ref: '#/definitions/HiringTeamAssignment'
+      openingConfig:
+        $ref: '#/definitions/OpeningConfig'
+  JwtConfig:
+    type: object
+    properties:
+      algorithm:
+        type: string
+        description: JWT signing algorithm. Default=RS256
+        enum:
+        - HS256
+        - HS384
+        - HS512
+        - RS256
+        - RS384
+        - RS512
+      bodyHashClaim:
+        type: string
+        description: name of the JWT claim carrying the hex SHA-256 digest of the request body. Default=body_sha256.
+      expectedIssuer:
+        type: string
+        description: if set, the JWT `iss` claim must be present and equal to this value
+      expectedAudience:
+        type: string
+        description: if set, the JWT `aud` claim must be present and contain this value
+  FieldMapper:
+    type: object
+    required:
+    - charthopFields
+    - remoteFields
+    - type
+    properties:
+      id:
+        type: string
+        description: unique id
+        example: 588f7ee98f138b19220041a7
+      key:
+        type: string
+        description: stable semantic key used by per-install AppConfig overrides/disables. Defaults to the single charthop field; an explicit key is required for multi-output mappers.
+      readOnly:
+        type: boolean
+        description: when true, this mapper only DEFINES how to read the value from the source system (for the outbound diff to compare against); it is not synced into ChartHop, so its charthopFields key is just a correlation handle and need not be a real ChartHop field.
+      charthopFields:
+        type: array
+        description: list of ChartHop fields
+        items:
+          type: string
+      remoteFields:
+        type: array
+        description: list of remote fields
+        items:
+          type: string
+      type:
+        type: string
+        description: type of field mapper to apply for mapping remote fields to ChartHop fields
+      defaultCharthopValue:
+        type: string
+        description: default charthop value
+      defaultRemoteValue:
+        type: string
+        description: default remote value
+      defaultAmount:
+        type: number
+        description: default amount
+      defaultCurrency:
+        type: string
+        description: default currency
+      transformFunction:
+        type: string
+        description: transform function
+      charthopToRemoteTransformFunction:
+        type: string
+        description: charthop to remote transform function
+      map:
+        type: object
+        description: map
+        additionalProperties:
+          type: string
+      charthopToRemoteMap:
+        type: object
+        description: charthop to remote map
+        additionalProperties:
+          type: string
+      idField:
+        type: string
+        description: id field
+      nameField:
+        type: string
+        description: name field
+      remoteToCharthopMultiplier:
+        type: number
+        description: remote to Charthop Multiplier
+      separator:
+        type: string
+        description: separator for join field mapper
+  FormBlock:
+    type: object
+    required:
+    - type
+    properties:
+      id:
+        type: string
+        description: unique id for the block
+        example: 588f7ee98f138b19220041a7
+      fieldName:
+        type: string
+        description: field code name
+      type:
+        type: string
+        description: Type of Form Block
+        enum:
+        - QUESTION
+        - CONTENT
+      content:
+        type: string
+        description: Content of Content Block
+      contentTr:
+        description: Translations for content block
+        $ref: '#/definitions/Translations'
+      required:
+        type: boolean
+        description: whether field is required or not
+      questionId:
+        type: string
+        description: question id, for questions
+        example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: Filter to apply on visibility of this block
+  NotifyRequest:
+    type: object
+    required:
+    - emailSubject
+    properties:
+      emailSubject:
+        type: string
+        description: email subject line
+      emailContentHtml:
+        type: string
+        description: email HTML content
+      emailMarkdown:
+        type: string
+        description: email Markdown content
+      chatMarkdown:
+        type: string
+        description: chat Markdown content, if chat message should be different/abbreviated
+      notifyType:
+        type: string
+        description: Type of notification
+  UpdateUser:
+    type: object
+    properties:
+      appId:
+        type: string
+        description: if the user is an app user, the id of the app
+        example: 588f7ee98f138b19220041a7
+      name:
+        description: full name of user
+        $ref: '#/definitions/Name'
+      email:
+        type: string
+        description: email address of user
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      orgs:
+        type: array
+        description: list of member orgs with permission levels
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/OrgAccess'
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of user
+        enum:
+        - SUPERUSER
+        - NORMAL
+        - INACTIVE
+        - UNINSTALLED
+      options:
+        type: object
+        description: for apps, options (specific options are specific to the particular app); for users, user-set preferences
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+      secrets:
+        type: object
+        description: write-only secrets; the content of these secrets are not retrievable via the external-facing API
+      emailSettings:
+        type: array
+        description: Email settings for the user
+        items:
+          $ref: '#/definitions/UserEmailSetting'
+      sensitive:
+        type: string
+        description: sensitivity level of the user's configuration; only applicable to APP users
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users and groups who have access to configure this user; only applicable to APP users
+        items:
+          $ref: '#/definitions/ShareAccess'
+      agentConfig:
+        description: per-user agent configuration overrides
+        $ref: '#/definitions/AiAgentConfig'
+  DueDate:
+    type: object
+    required:
+    - type
+    - dueDay
+    - dueTime
+    properties:
+      type:
+        type: string
+        enum:
+        - EXACT
+        - RELATIVE
+      dueDay:
+        type: string
+        description: due day, in either relative (-7d) or exact (YYYY-MM-DD) format
+      dueTime:
+        type: string
+        description: due time, which is a LocalTime
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  ApiOperationCall:
+    type: object
+    required:
+    - operation
+    properties:
+      operation:
+        type: string
+      params:
+        type: object
+        additionalProperties:
+          type: string
+      forEach:
+        $ref: '#/definitions/ForEach'
+  SignaturePlacement:
+    type: object
+    required:
+    - type
+    - x
+    - y
+    - pageNumber
+    properties:
+      type:
+        type: string
+        description: the kind of placement
+        enum:
+        - SIGNATURE
+        - NAME
+        - TITLE
+        - DATE
+        - EXPR
+      x:
+        type: number
+        format: float
+        description: horizontal position as a fraction (0..1) of page width, from the left edge
+      y:
+        type: number
+        format: float
+        description: vertical position as a fraction (0..1) of page height, from the top edge
+      pageNumber:
+        type: integer
+        format: int32
+        description: 1-based page number the placement is anchored to
+      width:
+        type: number
+        format: float
+        description: optional width as a fraction (0..1) of page width, reserved for future use
+      height:
+        type: number
+        format: float
+        description: optional height as a fraction (0..1) of page height, reserved for future use
+      expr:
+        type: string
+        description: carrot expression evaluated against the document's person; required for EXPR placements
+      signerNumber:
+        type: integer
+        format: int32
+        description: 1-based signer this placement binds to; when null, the placement is assigned to a signer by position
+  AccessTokenResponse:
+    type: object
+    required:
+    - access_token
+    - expires_in
+    properties:
+      access_token:
+        type: string
+        description: access token value
+        readOnly: true
+        example: 2YotnFZFEjr1zCsicMWsdv
+      token_type:
+        type: string
+        description: access token type
+        readOnly: true
+        example: bearer
+      expires_in:
+        type: integer
+        format: int32
+        description: expiration time of token, in seconds
+        readOnly: true
+        example: '86400'
+      refresh_token:
+        type: string
+        description: refresh token value
+        readOnly: true
+        example: tGzv3JOkF0XG5Qx2TlKWIA
+      scope:
+        type: string
+        description: scope of the access token
+        readOnly: true
+        example: admin
+      redirect_uri:
+        type: string
+        description: redirect uri of the access token
+        readOnly: true
+        example: com.charthop.mobile://oauth
+  CreateApp:
+    type: object
+    required:
+    - orgId
+    - name
+    - title
+    - summary
+    - cronOrder
+    - minAccess
+    - type
+    properties:
+      orgId:
+        type: string
+        description: organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short unique name
+        example: slack-import
+        pattern: ^[a-z0-9-]+$
+        minItems: 3
+        maxItems: 30
+      redirectUris:
+        type: array
+        description: list of acceptable Oauth2 redirect URIs, if Oauth2 is supported for this app
+        items:
+          type: string
+          format: uri
+      oauthClientIds:
+        type: array
+        description: OAuth client identities allowed to connect as this agent over MCP. Each entry is either a full Client ID Metadata Document (CIMD) URL (matched exactly, e.g. Claude Code's fixed URL) or a bare host (matched against the client_id's host, e.g. chatgpt.com, for clients whose CIMD URL varies per server).
+        example: '["https://claude.ai/oauth/claude-code-client-metadata", "chatgpt.com"]'
+        items:
+          type: string
+      mcpInstructions:
+        type: string
+        description: Connection instructions shown on the agent's MCP tab (e.g. how to add this MCP server to a client like Claude Code). The literal token {{mcpUrl}} is replaced with the org-specific MCP server URL when displayed.
+        example: 'Run: claude mcp add --transport http charthop {{mcpUrl}}
+
+          Then run /mcp and sign in.'
+      allowedIps:
+        type: array
+        description: allowlist of IPs or IP ranges that are allowed to make API calls on behalf of this app
+        items:
+          type: string
+      configFields:
+        type: array
+        description: list of configuration fields
+        items:
+          $ref: '#/definitions/AppConfigField'
+      title:
+        type: string
+        description: human-readable name of app
+        example: Slack
+        minItems: 4
+        maxItems: 50
+      summary:
+        type: string
+        description: short summary of app
+        example: The Slack app does X Y and Z
+        minItems: 5
+        maxItems: 140
+      description:
+        type: string
+        description: full description of app, in Markdown
+        example: The Slack app does X Y and Z
+      setupInstructions:
+        type: string
+        description: setup instructions, in Markdown
+        example: To install the Slack, use your API key from X and Y
+      cronOrder:
+        type: integer
+        format: int32
+        description: execution order of the cron (lower numbers execute earlier)
+      cronSchedule:
+        type: string
+        description: cron schedule
+        enum:
+        - DAILY
+        - WEEKLY
+      cronDayOfWeek:
+        type: string
+        description: Day of week if cronSchedule is WEEKLY
+        enum:
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
+        - SUNDAY
+      imagePath:
+        type: string
+        description: path to avatar profile image, should be approximately square dimensions and show logo
+        pattern: ^[a-zA-Z0-9._/-]+$
+      wordmarkImagePath:
+        type: string
+        description: path to larger profile logo image containing brand wordmark, does not need to be square dimensions
+        pattern: ^[a-zA-Z0-9._/-]+$
+      poweredByImagePath:
+        type: string
+        description: path to powered by image, should be approximately square dimensions and show logo
+        pattern: ^[a-zA-Z0-9._/-]+$
+      status:
+        type: string
+        description: current status of app
+        enum:
+        - GLOBAL
+        - ACTIVE
+        - INACTIVE
+        - DEVELOPMENT
+      minAccess:
+        type: string
+        description: minimum access level requested by app
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      roleId:
+        type: string
+        description: roleId requested by app
+        example: 588f7ee98f138b19220041a7
+      eventNotifyUrl:
+        type: string
+        format: uri
+        description: URL that should be notified on events
+      payload:
+        type: object
+        description: custom payload to send in lieu of regular payload
+        additionalProperties:
+          type: string
+      events:
+        type: array
+        description: set of events to notify on
+        uniqueItems: true
+        items:
+          type: string
+      type:
+        type: string
+        description: APP, BUNDLE, or INTERNAL
+        enum:
+        - AGENT
+        - APP
+        - BUNDLE
+        - INTERNAL
+      bundle:
+        description: for apps of type BUNDLE, the contents included in the bundle
+        $ref: '#/definitions/Bundle'
+      agentConfig:
+        description: for apps of type AGENT, the configuration of the agent
+        $ref: '#/definitions/AiAgentConfig'
+      externalApiConfig:
+        description: for apps with external API capabilities, the API configuration
+        $ref: '#/definitions/ExternalApiConfig'
+      webhookConfig:
+        description: for apps that receive inbound webhooks, the webhook configuration
+        $ref: '#/definitions/WebhookConfig'
+      secrets:
+        description: write-only app-level secrets
+        $ref: '#/definitions/AppSecrets'
+      scopes:
+        type: array
+        description: access scopes that the app is requesting
+        items:
+          type: string
+      tags:
+        type: array
+        description: tags/categories the app belongs to
+        items:
+          type: string
+      requiredFeatures:
+        type: array
+        description: The product features that are required in order to install the app or bundle
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      internalOptions:
+        type: object
+        description: internal (ChartHop controlled) options
+  WebhookConfig:
+    type: object
+    required:
+    - auth
+    properties:
+      auth:
+        type: string
+        description: verification mechanism applied to inbound webhook requests
+        enum:
+        - HMAC
+        - JWT
+        - HEADER_SECRET
+        - HEADER_BEARER
+        - HEADER_BASIC
+      hmac:
+        description: tuning parameters when auth=HMAC; ignored otherwise
+        $ref: '#/definitions/HmacConfig'
+      jwt:
+        description: tuning parameters when auth=JWT; ignored otherwise
+        $ref: '#/definitions/JwtConfig'
+      signatureHeader:
+        type: string
+        description: 'header name carrying the signature/JWT/secret. Defaults: HMAC=X-Signature, JWT/HEADER_BEARER/HEADER_BASIC=Authorization, HEADER_SECRET=X-Webhook-Secret'
+      timestampHeader:
+        type: string
+        description: for HMAC schemes that include a timestamp in the signing input, name of the header carrying the request timestamp. Default=X-Timestamp
+      signaturePrefix:
+        type: string
+        description: optional prefix stripped from the signature header before comparison (e.g. "sha256=" for github-style HMAC signatures, or "Bearer " for JWT)
+  PartialAction:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      event:
+        type: string
+        description: event pattern to match on, such as change.create.*
+      cronSchedule:
+        type: string
+        description: cron schedule to run on, in crontab format
+        example: 5 4 * * *
+      filter:
+        type: string
+        description: only run when matching a particular filter
+      steps:
+        type: array
+        description: list of steps to run when matching the event, schedule, and filter
+        items:
+          $ref: '#/definitions/ActionStep'
+      description:
+        type: string
+        description: description of the action
+      status:
+        type: string
+        description: status of the action
+        enum:
+        - ACTIVE
+        - INACTIVE
+      runUserId:
+        type: string
+        description: the user to run the action as - normally the same as the user who created the action
+        example: 588f7ee98f138b19220041a7
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not
+      categoryId:
+        type: string
+        description: data category of the action, such as onboarding or offboarding
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      formId:
+        type: string
+        description: form that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  AutoIncFieldPart:
+    type: object
+    required:
+    - type
+    - value
+    properties:
+      type:
+        type: string
+        enum:
+        - LITERAL_STRING
+        - GROUP_CODE
+      value:
+        type: object
+      defaultValue:
+        type: string
+  ExternalApiConfig:
+    type: object
+    required:
+    - auth
+    properties:
+      url:
+        type: string
+      auth:
+        $ref: '#/definitions/ExternalApiAuthConfig'
+      apiOperations:
+        type: array
+        items:
+          $ref: '#/definitions/ApiOperation'
+      pagination:
+        $ref: '#/definitions/PaginationConfig'
+      entities:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/ApiEntity'
+      pull:
+        $ref: '#/definitions/PullAppConfig'
+      ats:
+        $ref: '#/definitions/AtsAppConfig'
+      transcript:
+        $ref: '#/definitions/TranscriptAppConfig'
+      inboundFieldMappers:
+        type: array
+        items:
+          $ref: '#/definitions/FieldMapper'
+      outboundFieldMappers:
+        type: array
+        items:
+          $ref: '#/definitions/OutboundFieldMapper'
+      rateLimit:
+        $ref: '#/definitions/RateLimitConfig'
+  PartialForm:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable full name of form
+        example: 'Health Index: Q2'
+        minItems: 1
+        maxItems: 255
+      displayName:
+        type: string
+        description: display name of form during completion
+        example: Health Index
+        minItems: 1
+        maxItems: 255
+      displayNameTr:
+        description: display name of form, translated
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of form
+        example: The Engineering department, where engineers develop new technology and products.
+        minItems: 0
+        maxItems: 1000
+      blocks:
+        type: array
+        description: ordered list of blocks being collected in this form
+        items:
+          $ref: '#/definitions/FormBlock'
+      status:
+        type: string
+        description: status of the form
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - ARCHIVED
+      type:
+        type: string
+        description: type of the form
+        enum:
+        - BUILT_IN
+        - CUSTOM
+      targetType:
+        type: string
+        description: target type that the form can be filled out about
+        enum:
+        - NONE
+        - PERSON
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      submitFilter:
+        type: string
+        description: filter that controls which respondents can submit this form. The form:submit permission, if present, overrides this filter
+      responseReadFilter:
+        type: string
+        description: filter that controls who can read the form responses. The formResponse:read permission, if present, overrides this filter
+      approval:
+        type: string
+        description: approval needed, if any approval is required
+        enum:
+        - MANAGER
+        - GRAND_MANAGER
+      release:
+        type: string
+        description: whether a release step is involved (subsequent to approval if any)
+        enum:
+        - SUBMITTER
+        - ADMIN
+      releaseMessageChannel:
+        description: the message channel to be used for release notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      share:
+        type: string
+        description: whether sharing form responses is allowed
+        enum:
+        - SUBMITTER
+        - ADMIN
+      shareMessageChannel:
+        description: the message channel to be used for sharing notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      autoShare:
+        type: array
+        description: list of automatic sharing to be done after submission
+        items:
+          $ref: '#/definitions/AutoShare'
+      autoShareMessageChannel:
+        description: the message channel to be used for automatic sharing notifications
+        $ref: '#/definitions/MessageChannelConfig'
+      submitterEdit:
+        description: post-submission editing permissions for the submitter
+        $ref: '#/definitions/FormEditAccess'
+      approverEdit:
+        description: post-submission editing permissions for the approver
+        $ref: '#/definitions/FormEditAccess'
+      signature:
+        description: if the form response should generate a PDF which should be sent for signature, these settings are used
+        $ref: '#/definitions/FormSignatureConfig'
+      authorSensitive:
+        type: string
+        description: view sensitivity for the author of this form - the level of view access required to view the createId and updateId fields. If null, the author's identity is always visible as long as the viewer can read the form response. If set to PRIVATE, the author's identity is stored in ChartHop, but protected such that even users with sensitive access cannot access the data. If set to ANONYMOUS, the author's identity is not stored in ChartHop at all.
+        enum:
+        - ANONYMOUS
+        - PRIVATE
+        - HIGH
+        - MANAGER
+      options:
+        description: options, such as notification settings
+        $ref: '#/definitions/FormOptions'
+      completeMode:
+        type: string
+        description: appearance of the form during completion
+        enum:
+        - MODAL
+        - FULLSCREEN
+      ai:
+        description: AI form completion and assistance settings
+        $ref: '#/definitions/FormAiConfig'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: 2017-01-24T13:52Z
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  RateLimitConfig:
+    type: object
+    properties:
+      retryAfterHeader:
+        type: string
+      maxRetries:
+        type: integer
+        format: int32
+      baseBackoffMillis:
+        type: integer
+        format: int32
+      maxBackoffMillis:
+        type: integer
+        format: int32
+      retryServerErrors:
+        type: boolean
+  FormOptions:
+    type: object
+    properties:
+      notifySubmitter:
+        type: boolean
+      notifySubmitterManager:
+        type: boolean
+      notifySelf:
+        type: boolean
+      notifyManager:
+        type: boolean
+      notifyUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fillValues:
+        type: boolean
+      enableDraft:
+        type: boolean
+      peersField:
+        type: string
+      enableExport:
+        type: boolean
+      timeToEdit:
+        type: string
+      endDate:
+        type: string

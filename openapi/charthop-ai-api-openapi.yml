@@ -1,0 +1,1676 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access ai API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: ai
+paths:
+  /v1/org/{orgId}/ai/agent-memory:
+    get:
+      tags:
+      - ai
+      summary: List memories for an agent
+      operationId: listMemories
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: agentUserId
+        in: query
+        description: Agent user ID
+        required: false
+        type: string
+      - name: userId
+        in: query
+        description: User ID (defaults to current user)
+        required: false
+        type: string
+      - name: actionId
+        in: query
+        description: Action ID, if filtering for a particular action
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - ai
+      summary: Create a new memory
+      operationId: createMemory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAiAgentMemory'
+      responses:
+        '201':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/org/{orgId}/ai/agent-memory/{memoryId}:
+    get:
+      tags:
+      - ai
+      summary: Get a single memory
+      operationId: getMemory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: memoryId
+        in: path
+        description: Memory ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    patch:
+      tags:
+      - ai
+      summary: Update a memory
+      operationId: updateMemory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: memoryId
+        in: path
+        description: Memory ID
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAiAgentMemory'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - ai
+      summary: Delete a memory
+      operationId: deleteMemory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: memoryId
+        in: path
+        description: Memory ID
+        required: true
+        type: string
+      responses:
+        '204':
+          description: successful operation
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat:
+    post:
+      tags:
+      - ai
+      summary: Start a new AI chat with an initial message or question
+      operationId: startChat
+      consumes:
+      - application/json
+      produces:
+      - text/event-stream
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiChatRequest'
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiChat'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    get:
+      tags:
+      - ai
+      summary: Retrieve previous AI chats
+      operationId: findChats
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: userId
+        in: query
+        description: User id
+        required: false
+        type: string
+      - name: agentUserId
+        in: query
+        description: Filter by agent user id
+        required: false
+        type: string
+      - name: fromAt
+        in: query
+        description: Timestamp to search from
+        required: false
+        type: string
+      - name: untilAt
+        in: query
+        description: Timestamp to search up until
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Identifier to paginate from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: Sort by (default is createAt, can also use updateAt)
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsAiChat'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/prompt-suggest:
+    get:
+      tags:
+      - ai
+      summary: Retrieve some suggested prompts for starting an AI chat
+      operationId: getSuggestedPrompts
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of suggestions to return (defaults to 5)
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiSuggestedPromptsResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/top-users:
+    get:
+      tags:
+      - ai
+      summary: Find users with the most AI chats over a date range
+      operationId: findTopUsers
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: startDate
+        in: query
+        description: Start date (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: filter
+        in: query
+        description: CQL filter to apply on the person
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}:
+    get:
+      tags:
+      - ai
+      summary: Retrieve a previous AI chat
+      operationId: getChat
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiChat'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    patch:
+      tags:
+      - ai
+      summary: Update an existing AI chat's metadata, such as label or shareAccess information
+      operationId: updateChat
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Chat data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAiChat'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - ai
+      summary: Delete an AI chat
+      operationId: deleteChat
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      responses:
+        '204':
+          description: chat deleted
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}/answer-tool:
+    post:
+      tags:
+      - ai
+      summary: Answer a pending AskUserQuestion tool call in an AI chat
+      operationId: answerToolQuestion
+      consumes:
+      - application/json
+      produces:
+      - text/event-stream
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiChatAnswerToolRequest'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}/approve-tool:
+    post:
+      tags:
+      - ai
+      summary: Approve pending tool calls in an AI chat
+      operationId: approveToolUses
+      consumes:
+      - application/json
+      produces:
+      - text/event-stream
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiChatApproveToolRequest'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}/message:
+    post:
+      tags:
+      - ai
+      summary: Send an additional message to an existing AI chat
+      operationId: sendMessageToChat
+      consumes:
+      - application/json
+      produces:
+      - text/event-stream
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiChatRequest'
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiChatMessage'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}/message/{messageId}:
+    get:
+      tags:
+      - ai
+      summary: Retrieve an individual message from an existing AI chat
+      operationId: getChatMessage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: messageId
+        in: path
+        description: Message identifier
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiChatMessage'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}/message/{messageId}/feedback:
+    post:
+      tags:
+      - ai
+      summary: Send feedback on a message in an AI chat
+      operationId: sendChatMessageFeedback
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: messageId
+        in: path
+        description: Message identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiChatFeedback'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/chat/{chatId}/reject-tool:
+    post:
+      tags:
+      - ai
+      summary: Reject pending tool calls in an AI chat
+      operationId: rejectToolUses
+      consumes:
+      - application/json
+      produces:
+      - text/event-stream
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: chatId
+        in: path
+        description: Chat identifier
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiChatRejectToolRequest'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/config:
+    patch:
+      tags:
+      - ai
+      summary: Update configuration of AI models for this org (ChartHop staff only)
+      operationId: configureModelForOrg
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAiConfig'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/form-response/summary:
+    post:
+      tags:
+      - ai
+      summary: Use AI to generate a summary of text form responses
+      operationId: summarizeFormResponses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/SummarizeFormResponsesRequest'
+      responses:
+        '204':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/SummarizeResponse'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/translate:
+    post:
+      tags:
+      - ai
+      summary: Translate from one language to another using AI
+      operationId: translate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiTranslateRequest'
+      responses:
+        '204':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiTranslateResponse'
+        '400':
+          description: invalid request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/translate/detect-language:
+    post:
+      tags:
+      - ai
+      summary: Detect the dominant language of a text
+      operationId: detectLanguage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DetectLanguageRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/DetectLanguageResponse'
+        '400':
+          description: invalid request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/ai/translate/expression:
+    post:
+      tags:
+      - ai
+      summary: Translate natural language into a CQL filter expression
+      operationId: translateExpression
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AiExpressionTranslateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AiExpressionTranslateResponse'
+        '400':
+          description: invalid request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - ai
+      summary: Invalidate all cached expression translation responses
+      operationId: invalidateExpressionTranslations
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      responses:
+        '204':
+          description: successful operation
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  AiSuggestedPromptsResponse:
+    type: object
+    required:
+    - prompts
+    properties:
+      prompts:
+        type: array
+        items:
+          type: string
+  AiChatMessageBlock:
+    type: object
+    properties:
+      dataContextMessage:
+        type: string
+      contextMessage:
+        type: string
+      message:
+        type: string
+      toolUse:
+        $ref: '#/definitions/AiToolUse'
+      toolResult:
+        $ref: '#/definitions/AiToolResult'
+  UpdateAiChat:
+    type: object
+    properties:
+      label:
+        type: string
+        description: label for the chat (defaults to the first question asked)
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this chat
+        items:
+          $ref: '#/definitions/ShareAccess'
+  AiChatAnswerToolRequest:
+    type: object
+    required:
+    - toolUseId
+    - answers
+    properties:
+      toolUseId:
+        type: string
+      answers:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+      message:
+        type: string
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  AiChat:
+    type: object
+    required:
+    - id
+    - orgId
+    - type
+    - mode
+    - userId
+    - agentUserId
+    - shareAccess
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: the type of the chat
+        enum:
+        - OWNER
+        - INTERNAL
+        - STAFF
+        - CUSTOMER
+        - DEMO
+        - TEST
+      mode:
+        type: string
+        description: the mode of the chat -- CHAT is an interactive chat, while AUTO is an autonomous action
+        enum:
+        - CHAT
+        - AUTO
+      userId:
+        type: string
+        description: user id who initiated the chat
+        example: 588f7ee98f138b19220041a7
+      agentUserId:
+        type: string
+        description: AI agent user id who is participating in the chat
+        example: 588f7ee98f138b19220041a7
+      behalfUserId:
+        type: string
+        description: user id this chat was created on behalf of, when an agent initiated it (userId is then the initiating agent)
+        example: 588f7ee98f138b19220041a7
+      modelId:
+        type: string
+        description: model that was used in the chat
+      aiPromptId:
+        type: string
+        description: prompt id that was used in the chat
+        example: 588f7ee98f138b19220041a7
+      actionId:
+        type: string
+        description: action that triggered the chat, if autonomous action
+        example: 588f7ee98f138b19220041a7
+      actionStepId:
+        type: string
+        description: action step id that triggered the chat, if autonomous action
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: label for the chat (defaults to the first question asked)
+      feedbackScore:
+        type: integer
+        format: int32
+        description: feedback score for the chat
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this chat
+        items:
+          $ref: '#/definitions/ShareAccess'
+      systemPrompts:
+        type: array
+        description: system prompts used (stable prefix; eligible for prompt caching across turns)
+        items:
+          type: string
+      messages:
+        type: array
+        description: transcript of the messages
+        items:
+          $ref: '#/definitions/AiChatMessage'
+      messageCount:
+        type: integer
+        format: int32
+        description: number of messages in the chat
+      totalMessageCount:
+        type: integer
+        format: int32
+        description: number of messages in the chat, including tool usage
+      summary:
+        description: summary data for analysis
+        $ref: '#/definitions/AiChatSummary'
+      inputTokenCount:
+        type: integer
+        format: int32
+        description: number of input tokens used
+      outputTokenCount:
+        type: integer
+        format: int32
+        description: number of output tokens used
+      cacheReadInputTokenCount:
+        type: integer
+        format: int32
+        description: number of cached input tokens read from the prompt cache
+      cacheWriteInputTokenCount:
+        type: integer
+        format: int32
+        description: number of input tokens written to the prompt cache
+      creditCount:
+        type: number
+        description: number of AI credits consumed by this chat
+      dataContextType:
+        type: string
+        description: data context used for this chat
+        enum:
+        - ASSESSMENT
+        - ASSESSMENT_CALIBRATE
+        - COMP_REVIEW
+        - PERSON_COMMON
+        - DASHBOARD
+        - FORM_COMPLETE
+        - GOAL
+        - SCENARIO
+        - SCENARIO_IMPACT
+        - TRANSCRIPT
+        - PROCESS_LOG
+      toolsAvailable:
+        type: array
+        description: list of tools that were available in this chat
+        items:
+          type: string
+      readOnly:
+        type: boolean
+        description: whether tool use in this chat is constrained to read-only tools
+      toolsUsed:
+        type: array
+        description: list of tools that were used in this chat
+        items:
+          type: string
+      providedHintIds:
+        type: array
+        description: set of AI hint IDs that have been provided to this chat
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      pendingToolUseIds:
+        type: array
+        description: tool use IDs currently pending approval, used for idempotent approval
+        items:
+          type: string
+      pendingToolUseAt:
+        type: string
+        description: timestamp when the pending tool uses were proposed, used for expiration
+      channel:
+        description: channel where the chat originated
+        $ref: '#/definitions/AiChatChannel'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: last-updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  DetectLanguageResponse:
+    type: object
+    required:
+    - language
+    properties:
+      language:
+        type: string
+  AiTranslateResponse:
+    type: object
+    required:
+    - outputTexts
+    properties:
+      outputTexts:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: string
+  AiTranslateRequest:
+    type: object
+    required:
+    - inputTexts
+    - inputLocale
+    - outputLocales
+    properties:
+      inputTexts:
+        type: array
+        items:
+          type: string
+      inputLocale:
+        type: string
+      outputLocales:
+        type: array
+        items:
+          type: string
+  TabularData:
+    type: object
+    required:
+    - columnNames
+    - rows
+    properties:
+      columnNames:
+        type: array
+        items:
+          type: string
+      rows:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object
+      date:
+        type: string
+        format: date
+      next:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  AiChatApproveToolRequest:
+    type: object
+    required:
+    - toolUseIds
+    properties:
+      toolUseIds:
+        type: array
+        items:
+          type: string
+  AiExpressionTranslateRequest:
+    type: object
+    required:
+    - text
+    properties:
+      text:
+        type: string
+  AiToolResult:
+    type: object
+    required:
+    - toolUseId
+    - success
+    properties:
+      toolUseId:
+        type: string
+      success:
+        type: boolean
+      outputText:
+        type: string
+      outputJson:
+        type: object
+        additionalProperties:
+          type: object
+      outputCsv:
+        $ref: '#/definitions/TabularData'
+      navigateUrl:
+        type: string
+        format: uri
+      actionButton:
+        $ref: '#/definitions/AiToolActionButton'
+      userRejected:
+        type: boolean
+      userRejectedReason:
+        type: string
+      hintIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  AiChatMessage:
+    type: object
+    required:
+    - id
+    - blocks
+    - at
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      userName:
+        type: string
+      externalUserId:
+        type: string
+      externalId:
+        type: string
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/AiChatMessageBlock'
+      at:
+        type: string
+      latencyMs:
+        type: integer
+        format: int64
+      inputTokenCount:
+        type: integer
+        format: int32
+      outputTokenCount:
+        type: integer
+        format: int32
+      cacheReadInputTokenCount:
+        type: integer
+        format: int32
+      cacheWriteInputTokenCount:
+        type: integer
+        format: int32
+      feedbackScore:
+        type: integer
+        format: int32
+      feedbackText:
+        type: string
+      actionButtons:
+        type: array
+        items:
+          $ref: '#/definitions/AiToolActionButton'
+      fileIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  AiExpressionTranslateResponse:
+    type: object
+    required:
+    - expression
+    properties:
+      expression:
+        type: string
+  AiChatChannel:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+      externalId:
+        type: string
+      threadId:
+        type: string
+      name:
+        type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  SummarizeFormResponsesRequest:
+    type: object
+    required:
+    - questionId
+    properties:
+      questionId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      formId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      submitPersonFilter:
+        type: string
+      targetPersonFilter:
+        type: string
+  AiToolUse:
+    type: object
+    required:
+    - toolUseId
+    - name
+    - input
+    properties:
+      toolUseId:
+        type: string
+      name:
+        type: string
+      input:
+        type: object
+        additionalProperties:
+          type: object
+      entity:
+        $ref: '#/definitions/AiToolEntity'
+      summary:
+        type: string
+      readOnly:
+        type: boolean
+  AiToolActionButton:
+    type: object
+    required:
+    - label
+    - url
+    properties:
+      label:
+        type: string
+      url:
+        type: string
+        format: uri
+      iconUrl:
+        type: string
+        format: uri
+  AiChatFeedback:
+    type: object
+    required:
+    - score
+    properties:
+      score:
+        type: integer
+        format: int32
+  AiChatSummary:
+    type: object
+    required:
+    - title
+    - summary
+    - keywords
+    - usecase
+    - at
+    properties:
+      title:
+        type: string
+      summary:
+        type: string
+      keywords:
+        type: array
+        items:
+          type: string
+      usecase:
+        type: string
+      safetyScore:
+        type: integer
+        format: int32
+      complexityScore:
+        type: integer
+        format: int32
+      uniqueScore:
+        type: integer
+        format: int32
+      successScore:
+        type: integer
+        format: int32
+      improvements:
+        type: string
+      toolsNeeded:
+        type: string
+      safetyRisks:
+        type: string
+      at:
+        type: string
+  AiPromptConfig:
+    type: object
+    required:
+    - type
+    - aiPromptId
+    properties:
+      type:
+        type: string
+        enum:
+        - AUTO_CHAT
+        - CHAT
+        - CHAT_SHOULD_RESPOND
+        - CHAT_SUMMARY
+        - FORM_RESPONSE_SUMMARY
+        - REPORT_RESULT_SUMMARY
+        - SCENARIO_PLANNING
+        - CQL
+        - CQL_TRANSLATE
+        - PROMPT_SUGGEST
+        - JOB_CODE_MATCH
+      aiPromptId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  DetectLanguageRequest:
+    type: object
+    required:
+    - text
+    properties:
+      text:
+        type: string
+  UpdateAiAgentMemory:
+    type: object
+    properties:
+      content:
+        type: string
+        description: text content of the memory
+        minItems: 0
+        maxItems: 2000
+      importance:
+        type: number
+        format: double
+        description: importance score from 0.0 (low) to 1.0 (high)
+      expireAt:
+        type: string
+        description: optional expiration timestamp; memory is auto-deleted after this time
+        example: '2017-01-24T13:57:52Z'
+  AiChatRequest:
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        type: string
+      label:
+        type: string
+      initialAiMessage:
+        type: string
+      initialAiMessageAt:
+        type: string
+      dataContext:
+        type: string
+        enum:
+        - ASSESSMENT
+        - ASSESSMENT_CALIBRATE
+        - COMP_REVIEW
+        - PERSON_COMMON
+        - DASHBOARD
+        - FORM_COMPLETE
+        - GOAL
+        - SCENARIO
+        - SCENARIO_IMPACT
+        - TRANSCRIPT
+        - PROCESS_LOG
+      dataContextParams:
+        type: object
+        additionalProperties:
+          type: object
+      url:
+        type: string
+        format: uri
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+      agentUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      fileIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  UpdateAiConfig:
+    type: object
+    properties:
+      prompts:
+        type: array
+        description: list of configured prompts for various use cases
+        items:
+          $ref: '#/definitions/AiPromptConfig'
+  ResultsAiChat:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AiChat'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  CreateAiAgentMemory:
+    type: object
+    required:
+    - agentUserId
+    - content
+    properties:
+      agentUserId:
+        type: string
+        description: AI agent user id that owns this memory
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id this memory is scoped to; null means org-wide
+        example: 588f7ee98f138b19220041a7
+      actionId:
+        type: string
+        description: action id this memory is scoped to; null means not action-scoped
+        example: 588f7ee98f138b19220041a7
+      content:
+        type: string
+        description: text content of the memory
+        minItems: 0
+        maxItems: 2000
+      importance:
+        type: number
+        format: double
+        description: importance score from 0.0 (low) to 1.0 (high)
+      expireAt:
+        type: string
+        description: optional expiration timestamp; memory is auto-deleted after this time
+        example: '2017-01-24T13:57:52Z'
+      sourceAiChatId:
+        type: string
+        description: id of the AI chat that created this memory
+        example: 588f7ee98f138b19220041a7
+  SummarizeResponse:
+    type: object
+    required:
+    - summary
+    - responseCount
+    properties:
+      summary:
+        type: string
+      responseCount:
+        type: integer
+        format: int32
+  AiChatRejectToolRequest:
+    type: object
+    required:
+    - toolUseIds
+    properties:
+      toolUseIds:
+        type: array
+        items:
+          type: string
+      message:
+        type: string
+  AiToolEntity:
+    type: object
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+      label:
+        type: string
+      imagePath:
+        type: string
+      entityType:
+        type: string

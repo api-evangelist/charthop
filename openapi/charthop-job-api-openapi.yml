@@ -1,0 +1,1144 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access job API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: job
+paths:
+  /v2/org/{orgId}/job:
+    get:
+      tags:
+      - job
+      summary: Find jobs in the organization
+      operationId: findJobs
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: compReviewId
+        in: query
+        description: Comp review id to query
+        required: false
+        type: string
+      - name: approvalChainId
+        in: query
+        description: Approval chain id to query; only relevant when there is a comp review id
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if retrieving jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if retrieving jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: ids
+        in: query
+        description: Comma-separated list of job ids to look up
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Job id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: Sort by fields, comma-separated. For descending sort, prepend a -
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: fieldsList
+        in: query
+        description: Fields to retrieve, list syntax
+        required: false
+        type: array
+        items:
+          type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      - name: useScenarioChanges
+        in: query
+        description: Find jobs only based on the changes that are in the scenario. This option also allows you to reference the change within the filter, which is otherwise not allowed
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - job
+      summary: Create a job
+      operationId: createJob
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to create the job in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of job creation
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '201':
+          description: job created
+          schema:
+            type: object
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/bulkupdate:
+    post:
+      tags:
+      - job
+      summary: Perform a bulk update on a number of jobs
+      operationId: bulkUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: enrichLinkedFields
+        in: query
+        description: Whether to enrich linked fields from the job code when set; defaults to true
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: Bulk update data
+        required: true
+        schema:
+          $ref: '#/definitions/BulkJobPersonUpdateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/count:
+    get:
+      tags:
+      - job
+      summary: Count jobs or people in the organization
+      operationId: countJobs
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if counting jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if counting jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/OrgCount'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/graph:
+    get:
+      tags:
+      - job
+      summary: Retrieve jobs from a region of the job graph
+      operationId: findJobsGraph
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: start
+        in: query
+        description: Job id to use as the starting point for the search
+        required: false
+        type: string
+      - name: depth
+        in: query
+        description: Number of levels down to search
+        required: false
+        type: integer
+        format: int32
+      - name: approxLimit
+        in: query
+        description: Number of results to return, approximately
+        required: false
+        type: integer
+        format: int32
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: q
+        in: query
+        description: Query string to filter by
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: useScenarioChanges
+        in: query
+        description: Find jobs only based on the changes that are in the scenario. This option also allows you to reference the change within the filter, which is otherwise not allowed
+        required: false
+        type: boolean
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/group-by:
+    get:
+      tags:
+      - job
+      summary: Find jobs in the organization, grouped by an expression
+      operationId: findJobsGrouped
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: startDate
+        in: query
+        description: Start date, if retrieving jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if retrieving jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: columns
+        in: query
+        description: Fields to retrieve with their aggregation function, comma-separated
+        required: false
+        type: string
+      - name: groupBy
+        in: query
+        description: Expression to group by
+        required: false
+        type: string
+      - name: sort
+        in: query
+        description: Sort by fields, comma-separated. For descending sort, prepend a -
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: splitColumns
+        in: query
+        description: Whether to split complex columns, used for tabular data formats
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/person/{personIds}:
+    get:
+      tags:
+      - job
+      summary: Find jobs by person ids
+      operationId: getJobsByPersonIds
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personIds
+        in: path
+        description: Comma-separated list of person ids to look up jobs for
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: bad request
+  /v2/org/{orgId}/job/subcounts:
+    get:
+      tags:
+      - job
+      summary: Compute top-N + Other subcounts for one or more fields, for jobs in the organization
+      operationId: getJobSubcounts
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if counting jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if counting jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Comma-separated list of fields to compute subcounts for
+        required: true
+        type: string
+      - name: topN
+        in: query
+        description: Number of top values to return per field; remainder is rolled into an Other bucket (default 10, max 25)
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/SubcountsResponse'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/timeseries:
+    get:
+      tags:
+      - job
+      summary: Find jobs in the organization returned as a time-series
+      operationId: findJobsTimeseries
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: startDate
+        in: query
+        description: Start date to start from (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date to start from (exclusive)
+        required: false
+        type: string
+        format: date
+      - name: interval
+        in: query
+        description: Interval to separate by (default is 'month')
+        required: false
+        type: string
+        enum:
+        - DAY
+        - WEEK
+        - MONTH
+        - QUARTER
+        - FISCAL_QUARTER
+        - YEAR
+        - FISCAL_YEAR
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: expr
+        in: query
+        description: Expression to calculate as-of the end of each interval
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/total:
+    get:
+      tags:
+      - job
+      summary: Compute aggregated totals for jobs matching a query
+      operationId: getJobTotals
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to search as of
+        required: false
+        type: string
+        format: date
+      - name: startDate
+        in: query
+        description: Start date, if retrieving jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: endDate
+        in: query
+        description: End date, if retrieving jobs that existed between two dates (inclusive)
+        required: false
+        type: string
+        format: date
+      - name: q
+        in: query
+        description: Search query
+        required: false
+        type: string
+      - name: columns
+        in: query
+        description: Fields to aggregate with their aggregation function, comma-separated
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v2/org/{orgId}/job/{jobId}:
+    get:
+      tags:
+      - job
+      summary: Return a particular job by id
+      operationId: getJob
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to query
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Fields to retrieve, comma-separated
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - job
+      summary: Update a job
+      operationId: updateJob
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the job in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of job update
+        required: false
+        type: string
+        format: date
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - job
+      summary: Delete a job
+      operationId: deleteJob
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        type: string
+      - name: scenarioId
+        in: query
+        description: Scenario id to update the job in
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Effective date of job update
+        required: false
+        type: string
+        format: date
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  FieldSubcount:
+    type: object
+    required:
+    - count
+    - isOther
+    properties:
+      key:
+        type: object
+      count:
+        type: integer
+        format: int64
+      isOther:
+        type: boolean
+  OrgCount:
+    type: object
+    required:
+    - jobCount
+    - personCount
+    - startingCount
+    - departingCount
+    properties:
+      jobCount:
+        type: integer
+        format: int64
+      personCount:
+        type: integer
+        format: int64
+      startingCount:
+        type: integer
+        format: int64
+      departingCount:
+        type: integer
+        format: int64
+      groupCount:
+        type: integer
+        format: int64
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  BulkJobPersonUpdateRequest:
+    type: object
+    required:
+    - updates
+    - date
+    properties:
+      updates:
+        type: array
+        description: list of update operations to perform
+        items:
+          $ref: '#/definitions/UpdateOperation'
+      date:
+        type: string
+        format: date
+        description: date of update
+      scenarioId:
+        type: string
+        description: scenario id
+        example: 588f7ee98f138b19220041a7
+      note:
+        type: string
+        description: note for update
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  SubcountsResponse:
+    type: object
+    required:
+    - counts
+    properties:
+      counts:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/FieldSubcount'
+  UpdateOperation:
+    type: object
+    required:
+    - update
+    properties:
+      jobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+      update:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object

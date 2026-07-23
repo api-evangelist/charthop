@@ -1,0 +1,1686 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access billing API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: billing
+paths:
+  /v1/customer/{customerId}/billing:
+    get:
+      tags:
+      - billing
+      summary: Return billing information for a customer
+      operationId: getBilling
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Billing'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/customer/{customerId}/billing/cancel:
+    post:
+      tags:
+      - billing
+      summary: Cancel a subscription for a customer
+      operationId: cancelSubscription
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Survey response
+        required: true
+        schema:
+          $ref: '#/definitions/CancelSubscriptionSurveyAnswers'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/customer/{customerId}/billing/checkout:
+    post:
+      tags:
+      - billing
+      summary: Checks out customer to upgrade to pay for their subscription
+      operationId: checkout
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: Customer id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Subscription data to create
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateSubscription'
+      responses:
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  Address:
+    type: object
+    required:
+    - country
+    properties:
+      street1:
+        type: string
+        description: street address, line 1
+        example: 123 Anywhere Street
+        minItems: 0
+        maxItems: 200
+      street2:
+        type: string
+        description: street address, line 2
+        example: Apt 6L
+        minItems: 0
+        maxItems: 200
+      street3:
+        type: string
+        description: street address, line 3
+        example: Sixth Floor
+        minItems: 0
+        maxItems: 200
+      city:
+        type: string
+        description: city
+        example: New York
+        minItems: 0
+        maxItems: 80
+      state:
+        type: string
+        description: state
+        example: NY
+        minItems: 0
+        maxItems: 80
+      country:
+        type: string
+        description: country (two-digit ISO code)
+        example: NY
+        pattern: ^[A-Z]{2}$
+      postal:
+        type: string
+        description: postal code
+        example: '10001'
+        minItems: 0
+        maxItems: 10
+      geo:
+        description: geopoint location
+        $ref: '#/definitions/Geopoint'
+      approxGeo:
+        description: approximate geopoint location (suitable for a map placement, but not exact location)
+        $ref: '#/definitions/Geopoint'
+  Customer:
+    type: object
+    required:
+    - id
+    - name
+    - status
+    properties:
+      id:
+        type: string
+        description: unique id of customer
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: name of customer
+      email:
+        type: string
+        description: email address for billing purposes
+      billAddress:
+        description: mailing address for billing purposes
+        $ref: '#/definitions/Address'
+      industry:
+        type: string
+        description: industry that customer is in
+      source:
+        type: string
+        description: source of customer signup
+        enum:
+        - ADP_MARKETPLACE
+        - SELF_SERVE
+        - SELF_SERVE_TEST
+        - SEQUOIA_ONE
+        - CONNECT
+      status:
+        type: string
+        description: current status
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - TRIAL
+        - CHURN
+        - PAYMENT_ERROR
+      stripeCustomerId:
+        type: string
+        description: stripe customer id
+      salesforceAccountId:
+        type: string
+        description: salesforce account id
+        pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+      products:
+        type: array
+        description: products that this customer has purchased
+        items:
+          $ref: '#/definitions/ProductItem'
+      trialProducts:
+        type: array
+        description: products this customer has temporary trial access to, each bounded by a date range
+        items:
+          $ref: '#/definitions/TrialProduct'
+      restrictedFeatures:
+        type: array
+        description: features that are restricted for the customer
+        items:
+          type: string
+          enum:
+          - AI_ACTION
+          - AI_AGENT
+          - AI_API_WRITE
+          - AI_SLACK_TEAM_CHAT
+          - ATS_SYNC
+          - BUDGET
+          - COMPENSATION_REVIEW
+          - CUSTOM_CALENDAR
+          - CUSTOM_FIELD
+          - CUSTOM_FIELD_READONLY
+          - CUSTOM_FORM
+          - CUSTOM_PROFILE_TAB
+          - CUSTOM_ROLE
+          - FORM_ANONYMOUS
+          - FORM_RELEASE
+          - FORM_SIGNATURE
+          - GOAL
+          - MULTI_PAYROLL
+          - PERFORMANCE_REVIEW
+          - REPORT
+          - REPORT_READONLY
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_QES
+          - SIMPLE_WORKFLOWS
+          - SURVEY
+          - TABLE
+          - TEMPLATE
+          - WORKDAY_ADAPTIVE
+          - PAYROLL_OUTBOUND
+          - APPROVAL_WORKFLOWS
+          - CONTENT
+          - IDENTITY_OUTBOUND
+          - ONBOARDING_OFFBOARDING
+          - TIMEOFF
+      featureOptionOverrides:
+        type: array
+        description: override feature options for the customer
+        items:
+          $ref: '#/definitions/FeatureAccessOption'
+      startDate:
+        type: string
+        format: date
+        description: initial date of billing
+      endDate:
+        type: string
+        format: date
+        description: end of service date for churning customers -- on or after this date, service should be disabled
+      nextInvoiceDate:
+        type: string
+        format: date
+        description: date of next invoice
+      orgCount:
+        type: integer
+        format: int32
+        description: number of orgs covered by this customer
+      primaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      secondaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      tertiaryHeadCount:
+        type: integer
+        format: int32
+        description: number of total headcount across all orgs
+      primaryHeadCountFilter:
+        type: string
+        description: primary headcount filter - used for billing purposes
+      secondaryHeadCountFilter:
+        type: string
+        description: secondary headcount filter - used for billing purposes
+      tertiaryHeadCountFilter:
+        type: string
+        description: tertiary headcount filter - used for billing purposes
+      arr:
+        type: number
+        description: current ARR of the customer based on most recent invoice
+      trialStartDate:
+        type: string
+        format: date
+        description: date this customer begins their trial period
+      trialEndDate:
+        type: string
+        format: date
+        description: date this customer ends their trial period
+      stripeSubscriptionSync:
+        type: string
+        description: Stripe subscription settings
+        enum:
+        - SYNC
+        - DELETE
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+  InternalOrgOptions:
+    type: object
+    properties:
+      adpOrganizationOID:
+        type: string
+      assessmentCount:
+        type: integer
+        format: int32
+      dashboardGettingStartedHidden:
+        type: boolean
+      dashboardNeedHelpHidden:
+        type: boolean
+      enableUniversalSso:
+        type: boolean
+      sequoiaOrgId:
+        type: string
+      tosAgreement:
+        type: boolean
+      fileUploadLimit:
+        type: integer
+        format: int64
+      maxFileUploadSize:
+        type: integer
+        format: int64
+      lowPriorityReports:
+        type: boolean
+      isInitialDataSynced:
+        type: boolean
+      maxReportDatapoints:
+        type: integer
+        format: int64
+      disableImportEvents:
+        type: boolean
+        description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
+      useAlphaSlackApp:
+        type: boolean
+        description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
+      extraFields:
+        type: object
+        additionalProperties:
+          type: object
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  Billing:
+    type: object
+    required:
+    - customer
+    - invoices
+    - org
+    properties:
+      checkout:
+        $ref: '#/definitions/Checkout'
+      customer:
+        $ref: '#/definitions/Customer'
+      invoices:
+        type: array
+        items:
+          $ref: '#/definitions/Invoice'
+      paymentInfo:
+        $ref: '#/definitions/PaymentInfo'
+      plan:
+        $ref: '#/definitions/Plan'
+      org:
+        $ref: '#/definitions/Org'
+  Invoice:
+    type: object
+    required:
+    - number
+    - amount
+    - status
+    - createAt
+    properties:
+      number:
+        type: string
+        description: a unique identifying string for invoices
+        example: F38A6C8-0010
+      amount:
+        type: number
+        description: current final amount due for the invoices
+        example: '1002.31'
+      hostedInvoiceUrl:
+        type: string
+        description: URL for the hosted invoice page, which allows customers to view and pay an invoice
+        example: https://pay.stripe.com/invoice/invst_Nv8DFERQvTsBJqnZ4z19cGZBU1
+      invoicePdf:
+        type: string
+        description: the link to download the PDF for the invoice
+        example: https://pay.stripe.com/invoice/invst_wNK0BvV4iUOWOn5mzLT1ybQ2LC/pdf
+      status:
+        type: string
+        description: one of PAID, UNPAID, or VOID
+        example: PAID
+        enum:
+        - PAID
+        - UNPAID
+        - VOID
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2019-07-27T20:56:10Z'
+  ProductItem:
+    type: object
+    required:
+    - productId
+    - stripePriceId
+    properties:
+      productId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      stripePriceId:
+        type: string
+  PaymentInfo:
+    type: object
+    required:
+    - paymentType
+    properties:
+      paymentType:
+        type: string
+        description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
+        example: CREDIT_CARD
+        enum:
+        - CREDIT_CARD
+        - INVOICE
+      creditCardEndDigits:
+        type: string
+        description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
+        example: '4242'
+      brand:
+        type: string
+        description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
+        example: Visa
+  FeatureAccessOption:
+    type: object
+    required:
+    - name
+    - type
+    properties:
+      name:
+        type: string
+        description: The name of the feature option tied to the feature access
+        example: smart_fields
+        enum:
+        - CONFIGURED_ROLES
+        - SMART_FIELDS
+        - APP_FIELD_MAPPERS
+        - MULTI_PAYROLL_INSTALLS
+      description:
+        type: string
+        description: The description of the feature option
+      type:
+        type: string
+        description: The feature option type
+        enum:
+        - LIMIT
+        - FULL_ACCESS
+      limit:
+        type: integer
+        format: int32
+        description: The feature option limit
+  Layout:
+    type: object
+    required:
+    - rows
+    properties:
+      rows:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutRow'
+  Geopoint:
+    type: object
+    required:
+    - type
+    - coordinates
+    properties:
+      type:
+        type: string
+        description: Type of point
+        readOnly: true
+      coordinates:
+        type: array
+        description: The longitude and latitude of the point
+        readOnly: true
+        items:
+          type: number
+          format: double
+  Checkout:
+    type: object
+    properties:
+      nextPaymentDate:
+        type: string
+        format: date
+      tax:
+        type: integer
+        format: int64
+      total:
+        type: integer
+        format: int64
+  LayoutButton:
+    type: object
+    required:
+    - url
+    - label
+    properties:
+      url:
+        type: string
+      label:
+        type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  Block:
+    type: object
+    properties:
+      type:
+        type: string
+        description: the type of this block, or null if legacy
+        enum:
+        - CONTENT
+        - TASK
+        - CALENDAR
+      label:
+        type: string
+        description: human readable label for this block
+      height:
+        type: object
+        description: fixed height in px, or expand if “stretch”, or fit to contents if null
+      targetFilter:
+        type: string
+        description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
+      readFilter:
+        type: string
+        description: filter condition expression applied to this block, relative to the viewer
+      formIds:
+        type: array
+        description: form ids to surface responses in this block
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: fields retrieved in this block
+        items:
+          type: string
+      title:
+        type: string
+        description: title to show in block header
+      content:
+        type: string
+        description: template content returned in this block
+      contentTr:
+        description: template content returned in this block, translated
+        $ref: '#/definitions/Translations'
+      primaryButton:
+        description: primary CTA button
+        $ref: '#/definitions/LayoutButton'
+      secondaryButton:
+        description: secondary CTA button
+        $ref: '#/definitions/LayoutButton'
+  Plan:
+    type: object
+    required:
+    - id
+    - name
+    - interval
+    - intervalCount
+    - tiers
+    - stripeProductId
+    properties:
+      id:
+        type: string
+        description: unique Stripe identifier for this plan
+      name:
+        type: string
+        description: human-readable nickname for this plan
+      interval:
+        type: string
+        description: interval for billing on this plan
+        enum:
+        - DAY
+        - WEEK
+        - MONTH
+        - YEAR
+      intervalCount:
+        type: integer
+        format: int32
+        description: number of intervals, for example 3 for quarterly billing
+      tiers:
+        type: array
+        description: pricing tiers, per employee per interval
+        items:
+          $ref: '#/definitions/PlanTier'
+      stripeProductId:
+        type: string
+        description: stripe product id that this plan belongs to
+  PlanTier:
+    type: object
+    required:
+    - unitAmount
+    properties:
+      upTo:
+        type: integer
+        format: int64
+        description: headcount up to this level is charged at the below rate
+      unitAmount:
+        type: number
+        description: PEPM rate
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  UpdateSubscription:
+    type: object
+    required:
+    - paymentMethod
+    properties:
+      paymentMethod:
+        type: string
+        description: Payment method to create; 'INVOICE' to make subscription paid by invoice, or the ID of the payment method if to make the subscription automatically charge a card
+  LayoutColumn:
+    type: object
+    required:
+    - blocks
+    properties:
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/Block'
+  TrialProduct:
+    type: object
+    required:
+    - productId
+    - startDate
+    - endDate
+    properties:
+      productId:
+        type: string
+        description: id of the product the customer is trialing
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+        description: first date the trial grants access (inclusive)
+      endDate:
+        type: string
+        format: date
+        description: last date the trial grants access (inclusive)
+  CancelSubscriptionSurveyAnswers:
+    type: object
+    required:
+    - otherComments
+    - reason
+    properties:
+      otherComments:
+        type: string
+        description: Any additional comments about ChartHop when cancelling their subscription
+      reason:
+        type: string
+        description: Concatenated string of reasons why the customer unsubscribed from ChartHop
+  Org:
+    type: object
+    required:
+    - id
+    - name
+    - slug
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      customerId:
+        type: string
+        description: customer for billing processing
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: name of organization
+        example: Acme Corp
+      slug:
+        type: string
+        description: unique slug of organization
+        example: acme-corp
+      type:
+        type: string
+        description: type of organization
+        example: PRIVATE
+        enum:
+        - PRIVATE
+        - PUBLIC
+        - EDU
+        - GOV
+        - NONPROFIT
+        - DEMO
+        - TEST
+        - PORTFOLIO
+      industry:
+        type: string
+        description: industry
+        example: Software and Internet
+      estEmployees:
+        type: integer
+        format: int32
+        description: approximate number of employees
+      estRevenue:
+        type: integer
+        format: int32
+        description: approximate amount of revenue
+      foundedYear:
+        type: string
+        description: year of founding
+        example: '1998'
+      address:
+        description: street address
+        $ref: '#/definitions/Address'
+      phone:
+        type: string
+        description: company phone number in E.164 format
+        pattern: ^\+?[1-9]\d{1,14}$
+      email:
+        type: string
+        description: primary contact email
+        example: bob@example.com
+      url:
+        type: string
+        format: uri
+        description: website URL
+      domains:
+        type: array
+        description: domains used by this org
+        items:
+          $ref: '#/definitions/OrgDomain'
+      status:
+        type: string
+        description: current status of organization
+        enum:
+        - ACTIVE
+        - INACTIVE
+        - DISABLED
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      currencies:
+        type: array
+        description: types of currencies in use, with the first currency the primary currency
+        items:
+          type: string
+        minItems: 1
+        maxItems: 100
+      locales:
+        type: array
+        description: locales supported within the org based on user selection, with the first locale the primary locale (e.g., en_US, en_GB, fr_FR, fr_CA)
+        items:
+          type: string
+      dataResidency:
+        type: string
+        description: data residency of the org - the db cluster where this org's data resides
+        enum:
+        - GLOBAL
+        - US
+        - EU
+      stock:
+        type: string
+        description: stock symbol
+        example: GOOG
+      timezone:
+        type: string
+        description: timezone in use
+        example: America/New_York
+      appTimes:
+        type: array
+        description: approximate times of day in the org timezone for daily app syncs to run (if unset, syncs will run 2am-8am US Eastern Time)
+        example: 09:00
+        items:
+          type: string
+      fiscalStart:
+        type: integer
+        format: int32
+        description: number of months into the calendar year that the fiscal year starts (1 = February, 2 = March)
+      headJobId:
+        type: string
+        description: head of the organization
+        example: 588f7ee98f138b19220041a7
+      unassignedManagerJobId:
+        type: string
+        description: Job ID that all jobs with missing manager report to in the organization
+        example: 588f7ee98f138b19220041a7
+      portfolioParentOrgId:
+        type: string
+        description: portfolio parent org ID
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+        description: start date of history
+      options:
+        description: org-public options
+        $ref: '#/definitions/OrgOptions'
+      internalOptions:
+        description: internal (ChartHop controlled) options
+        $ref: '#/definitions/InternalOrgOptions'
+      onboarding:
+        type: boolean
+        description: current onboarding status of an organization, allowing clearing of org
+      selfServeImporting:
+        type: boolean
+        description: completion status of initial import for orgs signed up via self serve
+      headCount:
+        type: integer
+        format: int32
+        description: number of total headcount currently in the org
+      userCount:
+        type: integer
+        format: int32
+        description: number of non-ChartHop, non-app users in the org
+      activeUserCount:
+        type: integer
+        format: int32
+        description: number of non-ChartHop, non-app users in the org active in the past month
+      activeAt:
+        type: string
+        description: last timestamp that any user was active in the org
+        example: '2017-01-24T13:57:52Z'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      destroyAt:
+        type: string
+        description: timestamp that the org is marked for data destruction
+        readOnly: true
+        example: '2017-01-24T13:57:52Z'
+      destroyId:
+        type: string
+        description: user who marked the org for data destruction
+        readOnly: true
+        example: 588f7ee98f138b19220041a7
+      destroyedAt:
+        type: string
+        description: date at which this org was destroyed, can not be modified
+        readOnly: true
+  OrgOptions:
+    type: object
+    properties:
+      costMultiplier:
+        type: number
+        description: Blanket multiplier to apply to all headcount costs, to account for blanket costs such as taxes and benefits
+      orgEngineIncrementalBackDays:
+        type: integer
+        format: int32
+        description: Org engine incremental back day option
+      stockPriceRollingAverage:
+        type: integer
+        format: int32
+      bannerMessageExpireDays:
+        type: integer
+        format: int32
+      dashboardChangeDaysAhead:
+        type: integer
+        format: int32
+        description: How many days ahead to look for changes on home screen
+      dashboardChangeDaysBack:
+        type: integer
+        format: int32
+        description: How many days back to look for changes on home screen
+      dashboardChangeDaysAheadMembers:
+        type: integer
+        format: int32
+        description: How many days ahead to look for changes, for members only — i.e. set this to 0 to disallow regular people seeing in the future
+      dashboardAnniversariesDaysBack:
+        type: integer
+        format: int32
+      dashboardAnniversariesDaysAhead:
+        type: integer
+        format: int32
+      maxDateYears:
+        type: integer
+        format: int32
+        description: The max number of years ahead shown in date inputs, defaults to 20 years
+      dashboardGlobal:
+        type: boolean
+        description: If you want employees to see all jobs regardless of location set this to true
+      dashboardHidePeopleMoves:
+        type: boolean
+      dashboardHideOpenJobs:
+        type: boolean
+      dashboardRestrictOpenJobs:
+        type: boolean
+      dashboardHideAnniversaries:
+        type: boolean
+      dashboardHideWeeklyCalendar:
+        type: boolean
+        description: Hides the weekly calendar widget on the home screen
+      dashboardWeeklyCalendarIncludeWeekends:
+        type: boolean
+        description: Includes weekends in the weekly calendar widget
+      placesDecimal:
+        type: integer
+        format: int32
+      placesMoney:
+        type: integer
+        format: int32
+      placesPercent:
+        type: integer
+        format: int32
+      placesPayYearly:
+        type: integer
+        format: int32
+      placesPayHourly:
+        type: integer
+        format: int32
+      placesVariableAmount:
+        type: integer
+        format: int32
+      placesVariablePercent:
+        type: integer
+        format: int32
+      disableCompReviewV2Emails:
+        type: boolean
+      disableDataAggregation:
+        type: boolean
+      disableDataImportTypes:
+        type: boolean
+      disableLiveQuery:
+        type: boolean
+      disableWelcomeEmail:
+        type: boolean
+      disableOrgExportLimit:
+        type: boolean
+        description: Allows powerpoint exports of over 1000 jobs
+      disableApproverScenarioEdits:
+        type: boolean
+        description: Disables ability of approvers to modify scenario data
+      enableActions:
+        type: boolean
+      enableAdp:
+        type: boolean
+      enableAzure:
+        type: boolean
+      enableBackwardsCompatibleCompBandRead:
+        type: boolean
+        description: Backwards compatibility flags for bands UAC
+      enableColumnCacheLogging:
+        type: boolean
+      enableColumnCacheInRedis:
+        type: boolean
+      enableTimeOffCacheInRedis:
+        type: boolean
+      enableStockGrantCacheInRedis:
+        type: boolean
+      enableMapForScenarios:
+        type: boolean
+      enablePositionEligibilityFilter:
+        type: boolean
+        description: Enables the CQL eligibility filter input on Group Type position rows
+      enableCompChangeCacheInRedis:
+        type: boolean
+      enableCompReviewV2LaunchFlag:
+        type: boolean
+      enableExperimentalScreenshotLayoutChanges:
+        type: boolean
+      enableGoogle:
+        type: boolean
+      enableMicrosoft:
+        type: boolean
+      enableOkta:
+        type: boolean
+      enableOneLogin:
+        type: boolean
+      enablePassword:
+        type: boolean
+      enableStartingSalary:
+        type: boolean
+        description: Enable starting salary configuration for comp bands
+      enableDynamicFields:
+        type: boolean
+        description: Enable dynamic fields configuration for job codes
+      enableDynamicJobDialog:
+        type: boolean
+        description: Enable dynamic fields configuration in the job modal
+      enableDynamicOrgChartCardHeight:
+        type: boolean
+        description: Enables dynamic card height on the org chart to optimize layout based on card content
+      linkedJobUpdateExcludedCategories:
+        type: array
+        description: Field categories excluded from linked field updates on filled jobs. Defaults to compensation categories if null.
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      jobDialogFilterJobCodeFieldId:
+        type: string
+        description: Determines which field to filter job codes by in the job dialog, defaults to department
+        example: 588f7ee98f138b19220041a7
+      enablePerOrgAuth:
+        type: boolean
+      enableRickrollLogin:
+        type: boolean
+      enableSaml:
+        type: boolean
+      disableSamlLoginToken:
+        type: boolean
+      enableTemplatesRichTextEditorV2:
+        type: boolean
+      enableOrgEngineRequiredFields:
+        type: boolean
+        description: Configures Org Engine to respect required fields
+      enableLongLivedCache:
+        type: boolean
+        description: Enables a managed service that, on API startup, primes those orgs' caches, for both column cache, as well as the primary org cache. These keys should also last for 24+ hours and therefore be always kept warm.
+      grantValueDefault:
+        type: boolean
+        description: If enabled, then by default grants are in value, not shares
+      orgEnginePromoteCustomIdsAsTrueIds:
+        type: boolean
+        description: This field promotes the alternate id to the true id and allows HRIS to be updated
+      preventAtsEmailNotifications:
+        type: boolean
+        description: Sync History V2 Option to prevent ATS notifications
+      scenarioCols:
+        type: string
+        description: The default set of comma separated columns to show in the scenario changes screen
+      enablePowerpointScreenshot:
+        type: boolean
+        description: Enables the powerpoint screenshot export feature, on by default
+      enableDelightedSurvey:
+        type: boolean
+        description: Enables the delighted survey popup
+      enableOrgChartIndicators:
+        type: boolean
+        description: Shows the +XX job sibling indicators on the org chart
+      enableHideEquityCalculator:
+        type: boolean
+        description: Hides the value calculator on the equity section of the profile
+      enableTransformFieldMapper:
+        type: boolean
+        description: Enables the ability to configure the One to One field mapper with a Charthop Default Value
+      enableFullNamesTitlesLegacy:
+        type: boolean
+        description: Shows full names in powerpoint exports
+      disableSiblingIndicators:
+        type: boolean
+        description: Disables the sibling indicators on the org chart
+      enableGrantCustomization:
+        type: boolean
+        description: Enables grant aliases in the financial settings
+      enableScenarioChangesV2:
+        type: boolean
+        description: Enables new scenario changes screen
+      enableScenarioAuditLog:
+        type: boolean
+        description: Enables the audit log tab for scenarios
+      showErrorRows:
+        type: boolean
+      hideEquityValuation:
+        type: boolean
+        description: Hides the company valuation component of the calculation in the Equity profile tab (stock price will still be shown)
+      hideProfileCompensationVesting:
+        type: boolean
+        description: Hides the vesting section of the compensation profile tab
+      hideScenarioTotalRows:
+        type: boolean
+        description: Hide total rows in scenario change summary tables
+      generateApprovalRequestsForTimeOffImport:
+        type: boolean
+      recalculateDaysForTimeOffImport:
+        type: boolean
+      positionIdField:
+        type: string
+        description: Name of the job field that holds the org's Position ID for display in pickers
+      enableCompBandPrefetchByJobCode:
+        type: boolean
+      legacyManagerFieldVisibility:
+        type: boolean
+      restrictReports:
+        type: boolean
+      restrictScenarios:
+        type: boolean
+      restrictSensitiveFilters:
+        type: boolean
+      restrictVariableView:
+        type: boolean
+      restrictVestingView:
+        type: boolean
+      restrictPersonHistory:
+        type: boolean
+      restrictSelfEdit:
+        type: boolean
+      skipSyncNotify:
+        type: boolean
+      hideCompensationTab:
+        type: boolean
+      hideEquityTab:
+        type: boolean
+      hideTasksTab:
+        type: boolean
+      hideTimeOffTab:
+        type: boolean
+      hideProfileCurrencyConversion:
+        type: boolean
+        description: Hides profile currency conversion on compensation tab
+      enableCalendarExport:
+        type: boolean
+      enableChangeExport:
+        type: boolean
+      deidentifiedMinSampleSize:
+        type: integer
+        format: int32
+      deidentifiedFieldIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      enableAi:
+        type: boolean
+        description: Enable AI features like chart analysis and review calibrations
+      enableAiSummaries:
+        type: boolean
+        description: Enable AI form response summaries
+      enableAiChatButtons:
+        type: boolean
+        description: Enables the AI Ask ChartHop chatbot feature via interaction buttons
+      enableMobileAiVoice:
+        type: boolean
+        description: Enables the AI Voice feature in ChartHop mobile
+      limitAiChatButtonsUserIds:
+        type: array
+        description: Limits the usage of the buttons to a set of User IDs
+        items:
+          type: string
+      enableAiChatAsk:
+        type: boolean
+        description: Enables the open-ended AI Ask ChartHop chatbot feature
+      enableAiHomePage:
+        type: boolean
+        description: Enables the AI-centric home page
+      limitAiChatbotUserIds:
+        type: array
+        description: Limits the usage of the AI chatbot feature to a set of User IDs
+        items:
+          type: string
+      enableAiScenarioPlanning:
+        type: boolean
+        description: Enables the AI scenario planning feature
+      limitAiScenarioPlanningUserIds:
+        type: array
+        description: Limits the usage of the AI chatbot scenario planning feature to a set of User IDs
+        items:
+          type: string
+      aiChatDisableStreaming:
+        type: boolean
+        description: Disable streaming for ai chat messages
+      enableAiTerminationGuardrail:
+        type: boolean
+        description: Disable ability for AI to recommend terminations in scenarios
+      aiChatAgentUserId:
+        type: string
+        description: Which agent is used by default in chat, instead of the ChartHop AI
+        example: 588f7ee98f138b19220041a7
+      enableAiAgents:
+        type: boolean
+        description: Enable the use of AI agents
+      enableAiForms:
+        type: boolean
+        description: Enable the use of AI form completions
+      enableAiActions:
+        type: boolean
+        description: Enable the use of AI agentic actions
+      enableAiChatWrite:
+        type: boolean
+        description: Enable AI chat write tools (create, update, delete entities)
+      enableDataExplorer:
+        type: boolean
+        description: Enables the Data Explorer feature
+      enableFinanceImpactDashboard:
+        type: boolean
+        description: Enables the finance-oriented impact dashboard
+      limitDataExplorerUserIds:
+        type: array
+        description: Limits the usage of the Data Explorer to a set of User IDs
+        items:
+          type: string
+      limitInfiniteDataSheetGroupingUserIds:
+        type: array
+        description: Limits the usage of the new Infinite Data Sheet with grouping to a set of User IDs
+        items:
+          type: string
+      enableUserSettingsV2:
+        type: boolean
+      enableCalendarScreen:
+        type: boolean
+      enableCompensationBands:
+        type: boolean
+        description: Enables Comp bands V2 (on by default for Premium customers)
+      enableCompBandsSetupSpreadsheet:
+        type: boolean
+        description: Enables the new comp bands setup spreadsheet UI (AG Grid). Absent/false = legacy path.
+      easyAppInstallConfigManageEnabled:
+        type: boolean
+        description: Enables easy app install (on by default for self-serve & standard orgs)
+      enableGeoip:
+        type: boolean
+      enableNewHireManagement:
+        type: boolean
+      enableOutboundPayroll:
+        type: boolean
+      enableRefreshedReportsV2:
+        type: boolean
+      enableLanguageSwitching:
+        type: boolean
+      hideNextYearTabPolicyTimeOffDisplay:
+        type: boolean
+      enableInfiniteDataSheet:
+        type: boolean
+        description: Enables infinite scrolling with server-side sorting and pagination in Data Sheet
+      infiniteDataSheetPageSize:
+        type: integer
+        format: int32
+        description: 'Number of rows to load per page in infinite scrolling Data Sheet (default: 100)'
+      enableDataSheetGrouping:
+        type: boolean
+        description: Enables grouping functionality in Data Sheet
+      userTablePaginated:
+        type: boolean
+        description: Enables server-side paginated user table with search, filter, and sort via findUsers
+      enableTables:
+        type: boolean
+      enableTeamOrgChart:
+        type: boolean
+        description: Enables groups with positions feature
+      enableDepartedPersonAccessDirection:
+        type: boolean
+      enableForceChangeGroupingOrgCacheReload:
+        type: boolean
+      enableGroupTypes:
+        type: boolean
+      enablePreboarding:
+        type: boolean
+        description: Enables preboarding features
+      allowedIpsPasswordLogin:
+        type: array
+        description: IP Allow-list for Password based logins
+        items:
+          type: string
+      jobDetailPanelFields:
+        type: array
+        description: Customize which fields are displayed in the job details panel in the Org Chart and their order.
+        items:
+          type: string
+      notifyUserIds:
+        type: array
+        description: Sends notification to org users when new Users are assigned
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      orgEngineCustomIdCustomFieldNameList:
+        type: array
+        description: This is an array of fields that an org can use to indicate that one or more fields should be used as alternate id
+        items:
+          type: string
+      highlightMenuPreferredFields:
+        type: array
+        items:
+          type: string
+      impactGroupByExcludedFieldIds:
+        type: array
+        description: Field IDs excluded from the Impact Dashboard Group By picker
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      profileGroupTypeTagIds:
+        type: array
+        description: The types of groups that should be shown as tags in the profile header, defaults to department and location
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      pptThemes:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      editJobFieldOrder:
+        type: object
+        description: Allows ordering of fields within tabs of the edit job dialog
+        additionalProperties:
+          type: array
+          items:
+            type: string
+      profileCompensationChartFields:
+        type: array
+        description: Controls comp fields show in profile tab
+        items:
+          type: string
+      orgMinDate:
+        type: string
+        description: min Date for all DateInput across Org except Groups in format YYYY-MM-DD
+      aboutEquityMessage:
+        type: string
+        description: Message to show in place of the default About equity compensation... message on profile tab
+      atsReqField:
+        type: string
+        description: If an org has an ATS integration, use their atsReqField instead of greenhouseId
+      bannerMessage:
+        type: string
+      bannerHeader:
+        type: string
+      brandColor:
+        type: string
+        description: The org's primary brand color
+      brandSecondaryColor:
+        type: string
+        description: The org's secondary brand color
+      brandLogo:
+        type: string
+        description: Show brand logo in header of home page
+      customSsoImage:
+        type: string
+        description: Customizes the SSO button image on the login screen
+      customSsoLabel:
+        type: string
+        description: Customizes the SSO button label on the login screen
+      dashboardAnnouncementMessage:
+        type: string
+      dashboardCalendarTypes:
+        type: object
+        description: Comma-separated types of calendar events to show in milestones panel
+      dashboardChangeTypes:
+        type: object
+        description: Which change types to show on home screen and calendar, uses ChangeDao.ChangeType as enum
+      dateFormat:
+        type: string
+      defaultNoTimeOffMessage:
+        type: string
+        description: Message to show if no time off policies apply to the org member
+      greenhouseDomain:
+        type: string
+        description: Allows customization of greenhouse subdomain for XHOP app
+      country:
+        type: string
+      language:
+        type: string
+      limitTeamOrgChartUserIds:
+        type: array
+        description: A list of users ids that are allowed to see the team org chart when enableTeamOrgChart is true
+        items:
+          type: string
+      orgDefaultData:
+        type: string
+        description: Controls what data field will be shown in the Visualize option on the Org Chart by default (default is department)
+      loginRedirectUrl:
+        type: string
+      newHireOpenJobMatchingFieldName:
+        type: string
+        description: Custom field for fallback open job matching in org engine
+      restrictExportOrgChart:
+        type: string
+        description: Prevent non-sensitive users to export company org chart
+      restrictExportCsv:
+        type: string
+        description: Prevent non-sensitive users to export company data in CSV files
+      teamOrgChartTypes:
+        type: array
+        description: A filter that can show/hide what toggle options are available on the team org chart, when null everything is shown
+        items:
+          type: string
+      timeOffDaysAhead:
+        type: integer
+        format: int32
+        description: The number of days ahead which PTO becomes org public. Anything outside of this range will be treated as effectively manager shared
+      userSessionDuration:
+        type: string
+      userSessionInactiveDuration:
+        type: string
+      userInviteDuration:
+        type: string
+      turnoverFormula:
+        type: string
+        description: Turnover rate calculation formula - 'monthlyEnd' for end-of-month sampling
+      welcomeEmailButtonLabel:
+        type: string
+      welcomeEmailSubject:
+        type: string
+      customWelcomeMessage:
+        type: string
+      preboardingWelcomeEmailButtonLabel:
+        type: string
+      preboardingWelcomeEmailSubject:
+        type: string
+      preboardingCustomWelcomeHeader:
+        type: string
+      preboardingCustomWelcomeMessage:
+        type: string
+      orgDefaultFilter:
+        type: string
+      sheetDefaultFilter:
+        type: string
+      preboardingFilter:
+        type: string
+      onboardingFilter:
+        type: string
+      offboardingFilter:
+        type: string
+      preboardingColNames:
+        type: string
+      onboardingColNames:
+        type: string
+      offboardingColNames:
+        type: string
+      defaultMessageChannel:
+        $ref: '#/definitions/MessageChannelConfig'
+      allowCharthopMobileApp:
+        type: boolean
+      timeOffPolicyTypeOrder:
+        type: array
+        description: The order in which time off policies should be sorted by type (types not included here are sorted at the end)
+        items:
+          type: string
+          enum:
+          - PTO
+          - TOIL
+          - VACATION
+          - SICK
+          - MEDICAL
+          - JURY
+          - OFFSITE
+          - PARENTAL
+          - UNPAID
+          - DISABILITY_SHORT
+          - DISABILITY_LONG
+          - BEREAVEMENT
+          - MILITARY
+          - RELIGIOUS
+          - VOTING
+          - VOLUNTEER
+          - UNKNOWN
+      enableFormRejections:
+        type: boolean
+        description: Enables form rejections instead of request changes, for backwards compatiblity
+      enableCalibration:
+        type: boolean
+        description: Enables the calibration feature for performance reviews
+      useStandardizedTitle:
+        type: string
+        description: Whether to suggest or enforce standardized titles
+      enableProfilePageV2:
+        type: boolean
+        description: Enables the redesigned profile page
+      enableHomeCustomLayout:
+        type: boolean
+        description: Enables using a custom layout for the home page
+      homeCustomLayout:
+        description: The custom layout for the home page
+        $ref: '#/definitions/Layout'
+      enableSkipSignatureConfirmationEmail:
+        type: boolean
+        description: Temporary option to turn on skipping emails for signatures, until we have a better solution for miller-cooper
+      disableSignatureTitles:
+        type: boolean
+        description: When set to true, do not include job titles in signatures
+      enableHiddenRolesAndPolicies:
+        type: boolean
+      enableAlphaApps:
+        type: boolean
+        description: Allows this org to access applications in alpha
+      csvImportMaxNumRows:
+        type: integer
+        format: int32
+        description: The maximum number of rows for CSV imports
+      enableGoals:
+        type: boolean
+        description: Enable goal-setting features in the org
+      disableAiMemory:
+        type: boolean
+        description: Disable AI agent persistent memory in the org
+      enableLegacyBands:
+        type: boolean
+        description: Enable bands V1 feature in the org
+      enableApprovalDelegates:
+        type: boolean
+        description: Enable Approval Delegates feature in the org
+      useImporterV3:
+        type: boolean
+        description: Whether to use the v3 job importer
+      logImportErrorsUsingJavaLogger:
+        type: boolean
+        description: Whether the v3 job importer should log errors to the java logger in addition to the log file
+      enableIdentitySyncLogging:
+        type: boolean
+        description: Emit verbose identity sync deactivation diagnostics to the process log
+      scenarioCostExpr:
+        type: string
+        description: Cost calculation used for scenarios by default, if not set defaults to annualized cost with multiplier
+      scenarioCostLabel:
+        type: string
+        description: Label to show for cost in scenarios, if not set defaults to 'Annual Cost'
+      scenarioCostDescription:
+        type: string
+        description: Description to show for cost in scenarios,
+      disableAiKnowledgeBase:
+        type: boolean
+        description: Global option to disable AI knowledge base usage (typically for AWS outages)
+      qesFilter:
+        type: string
+        description: filter expression evaluated on each signer for whether to use qualified electronic signature (if it evaluates to true for any signer, QES will be used)
+      disableQes:
+        type: boolean
+        description: disable QES usage while still using external vendor, purely for testing
+      enableBudgets:
+        type: boolean
+        description: enable budgets feature
+      enableEndOfYearTimeOffBalanceDisplay:
+        type: boolean
+        description: display end-of-year balance (roughly) on the time off profile page even for accrued policies
+      timeOffCustomBalanceDescription:
+        type: string
+        description: custom time off balance description (if blank, shows default message)
+      csvImportSetAdjustCreateDate:
+        type: boolean
+        description: Set the adjustCreateDate import option needed for turbo
+      csvImportCreateJobsWithMissingManager:
+        type: boolean
+        description: Set the createJobsWithMissingManager import option
+      csvImportReassignDirectReportsOnMove:
+        type: boolean
+        description: Set the reassignDirectReportsOnMove import option (reassign a moved manager's reports to the target job)
+      defaultBackfillJobSensitivity:
+        type: string
+        description: Default sensitivity for backfill jobs (defaults to HIGH if not set)
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      jobCodeMatchMaxCatalogSize:
+        type: integer
+        format: int32
+        description: 'Maximum number of job codes allowed for AI job-code matching (default: 1000)'
+  OrgDomain:
+    type: object
+    required:
+    - domain
+    - aliases
+    properties:
+      domain:
+        type: string
+      aliases:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  LayoutRow:
+    type: object
+    required:
+    - columns
+    - format
+    properties:
+      columns:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutColumn'
+      format:
+        type: string

@@ -1,0 +1,780 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access oauth API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: oauth
+paths:
+  /oauth/app/{appName}:
+    get:
+      tags:
+      - oauth
+      summary: Process an Oauth2 redirect request from an access request for an app installation, storing the accessToken and refreshToken as secrets for the app
+      operationId: handleRedirect
+      produces:
+      - application/json
+      parameters:
+      - name: token
+        in: cookie
+        required: false
+        type: string
+      - name: appName
+        in: path
+        description: App name
+        required: true
+        type: string
+      - name: state
+        in: query
+        description: State, containing orgId and appUserId
+        required: false
+        type: string
+      - name: code
+        in: query
+        description: Temporary authorization code
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /oauth/credentials:
+    post:
+      tags:
+      - oauth
+      summary: Return a ChartHop authorization token, given a username and password
+      operationId: issueAccessTokenFromCredentials
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      parameters:
+      - name: username
+        in: formData
+        description: Username to authenticate
+        required: false
+        type: string
+      - name: password
+        in: formData
+        description: Password to authenticate
+        required: false
+        type: string
+      - name: scope
+        in: formData
+        description: Requested access scope or scopes (space separated)
+        required: false
+        type: string
+      - name: client_id
+        in: formData
+        description: client id
+        required: false
+        type: string
+      - name: code_challenge
+        in: formData
+        description: code_challenge
+        required: false
+        type: string
+      - name: code_challenge_method
+        in: formData
+        description: code_challenge_method
+        required: false
+        type: string
+      - name: redirect_uri
+        in: formData
+        description: redirect_uri
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid credentials
+  /oauth/join:
+    post:
+      tags:
+      - oauth
+      summary: Return a JOIN token to be used for new user operations
+      operationId: join
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+  /oauth/loginWithToken:
+    post:
+      tags:
+      - oauth
+      summary: Return a ChartHop authorization token, given a login token
+      operationId: issueAccessTokenFromLoginToken
+      produces:
+      - application/json
+      parameters:
+      - name: scope
+        in: query
+        description: Requested access scope or scopes (space separated)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid credentials
+  /oauth/mcp/approve:
+    post:
+      tags:
+      - oauth
+      summary: Approve an MCP authorization grant and issue an authorization code
+      operationId: approveMcpGrant
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/McpApproveRequest'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: bad request
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+  /oauth/mcp/grant-info:
+    get:
+      tags:
+      - oauth
+      summary: Describe a pending MCP authorization grant
+      operationId: getMcpGrantInfo
+      produces:
+      - application/json
+      parameters:
+      - name: clientId
+        in: query
+        description: The client's CIMD URL
+        required: true
+        type: string
+      - name: resource
+        in: query
+        description: The MCP server URL being authorized
+        required: true
+        type: string
+      - name: redirectUri
+        in: query
+        description: The client's OAuth redirect URI
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: bad request
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+  /oauth/org/{orgIdentifier}/app/{appName}/{appUserId}:
+    get:
+      tags:
+      - oauth
+      summary: Retrieve the oauth uri the user should be directed to in order to start the oauth flow
+      operationId: getOauthConnectUri
+      produces:
+      - application/json
+      parameters:
+      - name: orgIdentifier
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appName
+        in: path
+        description: App name
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: returnTo
+        in: query
+        description: Where to return the user
+        required: true
+        type: string
+        enum:
+        - INSTALL
+        - MANAGE
+        - SELF_SERVE
+        - AGENT
+        - AI_CHAT
+      - name: finchAppType
+        in: query
+        description: The type of Finch app being installed
+        required: false
+        type: string
+        enum:
+        - ALL
+        - AUTOMATED
+        - SANDBOX_FINCH
+        - SANDBOX_PROVIDER
+      - name: tokenLevel
+        in: query
+        description: For OAUTH apps, whether to create a shared org or per-user connection
+        required: false
+        type: string
+        enum:
+        - ORG
+        - USER
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ConnectUriResponse'
+        '400':
+          description: bad request
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+  /oauth/org/{orgIdentifier}/app/{appUserId}/oauth/connection:
+    get:
+      tags:
+      - oauth
+      summary: Whether the app installation has an active org-level OAuth connection
+      operationId: getAppOauthConnection
+      produces:
+      - application/json
+      parameters:
+      - name: orgIdentifier
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppOauthConnectionStatus'
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+  /oauth/org/{orgIdentifier}/app/{appUserId}/oauth/user:
+    get:
+      tags:
+      - oauth
+      summary: List the per-user OAuth connections for an app installation
+      operationId: listAppOauthUserConnections
+      produces:
+      - application/json
+      parameters:
+      - name: orgIdentifier
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AppOauthUserConnection'
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+    delete:
+      tags:
+      - oauth
+      summary: Revoke one or more per-user OAuth connections for an app installation
+      operationId: revokeAppOauthTokens
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgIdentifier
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: appUserId
+        in: path
+        description: App user id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/RevokeAppOauthTokensRequest'
+      responses:
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+  /oauth/revoke:
+    post:
+      tags:
+      - oauth
+      summary: Delete the current Oauth2 bearer token (for signout)
+      operationId: revokeToken
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      parameters:
+      - name: token
+        in: formData
+        description: Token to revoke
+        required: true
+        type: string
+      responses:
+        '200':
+          description: token revoked
+  /oauth/sendLoginToken:
+    post:
+      tags:
+      - oauth
+      summary: Send a login ("magic link") email
+      operationId: sendLoginToken
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: User email address
+        required: true
+        schema:
+          $ref: '#/definitions/EmailRequest'
+      responses:
+        '204':
+          description: email sent
+  /oauth/sso/{idp}/access-token:
+    get:
+      tags:
+      - oauth
+      summary: Exchange a one-time use Auth Code for the IDP access token response
+      operationId: getIdpAccessTokenResponse
+      produces:
+      - application/json
+      parameters:
+      - name: idp
+        in: path
+        description: Identity provider of SSO login (e.g. adp)
+        required: true
+        type: string
+      - name: authCode
+        in: query
+        description: A one-time use Auth Code
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/IdpAccessTokenResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /oauth/sso/{idp}/login:
+    get:
+      tags:
+      - oauth
+      summary: Login via the auth endpoint
+      operationId: ssoAuthLogin
+      produces:
+      - application/json
+      parameters:
+      - name: idp
+        in: path
+        description: Identity provider of SSO login (e.g. adp)
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /oauth/token:
+    post:
+      tags:
+      - oauth
+      summary: Return an Oauth2 Authorization bearer token
+      operationId: issueAccessToken
+      consumes:
+      - application/x-www-form-urlencoded
+      produces:
+      - application/json
+      parameters:
+      - name: grant_type
+        in: formData
+        description: Type of grant; 'password', 'refresh_token', 'authorization_code' supported
+        required: false
+        type: string
+      - name: code
+        in: formData
+        description: Authorization code
+        required: false
+        type: string
+      - name: redirect_uri
+        in: formData
+        description: Redirect URI
+        required: false
+        type: string
+        format: uri
+      - name: client_id
+        in: formData
+        description: Client id
+        required: false
+        type: string
+      - name: refresh_token
+        in: formData
+        description: Refresh token
+        required: false
+        type: string
+      - name: code_verifier
+        in: formData
+        description: Code verifier
+        required: false
+        type: string
+      - name: resource
+        in: formData
+        description: Target resource (RFC 8707)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid credentials
+    delete:
+      tags:
+      - oauth
+      summary: Delete the current Oauth2 bearer token (for signout)
+      operationId: deleteToken
+      produces:
+      - application/json
+      responses:
+        '204':
+          description: token deleted
+        '401':
+          description: not authorized
+  /oauth/token/attenuate:
+    post:
+      tags:
+      - oauth
+      summary: Given an existing token, issue a new token with a reduced set of scopes
+      operationId: attenuateToken
+      produces:
+      - application/json
+      parameters:
+      - name: scope
+        in: query
+        description: Requested access scope or scopes (space separated)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+  /oauth/token/sso/{type}:
+    post:
+      tags:
+      - oauth
+      summary: Return an Oauth2 Authorization bearer token, given a SSO id token
+      operationId: issueSsoToken
+      produces:
+      - application/json
+      parameters:
+      - name: type
+        in: path
+        description: type of SSO request (google or microsoft)
+        required: true
+        type: string
+      - name: createOrg
+        in: query
+        description: automatically create org if possible to do so
+        required: false
+        type: boolean
+      - name: signupSource
+        in: query
+        description: sign up source (self-serve, connect, or sequoia)
+        required: false
+        type: string
+        enum:
+        - ADP_MARKETPLACE
+        - SELF_SERVE
+        - SELF_SERVE_TEST
+        - SEQUOIA_ONE
+        - CONNECT
+      - name: utmParams
+        in: query
+        description: utm params (used in salesforce for lead tracking)
+        required: false
+        type: string
+      - name: email
+        in: query
+        description: sign up email address
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: access token request
+        required: true
+        schema:
+          $ref: '#/definitions/AccessTokenRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid credentials
+  /oauth/token/view:
+    post:
+      tags:
+      - oauth
+      summary: Return a view-as token
+      operationId: issueViewToken
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: request on whom to view as
+        required: true
+        schema:
+          $ref: '#/definitions/ViewAsRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AccessTokenResponse'
+        '400':
+          description: invalid credentials
+definitions:
+  AppOauthConnectionStatus:
+    type: object
+    required:
+    - connected
+    properties:
+      connected:
+        type: boolean
+        description: whether an org-level OAuth token is currently connected
+      connectedAt:
+        type: string
+        description: when the org-level token was issued, if connected
+        example: '2017-01-24T13:57:52Z'
+      connectedById:
+        type: string
+        description: id of the user who set up the org-level connection, if connected
+  RevokeAppOauthTokensRequest:
+    type: object
+    required:
+    - tokenIds
+    properties:
+      tokenIds:
+        type: array
+        description: ids of the oauth tokens to revoke
+        items:
+          type: string
+  EmailRequest:
+    type: object
+    required:
+    - email
+    properties:
+      email:
+        type: string
+        description: email address
+        example: example@example.com
+  AppOauthUserConnection:
+    type: object
+    required:
+    - tokenId
+    - userId
+    - issuedAt
+    properties:
+      tokenId:
+        type: string
+        description: the oauth token id, used to revoke the connection
+      userId:
+        type: string
+        description: the id of the user who authorized
+      issuedAt:
+        type: string
+        description: when the connection was authorized
+        example: '2017-01-24T13:57:52Z'
+      activeAt:
+        type: string
+        description: when the connection was last used for an API call
+        example: '2017-01-24T13:57:52Z'
+  AccessTokenRequest:
+    type: object
+    required:
+    - idToken
+    - scope
+    properties:
+      idToken:
+        type: string
+        description: id token
+      scope:
+        type: string
+        description: scope being requested
+      fromToken:
+        type: string
+        description: an existing token
+      clientId:
+        type: string
+        description: client id for OAuth2.0 PKCE
+      codeChallenge:
+        type: string
+        description: code_challenge for OAuth2.0 PKCE
+      codeChallengeMethod:
+        type: string
+        description: code_challenge_method for OAuth2.0 PKCE
+      redirectUri:
+        type: string
+        description: redirect_uri for OAuth2.0 PKCE
+  IdpAccessTokenResponse:
+    type: object
+    required:
+    - id_token
+    properties:
+      id_token:
+        type: string
+        description: id token value (likely a JWT)
+        example: header.payload.signature
+  AccessTokenResponse:
+    type: object
+    required:
+    - access_token
+    - expires_in
+    properties:
+      access_token:
+        type: string
+        description: access token value
+        readOnly: true
+        example: 2YotnFZFEjr1zCsicMWsdv
+      token_type:
+        type: string
+        description: access token type
+        readOnly: true
+        example: bearer
+      expires_in:
+        type: integer
+        format: int32
+        description: expiration time of token, in seconds
+        readOnly: true
+        example: '86400'
+      refresh_token:
+        type: string
+        description: refresh token value
+        readOnly: true
+        example: tGzv3JOkF0XG5Qx2TlKWIA
+      scope:
+        type: string
+        description: scope of the access token
+        readOnly: true
+        example: admin
+      redirect_uri:
+        type: string
+        description: redirect uri of the access token
+        readOnly: true
+        example: com.charthop.mobile://oauth
+  ConnectUriResponse:
+    type: object
+    required:
+    - uri
+    properties:
+      uri:
+        type: string
+        description: uri to use for oath
+        example: https://api.tryfinch.com/connect/sessions
+  ViewAsRequest:
+    type: object
+    required:
+    - orgId
+    - scope
+    properties:
+      orgId:
+        type: string
+        description: org id
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: person id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id
+        example: 588f7ee98f138b19220041a7
+      roleId:
+        type: string
+        description: role id
+        example: 588f7ee98f138b19220041a7
+      scope:
+        type: string
+        description: scope being requested
+  McpApproveRequest:
+    type: object
+    required:
+    - clientId
+    - redirectUri
+    - codeChallenge
+    - codeChallengeMethod
+    - resource
+    properties:
+      clientId:
+        type: string
+      redirectUri:
+        type: string
+      codeChallenge:
+        type: string
+      codeChallengeMethod:
+        type: string
+      resource:
+        type: string
+      state:
+        type: string
+      orgId:
+        type: string

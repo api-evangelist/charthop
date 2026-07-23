@@ -1,0 +1,122 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access mcp API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: mcp
+paths:
+  /mcp/{agent}:
+    post:
+      tags:
+      - mcp
+      summary: Org-less MCP server message endpoint (JSON-RPC 2.0 over Streamable HTTP)
+      operationId: handleMessageNoOrg
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+      responses:
+        '200':
+          description: successful operation
+        '202':
+          description: notification accepted
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    get:
+      tags:
+      - mcp
+      summary: Org-less MCP server SSE stream (not supported)
+      operationId: streamNoOrg
+      produces:
+      - application/json
+      parameters:
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      responses:
+        '405':
+          description: method not allowed
+  /mcp/{agent}/{orgId}:
+    post:
+      tags:
+      - mcp
+      summary: MCP server message endpoint (JSON-RPC 2.0 over Streamable HTTP)
+      operationId: handleMessageForOrg
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+      responses:
+        '200':
+          description: successful operation
+        '202':
+          description: notification accepted
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    get:
+      tags:
+      - mcp
+      summary: MCP server SSE stream (not supported)
+      operationId: stream
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: agent
+        in: path
+        description: Agent app name
+        required: true
+        type: string
+      responses:
+        '405':
+          description: method not allowed

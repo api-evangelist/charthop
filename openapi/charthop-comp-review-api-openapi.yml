@@ -1,0 +1,5076 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access comp-review API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: comp-review
+paths:
+  /v1/org/{orgId}/comp-review:
+    get:
+      tags:
+      - comp-review
+      summary: Find comp reviews in the organization
+      operationId: findCompReviews
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Comp review ID to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsCompReview'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - comp-review
+      summary: Create a comp review
+      operationId: createCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Comp review data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCompReview'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/CompReview'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/bulk/delete:
+    post:
+      tags:
+      - comp-review
+      summary: Delete a set of comp reviews
+      operationId: bulkDelete
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of comp review ids to delete
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/bulk/duplicate:
+    post:
+      tags:
+      - comp-review
+      summary: Duplicate a set of comp reviews
+      operationId: bulkDuplicate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of comp review ids to duplicate
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}:
+    get:
+      tags:
+      - comp-review
+      summary: Return a particular comp review by ID
+      operationId: getCompReviewById
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompReview'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - comp-review
+      summary: Update a comp review
+      operationId: updateCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCompReview'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompReview'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    delete:
+      tags:
+      - comp-review
+      summary: Delete a comp review
+      operationId: deleteCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/approval-requests:
+    get:
+      tags:
+      - comp-review
+      summary: Get a list of approval request responses for a given comp review
+      operationId: getApprovalRequestsForCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: isPreview
+        in: query
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ApprovalRequestCompReviewResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/approval-requests/{approvalRequestId}:
+    patch:
+      tags:
+      - comp-review
+      summary: Update approval request status, including any rollups
+      operationId: updateApprovalRequestStatus
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: Approval request id
+        required: true
+        type: string
+      - name: previewJobId
+        in: query
+        description: Preview-as job id
+        required: false
+        type: string
+      - name: isFinalApproval
+        in: query
+        description: Updating the final stage status
+        required: false
+        type: boolean
+      - name: collaboratorSelectedReviewerJobId
+        in: query
+        description: Reviewer job id a collaborator is working on
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Approval request data to update
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalRequestPatchBody'
+      responses:
+        '204':
+          description: No Content
+  /v1/org/{orgId}/comp-review/{compReviewId}/associated-entities:
+    get:
+      tags:
+      - comp-review
+      summary: Get the necessary caches on a specific date for a compensation review
+      operationId: getAssociatedEntities
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PartialAppEntities'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/audit-log:
+    get:
+      tags:
+      - comp-review
+      summary: Return past events, paginated, without payloads present
+      operationId: getAuditLog
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: currentUserJobId
+        in: query
+        description: The jobId of the current user
+        required: false
+        type: string
+      - name: isPreview
+        in: query
+        description: Is the audit log for a preview
+        required: false
+        type: boolean
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: from
+        in: query
+        description: Timestamp to start search at
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsEvent'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/conclude:
+    post:
+      tags:
+      - comp-review
+      summary: Concludes (or closes) the compensation review
+      operationId: concludeReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: isFullyApproved
+        in: query
+        description: Whether is review fully approved on conclude (default false)
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/dry-run:
+    post:
+      tags:
+      - comp-review
+      summary: Preview changes that will occur when resuming a paused comp review
+      operationId: dryRunUnpause
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompReviewDryRunResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/duplicate:
+    post:
+      tags:
+      - comp-review
+      summary: Duplicate a comp review
+      operationId: duplicate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Duplicate options
+        required: true
+        schema:
+          $ref: '#/definitions/DuplicateCompReviewOptions'
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompReview'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/eligible-employees:
+    get:
+      tags:
+      - comp-review
+      summary: Get a list of employees eligible for a given comp review
+      operationId: getEligibleEmployees
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: filterScenarioIds
+        in: query
+        description: Find ineligible employees under specific comp scenario managers
+        required: false
+        type: string
+      - name: ineligible
+        in: query
+        description: Whether to get eligible or ineligible employees (defaults to eligible)
+        required: false
+        type: boolean
+      - name: from
+        in: query
+        description: Job id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: fields
+        in: query
+        description: Table fields
+        required: true
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Optional CQL filter to apply to employees
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsData'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/export:
+    post:
+      tags:
+      - comp-review
+      summary: Export a comp review's changes
+      operationId: exportChanges
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Export options
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/export/audit:
+    post:
+      tags:
+      - comp-review
+      summary: Export a comp review's audit log
+      operationId: exportAuditLog
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Export options
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/export/comments:
+    post:
+      tags:
+      - comp-review
+      summary: Export a comp review's comments
+      operationId: exportComments
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Export options
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/generate:
+    post:
+      tags:
+      - comp-review
+      summary: Generate a compensation review
+      operationId: generateCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Whether this should be generated as a preview
+        required: true
+        schema:
+          $ref: '#/definitions/GenerateCompReviewOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/in-cycle:
+    get:
+      tags:
+      - comp-review
+      summary: Get an overview for a given user in an in-cycle comp-review
+      operationId: getInCycleView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: scenariosOnly
+        in: query
+        required: false
+        type: boolean
+      - name: proposalOnly
+        in: query
+        required: false
+        type: boolean
+      - name: reviewsOnly
+        in: query
+        required: false
+        type: boolean
+      - name: columnsOnly
+        in: query
+        required: false
+        type: boolean
+      - name: isPreview
+        in: query
+        required: false
+        type: boolean
+      - name: jobId
+        in: query
+        required: false
+        type: string
+      - name: includeAllRequests
+        in: query
+        description: Allows users with multiple roles to request full access for owner or final approver roles
+        required: false
+        type: boolean
+      - name: includeFeatures
+        in: query
+        required: false
+        type: boolean
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/InCycleViewResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/in-cycle/changes:
+    get:
+      tags:
+      - comp-review
+      summary: Get the changes for a set of scenarios in an in-cycle comp-review
+      operationId: getInCycleChanges
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: query
+        description: Approval request id
+        required: false
+        type: string
+      - name: isPreview
+        in: query
+        required: false
+        type: boolean
+      - name: jobId
+        in: query
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/InCycleViewChanges'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/in-cycle/changes/{changeId}:
+    get:
+      tags:
+      - comp-review
+      summary: Get the change data and guideline flags associated with an in-cycle change
+      operationId: getInCycleChange
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: changeId
+        in: path
+        description: Change id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/InCycleChange'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/in-cycle/collabicient:
+    get:
+      tags:
+      - comp-review
+      summary: Get a collaborator participant reviewer in-cycle comp-review
+      operationId: getInCycleCollabicientView
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: scenariosOnly
+        in: query
+        required: false
+        type: boolean
+      - name: proposalOnly
+        in: query
+        required: false
+        type: boolean
+      - name: reviewsOnly
+        in: query
+        required: false
+        type: boolean
+      - name: columnsOnly
+        in: query
+        required: false
+        type: boolean
+      - name: isPreview
+        in: query
+        required: false
+        type: boolean
+      - name: collabicientJobId
+        in: query
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/InCycleViewResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/metadata:
+    get:
+      tags:
+      - comp-review
+      summary: Return metadata for a particular comp review by ID
+      operationId: getCompReviewMetadata
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompReviewMetadata'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/pause:
+    post:
+      tags:
+      - comp-review
+      summary: Pauses the compensation review to allow for editing by an admin
+      operationId: pauseReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/preview:
+    post:
+      tags:
+      - comp-review
+      summary: Generate tiering & preview for a compensation review
+      operationId: previewCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TiersResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/send-reminder-email:
+    post:
+      tags:
+      - comp-review
+      summary: 'Send a reminder email to someone participating in a comp review '
+      operationId: sendCompReviewReminderEmail
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Approval request ID
+        required: true
+        schema:
+          $ref: '#/definitions/SendReminderEmailOptions'
+      responses:
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/comp-review/{compReviewId}/visualizations:
+    post:
+      tags:
+      - comp-review
+      summary: Get data for visualizations for a comp review
+      operationId: getVisualizations
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: compReviewId
+        in: path
+        description: Comp review id
+        required: true
+        type: string
+      - name: viewJobId
+        in: query
+        description: The job you would like to view as
+        required: false
+        type: string
+      - name: preview
+        in: query
+        description: Are the visualizations for a preview
+        required: false
+        type: boolean
+      - name: includeAllRequests
+        in: query
+        description: Allows users with multiple roles to request full access for owner or final approver roles
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: Options for visualizations
+        required: true
+        schema:
+          $ref: '#/definitions/GetVisualizationsOptions'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CompReviewVisualizations'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  ApprovalGroup:
+    type: object
+    required:
+    - type
+    - approvers
+    properties:
+      groupId:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: What type of group this is
+        enum:
+        - REVIEWER
+        - COLLABORATOR
+        - FINAL_APPROVER
+      approvers:
+        type: array
+        description: approvers that make up the group
+        items:
+          $ref: '#/definitions/ApprovalGroupApprover'
+      expandExpression:
+        type: string
+        description: optional custom expression to determine approval request tree
+      minApproversNeeded:
+        type: integer
+        format: int32
+        description: minimum number of approvers required in this group for approval (null means all approvers required)
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  CompReviewReviewerWorkbook:
+    type: object
+    required:
+    - columns
+    properties:
+      columns:
+        type: array
+        description: ordering and settings of columns in workbook
+        items:
+          $ref: '#/definitions/CompReviewWorkbookColumn'
+      numFrozenColumns:
+        type: integer
+        format: int32
+        description: number of frozen columns at start of workbook
+      moreInfoUrl:
+        type: string
+        description: optional link to see additional customer documentation
+      moreInfoLabel:
+        type: string
+        description: optional label for additional customer documentation
+      isEdited:
+        type: boolean
+        description: whether the default config has been modified
+      allowReviewerApproverAuditLog:
+        type: boolean
+        description: allows all reviewers and approvers to view the audit log
+  OwnershipChange:
+    type: object
+    required:
+    - scenarioId
+    - oldOwnerJobId
+    - newOwnerJobId
+    properties:
+      scenarioId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      oldOwnerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      oldOwnerPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      newOwnerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      newOwnerPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  DtValue:
+    type: object
+    properties:
+      value:
+        type: object
+  ResultsCompReview:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CompReview'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  CompReviewBudgets:
+    type: object
+    required:
+    - allocationType
+    - visualizationType
+    - showTotalBudget
+    - totalBudgetVisibilityType
+    properties:
+      allocationType:
+        type: string
+        description: How budgets are allocated
+        enum:
+        - PROPORTIONAL
+        - SEQUENTIAL
+      visualizationType:
+        type: string
+        description: Whether all budget visualizations are visible or only those that apply to eligible employees in the reviewer's pod
+        enum:
+        - ALL
+        - ONLY_APPLICABLE
+      showTotalBudget:
+        type: boolean
+        description: Whether to display the total budget in the cycle
+      totalBudgetVisibilityType:
+        type: string
+        description: Controls who can view the total budget
+        enum:
+        - DEFAULT
+        - ROLE_SELECTION
+        - SPECIFIC_PEOPLE
+        - CUSTOM_CQL
+      totalBudgetVisibilityExpr:
+        type: string
+        description: CQL expression for total budget visibility (used with totalBudgetVisibilityType=CUSTOM_CQL)
+      totalBudgetVisibilityPersonIds:
+        type: array
+        description: Person IDs who can view total budget (used with totalBudgetVisibilityType=SPECIFIC_PEOPLE)
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      totalBudgetVisibilityRoles:
+        description: Roles that can view total budget (used with totalBudgetVisibilityType=ROLE_SELECTION)
+        $ref: '#/definitions/InCycleViewFeatures'
+  AutoIncFieldConfig:
+    type: object
+    required:
+    - upperCase
+    - padDigits
+    - separator
+    - prefixParts
+    properties:
+      upperCase:
+        type: boolean
+        description: convert any lower-case characters in the value to upper case
+      padDigits:
+        type: integer
+        format: int32
+        description: length of the numeric part of the value (left-padded with zeroes)
+      separator:
+        type: string
+        description: separator character to use between parts of the value
+        enum:
+        - HYPHEN
+        - UNDERSCORE
+        - SPACE
+        - NONE
+      prefixParts:
+        type: array
+        items:
+          $ref: '#/definitions/AutoIncFieldPart'
+  Contact:
+    type: object
+    required:
+    - type
+    - format
+    properties:
+      type:
+        type: string
+        description: type identifier for the contact
+        example: HOME_PHONE
+        enum:
+        - ADP
+        - BAMBOO
+        - EMPLOYEE
+        - GREENHOUSE
+        - GOOGLE
+        - GUSTO
+        - HUMAANS
+        - JOBVITE
+        - JUSTWORKS
+        - JUSTWORKS_MEMBER_ID
+        - LEVER
+        - NAMELY
+        - OKTA
+        - PAYLOCITY
+        - SAPLING
+        - PRISM
+        - SUCCESSFACTORS
+        - RIPPLING
+        - TRINET
+        - ULTIPRO
+        - WORKDAY
+        - ZENEFITS
+        - LINKEDIN
+        - TWITTER
+        - GITHUB
+        - GITLAB
+        - SLACK
+        - TIMETASTIC
+        - FINCH
+        - ALPHASTAFF
+        - DEEL
+        - ADP_ASSOCIATE_ID
+        - ADP_WORKER_ID
+        - HIBOB
+        - GUSTO_UUID
+        - MSTEAMS
+        - HOME_EMAIL
+        - MOBILE_PHONE
+        - WORK_EMAIL
+        - HOME_PHONE
+        - WORK_PHONE
+        - WORK_FAX
+      value:
+        type: string
+        description: value for the contact
+        example: linkedin:name
+      format:
+        type: string
+        description: format for the value
+        example: EMAIL
+        enum:
+        - PHONE
+        - EMAIL
+        - ID
+  Change:
+    type: object
+    required:
+    - id
+    - jobId
+    - orgId
+    - type
+    - date
+    - status
+    properties:
+      id:
+        type: string
+        description: unique id
+        example: 588f7ee98f138b19220041a7
+      jobId:
+        type: string
+        description: job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      scenarioId:
+        type: string
+        description: scenario that this change belongs to
+        example: 588f7ee98f138b19220041a7
+      mergeScenarioId:
+        type: string
+        description: scenario that this change was merged in from, if the change originally came from a scenario
+        example: 588f7ee98f138b19220041a7
+      parentChangeId:
+        type: string
+        description: change that this change emanates from
+        example: 588f7ee98f138b19220041a7
+      priorStateChangeId:
+        type: string
+        description: connects this change to a previous version if itself that you might want to roll back to because of bad edits
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of change
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+        description: date of change
+      sort:
+        type: integer
+        format: int64
+        description: sort order of change
+      announceDate:
+        type: string
+        format: date
+        description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+      status:
+        type: string
+        description: whether the change is active or not
+        enum:
+        - ACTIVE
+        - STRUCK
+        - CONFLICT
+        - INACTIVE
+        - PROPOSED
+      personId:
+        type: string
+        description: the id of the person involved, or empty if no person attached to job
+        example: 588f7ee98f138b19220041a7
+      otherJobId:
+        type: string
+        description: for MOVE changes, the id of the job moving from; for RELATE changes, the id of the other job
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        description: for MOVE changes, the id of the other person involved in the move
+        example: 588f7ee98f138b19220041a7
+      departType:
+        type: string
+        description: for DEPART changes, the type of departure
+        enum:
+        - VOLUNTARY
+        - INVOLUNTARY
+      departRegret:
+        type: string
+        description: for DEPART changes, whether the departure was regrettable
+        enum:
+        - REGRET
+        - NONREGRET
+      promotionType:
+        type: string
+        description: if it's a promotion or a demotion
+        enum:
+        - PROMOTION
+        - DEMOTION
+        - NONE
+      reason:
+        type: string
+        description: the reason for the change
+      relateType:
+        type: string
+        description: for RELATE changes, the type of the relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE
+      refs:
+        type: array
+        description: list of ids referenced in text field body, for indexing purposes only
+        items:
+          type: object
+      job:
+        description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+        $ref: '#/definitions/PartialJob'
+      otherJob:
+        description: if otherJobId present, contains title and person.startDate of the other job at the time of change
+        $ref: '#/definitions/PartialJob'
+      formId:
+        type: string
+        description: if this change was data submitted by a form, the id of that form
+        example: 588f7ee98f138b19220041a7
+      formResponseId:
+        type: string
+        description: if this change is associated with a form response, the id of that form response
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: if this change is associated with a assessment, the id of that assessment
+        example: 588f7ee98f138b19220041a7
+      update:
+        description: for UPDATE changes, the data being updated
+        $ref: '#/definitions/JobUpdate'
+      upcoming:
+        description: for UPCOMING changes, the change ahead
+        $ref: '#/definitions/UpcomingChange'
+      conflict:
+        type: string
+        description: for changes that have been struck due to a merge conflict, the description of the conflict
+      note:
+        type: string
+        description: note on the change
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        description: attribution for the create
+        $ref: '#/definitions/Attribution'
+      mergeId:
+        type: string
+        description: merged by user id, if this change was merged
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        description: attribution for the last update
+        $ref: '#/definitions/Attribution'
+      statusAt:
+        type: string
+        description: timestamp of status change
+      approvalAt:
+        type: string
+        description: timestamp of approval
+      approvalId:
+        type: string
+        description: approved by user id
+        example: 588f7ee98f138b19220041a7
+      approvalNote:
+        type: string
+        description: approval/rejection note
+        example: Not acceptable
+      approval:
+        type: string
+        description: if approval is required, who is allowed to approve
+        enum:
+        - MANAGER
+        - GRAND_MANAGER
+      authorSensitive:
+        type: string
+        description: view sensitivity for the author author of this form - the level of view access required to view the createId and updateId fields
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      canEdit:
+        type: boolean
+        description: flag indicating whether authorized user can modify this change (will vary depending on user)
+  TimeOff:
+    type: object
+    required:
+    - id
+    - startDate
+    - endDate
+    properties:
+      id:
+        type: string
+        description: unique id of a time off request
+      startDate:
+        type: string
+        format: date
+        description: start date of time off, inclusive
+      endDate:
+        type: string
+        format: date
+        description: end date of time off, inclusive
+      days:
+        type: number
+        description: number of days used
+      hours:
+        type: number
+        description: number of hours used
+      type:
+        type: string
+        description: type of time off
+      note:
+        type: string
+        description: notes on the time off
+      approval:
+        type: string
+        description: approval status of the time off
+        enum:
+        - APPROVED
+        - PENDING
+        - CANCELLED
+        - REJECTED
+        - SUPERSEDED
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  EnumValue:
+    type: object
+    required:
+    - name
+    - label
+    properties:
+      name:
+        type: string
+        description: enum value name
+      label:
+        type: string
+        description: enum value label
+      color:
+        type: string
+        description: color of property
+        pattern: ^#[a-f0-9]{6}$
+      expr:
+        type: string
+        description: computed expression, for ENUM_EXPR type
+      num:
+        type: number
+        description: numeric value, for ENUM_SCALE type
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      rank:
+        type: integer
+        format: int32
+        description: rank order, if selected in rank order
+      id:
+        type: string
+        description: unique identifier for enum
+        example: 588f7ee98f138b19220041a7
+      labelTr:
+        description: translations for the label
+        $ref: '#/definitions/Translations'
+  GenerateCompReviewOptions:
+    type: object
+    required:
+    - isPreview
+    properties:
+      isPreview:
+        type: boolean
+  Event:
+    type: object
+    required:
+    - id
+    - userId
+    - type
+    - entityType
+    - entityId
+    - at
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id who caused the event
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of event
+        enum:
+        - APP
+        - APPROVE
+        - CANCEL
+        - COMBINE
+        - CREATE
+        - DELETE
+        - DONE
+        - ERROR
+        - EXPORT
+        - EXPORT_CSV
+        - EXPORT_ORG_CHART
+        - GENERATE
+        - GEOIP
+        - INCOMING
+        - INSTALL
+        - INVITE
+        - INBOUND
+        - LOGIN
+        - MERGE
+        - MESSAGE
+        - OUTBOUND
+        - PREVIEW_AS
+        - READ
+        - READ_EXTERNAL
+        - READ_SENSITIVE
+        - READ_ATS
+        - READ_ATS_WEBHOOK
+        - READ_FULL_NAME
+        - READ_FUTURE_DATE
+        - READ_METADATA
+        - READ_COMP
+        - READ_BILLING
+        - READ_PENDING
+        - READ_PAYROLL
+        - READ_SENSITIVE_FILTERS
+        - WRITE_EXTERNAL
+        - REASSIGN
+        - REJECT
+        - RELEASE
+        - REMIND
+        - REMOVE_PASSWORD
+        - REQUEST
+        - RESTORE
+        - RESUME
+        - REVOKE
+        - RUN
+        - RUN_ATS
+        - SECURITY
+        - SHARE
+        - SHOW_DASHBOARD_DAYS_AHEAD
+        - SHOW_OPEN_JOBS
+        - STEP
+        - SUBMIT
+        - SYNC
+        - TEST
+        - TOKEN
+        - UNINSTALL
+        - UPDATE
+        - UPDATE_PASSWORD
+        - UPLOAD_CSV
+        - WRITE
+        - VIEW_AS
+      entityType:
+        type: string
+        description: type of target entity
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        description: id of target entity
+        example: 588f7ee98f138b19220041a7
+      behalfUserId:
+        type: string
+        description: id of the original user this app user is acting on behalf of
+        example: 588f7ee98f138b19220041a7
+      agentUserId:
+        type: string
+        description: id of the agent (app user) if this event was performed by an agent on behalf of a user
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        description: id of the AI chat that this event derives from
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+        description: AI chat tool use identifier that ties this event to a specific tool invocation
+      jobId:
+        type: string
+        description: jobId of the entity, if the entity is a job or closely connected to a single job
+        example: 588f7ee98f138b19220041a7
+      personId:
+        type: string
+        description: personId of the entity, if the entity is a person or closely connected to a single person
+        example: 588f7ee98f138b19220041a7
+      tableId:
+        type: string
+        description: id of table, if entity is a table row
+        example: 588f7ee98f138b19220041a7
+      subtype:
+        type: string
+        description: subtype of entity
+      payload:
+        type: object
+        description: event-specific payload containing information about the change that took place
+        additionalProperties:
+          type: object
+      at:
+        type: string
+        description: timestamp of event
+      processId:
+        type: string
+        description: id of process
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+        description: effective date, if in use
+      scenarioId:
+        type: string
+        description: id of scenario
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: id of associated entity, such as comp cycle
+        example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: set of fields that were updated by the event
+        uniqueItems: true
+        items:
+          type: string
+      code:
+        type: string
+        description: event code, for example job.update
+  PartialJob:
+    type: object
+    properties:
+      jobId:
+        type: string
+        description: globally unique job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      snapshotId:
+        type: string
+        description: snapshot that this job belongs to
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title
+        example: Senior Engineer
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: compensation
+        $ref: '#/definitions/Comp'
+      sensitive:
+        type: string
+        description: view sensitive of the job while open
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      relationships:
+        type: array
+        description: relationship to other jobs
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      groupIds:
+        type: array
+        description: groups that this job is a member of
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIdsByType:
+        type: object
+        description: groups that this job is a member of, mapped by group type id
+        additionalProperties:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      placement:
+        type: string
+        description: guidance on placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      state:
+        type: string
+        description: current state - whether the job is open, filled, or has someone departed or hired
+        enum:
+        - OPEN
+        - FILLED
+        - DEPART
+        - START
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      fieldDates:
+        type: object
+        description: dates of the field data
+        additionalProperties:
+          type: string
+          format: date
+      fieldsProposed:
+        type: object
+        description: proposed values for fields
+        additionalProperties:
+          type: object
+      createDate:
+        type: string
+        format: date
+        description: job creation date
+      startDate:
+        type: string
+        format: date
+        description: for empty jobs, expected start date - for filled jobs, confirmed start date
+      startDatePlanned:
+        type: string
+        format: date
+        description: expected start date whether job is open or has been filled - doesn't change when job is filled
+      personStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the org after the latest departure (if any)
+      personEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing, the last day of that person in the org
+      personJobStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the job
+      personIdDate:
+        type: string
+        format: date
+        description: if personId is present, the first day that the personId actually filled the job
+      personJobEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing or moving out, the last day of that person in the job
+      personId:
+        type: string
+        description: the person holding this job -- either currently in the job, or upcoming announced hire
+        example: 588f7ee98f138b19220041a7
+      backfillPersonId:
+        type: string
+        description: the person who most recently held the job, who this represents a backfill for
+        example: 588f7ee98f138b19220041a7
+      jobCodeId:
+        type: string
+        description: the ID of the job code for this job
+        example: 588f7ee98f138b19220041a7
+      backfillByJobId:
+        type: string
+        description: another job which is planned to be a backfill for this job
+        example: 588f7ee98f138b19220041a7
+      upcoming:
+        type: array
+        description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+        items:
+          $ref: '#/definitions/UpcomingChange'
+      scenarioId:
+        type: string
+        description: scenario that the job was created in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      scenarioChangedId:
+        type: string
+        description: scenario that the job was changed in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      fetchState:
+        type: string
+        description: scenario that the job was changed in (null if job is on primary timeline)
+        enum:
+        - PERSON
+        - STRUCTURE
+        - ALL
+  Name:
+    type: object
+    required:
+    - last
+    properties:
+      first:
+        type: string
+        description: first name
+        example: Jane
+        minItems: 0
+        maxItems: 80
+      middle:
+        type: string
+        description: middle name
+        example: Quidditch
+        minItems: 0
+        maxItems: 80
+      last:
+        type: string
+        description: last name
+        example: Public
+        minItems: 0
+        maxItems: 80
+      pref:
+        type: string
+        description: preferred first name
+        example: JQ
+        minItems: 0
+        maxItems: 80
+      prefLast:
+        type: string
+        description: preferred last name
+        example: Smith
+        minItems: 0
+        maxItems: 80
+  Comp:
+    type: object
+    properties:
+      baseComp:
+        description: base pay (money) with interval (annual or hourly)
+        $ref: '#/definitions/PayInterval'
+      variableTargets:
+        type: array
+        description: variable compensation (money or percent)
+        items:
+          $ref: '#/definitions/VariableComp'
+      grantShares:
+        type: integer
+        format: int32
+        description: planned stock grant, in shares
+        example: '5000'
+      grantValue:
+        type: integer
+        format: int32
+        description: planned stock grant, in value (based on the stock's currency, not the comp)
+        example: '5000'
+      grantType:
+        type: string
+        description: planned stock grant type
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+  JobRelationship:
+    type: object
+    required:
+    - jobId
+    - type
+    properties:
+      jobId:
+        type: string
+        description: destination job id
+        example: 5887a7718f138b6a2a0041a7
+      type:
+        type: string
+        description: type of relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE
+  InCycleViewResponse:
+    type: object
+    properties:
+      reviews:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalRequestCompReviewResponse'
+      proposal:
+        $ref: '#/definitions/ApprovalRequestCompReviewResponse'
+      scenarioMap:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/Scenario'
+      parentReviewsMap:
+        type: object
+        additionalProperties:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      collaboratingWithJobIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      visibleColumns:
+        type: array
+        items:
+          $ref: '#/definitions/CompReviewWorkbookColumn'
+      error:
+        type: object
+        additionalProperties:
+          type: string
+      features:
+        $ref: '#/definitions/InCycleViewFeatures'
+  BudgetCalculation:
+    type: object
+    required:
+    - pools
+    properties:
+      allocated:
+        type: object
+        description: the total budget amount (null if user doesn't have permission to view)
+        example: '500'
+      used:
+        type: object
+        description: the amount of the budget that has been used (null if user doesn't have permission to view)
+        example: '500'
+      pools:
+        type: array
+        description: a list of budget pools that make up the total amount
+        items:
+          $ref: '#/definitions/PoolCalculation'
+      jobBudgetMap:
+        type: object
+        description: the amount allotted and allocated for the comp review broken down by job
+        additionalProperties:
+          type: object
+          additionalProperties:
+            $ref: '#/definitions/BudgetAllocation'
+  CompReviewEligibleEmployees:
+    type: object
+    required:
+    - ineligibilityType
+    properties:
+      ineligibilityType:
+        type: string
+        description: Defines who is ineligible for this cycle
+        enum:
+        - NONE
+        - DEPARTMENT
+        - DIVISION
+        - LOCATION
+        - CUSTOM
+      excludedEmploymentStatuses:
+        type: array
+        description: Exclude these employment types if specified
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+      excludeGroupIds:
+        type: array
+        description: Exclude these groups from the cycle
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: The filter to apply when custom ineligibility rules is selected
+      lastRaiseDate:
+        type: string
+        format: date
+        description: The cutoff date of last raise if specified
+      startDate:
+        type: string
+        format: date
+        description: The cutoff start date if specified
+      individualExclusions:
+        type: array
+        description: List of individuals by personId to exclude from the review
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      individualInclusions:
+        type: array
+        description: List of individuals by personId to include in the review
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  InCycleViewFeatures:
+    type: object
+    required:
+    - isFinalApprover
+    - isProposer
+    - isApprover
+    - isOwner
+    - isCollaborator
+    properties:
+      isFinalApprover:
+        type: boolean
+      isProposer:
+        type: boolean
+      isApprover:
+        type: boolean
+      isOwner:
+        type: boolean
+      isCollaborator:
+        type: boolean
+      isRoot:
+        type: boolean
+  RevieweeMove:
+    type: object
+    required:
+    - revieweeJobId
+    - oldReviewerJobId
+    - newReviewerJobId
+    properties:
+      revieweeJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      revieweePersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      oldReviewerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      oldReviewerPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      newReviewerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      newReviewerPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ScenarioSharedViewConfig:
+    type: object
+    properties:
+      customColumnNames:
+        type: array
+        description: list of column names to display
+        items:
+          type: string
+      columnWidths:
+        type: object
+        description: map of column names to widths
+        additionalProperties:
+          type: integer
+          format: int32
+      type:
+        type: string
+        description: type of view
+        enum:
+        - ALL_CHANGES_GROUPED
+        - CREATE
+        - HIRE
+        - DELETE
+        - DEPART
+        - COMP
+        - UPDATE
+        - MOVE
+      updateId:
+        type: string
+        description: update id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: update at
+  CompReviewDryRunResponse:
+    type: object
+    required:
+    - additions
+    - removals
+    - moves
+    - ownershipChanges
+    - hasChanges
+    properties:
+      additions:
+        type: array
+        description: People being added to reviewer pods
+        items:
+          $ref: '#/definitions/RevieweeChange'
+      removals:
+        type: array
+        description: People being removed from reviewer pods
+        items:
+          $ref: '#/definitions/RevieweeChange'
+      moves:
+        type: array
+        description: People being moved from one reviewer to another
+        items:
+          $ref: '#/definitions/RevieweeMove'
+      ownershipChanges:
+        type: array
+        description: Reviewers whose ownership is changing
+        items:
+          $ref: '#/definitions/OwnershipChange'
+      hasChanges:
+        type: boolean
+        description: Whether there are any changes at all
+    description: Preview of changes that will occur when resuming a paused comp review
+  VariableComp:
+    type: object
+    required:
+    - type
+    - interval
+    properties:
+      type:
+        type: string
+        description: compensation type
+        enum:
+        - BONUS
+        - COMMISSION
+      interval:
+        type: string
+        description: compensation interval
+        enum:
+        - YEARLY
+    description: 'variable compensation
+
+      Implementations: VariableCompPercent, VariableCompPercent'
+    discriminator: compType
+  ApprovalRequestCompReviewResponse:
+    type: object
+    required:
+    - id
+    - status
+    - entityType
+    - entityId
+    - approvalChainId
+    - stageOverrides
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      parentStatus:
+        type: string
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      isFullySubmitted:
+        type: boolean
+      entityType:
+        type: string
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      approvalChainId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      stageOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChainStageOverride'
+      createId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+      updateId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+  CompReviewConfig:
+    type: object
+    required:
+    - keyDates
+    - eligibleEmployees
+    - reviewersAndApprovers
+    - collaborators
+    - reviewerWorkbook
+    properties:
+      keyDates:
+        description: Key dates config
+        $ref: '#/definitions/CompReviewKeyDates'
+      eligibleEmployees:
+        description: Eligible employees config
+        $ref: '#/definitions/CompReviewEligibleEmployees'
+      reviewersAndApprovers:
+        description: Reviewers & approvers config
+        $ref: '#/definitions/CompReviewReviewersApprovers'
+      collaborators:
+        description: HRBP (Collaborator) config
+        $ref: '#/definitions/CompReviewCollaborators'
+      reviewerWorkbook:
+        description: Eligible employees config
+        $ref: '#/definitions/CompReviewReviewerWorkbook'
+      budgets:
+        description: Budget settings config
+        $ref: '#/definitions/CompReviewBudgets'
+      notifications:
+        description: Eligible employees config
+        $ref: '#/definitions/CompReviewNotifications'
+      reassignments:
+        type: object
+        description: Employees that have been reassigned for this cycle (manager to employee set)
+        additionalProperties:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+  ResultsEvent:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  Scenario:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - startDate
+    - status
+    - shareAccess
+    - createId
+    - createAt
+    - updateId
+    - updateAt
+    - startDateFixed
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: scenario name
+        example: Q4 Conservative Plan
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: scenario description
+        example: Q4 Conservative Plan
+        minItems: 0
+        maxItems: 2000
+      startDate:
+        type: string
+        format: date
+        description: date that this scenario diverges from primary
+        example: '2017-01-15'
+      status:
+        type: string
+        description: status of scenario
+        enum:
+        - OPEN
+        - INACTIVE
+        - MERGED
+        - DRAFT
+        - ARCHIVED
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to this scenario
+        items:
+          $ref: '#/definitions/ShareAccess'
+      cost:
+        description: full summary of cost impact on scenario
+        $ref: '#/definitions/CostImpact'
+      changeCount:
+        type: integer
+        format: int32
+        description: number of changes contained in scenario
+      changeCounts:
+        type: object
+        description: number of changes of each type contained in scenario
+        additionalProperties:
+          type: integer
+          format: int32
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+      mergeId:
+        type: string
+        description: merged by user id
+        example: 588f7ee98f138b19220041a7
+      mergeAt:
+        type: string
+        description: merged timestamp
+        example: '2017-01-24T13:57:52Z'
+      calcStartAt:
+        type: string
+        description: most recent summary calculation started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      calcEndAt:
+        type: string
+        description: most recent summary calculation ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      changeAt:
+        type: string
+        description: timestamp of most recent changes made to scenario
+        example: '2017-01-24T13:57:52Z'
+      changeId:
+        type: string
+        description: user who made the most recent change to scenario
+        example: '2017-01-24T13:57:52Z'
+      type:
+        type: string
+        description: Type of scenario to be created
+        enum:
+        - GENERAL
+        - COMP
+        - PROMOTION
+        - TERMINATE
+        - CREATE_JOB
+        - UPDATE_JOB
+        - BUDGET
+        - BACKFILL
+      startDateFixed:
+        type: string
+        description: whether or not the start date should stay fixed in time, or update to today's date as time passes
+        enum:
+        - FIXED
+        - TODAY
+      query:
+        type: string
+        description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
+      validJobIdSet:
+        type: array
+        description: This scenario changes are restricted to the following jobIds
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      approvalRequestId:
+        type: string
+        description: Approval request id, if the scenario has been submitted for approval
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: The entity this scenario is associated with
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: The type of entity associated with this scenario
+        enum:
+        - COMP_REVIEW
+      sharedViewConfig:
+        type: array
+        description: View configurations associated with this scenario
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ScenarioSharedViewConfig'
+      budget:
+        description: Total budget associated with the scenario
+        $ref: '#/definitions/Money'
+  InCycleViewChanges:
+    type: object
+    required:
+    - changeMap
+    properties:
+      changeMap:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/ChangeData'
+      guidelinesMap:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/GuidelineCalculation'
+      access:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/ResultsAccess'
+  CompReview:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - config
+    - shareAccess
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label of goal
+        example: Comp review H2 2022
+        minItems: 1
+        maxItems: 80
+      config:
+        description: Configuration for this comp review
+        $ref: '#/definitions/CompReviewConfig'
+      status:
+        type: string
+        description: Whether the compensation review has been approved by the final approvers
+        enum:
+        - PENDING
+        - PAUSED
+        - ACTIVE
+        - REJECTED
+        - COMPLETE
+        - COMPLETE_APPROVED
+      shareAccess:
+        type: array
+        description: users who have been granted access to this comp review
+        items:
+          $ref: '#/definitions/ShareAccess'
+      reviewerCount:
+        type: integer
+        format: int32
+        description: count of reviewers in the comp review
+      submittedCount:
+        type: integer
+        format: int32
+        description: count of reviews that have been submitted and approved
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  CompReviewKeyDates:
+    type: object
+    required:
+    - cycleBeginDate
+    - levelsSubmitByDate
+    - finalApprovalDate
+    properties:
+      cycleBeginDate:
+        type: string
+        format: date
+        description: Date on which the comp review cycle begins
+      levelsSubmitByDate:
+        type: string
+        format: date
+        description: Date by which all levels should be submitted for approval
+      finalApprovalDate:
+        type: string
+        format: date
+        description: Date by which final approval/sign-off will be completed, this is the baseline primary effective date for the comp review
+      payrollEffectiveDate:
+        type: string
+        format: date
+        description: Date on which payroll updates become effective
+      customEffectiveDate:
+        type: string
+        format: date
+        description: A custom date to use for the primary data structure
+      isSkipAfterSubmitOverdue:
+        type: boolean
+        description: Whether to skip approval stages forward after the submit date
+      skippedAt:
+        type: string
+        description: Whether to skip approval stages forward after the submit date
+      isEdited:
+        type: boolean
+        description: whether the default config has been modified
+  TiersResponse:
+    type: object
+    required:
+    - reviews
+    - finalApprovers
+    properties:
+      reviews:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/TierRepresentationResponse'
+      finalApprovers:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  CostImpact:
+    type: object
+    required:
+    - annual
+    - firstMonth
+    - months
+    properties:
+      annual:
+        type: number
+        description: total annual run-rate impact
+      firstMonth:
+        type: string
+        description: first month to be affected
+      months:
+        type: array
+        description: impact to each month, starting at firstMonth
+        items:
+          type: number
+  SendReminderEmailOptions:
+    type: object
+    required:
+    - approvalRequestId
+    properties:
+      approvalRequestId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  RevieweeChange:
+    type: object
+    required:
+    - revieweeJobId
+    - reviewerJobId
+    properties:
+      revieweeJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      revieweePersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      reviewerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      reviewerPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  FieldOptions:
+    type: object
+    properties:
+      min:
+        type: string
+        description: minimum value, for numeric and date fields
+      max:
+        type: string
+        description: maximum value, for numeric and date fields
+      minItems:
+        type: integer
+        format: int32
+      maxItems:
+        type: integer
+        format: int32
+      stackRank:
+        type: boolean
+      step:
+        type: number
+      enableEditDialog:
+        type: boolean
+      requiredJobField:
+        type: boolean
+      excludeTargetPersonId:
+        type: boolean
+      maxLength:
+        type: integer
+        format: int32
+      readOnly:
+        type: boolean
+      includeFormer:
+        type: boolean
+      effectiveDated:
+        type: boolean
+      unique:
+        type: boolean
+      required:
+        type: boolean
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  TierRepresentationResponse:
+    type: object
+    required:
+    - reviewer
+    - reviewees
+    - eligible
+    properties:
+      reviewer:
+        $ref: '#/definitions/Job'
+      reviewees:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      parentReviewerJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      eligible:
+        type: boolean
+  TableRef:
+    type: object
+    properties:
+      tableId:
+        type: string
+        description: the table id this field references
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+        description: the table name this field references
+  Geopoint:
+    type: object
+    required:
+    - type
+    - coordinates
+    properties:
+      type:
+        type: string
+        description: Type of point
+        readOnly: true
+      coordinates:
+        type: array
+        description: The longitude and latitude of the point
+        readOnly: true
+        items:
+          type: number
+          format: double
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  DuplicateCompReviewOptions:
+    type: object
+    required:
+    - label
+    - orgDataReferenceDate
+    - resetReviewerTree
+    properties:
+      label:
+        type: string
+      orgDataReferenceDate:
+        type: string
+      resetReviewerTree:
+        type: boolean
+  GuidelineCalculation:
+    type: object
+    required:
+    - guidelineId
+    - jobId
+    - compReviewId
+    - guidelineLabel
+    - appliedField
+    - flagMode
+    - isDeviated
+    - deviation
+    - fields
+    properties:
+      guidelineId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      jobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      compReviewId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      budgetPoolId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      guidelineLabel:
+        type: string
+      min:
+        type: object
+      max:
+        type: object
+      target:
+        type: object
+      appliedField:
+        type: string
+      flagMode:
+        type: string
+        enum:
+        - DEVIATION_THRESHOLD
+        - NONE
+      flagDeviationThreshold:
+        type: number
+      isDeviated:
+        type: boolean
+      deviation:
+        $ref: '#/definitions/Deviation'
+      fields:
+        type: object
+        additionalProperties:
+          type: object
+  CreateCompReview:
+    type: object
+    required:
+    - label
+    properties:
+      label:
+        type: string
+        description: human-readable label of goal
+        example: Comp review H2 2022
+        minItems: 1
+        maxItems: 80
+      config:
+        description: Configuration for this comp review
+        $ref: '#/definitions/CompReviewConfig'
+      status:
+        type: string
+        description: Whether the compensation review has been approved by the final approvers
+        enum:
+        - PENDING
+        - PAUSED
+        - ACTIVE
+        - REJECTED
+        - COMPLETE
+        - COMPLETE_APPROVED
+      shareAccess:
+        type: array
+        description: users who have been granted access to this comp review
+        items:
+          $ref: '#/definitions/ShareAccess'
+  BudgetAllocation:
+    type: object
+    properties:
+      allocated:
+        type: object
+      used:
+        type: object
+  Deviation:
+    type: object
+    properties:
+      min:
+        type: object
+      max:
+        type: object
+  CompReviewNotifications:
+    type: object
+    required:
+    - announcementDate
+    properties:
+      announcementDate:
+        type: string
+        format: date
+        description: Announcement date
+  PartialAppEntities:
+    type: object
+    required:
+    - jobs
+    - persons
+    - personToJobMap
+    - fields
+    properties:
+      jobs:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/Job'
+      persons:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/Person'
+      personToJobMap:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/Job'
+      fields:
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+  ChangeData:
+    type: object
+    required:
+    - change
+    - data
+    - cost
+    properties:
+      change:
+        description: the change that was applied
+        $ref: '#/definitions/Change'
+      data:
+        type: object
+        description: the returned data fields requested
+        additionalProperties:
+          type: object
+      cost:
+        type: number
+        description: the annualized impact of this change, denoted in organization's currency
+      lockedFields:
+        type: array
+        description: set of locked fields for this change
+        uniqueItems: true
+        items:
+          type: string
+  UpdateCompReview:
+    type: object
+    properties:
+      label:
+        type: string
+        description: human-readable label of goal
+        example: Comp review H2 2022
+        minItems: 1
+        maxItems: 80
+      config:
+        description: Configuration for this comp review
+        $ref: '#/definitions/CompReviewConfig'
+      status:
+        type: string
+        description: Whether the compensation review has been approved by the final approvers
+        enum:
+        - PENDING
+        - PAUSED
+        - ACTIVE
+        - REJECTED
+        - COMPLETE
+        - COMPLETE_APPROVED
+      shareAccess:
+        type: array
+        description: users who have been granted access to this comp review
+        items:
+          $ref: '#/definitions/ShareAccess'
+      reviewerCount:
+        type: integer
+        format: int32
+        description: count of reviewers in the comp review
+      submittedCount:
+        type: integer
+        format: int32
+        description: count of reviews that have been submitted and approved
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  OrgAccess:
+    type: object
+    required:
+    - orgId
+    - access
+    properties:
+      orgId:
+        type: string
+        description: org id
+        example: 5887a7718f138b6a2a0041a7
+      personId:
+        type: string
+        description: person id, if this user directly corresponds with a person
+        example: 5887a7718f138b6a2a0041a7
+      access:
+        type: string
+        description: legacy access permission level
+        enum:
+        - NONE
+        - PREBOARDING
+        - VIEW
+        - LIMITED
+        - MEMBER_LIMITED_COMP
+        - MEMBER
+        - CUSTOM
+        - TECH_OWNER
+        - TIMEOFF
+        - CONTACT
+        - COMP_CASH
+        - COMP_EQUITY
+        - COMP_ALL
+        - RECRUIT_SENSITIVE
+        - RECRUIT_PRIMARY
+        - SENSITIVE_LIMITED_COMP
+        - SENSITIVE
+        - PRIMARY
+        - PEOPLE_OPS_ADMIN
+        - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+        - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+        - OWNER
+      groupIds:
+        type: array
+        description: group ids that the above access applies to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      expr:
+        type: string
+        description: expression that the above access applies to
+      expireAt:
+        type: string
+        description: timestamp that this org access will expire
+      roleId:
+        type: string
+        description: the role id that defines the users access
+        example: 5887a7718f138b6a2a0041a7
+      status:
+        type: string
+        description: Onboarding status of the user in this org
+        enum:
+        - INACTIVE
+        - PREBOARDING
+        - ACTIVATION
+        - ACTIVE
+        - OFFBOARDED
+      homeEmail:
+        type: string
+        description: Personal email address of user, while they are preboarding
+        example: bob@example.com
+        minItems: 0
+        maxItems: 120
+      workEmail:
+        type: string
+        description: Work email address of user, once they have started
+        example: robert.doe@example.com
+        minItems: 0
+        maxItems: 120
+      workRoleId:
+        type: string
+        description: Active role ID that defines the user's access once they have started
+        example: 67c851da3dd1668c2fdd7e44
+  Address:
+    type: object
+    required:
+    - country
+    properties:
+      street1:
+        type: string
+        description: street address, line 1
+        example: 123 Anywhere Street
+        minItems: 0
+        maxItems: 200
+      street2:
+        type: string
+        description: street address, line 2
+        example: Apt 6L
+        minItems: 0
+        maxItems: 200
+      street3:
+        type: string
+        description: street address, line 3
+        example: Sixth Floor
+        minItems: 0
+        maxItems: 200
+      city:
+        type: string
+        description: city
+        example: New York
+        minItems: 0
+        maxItems: 80
+      state:
+        type: string
+        description: state
+        example: NY
+        minItems: 0
+        maxItems: 80
+      country:
+        type: string
+        description: country (two-digit ISO code)
+        example: NY
+        pattern: ^[A-Z]{2}$
+      postal:
+        type: string
+        description: postal code
+        example: '10001'
+        minItems: 0
+        maxItems: 10
+      geo:
+        description: geopoint location
+        $ref: '#/definitions/Geopoint'
+      approxGeo:
+        description: approximate geopoint location (suitable for a map placement, but not exact location)
+        $ref: '#/definitions/Geopoint'
+  ApprovalRequestPatchBody:
+    type: object
+    required:
+    - status
+    properties:
+      status:
+        type: string
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      message:
+        type: string
+  JobUpdate:
+    type: object
+    properties:
+      addRelationships:
+        type: array
+        description: relationships to add
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      removeRelationships:
+        type: array
+        description: relationships to remove
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      addGroupIds:
+        type: array
+        description: groups to add
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      removeGroupIds:
+        type: array
+        description: groups to remove
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      setGroupIds:
+        type: object
+        description: groups to set
+        additionalProperties:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      grant:
+        description: stock grant to add
+        $ref: '#/definitions/StockGrant'
+      timeOff:
+        description: time off to add
+        $ref: '#/definitions/TimeOff'
+      title:
+        type: string
+        description: new title
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: new compensation level
+        $ref: '#/definitions/Comp'
+      placement:
+        type: string
+        description: new placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: new employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      sensitive:
+        type: string
+        description: new view sensitivity
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      startDatePlanned:
+        type: string
+        format: date
+        description: planned start date
+      startDatePlannedRemove:
+        type: boolean
+        description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
+      startDate:
+        type: string
+        format: date
+        description: new expected start date - will update to person start date in future
+      backfillPersonId:
+        type: string
+        description: set who this job is backfilling
+        example: 588f7ee98f138b19220041a7
+      jobCodeId:
+        type: string
+        description: set (or unset) the job code for this job
+        example: 588f7ee98f138b19220041a7
+      hasUnsetFields:
+        type: boolean
+        description: set who this job is backfilling
+      fields:
+        type: object
+        description: custom fields values to set
+        additionalProperties:
+          type: object
+  ApprovalGroupApprover:
+    type: object
+    required:
+    - jobId
+    - status
+    properties:
+      jobId:
+        type: string
+        description: A job ID that is part of the group
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: The status of the approver
+        enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
+        - SKIPPED
+      commentId:
+        type: string
+        description: Last comment of the approver
+        example: 588f7ee98f138b19220041a7
+      reassignCommentId:
+        type: string
+        description: Last comment associated with a reassignment
+        example: 588f7ee98f138b19220041a7
+      isFallback:
+        type: boolean
+        description: Whether approver is a fallback
+      fallbackFor:
+        type: string
+        description: What jobId approver is a fallback for
+        example: 588f7ee98f138b19220041a7
+      actedByJobId:
+        type: string
+        description: Job of the delegate who acted on this slot on the approver's behalf
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: The date the status was updated last
+  CollaboratorMatrixCondition:
+    type: object
+    required:
+    - expression
+    - collaboratorJobIds
+    properties:
+      expression:
+        type: string
+      collaboratorJobIds:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  ResultsData:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+      totalRow:
+        type: object
+        additionalProperties:
+          type: object
+  PayInterval:
+    type: object
+    required:
+    - interval
+    - pay
+    properties:
+      interval:
+        type: string
+        description: Interval (annual or hourly)
+        enum:
+        - YEARLY
+        - MONTHLY
+        - WEEKLY
+        - DAILY
+        - HOURLY
+      pay:
+        description: Pay over the given interval
+        $ref: '#/definitions/Money'
+      hoursPerWeek:
+        type: integer
+        format: int32
+        description: working hours per week if interval=hourly
+        example: '40'
+      weeksPerYear:
+        type: integer
+        format: int32
+        description: working weeks per year if interval=hourly
+        example: '52'
+      monthsPerYear:
+        type: integer
+        format: int32
+        description: months per year if interval=month
+        example: '52'
+      daysPerYear:
+        type: integer
+        format: int32
+        description: days per year if interval=day
+        example: '250'
+  Field:
+    type: object
+    required:
+    - id
+    - name
+    - label
+    - type
+    - plural
+    - isUnique
+    - isRequired
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if global)
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: short field name
+        example: summary
+        pattern: ^[a-zA-Z][a-zA-Z0-9_]+$
+        minItems: 3
+        maxItems: 32
+      label:
+        type: string
+        description: human-readable full name of field
+        example: Job Summary
+        minItems: 3
+        maxItems: 80
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      description:
+        type: string
+        description: description of field
+        example: This field tracks the most recent performance rating for an individual.
+        minItems: 0
+        maxItems: 1000
+      inUse:
+        type: boolean
+        description: disallow any updates to this Field (except for field.question string)
+      expr:
+        type: string
+        description: calculated expression
+        example: (base + variable) / 12
+        minItems: 0
+        maxItems: 1000
+      exprType:
+        type: string
+        description: the expected type of the evaluated expression
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      type:
+        type: string
+        description: type of field
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        description: plural type of the field (either SINGLE, LIST, or SET)
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+      values:
+        type: array
+        description: possible values (enum type only)
+        items:
+          $ref: '#/definitions/EnumValue'
+      defaultValue:
+        type: object
+        description: default value if field is not set
+      options:
+        description: validation options
+        $ref: '#/definitions/FieldOptions'
+      entityType:
+        type: string
+        description: entity type of field
+        enum:
+        - JOB
+        - JOB_OPEN
+        - JOB_FILLED
+        - PERSON
+        - CHANGE
+        - TABLE
+        - ORG
+        - USER
+        - NONE
+      isUnique:
+        type: boolean
+        description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
+      isRequired:
+        type: boolean
+        description: indicates that this field value is required
+      isEffectiveDated:
+        type: boolean
+        description: indicates that this field value is effective-dated
+      aliases:
+        type: array
+        description: set of aliases for this field
+        uniqueItems: true
+        items:
+          type: string
+      groupTypeId:
+        type: string
+        description: if this is a group membership field, the group type ID it's for
+        example: 588f7ee98f138b19220041a7
+      calc:
+        type: string
+        description: unique ID for the function that runs to calculate the value of this field. For native fields only
+        enum:
+        - ADDRESS
+        - AGE
+        - ANNIVERSARY
+        - ANNUAL_BASE_MONEY
+        - BACKFILL
+        - BAND
+        - BAND_RANGE
+        - BASE
+        - BASE_CAL_YEAR_PRORATED
+        - BASE_CAL_YTD
+        - BASE_COMP
+        - BASE_COMP_AMOUNT
+        - BASE_COMP_ANNUALIZED
+        - BASE_COMP_ANNUALIZED_AS_ORG_CURRENCY
+        - BASE_COMP_AS_ORG_CURRENCY
+        - BASE_COMP_CHANGES
+        - BASE_COMP_CURRENCY
+        - BASE_COMP_HOURS_PER_WEEK
+        - BASE_COMP_INTERVAL
+        - BASE_COMP_LAST_RAISE_DATE
+        - BASE_COMP_LAST_RAISE_MONTHS_SINCE
+        - BASE_COMP_LAST_RAISE_PAY
+        - BASE_COMP_LAST_RAISE_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_LAST_RAISE_PERCENT
+        - BASE_COMP_LAST_RAISE_TYPE
+        - BASE_COMP_PAY
+        - BASE_COMP_PAY_AS_ORG_CURRENCY
+        - BASE_COMP_WEEKS_PER_YEAR
+        - BASE_FISCAL_YEAR_PRORATED
+        - BASE_FISCAL_YTD
+        - BASE_PRIMARY
+        - BASE_RAISE_AMOUNT
+        - BASE_RAISE_DATE
+        - BASE_RAISE_PERCENT
+        - BIRTH_DATE
+        - BIRTHDAY
+        - BONUS_TARGET
+        - BUDGET_COST
+        - BUSINESS_UNITS
+        - CAL_YEAR_VEST_SHARES
+        - CAL_YEAR_VEST_VALUE
+        - CAN_APPROVE_CHANGE
+        - CAN_EDIT_JOB
+        - CASH_COMP
+        - CASH_COMP_LOCAL
+        - CHANGE
+        - CHANGE_ID
+        - COMMISSION_TARGET
+        - COMP
+        - COMP_CHANGE_PERCENT
+        - COMPA_RATIO_MID
+        - COMPA_RATIO_TARGET
+        - CONTACT
+        - CONTACTS
+        - COST
+        - CREATE_DATE
+        - CURRENCY
+        - DATA
+        - DATE
+        - DATE_OF
+        - DAYS_ACTIVE
+        - DAYS_OFF
+        - DAYS_OFF_TAKEN
+        - DAYS_OFF_UPCOMING
+        - DAYS_OPEN
+        - DB
+        - DEPART
+        - DEPARTMENT
+        - DEPARTMENT_FUNC
+        - DIRECT_JOBS
+        - DIRECT_JOB_COUNT
+        - DIRECT_PERSON_COUNT
+        - DIRECT_PERSONS
+        - EMPLOYMENT
+        - END_DATE_JOB
+        - END_DATE_ORG
+        - ETHNICITY
+        - FISCAL_YEAR_COST
+        - GENDER
+        - GEOIP
+        - GEOIP_ADDRESS
+        - GRAND_MANAGER
+        - GRANT_SHARES
+        - GRANT_TYPE
+        - GRANT_VALUE
+        - GRANTS
+        - GROUP_IDS
+        - GROUPS_BY_TYPE
+        - GROUP_GOALS
+        - HEADCOUNT
+        - HISTORIC_BACKFILL
+        - HOUR
+        - HOURLY
+        - HOURLY_PRIMARY
+        - HOURS_PER_WEEK
+        - IMAGE
+        - INDIRECT
+        - INDIRECT_JOBS
+        - JOB
+        - JOB_ID
+        - JOB_CODE
+        - JOBCOUNT
+        - LAST_GRANT
+        - LAST_GRANT_DATE
+        - LAST_GRANT_ORIGINAL_VALUE
+        - LOCATION
+        - MANAGE_JOBS
+        - MANAGE_PERSONS
+        - MANAGER
+        - MANAGER_COUNT
+        - MANAGER_FILLED
+        - MANAGER_ID
+        - MANAGERS
+        - MANAGER_PERSON
+        - MANAGER_PERSONS
+        - ME
+        - MERGE_SCENARIO_ID
+        - NAME
+        - NAME_AUDIO
+        - NAME_TITLE
+        - NEXT_DAY_OFF
+        - NEXT_TIME_OFF
+        - NEXT_YEAR_VEST_SHARES
+        - NEXT_YEAR_VEST_VALUE
+        - NOTE
+        - NOOP
+        - OPEN
+        - ORG
+        - OWNER_GOALS
+        - PERSON
+        - PERSON_ID
+        - PLACEMENT
+        - PREV_DAY_OFF
+        - PREV_TIME_OFF
+        - PROMOTION
+        - PROMOTION_DATE
+        - PROPOSED
+        - Q
+        - RAISE_AMOUNT
+        - RAISE_DATE
+        - RAISE_PERCENT
+        - RAISE_PROMOTION_DATE
+        - REASON
+        - REGRET
+        - RELATIONSHIPS
+        - REMOTE_WORK_ADDRESS
+        - SCENARIO
+        - SCENARIO_CHANGED
+        - SENSITIVE
+        - SENSITIVE_FIELDS
+        - START_DATE
+        - START_DATE_JOB
+        - START_DATE_ORG
+        - START_DATE_LIFETIME
+        - START_DATE_PLANNED
+        - STATE
+        - STRIKE_PRICE
+        - SUPPORTER_GOALS
+        - TARGET_HOURS_PER_WEEK
+        - TARGET_WEEKS_PER_YEAR
+        - TEAM
+        - TENURE_JOB
+        - TENURE_ORG
+        - TENURE_LIFETIME
+        - TIMEZONE_OFFSET
+        - TITLE
+        - TITLE_DATE
+        - TODAY
+        - TOTAL_COMP
+        - TOTAL_COMP_LOCAL
+        - TOTAL_ORG_SHARES
+        - TOTAL_SHARES
+        - TOTAL_SHARES_VALUE
+        - UNDER_JOBS
+        - UNVESTED_SHARES
+        - UNVESTED_VALUE
+        - UPDATE
+        - USER_ACTIVE_DAYS
+        - USER_ACTIVE_DAYS_CONSECUTIVE
+        - USER_CAN_EDIT_COMP_FOR_JOB
+        - USER
+        - VARIABLE
+        - VARIABLE_AMOUNT
+        - VARIABLE_INTERVAL
+        - VARIABLE_PERCENT
+        - VARIABLE_PRIMARY
+        - VARIABLE_TARGET
+        - VARIABLE_TARGET_AMOUNT
+        - VARIABLE_TARGET_ANNUALIZED
+        - VARIABLE_TARGET_CURRENCY
+        - VARIABLE_TARGET_PERCENT
+        - VARIABLE_TARGET_TYPE
+        - VARIABLE_TARGETS
+        - VARIABLE_TARGETS_LAST_RAISE_DATE
+        - VARIABLE_TARGETS_LAST_RAISE_MONTHS_SINCE
+        - VARIABLE_TARGETS_LAST_RAISE_PAY
+        - VARIABLE_TARGETS_LAST_RAISE_PERCENT
+        - VARIABLE_COMP_CHANGES
+        - VARIABLE_TYPE
+        - VESTED_DATE
+        - VESTED_SHARES
+        - VESTED_VALUE
+        - WEEKS_PER_YEAR
+        - WORK_ADDRESS
+        - UPCOMING
+      classification:
+        type: string
+        description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
+        enum:
+        - COMPOUND
+      sensitive:
+        type: string
+        description: sensitivity level of data
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      hideExpr:
+        type: boolean
+        description: hide expression-derived values from non-sensitive users
+      expireDays:
+        type: integer
+        format: int32
+        description: number of days after which the data becomes invalid
+      categoryId:
+        type: string
+        description: the category the field belongs to
+        example: 588f7ee98f138b19220041a7
+      categoryIds:
+        type: array
+        description: the categories the field belongs to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: the status of the field
+        enum:
+        - ACTIVE
+        - HIDDEN
+      tableId:
+        type: string
+        description: the table id this field applies to, only applicable when EntityType equals TABLE
+        example: 588f7ee98f138b19220041a7
+      tableName:
+        type: string
+      tableRef:
+        description: the table and label this field references, only applicable when Type equals TABLE_REF
+        $ref: '#/definitions/TableRef'
+      readonly:
+        type: boolean
+      builtIn:
+        type: boolean
+      canOverrideSensitivity:
+        type: boolean
+      places:
+        type: integer
+        format: int32
+        description: number of decimal places for money values
+      isAutoIncrement:
+        type: boolean
+        description: whenther this field should auto-increment. For unique STRING or INT fields only
+      autoIncConfig:
+        description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
+        $ref: '#/definitions/AutoIncFieldConfig'
+      shouldAutoAddValue:
+        type: boolean
+        description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
+      overrideRevert:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/DtValue'
+      overrideName:
+        type: string
+      hasSubfields:
+        type: boolean
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  CompReviewReviewersApprovers:
+    type: object
+    required:
+    - reviewers
+    properties:
+      reviewers:
+        type: string
+        description: Which individuals are included as reviewers
+        enum:
+        - ALL_MANAGERS
+        - ONLY_SPECIFIC_LEVEL
+        - ONLY_SPECIFIC_TITLES
+        - CUSTOM
+      reviewerLevels:
+        type: array
+        description: Levels to be included if reviewers is only specific levels
+        items:
+          type: integer
+          format: int32
+      reviewerTitles:
+        type: array
+        description: Titles to be included if reviewers is only specific titles
+        items:
+          type: string
+      reviewerFilter:
+        type: string
+        description: Filter to be applied if reviewers is custom
+      excludedReviewerIds:
+        type: array
+        description: Job ids of individuals to exclude from the review
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      approverIds:
+        type: array
+        description: Person ids of employees who will final approve
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  PoolCalculation:
+    type: object
+    required:
+    - budgetPoolId
+    - label
+    - allocated
+    - scenarios
+    properties:
+      budgetPoolId:
+        type: string
+        description: budget pool id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: budget pool label
+        example: Merit
+      allocated:
+        type: object
+        description: budget pool total amount
+        example: '500'
+      used:
+        type: object
+        description: the amount of the budget pool that has been used
+        example: '500'
+      scenarios:
+        type: array
+        description: a list of reviewer/scenario specific calculations that create the total
+        items:
+          $ref: '#/definitions/ScenarioCalculation'
+  CollaboratorMatrix:
+    type: object
+    required:
+    - includedFields
+    - conditions
+    properties:
+      includedFields:
+        type: array
+        items:
+          type: string
+      conditions:
+        type: array
+        items:
+          $ref: '#/definitions/CollaboratorMatrixCondition'
+  CompReviewWorkbookColumn:
+    type: object
+    required:
+    - name
+    - label
+    - editableFor
+    - visibleTo
+    - visibleToGroups
+    - visibleToType
+    properties:
+      name:
+        type: string
+        description: field name
+      label:
+        type: string
+        description: display name in workbook
+      color:
+        type: string
+        description: color used in the column header
+      editableFor:
+        type: string
+        description: cql evaluated on the reviewee job specifying whether field is editable
+      visibleTo:
+        type: string
+        description: cql specifying who can view
+      visibleToGroups:
+        type: array
+        description: list of groupIds with viewing permissions
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      visibleToType:
+        type: string
+        description: type of cql filter used in the visible to
+        enum:
+        - EVERYONE
+        - DEPARTMENT
+        - TEAM
+        - LOCATION
+        - CUSTOM
+      visibleToRoles:
+        description: comp cycle roles this column is visible to, in addition to other filters
+        $ref: '#/definitions/InCycleViewFeatures'
+      editableForRoles:
+        description: comp cycle roles that can edit this column, in addition to editableFor filter
+        $ref: '#/definitions/InCycleViewFeatures'
+  CompReviewVisualizations:
+    type: object
+    required:
+    - jobToBaseSpendMap
+    properties:
+      jobToBaseSpendMap:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/Money'
+      budgetPoolCalculation:
+        $ref: '#/definitions/BudgetCalculation'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  InCycleChange:
+    type: object
+    required:
+    - change
+    - guidelines
+    properties:
+      change:
+        $ref: '#/definitions/ChangeData'
+      guidelines:
+        type: array
+        items:
+          $ref: '#/definitions/GuidelineCalculation'
+  Job:
+    type: object
+    required:
+    - jobId
+    - orgId
+    - title
+    - groupIds
+    - fields
+    properties:
+      jobId:
+        type: string
+        description: globally unique job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title
+        example: Senior Engineer
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: compensation
+        $ref: '#/definitions/Comp'
+      sensitive:
+        type: string
+        description: view sensitive of the job while open
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      relationships:
+        type: array
+        description: relationship to other jobs
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      managerIds:
+        type: array
+        description: list of managers, from immediate manager upwards
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: groups that this job is a member of
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      placement:
+        type: string
+        description: guidance on placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      startDate:
+        type: string
+        format: date
+        description: for empty jobs, expected start date - for filled jobs, confirmed start date
+      startDatePlanned:
+        type: string
+        format: date
+        description: expected start date whether job is open or has been filled - doesn't change when job is filled
+      personStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the org after the latest departure (if any)
+      personEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing, the last day of that person in the org
+      personJobStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the job
+      personJobEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing or moving out, the last day of that person in the job
+      personId:
+        type: string
+        description: the person holding this job -- either currently in the job, or upcoming announced hire
+        example: 588f7ee98f138b19220041a7
+      upcoming:
+        type: array
+        description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+        items:
+          $ref: '#/definitions/UpcomingChange'
+      scenarioId:
+        type: string
+        description: scenario that the job was created in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      backfillPersonId:
+        type: string
+        description: the person who most recently held the job, who this represents a backfill for
+        example: 588f7ee98f138b19220041a7
+  UpcomingChange:
+    type: object
+    required:
+    - date
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+      announceDate:
+        type: string
+        format: date
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  Person:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        description: unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      name:
+        description: full name of person
+        $ref: '#/definitions/Name'
+      contacts:
+        type: array
+        description: contacts (emails, phones, external ids)
+        items:
+          $ref: '#/definitions/Contact'
+      address:
+        description: home address
+        $ref: '#/definitions/Address'
+      remoteWorkAddress:
+        description: current work address, if working remotely somewhere other than home address or work location
+        $ref: '#/definitions/Address'
+      birthDate:
+        type: string
+        format: date
+        description: birthdate
+        example: '1980-05-12'
+      startDate:
+        type: string
+        format: date
+        description: start date of most recent hire
+        example: '1980-05-12'
+      endDate:
+        type: string
+        format: date
+        description: end date of most recent hire
+        example: '1980-05-12'
+      imagePath:
+        type: string
+        description: path to full-sized profile image in storage
+        pattern: ^[a-zA-Z0-9._/-]+$
+      nameAudioPath:
+        type: string
+        description: path to pronunciation of the person's name
+        pattern: ^[a-zA-Z0-9._/-]+$
+      gender:
+        type: string
+        description: self-reported gender
+        enum:
+        - MALE
+        - FEMALE
+        - NONBINARY
+        - PREFER_NOT
+      ethnicity:
+        type: string
+        description: self-reported ethnicity
+        enum:
+        - HISPANIC
+        - WHITE
+        - BLACK
+        - PACIFIC
+        - ASIAN
+        - NATIVE
+        - TWO
+        - PREFER_NOT
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      sensitiveFields:
+        type: object
+        description: personal sensitivity preferences around specific fields
+        additionalProperties:
+          type: string
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      inviteOptions:
+        description: saved settings used when inviting user from person
+        example: 'keys: email, role'
+        $ref: '#/definitions/OrgAccess'
+      state:
+        type: string
+        description: current status within the organization
+        enum:
+        - PRIMARY
+        - SCENARIO
+        - PENDING
+        - INACTIVE
+  StockGrant:
+    type: object
+    required:
+    - id
+    - stock
+    - date
+    - shares
+    - price
+    - type
+    - vestSchedule
+    properties:
+      id:
+        type: string
+        description: unique identifier of grant
+      stock:
+        type: string
+        description: ticker symbol of this stock
+        example: GOOG
+      date:
+        type: string
+        format: date
+        description: date of grant
+      vestStartDate:
+        type: string
+        format: date
+        description: vesting start date of grant
+      expireDate:
+        type: string
+        format: date
+        description: expiration date of grant
+      shares:
+        type: number
+        description: number of shares granted
+      price:
+        type: number
+        description: per share strike price
+      type:
+        type: string
+        description: type of grant
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+      vestSchedule:
+        type: string
+        description: vesting schedule
+      originalPrice:
+        type: number
+        description: original per share value of stock (grant price at time of issue)
+      currentPrice:
+        type: number
+        description: current per share value of stock
+      vestedShares:
+        type: number
+        description: current number of shares vested
+      vestedSharesNextYear:
+        type: number
+        description: number of shares vested one year from today
+      vestedSharesByDate:
+        type: object
+        description: number of shares vested, by future date
+        additionalProperties:
+          type: number
+      vestEndDate:
+        type: string
+        format: date
+        description: vesting end date
+      cancelDate:
+        type: string
+        format: date
+        description: cancellation date
+      terminationDate:
+        type: string
+        format: date
+        description: termination date — vesting freezes on this date when the holder separates
+      lastExercisableDate:
+        type: string
+        format: date
+        description: last date on which vested shares can be exercised; after this the grant is forfeited
+      details:
+        type: string
+        description: details of the grant (arbitrary text)
+      description:
+        type: string
+        description: human-readable description of vesting schedule
+  AutoIncFieldPart:
+    type: object
+    required:
+    - type
+    - value
+    properties:
+      type:
+        type: string
+        enum:
+        - LITERAL_STRING
+        - GROUP_CODE
+      value:
+        type: object
+      defaultValue:
+        type: string
+  CompReviewCollaborators:
+    type: object
+    required:
+    - collaborationType
+    - collaboratorAccess
+    - jobToCollaboratorsMap
+    properties:
+      collaborationType:
+        type: string
+        description: What type of HRBP collaboration the comp review uses
+        enum:
+        - NONE
+        - STATIC
+        - DYNAMIC
+      collaboratorAccess:
+        type: string
+        description: What level of access collaborators should have
+        enum:
+        - READ
+        - EDIT
+        - SUBMIT
+      collaboratorJobIds:
+        type: array
+        description: A list of collaborators for all reviewers, used when collaborationType is STATIC
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      collaboratorMatrix:
+        description: A matrix of collaborators assigned by condition, used when collaborationType is DYNAMIC
+        $ref: '#/definitions/CollaboratorMatrix'
+      jobToCollaboratorsMap:
+        type: object
+        description: A map of reviewer job ID to a set of collaborator job IDs indicating which collaborators are collaborating with a given reviewer
+        additionalProperties:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+  CompReviewMetadata:
+    type: object
+    required:
+    - compReviewId
+    - orgId
+    - eligibleEmployees
+    - eligibleEmployeesFilter
+    - ineligibleEmployees
+    - ineligibleEmployeesFilter
+    - approvers
+    - reviewers
+    - collaborators
+    properties:
+      compReviewId:
+        type: string
+        description: comp review id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id (empty if built-in)
+        example: 588f7ee98f138b19220041a7
+      eligibleEmployees:
+        type: integer
+        format: int32
+        description: count of employees eligible for the comp review
+      eligibleEmployeesFilter:
+        type: string
+        description: filter to view eligible employees on the datasheet
+      ineligibleEmployees:
+        type: integer
+        format: int32
+        description: count of employees ineligible for the comp review
+      ineligibleEmployeesFilter:
+        type: string
+        description: filter to view ineligible employees on the datasheet
+      approvers:
+        type: integer
+        format: int32
+        description: count of final approvers
+      reviewers:
+        type: integer
+        format: int32
+        description: count of reviewers in the comp review
+      collaborators:
+        type: integer
+        format: int32
+        description: count of collaborators in the comp review
+  GetVisualizationsOptions:
+    type: object
+    required:
+    - isCollabicientView
+    properties:
+      changeIds:
+        type: array
+        description: A set of Change ObjectIds used to filter the results of budget and raise calculations
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      viewInCurrency:
+        type: string
+        description: Currency to view budget visualizations
+      includeCollaborators:
+        type: boolean
+        description: Whether or not to include approval requests on which a user is collaborating when calculating budget amounts for that user
+      isCollabicientView:
+        type: boolean
+        description: Are the visualizations for a collaborating participant
+      scenarioIds:
+        type: array
+        description: A set of Scenario ObjectIds used to filter budget calculations to a specific reviewer's scenarios
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  ApprovalChainStageOverride:
+    type: object
+    required:
+    - stageOverrideId
+    - approvalChainStageId
+    - status
+    - order
+    properties:
+      stageOverrideId:
+        type: string
+        description: unique id for stage
+        example: 588f7ee98f138b19220041a7
+      approvalChainStageId:
+        type: string
+        description: parent approval chain stage id
+        example: 588f7ee98f138b19220041a7
+      groups:
+        type: array
+        description: approval group override
+        items:
+          $ref: '#/definitions/ApprovalGroup'
+      status:
+        type: string
+        description: status of the stage
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      order:
+        type: integer
+        format: int32
+        description: order of the stage
+  ScenarioCalculation:
+    type: object
+    required:
+    - scenarioId
+    - allocated
+    properties:
+      scenarioId:
+        type: string
+        description: scenario id
+        example: 588f7ee98f138b19220041a7
+      allocated:
+        type: object
+        description: budget pool total allocation for scenario
+        example: '500'
+      used:
+        type: object
+        description: budget pool total use for scenario
+        example: '500'

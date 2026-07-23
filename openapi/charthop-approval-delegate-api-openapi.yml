@@ -1,0 +1,404 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access approval-delegate API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: approval-delegate
+paths:
+  /v2/org/{orgId}/approval-delegate:
+    get:
+      tags:
+      - approval-delegate
+      summary: List the acting user's approval delegates
+      operationId: listDelegates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ApprovalDelegate'
+        '401':
+          description: not authorized
+        '404':
+          description: feature not enabled
+  /v2/org/{orgId}/approval-delegate/all:
+    get:
+      tags:
+      - approval-delegate
+      summary: List every approver's delegates in the org, grouped by approver and enriched with user/job refs
+      operationId: listAllDelegates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (id or slug)
+        required: true
+        type: string
+      - name: returnAccess
+        in: query
+        description: Comma-separated actions to return per-approver access for (e.g. update)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: not authorized
+        '404':
+          description: feature not enabled
+  /v2/org/{orgId}/approval-delegate/bulk:
+    post:
+      tags:
+      - approval-delegate
+      summary: Set or remove approval delegates on behalf of users in a single atomic batch
+      operationId: bulkSetDelegates
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Bulk delegate changes
+        required: true
+        schema:
+          $ref: '#/definitions/BulkSetDelegatesRequest'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: invalid delegate job
+        '401':
+          description: not authorized
+        '404':
+          description: feature not enabled
+  /v2/org/{orgId}/approval-delegate/delegated-to-me:
+    get:
+      tags:
+      - approval-delegate
+      summary: List the approvers the acting user is a delegate for
+      operationId: listDelegatedToMe
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (id or slug)
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RepresentedApprover'
+        '401':
+          description: not authorized
+        '404':
+          description: feature not enabled
+  /v2/org/{orgId}/approval-delegate/{type}:
+    put:
+      tags:
+      - approval-delegate
+      summary: Set (or replace) the delegate for the given approval type
+      operationId: setDelegate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Approval type
+        required: true
+        type: string
+        enum:
+        - SCENARIO
+        - TIME_OFF
+        - FORM
+      - name: body
+        in: body
+        description: Delegate request body
+        required: true
+        schema:
+          $ref: '#/definitions/SetDelegateRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalDelegate'
+        '400':
+          description: invalid delegate job
+        '401':
+          description: not authorized
+        '404':
+          description: feature not enabled
+    delete:
+      tags:
+      - approval-delegate
+      summary: Remove the delegate for the given approval type
+      operationId: deleteDelegate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (id or slug)
+        required: true
+        type: string
+      - name: type
+        in: path
+        description: Approval type
+        required: true
+        type: string
+        enum:
+        - SCENARIO
+        - TIME_OFF
+        - FORM
+      responses:
+        '204':
+          description: successful operation
+        '401':
+          description: not authorized
+        '404':
+          description: feature not enabled or no delegate set
+definitions:
+  RepresentedApprover:
+    type: object
+    required:
+    - approverUserId
+    - type
+    properties:
+      approverUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      approverName:
+        $ref: '#/definitions/Name'
+      type:
+        type: string
+        enum:
+        - SCENARIO
+        - TIME_OFF
+        - FORM
+  DelegateChange:
+    type: object
+    required:
+    - userId
+    - type
+    properties:
+      userId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - SCENARIO
+        - TIME_OFF
+        - FORM
+      delegateJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ApprovalDelegate:
+    type: object
+    required:
+    - id
+    - orgId
+    - userId
+    - type
+    - delegateJobId
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user who set the delegate (the original approver)
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of approval being delegated
+        enum:
+        - SCENARIO
+        - TIME_OFF
+        - FORM
+      delegateJobId:
+        type: string
+        description: job id of the delegate (job must be filled at set-time)
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+        description: date the delegation becomes active, inclusive (the delegate's read-visibility lower bound); defaults to the org's today on create/reassignment
+      endDate:
+        type: string
+        format: date
+        description: date the delegation stops being active, inclusive; null = never expires
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+  BulkSetDelegatesRequest:
+    type: object
+    required:
+    - changes
+    - notify
+    properties:
+      changes:
+        type: array
+        items:
+          $ref: '#/definitions/DelegateChange'
+      notify:
+        type: boolean
+  Name:
+    type: object
+    required:
+    - last
+    properties:
+      first:
+        type: string
+        description: first name
+        example: Jane
+        minItems: 0
+        maxItems: 80
+      middle:
+        type: string
+        description: middle name
+        example: Quidditch
+        minItems: 0
+        maxItems: 80
+      last:
+        type: string
+        description: last name
+        example: Public
+        minItems: 0
+        maxItems: 80
+      pref:
+        type: string
+        description: preferred first name
+        example: JQ
+        minItems: 0
+        maxItems: 80
+      prefLast:
+        type: string
+        description: preferred last name
+        example: Smith
+        minItems: 0
+        maxItems: 80
+  SetDelegateRequest:
+    type: object
+    required:
+    - delegateJobId
+    properties:
+      delegateJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date

@@ -1,0 +1,221 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access expression API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: expression
+paths:
+  /v1/org/{orgId}/cql/evaluate:
+    post:
+      tags:
+      - expression
+      summary: Evaluate carrot expression
+      operationId: evaluateExpression
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Expression to be evaluated
+        required: true
+        schema:
+          $ref: '#/definitions/EvaluateExpressionRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EvaluateExpressionResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+  /v1/org/{orgId}/cql/validate:
+    post:
+      tags:
+      - expression
+      summary: Validate carrot expression(s)
+      operationId: validateExpressions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Expression to be validated
+        required: true
+        schema:
+          $ref: '#/definitions/ValidateExpressionRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ValidateExpressionResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+definitions:
+  ValidateExpressionResponse:
+    type: object
+    required:
+    - isValid
+    - results
+    properties:
+      isValid:
+        type: boolean
+      results:
+        type: array
+        items:
+          $ref: '#/definitions/ValidateExpressionResult'
+  ValidateExpressionRequest:
+    type: object
+    required:
+    - expressions
+    properties:
+      expressions:
+        type: array
+        items:
+          type: string
+  EvaluateExpressionRequest:
+    type: object
+    required:
+    - expr
+    - entityType
+    - entityId
+    properties:
+      expr:
+        type: string
+      entityType:
+        type: string
+        enum:
+        - ACTION
+        - AGREEMENT
+        - AI_AGENT
+        - AI_AGENT_MEMORY
+        - AI_CHAT
+        - AI_CONFIG
+        - AI_CREDIT_LIMIT
+        - AI_CREDIT_USAGE
+        - AI_HINT
+        - AI_PROMPT
+        - APP
+        - APP_CONFIG
+        - APPROVAL_CHAIN
+        - APPROVAL_CHAIN_STAGE
+        - APPROVAL_DELEGATE
+        - APPROVAL_REQUEST
+        - ASSESSMENT
+        - BUDGET
+        - BUDGET_POOL
+        - BUNDLE
+        - CALENDAR
+        - CALENDAR_ENTRY
+        - CATEGORY
+        - CATEGORY_SORT
+        - CHANGE
+        - COMMENT
+        - COMP_BAND
+        - COMP_REVIEW
+        - CONTENT
+        - CUSTOMER
+        - DATA_VIEW
+        - EXCHANGE_RATE
+        - EMAIL_TEMPLATE
+        - EVENT
+        - FIELD
+        - FILE
+        - FORM
+        - FORM_DRAFT
+        - FORM_RESPONSE
+        - GEOCODE
+        - GROUP
+        - GROUP_TYPE
+        - GOAL
+        - GOAL_PROGRESS
+        - GOAL_TARGET
+        - GOAL_TYPE
+        - GUIDELINE
+        - JOB
+        - JOB_CODE
+        - JOB_LEVEL
+        - MEDIA
+        - MESSAGE
+        - MULTIPLIER
+        - ORG
+        - ORG_CONFIG
+        - PERSON
+        - PROFILE_TAB
+        - POLICY
+        - PROCESS
+        - PRODUCT
+        - QUERY_TOKEN
+        - QUESTION
+        - REPORT
+        - REPORT_CHART
+        - ROLE
+        - SCENARIO
+        - SIGNATURE
+        - SIGNATURE_REQUEST
+        - STOCK_GRANT
+        - STOCK_PRICE
+        - TABLE
+        - TABLE_ROW
+        - TASK_CONFIG
+        - TEMPLATE
+        - TASK
+        - TOKEN
+        - TIMEOFF
+        - TIMEOFF_BALANCE_ADJUSTMENT
+        - TIMEOFF_LEDGER_ENTRY
+        - TIMEOFF_POLICY
+        - TRANSCRIPT
+        - USER
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ValidateExpressionResult:
+    type: object
+    required:
+    - expr
+    - isValid
+    - message
+    properties:
+      expr:
+        type: string
+      isValid:
+        type: boolean
+      message:
+        type: string
+  EvaluateExpressionResponse:
+    type: object
+    properties:
+      result:
+        type: object
+      error:
+        type: string

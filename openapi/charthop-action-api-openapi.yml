@@ -1,0 +1,1141 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access action API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: action
+paths:
+  /v1/org/{orgId}/action:
+    get:
+      tags:
+      - action
+      summary: Return all actions in the organization paginated
+      operationId: findActions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Action id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: assessmentId
+        in: query
+        description: Retrieve actions associated with an assessment
+        required: false
+        type: string
+      - name: formId
+        in: query
+        description: Retrieve actions associated with a form
+        required: false
+        type: string
+      - name: stepType
+        in: query
+        description: 'Filter to actions containing at least one step of the given type(s), for example: ai,signature'
+        required: false
+        type: string
+      - name: agentUserId
+        in: query
+        description: Filter to actions containing an AI step assigned to the given agent user
+        required: false
+        type: string
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsAction'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - action
+      summary: Create an action
+      operationId: createAction
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Action data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateActionBody'
+      responses:
+        '201':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Action'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/action/bulk-delete:
+    post:
+      tags:
+      - action
+      summary: Delete a set of actions
+      operationId: bulkDelete
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: List of action ids to delete
+        required: true
+        schema:
+          $ref: '#/definitions/BulkDeleteRequest'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/action/{actionId}:
+    get:
+      tags:
+      - action
+      summary: Return a particular action by id
+      operationId: getAction
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: actionId
+        in: path
+        description: Action id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Action'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - action
+      summary: Update an existing action
+      operationId: updateAction
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: actionId
+        in: path
+        description: Action id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Action data to update
+        required: true
+        schema:
+          $ref: '#/definitions/PatchActionBody'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - action
+      summary: Delete an action
+      operationId: deleteAction
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: actionId
+        in: path
+        description: Action id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/action/{actionId}/run:
+    post:
+      tags:
+      - action
+      summary: Run an action - for testing
+      operationId: runAction
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: actionId
+        in: path
+        description: Action id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ActionRunRequest'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  ActionStep:
+    type: object
+    required:
+    - type
+    properties:
+      stepId:
+        type: string
+        description: unique id for action step
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: The type of action to run
+        enum:
+        - FORM
+        - MESSAGE
+        - HTTP
+        - TASK
+        - SIGNATURE
+        - AI
+      formId:
+        type: string
+        description: If the action is FORM, the id of the form to fill out
+        example: 588f7ee98f138b19220041a7
+      target:
+        type: string
+        description: If the action is MESSAGE, the target to send the message to. If the action is FORM/TASK, the person who should have the form filled out on/complete the task
+      assignee:
+        type: string
+        description: If the action is FORM/TASK, the user who should fill out the form/complete the task (default is, same as target)
+      notifyTarget:
+        type: string
+        description: If the action is SIGNATURE, an additional target expression resolving to users who should receive notifications about signature events
+      templateId:
+        type: string
+        description: If the action is SIGNATURE, the id of the template to generate a document for signature
+        example: 588f7ee98f138b19220041a7
+      aiAgentUserId:
+        type: string
+        description: If the action is AI, the agent id to use, otherwise defaults to org default
+        example: 588f7ee98f138b19220041a7
+      aiEnableMemory:
+        type: boolean
+        description: If the action is AI, whether or not a per-action memory storage is supported
+      aiApprovedPolicyRules:
+        type: array
+        description: If the action is AI, the policy rules that the AI agent should follow. If not provided, will use the default policy rules for the AI agent.
+        items:
+          $ref: '#/definitions/PolicyRule'
+      modelTier:
+        type: string
+        description: If the action is AI, the requested model tier; defaults to LOW when not set
+        enum:
+        - HIGH
+        - MEDIUM
+        - LOW
+      message:
+        type: string
+        description: The message that will be sent -- supports CQLT templates
+      messageChannel:
+        description: The preferred message channel(s) to send via
+        $ref: '#/definitions/MessageChannelConfig'
+      emailSubject:
+        type: string
+        description: The email subject line that will be used -- supports CQLT templates. If not provided, will use 'Notification'
+      taskLabel:
+        type: string
+        description: If the action is FORM, the task label that will be displayed to the user -- supports CQLT templates
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not - if this is left blank, will default to the sensitive setting of the Action
+      httpUrl:
+        type: string
+        format: uri
+        description: If the action is HTTP, the url that will receive the HTTP request
+      httpMethod:
+        type: string
+        description: If the action is HTTP, the method used by the HTTP request (defaults to POST)
+      httpHeaders:
+        type: object
+        description: If the action is HTTP, the headers to add to the HTTP request
+        additionalProperties:
+          type: string
+      httpContent:
+        type: object
+        description: If the action is HTTP, the payload contained in the HTTP request
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  PolicyRuleTarget:
+    type: object
+    properties:
+      userId:
+        type: string
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      channel:
+        type: string
+      email:
+        type: string
+  BulkDeleteRequest:
+    type: object
+    required:
+    - ids
+    properties:
+      ids:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  DueDate:
+    type: object
+    required:
+    - type
+    - dueDay
+    - dueTime
+    properties:
+      type:
+        type: string
+        enum:
+        - EXACT
+        - RELATIVE
+      dueDay:
+        type: string
+        description: due day, in either relative (-7d) or exact (YYYY-MM-DD) format
+      dueTime:
+        type: string
+        description: due time, which is a LocalTime
+  PatchActionBody:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        $ref: '#/definitions/UpdateAction'
+      stepTaskConfigs:
+        type: array
+        items:
+          $ref: '#/definitions/PartialTaskConfig'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Action:
+    type: object
+    required:
+    - id
+    - orgId
+    - steps
+    - status
+    - runUserId
+    - sensitive
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      event:
+        type: string
+        description: event pattern to match on, such as change.create.*
+      cronSchedule:
+        type: string
+        description: cron schedule to run on, in crontab format
+        example: 5 4 * * *
+      filter:
+        type: string
+        description: only run when matching a particular filter
+      steps:
+        type: array
+        description: list of steps to run when matching the event, schedule, and filter
+        items:
+          $ref: '#/definitions/ActionStep'
+      description:
+        type: string
+        description: description of the action
+      status:
+        type: string
+        description: status of the action
+        enum:
+        - ACTIVE
+        - INACTIVE
+      runUserId:
+        type: string
+        description: the user to run the action as - normally the same as the user who created the action
+        example: 588f7ee98f138b19220041a7
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not
+      categoryId:
+        type: string
+        description: data category of the action, such as onboarding or offboarding
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      formId:
+        type: string
+        description: form that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  CreateActionBody:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        $ref: '#/definitions/CreateAction'
+      stepTaskConfigs:
+        type: array
+        items:
+          $ref: '#/definitions/PartialTaskConfig'
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  UpdateAction:
+    type: object
+    properties:
+      event:
+        type: string
+        description: event pattern to match on, such as change.create.*
+      cronSchedule:
+        type: string
+        description: cron schedule to run on, in crontab format
+        example: 5 4 * * *
+      filter:
+        type: string
+        description: only run when matching a particular filter
+      steps:
+        type: array
+        description: list of steps to run when matching the event, schedule, and filter
+        items:
+          $ref: '#/definitions/ActionStep'
+      description:
+        type: string
+        description: description of the action
+      status:
+        type: string
+        description: status of the action
+        enum:
+        - ACTIVE
+        - INACTIVE
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not
+      categoryId:
+        type: string
+        description: data category of the action, such as onboarding or offboarding
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      formId:
+        type: string
+        description: form that this action is associated with
+        example: 588f7ee98f138b19220041a7
+  CreateAction:
+    type: object
+    required:
+    - steps
+    - sensitive
+    properties:
+      event:
+        type: string
+        description: event pattern to match on, such as change.create.*
+      cronSchedule:
+        type: string
+        description: cron schedule to run on, in crontab format
+        example: 5 4 * * *
+      filter:
+        type: string
+        description: only run when matching a particular filter
+      steps:
+        type: array
+        description: list of steps to run when matching the event, schedule, and filter
+        items:
+          $ref: '#/definitions/ActionStep'
+      description:
+        type: string
+        description: description of the action
+      status:
+        type: string
+        description: status of the action
+        enum:
+        - ACTIVE
+        - INACTIVE
+      runUserId:
+        type: string
+        description: the user to run the action as - normally the same as the user who created the action
+        example: 588f7ee98f138b19220041a7
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not
+      categoryId:
+        type: string
+        description: data category of the action, such as onboarding or offboarding
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      formId:
+        type: string
+        description: form that this action is associated with
+        example: 588f7ee98f138b19220041a7
+  ActionRunRequest:
+    type: object
+    properties:
+      jobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      eventCode:
+        type: string
+      action:
+        $ref: '#/definitions/PartialAction'
+  PartialAction:
+    type: object
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      event:
+        type: string
+        description: event pattern to match on, such as change.create.*
+      cronSchedule:
+        type: string
+        description: cron schedule to run on, in crontab format
+        example: 5 4 * * *
+      filter:
+        type: string
+        description: only run when matching a particular filter
+      steps:
+        type: array
+        description: list of steps to run when matching the event, schedule, and filter
+        items:
+          $ref: '#/definitions/ActionStep'
+      description:
+        type: string
+        description: description of the action
+      status:
+        type: string
+        description: status of the action
+        enum:
+        - ACTIVE
+        - INACTIVE
+      runUserId:
+        type: string
+        description: the user to run the action as - normally the same as the user who created the action
+        example: 588f7ee98f138b19220041a7
+      sensitive:
+        type: boolean
+        description: whether to run with access to sensitive events or not
+      categoryId:
+        type: string
+        description: data category of the action, such as onboarding or offboarding
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      formId:
+        type: string
+        description: form that this action is associated with
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  PartialTaskConfig:
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique id of task config
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: parent assessment id that this task config belongs to
+        example: 588f7ee98f138b19220041a7
+      parentEntityId:
+        type: string
+        description: parent entity id that this task config belongs to, should be used with entityId
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: the primary entity being referenced by the task config
+        example: 588f7ee98f138b19220041a7
+      slug:
+        type: string
+        description: System generated identifying name so that actions can be triggered as a result of task completion
+      type:
+        type: string
+        description: type of task generated by the task config
+        enum:
+        - FORM_SUBMIT
+        - FORM_RESPONSE_APPROVE
+        - FORM_RESPONSE_RESUBMIT
+        - CHANGE_APPROVE
+        - TIMEOFF_APPROVE
+        - SCENARIO_CHANGES_APPROVE
+        - SCENARIO_CHANGES_CREATE
+        - ORG_IMPORT
+        - COMP_REVIEW_APPROVAL_SUBMIT
+        - SCENARIO_APPROVAL_SUBMIT
+        - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+        - ACTION
+        - SIGNATURE
+        - GOAL_PROGRESS
+        - TODO
+      dueDate:
+        description: date object for tasks, can be relative or exact
+        $ref: '#/definitions/DueDate'
+      pastDueAction:
+        type: string
+        description: sets pastDueAction on the task when it's generated
+        enum:
+        - NONE
+        - SET_EXPIRED
+      isSkippable:
+        type: boolean
+        description: sets isSkippable on the task
+      label:
+        type: string
+        description: human-readable label that should be used for all tasks associated with the config as the task name
+      description:
+        type: string
+        description: description for all tasks associated with the config that should be used in notifications
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ResultsAction:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Action'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  PolicyRule:
+    type: object
+    properties:
+      allow:
+        type: array
+        description: allow rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      deny:
+        type: array
+        description: deny rules
+        example: '[''job:read'', ''person.read'']'
+        items:
+          type: string
+      categories:
+        type: array
+        description: categories the rule is limited to
+        example: '[''Compensation'', ''Stock Grants'']'
+        items:
+          type: string
+      fields:
+        type: array
+        description: fields the rule is limited to
+        example: '[''base'']'
+        items:
+          type: string
+      departmentIds:
+        type: array
+        description: departments the rule is limited to
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      filter:
+        type: string
+        description: custom filter the rule is limited to
+        example: department:engineering and under:me
+      directions:
+        type: array
+        description: directions that the rule applies to -- either self or under
+        items:
+          type: string
+      types:
+        type: array
+        description: types that the rule applies to
+        items:
+          type: string
+      targets:
+        type: array
+        description: targets allowed for messaging (email addresses, chat channels, user ids)
+        items:
+          $ref: '#/definitions/PolicyRuleTarget'
+      visibleSensitive:
+        type: array
+        description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string
+      fieldsSensitive:
+        type: array
+        description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
+        items:
+          type: string

@@ -1,0 +1,1215 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access timeOffPolicy API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: timeOffPolicy
+paths:
+  /v1/org/{orgId}/timeoff/policy:
+    post:
+      tags:
+      - timeOffPolicy
+      summary: Create a time off policy
+      operationId: createTimeOffPolicy
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: TimeOff policy data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTimeOffPolicy'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/TimeOffPolicy'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+    get:
+      tags:
+      - timeOffPolicy
+      summary: Return all policies in the organization
+      operationId: findTimeOffPolicies
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: from
+        in: query
+        description: From result id
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsTimeOffPolicy'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/timeoff/policy/balances:
+    get:
+      tags:
+      - timeOffPolicy
+      summary: Return time off balances for a given policy and date
+      operationId: findTimeOffPolicyBalances
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policies
+        in: query
+        description: Policy Ids to retrieve, comma-separated
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/timeoff/policy/balances/{personId}:
+    get:
+      tags:
+      - timeOffPolicy
+      summary: Return time off balances per policy for a given person
+      operationId: findTimeOffPolicyBalancesForPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person ID
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/timeoff/policy/balances/{policyId}:
+    post:
+      tags:
+      - timeOffPolicy
+      summary: Adjust time off balances for a group of people on a given policy and effective date
+      operationId: updateTimeOffPolicyBalances
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: path
+        description: Policy id associated with balances
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Effective Date
+        required: false
+        type: string
+        format: date
+      - name: enterMatching
+        in: query
+        description: Add adjustment even if it matches current balance
+        required: false
+        type: boolean
+      - name: body
+        in: body
+        description: Balances to adjust
+        required: true
+        schema:
+          $ref: '#/definitions/TimeOffBalanceAdjustmentBody'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Process'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/timeoff/policy/{policyId}:
+    get:
+      tags:
+      - timeOffPolicy
+      summary: Return a particular time off policy by id
+      operationId: getTimeOffPolicy
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: path
+        description: TimeOff policy id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TimeOffPolicy'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - timeOffPolicy
+      summary: Update an existing time off policy
+      operationId: updateTimeOffPolicy
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: path
+        description: TimeOff id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: TimeOff data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTimeOffPolicy'
+      responses:
+        '204':
+          description: no content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+    delete:
+      tags:
+      - timeOffPolicy
+      summary: Delete a time off request
+      operationId: deleteTimeOffPolicy
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: path
+        description: TimeOff policy id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: time off policy deleted
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+  /v1/org/{orgId}/timeoff/policy/{policyId}/duplicate:
+    post:
+      tags:
+      - timeOffPolicy
+      summary: Duplicate a time off policy
+      operationId: duplicateTimeOffPolicy
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: path
+        description: TimeOff policy id
+        required: true
+        type: string
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/TimeOffPolicy'
+        '400':
+          description: invalid data
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/timeoff/policy/{policyId}/estimateAccruals:
+    post:
+      tags:
+      - timeOffPolicy
+      summary: Estimate accrual value for policy
+      operationId: estimateAccrualForPolicy
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: policyId
+        in: path
+        description: TimeOff policy id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: TimeOff policy data to estimate from
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTimeOffPolicy'
+      responses:
+        '202':
+          description: accepted
+          schema:
+            $ref: '#/definitions/EstimatedAccrual'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+        '500':
+          description: Not Implemented
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  TimeOffBalanceAdjustmentBody:
+    type: object
+    required:
+    - balances
+    properties:
+      balances:
+        type: array
+        items:
+          $ref: '#/definitions/RequestedBalanceAdjustment'
+  RequestedBalanceAdjustment:
+    type: object
+    required:
+    - personId
+    properties:
+      personId:
+        type: string
+        description: person id
+        example: 588f7ee98f138b19220041a7
+      days:
+        type: number
+        description: adjusted balance in days
+  ResultsTimeOffPolicy:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/TimeOffPolicy'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  PolicyEvent:
+    type: object
+    required:
+    - dateExpr
+    - action
+    properties:
+      dateExpr:
+        type: string
+      action:
+        $ref: '#/definitions/PolicyAction'
+      noteExpr:
+        type: string
+      groupId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: Display name for the milestone group this event belongs to
+        example: Tenure milestones
+        minItems: 1
+        maxItems: 80
+  AccrualConfig:
+    type: object
+    required:
+    - frequency
+    - accrualOffsetFromStartDate
+    properties:
+      frequency:
+        type: string
+        enum:
+        - SEMI_MONTHLY
+        - MONTHLY
+        - WEEKLY
+      monthlyDaysOfMonth:
+        type: array
+        items:
+          type: integer
+          format: int32
+      weeklyStartDate:
+        type: string
+        format: date
+      weeklyIncrement:
+        type: integer
+        format: int32
+      balanceCapInWholeDays:
+        type: integer
+        format: int32
+      accrualOffsetFromStartDate:
+        type: integer
+        format: int32
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  TimeOffPolicy:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    - status
+    - filter
+    properties:
+      id:
+        type: string
+        description: Globally unique id of time off policy
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: Org that the time off belongs to
+        example: 588f7ee98f138b19220041a7
+      name:
+        type: string
+        description: Internal policy name
+        example: US Part-Time/Intern
+        minItems: 1
+        maxItems: 80
+      displayName:
+        type: string
+        description: External policy name displayed to users
+        example: PTO
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: Policy description
+        example: Annual sick days allotted to employees
+        minItems: 0
+        maxItems: 2000
+      guidelines:
+        type: string
+        description: Policy guidelines
+        minItems: 0
+        maxItems: 2000
+      type:
+        type: string
+        description: Type of policy to be created
+        enum:
+        - PTO
+        - TOIL
+        - VACATION
+        - SICK
+        - MEDICAL
+        - JURY
+        - OFFSITE
+        - PARENTAL
+        - UNPAID
+        - DISABILITY_SHORT
+        - DISABILITY_LONG
+        - BEREAVEMENT
+        - MILITARY
+        - RELIGIOUS
+        - VOTING
+        - VOLUNTEER
+        - UNKNOWN
+      status:
+        type: string
+        description: Status of the policy
+        enum:
+        - ACTIVE
+        - INACTIVE
+      allocationType:
+        type: string
+        description: Whether the time off is accrued, received upfront, or is an unlimited policy
+        enum:
+        - UPFRONT
+        - UNLIMITED
+        - ACCRUAL
+      annualAllocation:
+        type: number
+        description: Number of days allocated annually
+      accrualConfig:
+        description: Configuration for how time off is accrued.
+        $ref: '#/definitions/AccrualConfig'
+      maxConsecutiveDaysPerRequest:
+        type: number
+        description: An optional max number of days allowed per request
+      minBalance:
+        type: number
+        description: An optional minimum balance
+      enableCarryOverBalance:
+        type: boolean
+        description: Enable carry over balance.
+      maxCarryOverBalance:
+        type: number
+        description: An optional maximum carry over balance
+      carryOverExpirationDate:
+        type: string
+        description: Month and day of carry over expiration.
+      carryOverExpirationMonths:
+        type: integer
+        format: int32
+        description: Months after carry over date that carry over expires.
+      enablePartialDayRequests:
+        type: boolean
+        description: Allow half day requests
+      partialDayGranularity:
+        type: number
+        description: Partial day requests can only be made down to this level of granularity (i.e. request % granularity == 0)
+      enablePartialDayPeriod:
+        type: boolean
+        description: Allow specifying periods of time (e.g. AM, PM) for partial days
+      disableRequests:
+        type: boolean
+        description: Whether to disable time off requests for this policy
+      noteRequired:
+        type: boolean
+        description: Whether a note is required for time off requests
+      filter:
+        type: string
+        description: CQL used to determine which jobs the policy applies to
+      holidayCalendarId:
+        type: string
+        description: an associated holiday calendar, days on this calendar are not deducted from the time off balance
+        example: 588f7ee98f138b19220041a7
+      disableProratedAllocation:
+        type: boolean
+        description: whether limited allocation policies are prorated based on person start date
+      prorationRounding:
+        type: string
+        description: rounding method for prorating calculations
+        enum:
+        - UP
+        - NEAREST
+        - HALF
+      yearStartDate:
+        type: string
+        description: Month and day of policy year rollover. Defaults to January 1.
+      policyFromDate:
+        type: string
+        format: date
+        description: The date on which this policy's balance/accrual settings come into effect. The policy may have entries before this date, but it will not generate e.g. accrual entries.
+      policyUntilDate:
+        type: string
+        format: date
+        description: The first date after this policy's balance/accrual settings end (i.e. the exclusive end date). The policy may have entries after this date, but it will not generate e.g. accrual entries.
+      workDays:
+        type: array
+        description: Days of the week that count against the time off balance. Defaults to Monday through Friday if not set.
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      policyEvents:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyEvent'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  PolicyAction:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        enum:
+        - OPEN
+        - CLOSE
+        - MOD_ALLOCATION
+        - ADJUST
+        - TRANSFER
+        - PRORATED_MOD
+        - FULL_MOD
+      exprString:
+        type: string
+  EstimatedAccrual:
+    type: object
+    required:
+    - daysPerPeriod
+    properties:
+      daysPerPeriod:
+        type: number
+  UpdateTimeOffPolicy:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Internal policy name
+        example: US Part-Time/Intern
+        minItems: 1
+        maxItems: 80
+      displayName:
+        type: string
+        description: External policy name displayed to users
+        example: PTO
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: Policy description
+        example: Annual sick days allotted to employees
+        minItems: 0
+        maxItems: 2000
+      guidelines:
+        type: string
+        description: Policy guidelines
+        minItems: 0
+        maxItems: 2000
+      type:
+        type: string
+        description: Type of policy to be created
+        enum:
+        - PTO
+        - TOIL
+        - VACATION
+        - SICK
+        - MEDICAL
+        - JURY
+        - OFFSITE
+        - PARENTAL
+        - UNPAID
+        - DISABILITY_SHORT
+        - DISABILITY_LONG
+        - BEREAVEMENT
+        - MILITARY
+        - RELIGIOUS
+        - VOTING
+        - VOLUNTEER
+        - UNKNOWN
+      status:
+        type: string
+        description: Status of the policy
+        enum:
+        - ACTIVE
+        - INACTIVE
+      allocationType:
+        type: string
+        description: Whether the time off is accrued, received upfront, or is an unlimited policy
+        enum:
+        - UPFRONT
+        - UNLIMITED
+        - ACCRUAL
+      annualAllocation:
+        type: number
+        description: Number of days allocated annually
+      accrualConfig:
+        description: Configuration for how time off is accrued.
+        $ref: '#/definitions/AccrualConfig'
+      maxConsecutiveDaysPerRequest:
+        type: number
+        description: An optional max number of days allowed per request
+      minBalance:
+        type: number
+        description: An optional minimum balance
+      enableCarryOverBalance:
+        type: boolean
+        description: Enable carry over balance.
+      maxCarryOverBalance:
+        type: number
+        description: An optional maximum carry over balance
+      carryOverExpirationDate:
+        type: string
+        description: Month and day of carry over expiration.
+      carryOverExpirationMonths:
+        type: integer
+        format: int32
+        description: Months after carry over date that carry over expires.
+      enablePartialDayRequests:
+        type: boolean
+        description: Allow half day requests
+      partialDayGranularity:
+        type: number
+        description: Partial day requests can only be made down to this level of granularity (i.e. request % granularity == 0)
+      enablePartialDayPeriod:
+        type: boolean
+        description: Allow specifying periods of time (e.g. AM, PM) for partial days
+      disableRequests:
+        type: boolean
+        description: Whether to disable time off requests for this policy
+      noteRequired:
+        type: boolean
+        description: Whether a note is required for time off requests
+      filter:
+        type: string
+        description: CQL used to determine which jobs the policy applies to
+      holidayCalendarId:
+        type: string
+        description: an associated holiday calendar, days on this calendar are not deducted from the time off balance
+        example: 588f7ee98f138b19220041a7
+      disableProratedAllocation:
+        type: boolean
+        description: whether limited allocation policies are prorated based on person start date
+      prorationRounding:
+        type: string
+        description: rounding method for prorating calculations
+        enum:
+        - UP
+        - NEAREST
+        - HALF
+      yearStartDate:
+        type: string
+        description: Month and day of policy year rollover. Defaults to January 1.
+      policyFromDate:
+        type: string
+        format: date
+        description: The date on which this policy's balance/accrual settings come into effect. The policy may have entries before this date, but it will not generate e.g. accrual entries.
+      policyUntilDate:
+        type: string
+        format: date
+        description: The first date after this policy's balance/accrual settings end (i.e. the exclusive end date). The policy may have entries after this date, but it will not generate e.g. accrual entries.
+      workDays:
+        type: array
+        description: Days of the week that count against the time off balance. Defaults to Monday through Friday if not set.
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      policyEvents:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyEvent'
+  CreateTimeOffPolicy:
+    type: object
+    required:
+    - name
+    - type
+    - status
+    - allocationType
+    - filter
+    properties:
+      name:
+        type: string
+        description: Internal policy name
+        example: US Part-Time/Intern
+        minItems: 1
+        maxItems: 80
+      displayName:
+        type: string
+        description: External policy name displayed to users
+        example: PTO
+        minItems: 1
+        maxItems: 80
+      description:
+        type: string
+        description: Policy description
+        example: Annual sick days allotted to employees
+        minItems: 0
+        maxItems: 2000
+      guidelines:
+        type: string
+        description: Policy guidelines
+        minItems: 0
+        maxItems: 2000
+      type:
+        type: string
+        description: Type of policy to be created
+        enum:
+        - PTO
+        - TOIL
+        - VACATION
+        - SICK
+        - MEDICAL
+        - JURY
+        - OFFSITE
+        - PARENTAL
+        - UNPAID
+        - DISABILITY_SHORT
+        - DISABILITY_LONG
+        - BEREAVEMENT
+        - MILITARY
+        - RELIGIOUS
+        - VOTING
+        - VOLUNTEER
+        - UNKNOWN
+      status:
+        type: string
+        description: Status of the policy
+        enum:
+        - ACTIVE
+        - INACTIVE
+      allocationType:
+        type: string
+        description: Whether the time off is accrued, received upfront, or is an unlimited policy
+        enum:
+        - UPFRONT
+        - UNLIMITED
+        - ACCRUAL
+      annualAllocation:
+        type: number
+        description: Number of days allocated annually
+      accrualConfig:
+        description: Configuration for how time off is accrued.
+        $ref: '#/definitions/AccrualConfig'
+      maxConsecutiveDaysPerRequest:
+        type: number
+        description: An optional max number of days allowed per request
+      minBalance:
+        type: number
+        description: An optional minimum balance
+      enableCarryOverBalance:
+        type: boolean
+        description: Enable carry over balance.
+      maxCarryOverBalance:
+        type: number
+        description: An optional maximum carry over balance
+      carryOverExpirationDate:
+        type: string
+        description: Month and day of carry over expiration.
+      carryOverExpirationMonths:
+        type: integer
+        format: int32
+        description: Months after carry over date that carry over expires.
+      enablePartialDayRequests:
+        type: boolean
+        description: Allow half day requests
+      partialDayGranularity:
+        type: number
+        description: Partial day requests can only be made down to this level of granularity (i.e. request % granularity == 0)
+      enablePartialDayPeriod:
+        type: boolean
+        description: Allow specifying periods of time (e.g. AM, PM) for partial days
+      disableRequests:
+        type: boolean
+        description: Whether to disable time off requests for this policy
+      noteRequired:
+        type: boolean
+        description: Whether a note is required for time off requests
+      filter:
+        type: string
+        description: CQL used to determine which jobs the policy applies to
+      holidayCalendarId:
+        type: string
+        description: an associated holiday calendar, days on this calendar are not deducted from the time off balance
+        example: 588f7ee98f138b19220041a7
+      disableProratedAllocation:
+        type: boolean
+        description: whether limited allocation policies are prorated based on person start date
+      prorationRounding:
+        type: string
+        description: rounding method for prorating calculations
+        enum:
+        - UP
+        - NEAREST
+        - HALF
+      yearStartDate:
+        type: string
+        description: Month and day of policy year rollover. Defaults to January 1.
+      policyFromDate:
+        type: string
+        format: date
+        description: The date on which this policy's balance/accrual settings come into effect. The policy may have entries before this date, but it will not generate e.g. accrual entries.
+      policyUntilDate:
+        type: string
+        format: date
+        description: The first date after this policy's balance/accrual settings end (i.e. the exclusive end date). The policy may have entries after this date, but it will not generate e.g. accrual entries.
+      workDays:
+        type: array
+        description: Days of the week that count against the time off balance. Defaults to Monday through Friday if not set.
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+      policyEvents:
+        type: array
+        items:
+          $ref: '#/definitions/PolicyEvent'

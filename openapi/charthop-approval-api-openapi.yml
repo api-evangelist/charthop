@@ -1,0 +1,1919 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access approval API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: approval
+paths:
+  /v1/org/{orgId}/approval-chain:
+    get:
+      tags:
+      - approval
+      summary: Return approval chains
+      operationId: getApprovalChains
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: entityType
+        in: query
+        description: The type of entity
+        required: false
+        type: string
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      - name: entityId
+        in: query
+        description: the id of the entity
+        required: false
+        type: string
+      - name: from
+        in: query
+        description: Approval chain id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApprovalChain'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - approval
+      summary: Create an approval chain
+      operationId: createApprovalChain
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: ApprovalChain data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateApprovalChain'
+      - name: createDefaultStages
+        in: query
+        description: Create default stages
+        required: false
+        type: boolean
+      responses:
+        '201':
+          description: approval chain created
+          schema:
+            $ref: '#/definitions/ApprovalChain'
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}:
+    get:
+      tags:
+      - approval
+      summary: Return a particular approval chain by id
+      operationId: getApprovalChainById
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalChain'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - approval
+      summary: Update a approval chain
+      operationId: updateApprovalChain
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: approval chain id
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateApprovalChain'
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - approval
+      summary: Delete a approval chain
+      operationId: deleteApprovalChain
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/duplicate:
+    post:
+      tags:
+      - approval
+      summary: Duplicate an approval chain including all of its stages and settings
+      operationId: duplicateApprovalChain
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id to duplicate
+        required: true
+        type: string
+      responses:
+        '201':
+          description: approval chain duplicated
+          schema:
+            $ref: '#/definitions/ApprovalChain'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/export:
+    post:
+      tags:
+      - approval
+      summary: Export an approval chain's stages to CSV format
+      operationId: exportApprovalChain
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      responses:
+        '201':
+          description: process started
+          schema:
+            $ref: '#/definitions/Process'
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/request:
+    get:
+      tags:
+      - approval
+      summary: Return all approval requests for an approval chain
+      operationId: getApprovalRequests
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: entityType
+        in: query
+        description: entity type to filter on
+        required: false
+        type: string
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      - name: entityIds
+        in: query
+        description: entity ids to filter on
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApprovalRequest'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    post:
+      tags:
+      - approval
+      summary: Create an approval request
+      operationId: createApprovalRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: dryRun
+        in: query
+        description: Dry run without creating real request
+        required: false
+        type: boolean
+      - name: previewJobId
+        in: query
+        description: preview-as job id
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: Approval request data to create
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalRequestCreateBody'
+      responses:
+        '201':
+          description: approval request created
+          schema:
+            $ref: '#/definitions/ApprovalRequest'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/request/entity/comp-review:
+    get:
+      tags:
+      - approval
+      summary: Return all approval request comp review responses for an approval chain
+      operationId: getApprovalRequestResponsesByCompReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: entityIds
+        in: query
+        description: entity ids to filter on
+        required: true
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApprovalRequestCompReviewResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/request/entity/scenario:
+    get:
+      tags:
+      - approval
+      summary: Return all approval request scenario responses for an approval chain
+      operationId: getApprovalRequestResponsesByScenario
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: entityIds
+        in: query
+        description: entity ids to filter on
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApprovalRequestScenarioResponse'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/request/{approvalRequestId}:
+    get:
+      tags:
+      - approval
+      summary: Return an approval request
+      operationId: getApprovalRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: Approval request id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalRequest'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - approval
+      summary: Update an existing approval request
+      operationId: updateApprovalRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: approval request id
+        required: true
+        type: string
+      - name: previewJobId
+        in: query
+        description: preview-as job id
+        required: false
+        type: string
+      - name: targetApproverJobId
+        in: query
+        description: jobId of the approver the caller is acting for as their approval delegate
+        required: false
+        type: string
+      - name: body
+        in: body
+        description: approval request data to update
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalRequestPatchBody'
+      responses:
+        '204':
+          description: approval request updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - approval
+      summary: Delete an approval request
+      operationId: deleteApprovalRequest
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: Approval request id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Body params for deletion
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalRequestDeleteBody'
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/request/{approvalRequestId}/reassign-approver:
+    post:
+      tags:
+      - approval
+      summary: Reassigning an approver at a stage
+      operationId: reassignApproverAtStage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: approval request id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: approval request data to update
+        required: true
+        schema:
+          $ref: '#/definitions/ReassignApproverPatchBody'
+      responses:
+        '204':
+          description: approver reassigned
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/request/{approvalRequestId}/send-reminder:
+    post:
+      tags:
+      - approval
+      summary: Send a reminder for a stage reviewer in an existing approval request
+      operationId: sendReminder
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalRequestId
+        in: path
+        description: approval request id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: reminder body
+        required: true
+        schema:
+          $ref: '#/definitions/SendReminderBody'
+      responses:
+        '200':
+          description: reminder sent
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/stage:
+    get:
+      tags:
+      - approval
+      summary: Return all approval chain stages for an approval chain
+      operationId: getApprovalChainStages
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsApprovalChainStage'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    post:
+      tags:
+      - approval
+      summary: Create an approval chain stage
+      operationId: createApprovalChainStage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Approval chain stage data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateApprovalChainStage'
+      responses:
+        '201':
+          description: approval chain stage created
+          schema:
+            $ref: '#/definitions/ApprovalChainStage'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/approval-chain/{approvalChainId}/stage/{approvalChainStageId}:
+    get:
+      tags:
+      - approval
+      summary: Return all approval chain stages for an approval chain
+      operationId: getApprovalChainStage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalChainStageId
+        in: path
+        description: Approval chain stage id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ApprovalChainStage'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - approval
+      summary: Update an existing approval chain stage
+      operationId: updateApprovalChainStage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalChainStageId
+        in: path
+        description: approval chain stage id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: approval chain stage data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateApprovalChainStage'
+      responses:
+        '204':
+          description: approval chain stage updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - approval
+      summary: Delete an approval chain stage
+      operationId: deleteApprovalChainStage
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: approvalChainId
+        in: path
+        description: Approval chain id
+        required: true
+        type: string
+      - name: approvalChainStageId
+        in: path
+        description: Approval chain stage id
+        required: true
+        type: string
+      responses:
+        '202':
+          description: snapshot currently building
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  ApprovalGroup:
+    type: object
+    required:
+    - type
+    - approvers
+    properties:
+      groupId:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: What type of group this is
+        enum:
+        - REVIEWER
+        - COLLABORATOR
+        - FINAL_APPROVER
+      approvers:
+        type: array
+        description: approvers that make up the group
+        items:
+          $ref: '#/definitions/ApprovalGroupApprover'
+      expandExpression:
+        type: string
+        description: optional custom expression to determine approval request tree
+      minApproversNeeded:
+        type: integer
+        format: int32
+        description: minimum number of approvers required in this group for approval (null means all approvers required)
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ApprovalRequestPatchBody:
+    type: object
+    required:
+    - status
+    properties:
+      status:
+        type: string
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      message:
+        type: string
+  ApprovalNotifierGroup:
+    type: object
+    required:
+    - groupId
+    - userIds
+    properties:
+      groupId:
+        type: string
+        description: globally unique id for this notifier group
+        example: 588f7ee98f138b19220041a7
+      userIds:
+        type: array
+        description: user ids to notify in this group
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      inclusionBehavior:
+        type: string
+        description: condition behavior for this notifier group; null means always notify
+        enum:
+        - ONLY_INCLUDE_IF
+        - EXCLUDE_IF
+      inclusionExpression:
+        type: string
+        description: expression to evaluate for conditional notification
+  ApprovalGroupApprover:
+    type: object
+    required:
+    - jobId
+    - status
+    properties:
+      jobId:
+        type: string
+        description: A job ID that is part of the group
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: The status of the approver
+        enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
+        - SKIPPED
+      commentId:
+        type: string
+        description: Last comment of the approver
+        example: 588f7ee98f138b19220041a7
+      reassignCommentId:
+        type: string
+        description: Last comment associated with a reassignment
+        example: 588f7ee98f138b19220041a7
+      isFallback:
+        type: boolean
+        description: Whether approver is a fallback
+      fallbackFor:
+        type: string
+        description: What jobId approver is a fallback for
+        example: 588f7ee98f138b19220041a7
+      actedByJobId:
+        type: string
+        description: Job of the delegate who acted on this slot on the approver's behalf
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+        description: The date the status was updated last
+  UpdateApprovalChainStage:
+    type: object
+    properties:
+      inclusionExpression:
+        type: string
+        description: optional custom expression to determine stage inclusion behavior
+      inclusionBehavior:
+        type: string
+        description: determines whether stage is conditional based on an expression
+        enum:
+        - ONLY_INCLUDE_IF
+        - EXCLUDE_IF
+      rejectBehavior:
+        type: string
+        description: determines which stage becomes active when a rejection event happens
+        enum:
+        - BACK_TO_BEGINNING
+        - PREVIOUS_PHASE
+      dynamicStagesExpression:
+        type: string
+        description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
+      status:
+        type: string
+        description: status of the stage
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      approvalCommentRequired:
+        type: boolean
+        description: requires a comment on an approval event
+      rejectionCommentRequired:
+        type: boolean
+        description: requires a comment on an rejection event
+      order:
+        type: integer
+        format: int32
+        description: order of stage in approval chain
+      groups:
+        type: array
+        description: list of groups that are involved in this approval stage
+        items:
+          $ref: '#/definitions/ApprovalGroup'
+      autoApproveIfApproverIsSubmitter:
+        type: boolean
+        description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
+  ResultsApprovalRequestCompReviewResponse:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalRequestCompReviewResponse'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ApprovalRequestDeleteBody:
+    type: object
+    properties:
+      message:
+        type: string
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  ResultsApprovalChainStage:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChainStage'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  ApprovalRequestCreateBody:
+    type: object
+    required:
+    - entityId
+    properties:
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  CreateApprovalChainStage:
+    type: object
+    required:
+    - rejectBehavior
+    - status
+    - approvalCommentRequired
+    - rejectionCommentRequired
+    - order
+    - groups
+    properties:
+      inclusionExpression:
+        type: string
+        description: optional custom expression to determine stage inclusion behavior
+      inclusionBehavior:
+        type: string
+        description: determines whether stage is conditional based on an expression
+        enum:
+        - ONLY_INCLUDE_IF
+        - EXCLUDE_IF
+      rejectBehavior:
+        type: string
+        description: determines which stage becomes active when a rejection event happens
+        enum:
+        - BACK_TO_BEGINNING
+        - PREVIOUS_PHASE
+      dynamicStagesExpression:
+        type: string
+        description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
+      status:
+        type: string
+        description: status of the stage
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      approvalCommentRequired:
+        type: boolean
+        description: requires a comment on an approval event
+      rejectionCommentRequired:
+        type: boolean
+        description: requires a comment on an rejection event
+      order:
+        type: integer
+        format: int32
+        description: order of stage in approval chain
+      groups:
+        type: array
+        description: list of groups that are involved in this approval stage
+        items:
+          $ref: '#/definitions/ApprovalGroup'
+      autoApproveIfApproverIsSubmitter:
+        type: boolean
+        description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
+  SendReminderBody:
+    type: object
+    required:
+    - jobId
+    properties:
+      jobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  ApprovalRequestScenarioResponse:
+    type: object
+    required:
+    - id
+    - isComplete
+    - stageOverrides
+    - isApprovalCommentRequiredForActiveStage
+    - isRejectionCommentRequiredForActiveStage
+    - approvalChainId
+    - scenarioId
+    - createId
+    - createAt
+    - updateId
+    - updateAt
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      activeStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      proposerStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      nextReviewerStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      isComplete:
+        type: boolean
+      rejectedStage:
+        $ref: '#/definitions/ApprovalChainStageOverride'
+      stageOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChainStageOverride'
+      isApprovalCommentRequiredForActiveStage:
+        type: boolean
+      isRejectionCommentRequiredForActiveStage:
+        type: boolean
+      approvalChainId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      scenarioId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+      updateId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+      deleteId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      deleteAt:
+        type: string
+      delegatedApproverJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      delegatedApproverJobIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+  ApprovalChain:
+    type: object
+    required:
+    - id
+    - orgId
+    - name
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: entity id
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: entity type
+        example: SCENARIO
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      name:
+        type: string
+        description: human-readable name of approval chain
+        example: Comp Review 06/15/2022
+        minItems: 1
+        maxItems: 80
+      isPreview:
+        type: boolean
+        description: isPreview specifies that this is a preview for implementations that use it (e.g. Compensation Reviews)
+        example: 'true'
+      fallbackApproverJobId:
+        type: string
+        description: the jobId of the fallback approver
+        example: 588f7ee98f138b19220041a7
+      fallbackApproverJobError:
+        type: string
+        description: most recent error for fallback approver
+      approvalNotifierGroups:
+        type: array
+        description: notifier groups with optional conditions for post-approval notification
+        items:
+          $ref: '#/definitions/ApprovalNotifierGroup'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ApprovalChainStage:
+    type: object
+    required:
+    - id
+    - orgId
+    - approvalChainId
+    - rejectBehavior
+    - status
+    - approvalCommentRequired
+    - rejectionCommentRequired
+    - order
+    - groups
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      approvalChainId:
+        type: string
+        description: parent approval chain id
+        example: 588f7ee98f138b19220041a7
+      inclusionExpression:
+        type: string
+        description: optional custom expression to determine stage inclusion behavior
+      inclusionBehavior:
+        type: string
+        description: determines whether stage is conditional based on an expression
+        enum:
+        - ONLY_INCLUDE_IF
+        - EXCLUDE_IF
+      rejectBehavior:
+        type: string
+        description: determines which stage becomes active when a rejection event happens
+        enum:
+        - BACK_TO_BEGINNING
+        - PREVIOUS_PHASE
+      dynamicStagesExpression:
+        type: string
+        description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
+      status:
+        type: string
+        description: status of the stage
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      approvalCommentRequired:
+        type: boolean
+        description: requires a comment on an approval event
+      rejectionCommentRequired:
+        type: boolean
+        description: requires a comment on an rejection event
+      order:
+        type: integer
+        format: int32
+        description: order of stage in approval chain
+      groups:
+        type: array
+        description: list of groups that are involved in this approval stage
+        items:
+          $ref: '#/definitions/ApprovalGroup'
+      autoApproveIfApproverIsSubmitter:
+        type: boolean
+        description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ReassignApproverPatchBody:
+    type: object
+    required:
+    - stageOrder
+    - initialJobId
+    - reassignJobId
+    - message
+    properties:
+      stageOrder:
+        type: integer
+        format: int32
+      initialJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      reassignJobId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      message:
+        type: string
+  UpdateApprovalChain:
+    type: object
+    properties:
+      name:
+        type: string
+        description: human-readable name of approval chain
+        example: Comp Review 06/15/2022
+        minItems: 1
+        maxItems: 80
+      isPreview:
+        type: boolean
+        description: isPreview specifies that this is a preview for implementations that use it (e.g. Compensation Reviews)
+        example: 'true'
+      fallbackApproverJobId:
+        type: string
+        description: the jobId of the fallback approver
+        example: 588f7ee98f138b19220041a7
+      fallbackApproverJobError:
+        type: string
+        description: most recent error for fallback approver
+      approvalNotifierGroups:
+        type: array
+        description: notifier groups with optional conditions for post-approval notification
+        items:
+          $ref: '#/definitions/ApprovalNotifierGroup'
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  ApprovalRequestCompReviewResponse:
+    type: object
+    required:
+    - id
+    - status
+    - entityType
+    - entityId
+    - approvalChainId
+    - stageOverrides
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      parentStatus:
+        type: string
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      isFullySubmitted:
+        type: boolean
+      entityType:
+        type: string
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      entityId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      approvalChainId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      stageOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChainStageOverride'
+      createId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+      updateId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      updateAt:
+        type: string
+  CreateApprovalChain:
+    type: object
+    required:
+    - name
+    - isPreview
+    - approvalNotifierGroups
+    properties:
+      entityId:
+        type: string
+        description: entity id
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: entity type
+        example: SCENARIO
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      name:
+        type: string
+        description: human-readable name of approval chain
+        example: Comp Review 06/15/2022
+        minItems: 1
+        maxItems: 80
+      isPreview:
+        type: boolean
+        description: isPreview specifies that this is a preview for implementations that use it (e.g. Compensation Reviews)
+        example: 'true'
+      fallbackApproverJobId:
+        type: string
+        description: the jobId of the fallback approver
+        example: 588f7ee98f138b19220041a7
+      fallbackApproverJobError:
+        type: string
+        description: most recent error for fallback approver
+      approvalNotifierGroups:
+        type: array
+        description: notifier groups with optional conditions for post-approval notification
+        items:
+          $ref: '#/definitions/ApprovalNotifierGroup'
+  ResultsApprovalRequestScenarioResponse:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalRequestScenarioResponse'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ApprovalRequest:
+    type: object
+    required:
+    - id
+    - orgId
+    - entityId
+    - entityType
+    - approvalChainId
+    - stageOverrides
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      entityId:
+        type: string
+        description: entity id
+        example: 588f7ee98f138b19220041a7
+      entityType:
+        type: string
+        description: entity type
+        enum:
+        - COMP_REVIEW
+        - SCENARIO
+        - TIMEOFF
+      compReviewId:
+        type: string
+        description: comp review id
+        example: 588f7ee98f138b19220041a7
+      approvalChainId:
+        type: string
+        description: parent approval chain id
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: the user who requested the approval
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      stageOverrides:
+        type: array
+        description: list of configuration fields
+        items:
+          $ref: '#/definitions/ApprovalChainStageOverride'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  ResultsApprovalChain:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalChain'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  ApprovalChainStageOverride:
+    type: object
+    required:
+    - stageOverrideId
+    - approvalChainStageId
+    - status
+    - order
+    properties:
+      stageOverrideId:
+        type: string
+        description: unique id for stage
+        example: 588f7ee98f138b19220041a7
+      approvalChainStageId:
+        type: string
+        description: parent approval chain stage id
+        example: 588f7ee98f138b19220041a7
+      groups:
+        type: array
+        description: approval group override
+        items:
+          $ref: '#/definitions/ApprovalGroup'
+      status:
+        type: string
+        description: status of the stage
+        enum:
+        - CANCELED
+        - REJECTED
+        - PENDING
+        - ACTIVE
+        - REVIEWED
+        - APPROVED
+        - SKIPPED
+        - SUBMITTED
+      order:
+        type: integer
+        format: int32
+        description: order of the stage
+  ResultsApprovalRequest:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalRequest'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'

@@ -1,0 +1,476 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access appConfig API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: appConfig
+paths:
+  /v1/app-config:
+    post:
+      tags:
+      - appConfig
+      summary: Create a new app config
+      operationId: createAppConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: App config data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAppConfig'
+      responses:
+        '201':
+          description: app config created
+          schema:
+            $ref: '#/definitions/AppConfig'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '409':
+          description: duplicate outbound field mapper or value mapper id
+  /v1/app-config/{appId}:
+    get:
+      tags:
+      - appConfig
+      summary: Return default app configuration by app
+      operationId: getAppConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppConfig'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/app-config/{appId}/{userId}:
+    get:
+      tags:
+      - appConfig
+      summary: Return user app configuration by app and user
+      operationId: getCombinedAppConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      - name: userId
+        in: path
+        description: User id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AppConfig'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - appConfig
+      summary: Update an existing app
+      operationId: updateAppConfig
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: appId
+        in: path
+        description: App id
+        required: true
+        type: string
+      - name: userId
+        in: path
+        description: User id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: App data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAppConfig'
+      responses:
+        '204':
+          description: app config updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+        '409':
+          description: duplicate outbound field mapper or value mapper id
+definitions:
+  UpdateAppConfig:
+    type: object
+    properties:
+      fieldMappers:
+        type: array
+        description: list of default field mappers
+        items:
+          $ref: '#/definitions/FieldMapper'
+      customFieldMappers:
+        type: array
+        description: list of custom field mappers by a user
+        items:
+          $ref: '#/definitions/FieldMapper'
+      customOutboundFieldMappers:
+        type: array
+        description: list of custom outbound field mappers
+        items:
+          $ref: '#/definitions/AdpOutboundFieldMapper'
+      disabledFieldMappers:
+        type: array
+        description: list of disabled inbound field mappers by id
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      enabledOutboundFieldMappers:
+        type: array
+        description: list of enabled outbound field mappers by id
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      templateMatchers:
+        type: array
+        description: template field matchers defined by a user
+        items:
+          type: object
+          additionalProperties:
+            type: string
+      options:
+        type: object
+        description: app specific options
+  CreateAppConfig:
+    type: object
+    required:
+    - appId
+    properties:
+      appId:
+        type: string
+        description: app id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id, if this person corresponds with a user
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id, if this app config corresponds with an org
+        example: 588f7ee98f138b19220041a7
+      fieldMappers:
+        type: array
+        description: list of default field mappers
+        items:
+          $ref: '#/definitions/FieldMapper'
+      customFieldMappers:
+        type: array
+        description: list of custom field mappers by a user
+        items:
+          $ref: '#/definitions/FieldMapper'
+      customOutboundFieldMappers:
+        type: array
+        description: list of custom outbound field mappers
+        items:
+          $ref: '#/definitions/AdpOutboundFieldMapper'
+      disabledFieldMappers:
+        type: array
+        description: list of disabled inbound field mappers by id
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      enabledOutboundFieldMappers:
+        type: array
+        description: list of enabled outbound field mappers by id
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      templateMatchers:
+        type: array
+        description: template field matchers defined by a user
+        items:
+          type: object
+          additionalProperties:
+            type: string
+      options:
+        type: object
+        description: app specific options
+  OutboundValueMapper:
+    type: object
+    required:
+    - id
+    - charthopSide
+    - externalSide
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      charthopSide:
+        type: object
+      externalSide:
+        type: string
+      options:
+        type: object
+      charthopToExternalTransform:
+        type: string
+  AppConfig:
+    type: object
+    required:
+    - appId
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      appId:
+        type: string
+        description: app id
+        example: 588f7ee98f138b19220041a7
+      userId:
+        type: string
+        description: user id, if this person corresponds with a user
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: org id, if this app config corresponds with an org
+        example: 588f7ee98f138b19220041a7
+      fieldMappers:
+        type: array
+        description: list of default field mappers
+        items:
+          $ref: '#/definitions/FieldMapper'
+      customFieldMappers:
+        type: array
+        description: list of custom field mappers by a user
+        items:
+          $ref: '#/definitions/FieldMapper'
+      defaultOutboundFieldMappers:
+        type: array
+        description: list of default outbound field mappers
+        items:
+          $ref: '#/definitions/AdpOutboundFieldMapper'
+      customOutboundFieldMappers:
+        type: array
+        description: list of custom outbound field mappers
+        items:
+          $ref: '#/definitions/AdpOutboundFieldMapper'
+      disabledFieldMappers:
+        type: array
+        description: list of disabled inbound field mappers by id
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      enabledOutboundFieldMappers:
+        type: array
+        description: list of enabled outbound field mappers by id
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      templateMatchers:
+        type: array
+        description: template field matchers defined by a user
+        items:
+          type: object
+          additionalProperties:
+            type: string
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+      options:
+        type: object
+        description: app specific options
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  AdpOutboundFieldMapper:
+    type: object
+    required:
+    - id
+    - description
+    - namespace
+    - valueMappers
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      description:
+        type: string
+      namespace:
+        type: string
+      valueMappers:
+        type: array
+        items:
+          $ref: '#/definitions/OutboundValueMapper'
+      options:
+        type: object
+      gate:
+        type: string
+  FieldMapper:
+    type: object
+    required:
+    - charthopFields
+    - remoteFields
+    - type
+    properties:
+      id:
+        type: string
+        description: unique id
+        example: 588f7ee98f138b19220041a7
+      key:
+        type: string
+        description: stable semantic key used by per-install AppConfig overrides/disables. Defaults to the single charthop field; an explicit key is required for multi-output mappers.
+      readOnly:
+        type: boolean
+        description: when true, this mapper only DEFINES how to read the value from the source system (for the outbound diff to compare against); it is not synced into ChartHop, so its charthopFields key is just a correlation handle and need not be a real ChartHop field.
+      charthopFields:
+        type: array
+        description: list of ChartHop fields
+        items:
+          type: string
+      remoteFields:
+        type: array
+        description: list of remote fields
+        items:
+          type: string
+      type:
+        type: string
+        description: type of field mapper to apply for mapping remote fields to ChartHop fields
+      defaultCharthopValue:
+        type: string
+        description: default charthop value
+      defaultRemoteValue:
+        type: string
+        description: default remote value
+      defaultAmount:
+        type: number
+        description: default amount
+      defaultCurrency:
+        type: string
+        description: default currency
+      transformFunction:
+        type: string
+        description: transform function
+      charthopToRemoteTransformFunction:
+        type: string
+        description: charthop to remote transform function
+      map:
+        type: object
+        description: map
+        additionalProperties:
+          type: string
+      charthopToRemoteMap:
+        type: object
+        description: charthop to remote map
+        additionalProperties:
+          type: string
+      idField:
+        type: string
+        description: id field
+      nameField:
+        type: string
+        description: name field
+      remoteToCharthopMultiplier:
+        type: number
+        description: remote to Charthop Multiplier
+      separator:
+        type: string
+        description: separator for join field mapper

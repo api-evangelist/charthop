@@ -1,0 +1,1932 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access profile-tab API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: profile-tab
+paths:
+  /v1/org/{orgId}/profile-tab:
+    get:
+      tags:
+      - profile-tab
+      summary: Return all profile tabs in the organization paginated
+      operationId: findProfileTabs
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: status
+        in: query
+        description: Status to filter by
+        required: false
+        type: string
+        enum:
+        - ACTIVE
+        - INACTIVE
+      - name: from
+        in: query
+        description: Content id to start paginating from
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsProfileTab'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - profile-tab
+      summary: Create a profile tab
+      operationId: createProfileTab
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Profile tab data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateProfileTab'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/ProfileTab'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/profile-tab/job/{jobId}:
+    get:
+      tags:
+      - profile-tab
+      summary: Return all profile tabs applicable to a particular job
+      operationId: findProfileTabsForJob
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Return profile tabs that contain particular fields (comma-separated)
+        required: false
+        type: string
+      - name: formIds
+        in: query
+        description: Return profile tabs that contain particular formIds (comma-separated)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsProfileTabSummary'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/profile-tab/job/{jobId}/profile-tab/{tabId}:
+    get:
+      tags:
+      - profile-tab
+      summary: Fetch and evaluate the content of a particular profile tab id, relative to a particular job
+      operationId: evaluateProfileTabForJob
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        type: string
+      - name: tabId
+        in: path
+        description: Profile tab id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProfileTabSummary'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/profile-tab/person/{personId}:
+    get:
+      tags:
+      - profile-tab
+      summary: Return all profile tabs applicable to a particular person
+      operationId: findProfileTabsForPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      - name: fields
+        in: query
+        description: Return profile tabs that contain particular fields (comma-separated)
+        required: false
+        type: string
+      - name: formIds
+        in: query
+        description: Return profile tabs that contain particular formIds (comma-separated)
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsProfileTabSummary'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/profile-tab/person/{personId}/profile-tab/{tabId}:
+    get:
+      tags:
+      - profile-tab
+      summary: Fetch and evaluate the content of a particular profile tab id, relative to a particular person
+      operationId: evaluateProfileTabForPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person id
+        required: true
+        type: string
+      - name: tabId
+        in: path
+        description: Profile tab id
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date
+        required: false
+        type: string
+        format: date
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProfileTabSummary'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/profile-tab/person/{personId}/profile-tab/{tabId}/history:
+    get:
+      tags:
+      - profile-tab
+      summary: Evaluate the history (in the form of various cards) on a particular profile tab id, relative to a particular person
+      operationId: findProfileTabHistory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: path
+        description: Person id
+        required: true
+        type: string
+      - name: tabId
+        in: path
+        description: Profile tab id
+        required: true
+        type: string
+      - name: from
+        in: query
+        description: Search backwards in time from timestamp
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Data format to use; default is json, can also use json-extended or json-readable
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsProfileTabResponseCard'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+  /v1/org/{orgId}/profile-tab/{profileTabId}:
+    get:
+      tags:
+      - profile-tab
+      summary: Return a particular profile tab by id
+      operationId: getProfileTab
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: profileTabId
+        in: path
+        description: Content id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProfileTab'
+        '400':
+          description: bad request
+        '404':
+          description: not found
+    patch:
+      tags:
+      - profile-tab
+      summary: Update an existing profile tab
+      operationId: updateProfileTab
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: profileTabId
+        in: path
+        description: Profile tab id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Profile tab data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateProfileTab'
+      responses:
+        '204':
+          description: updated
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - profile-tab
+      summary: Delete a profile tab
+      operationId: deleteProfileTab
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: profileTabId
+        in: path
+        description: Profile tab id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  UpdateProfileTab:
+    type: object
+    properties:
+      label:
+        type: string
+        description: human-readable name of profile tab
+        example: Performance
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      blocks:
+        type: array
+        description: ordered list of blocks contained by profile tab
+        items:
+          $ref: '#/definitions/Block'
+      layout:
+        description: block layout configuration
+        $ref: '#/definitions/Layout'
+      status:
+        type: string
+        description: status of the profile tab
+        enum:
+        - ACTIVE
+        - INACTIVE
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      readFilter:
+        type: string
+        description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+  JobUpdate:
+    type: object
+    properties:
+      addRelationships:
+        type: array
+        description: relationships to add
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      removeRelationships:
+        type: array
+        description: relationships to remove
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      addGroupIds:
+        type: array
+        description: groups to add
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      removeGroupIds:
+        type: array
+        description: groups to remove
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      setGroupIds:
+        type: object
+        description: groups to set
+        additionalProperties:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      grant:
+        description: stock grant to add
+        $ref: '#/definitions/StockGrant'
+      timeOff:
+        description: time off to add
+        $ref: '#/definitions/TimeOff'
+      title:
+        type: string
+        description: new title
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: new compensation level
+        $ref: '#/definitions/Comp'
+      placement:
+        type: string
+        description: new placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: new employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      sensitive:
+        type: string
+        description: new view sensitivity
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      startDatePlanned:
+        type: string
+        format: date
+        description: planned start date
+      startDatePlannedRemove:
+        type: boolean
+        description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
+      startDate:
+        type: string
+        format: date
+        description: new expected start date - will update to person start date in future
+      backfillPersonId:
+        type: string
+        description: set who this job is backfilling
+        example: 588f7ee98f138b19220041a7
+      jobCodeId:
+        type: string
+        description: set (or unset) the job code for this job
+        example: 588f7ee98f138b19220041a7
+      hasUnsetFields:
+        type: boolean
+        description: set who this job is backfilling
+      fields:
+        type: object
+        description: custom fields values to set
+        additionalProperties:
+          type: object
+  Translations:
+    type: object
+    required:
+    - values
+    properties:
+      values:
+        type: object
+        additionalProperties:
+          type: string
+  CreateProfileTab:
+    type: object
+    required:
+    - label
+    - blocks
+    - status
+    properties:
+      label:
+        type: string
+        description: human-readable name of profile tab
+        example: Performance
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      blocks:
+        type: array
+        description: ordered list of blocks contained by profile tab
+        items:
+          $ref: '#/definitions/Block'
+      layout:
+        description: block layout configuration
+        $ref: '#/definitions/Layout'
+      status:
+        type: string
+        description: status of the profile tab
+        enum:
+        - ACTIVE
+        - INACTIVE
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      readFilter:
+        type: string
+        description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+  LayoutRow:
+    type: object
+    required:
+    - columns
+    - format
+    properties:
+      columns:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutColumn'
+      format:
+        type: string
+  ResultsProfileTabResponseCard:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ProfileTabResponseCard'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  FormVersionInfo:
+    type: object
+    required:
+    - id
+    - label
+    - displayName
+    - questions
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+      displayName:
+        type: string
+      displayNameTr:
+        $ref: '#/definitions/Translations'
+      questions:
+        type: array
+        items:
+          $ref: '#/definitions/FormQuestionInfo'
+  ProfileTabResponseCard:
+    type: object
+    required:
+    - id
+    - date
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      date:
+        type: string
+        format: date
+      change:
+        $ref: '#/definitions/Change'
+      formResponse:
+        $ref: '#/definitions/FormResponse'
+      formVersion:
+        $ref: '#/definitions/FormVersionInfo'
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  PayInterval:
+    type: object
+    required:
+    - interval
+    - pay
+    properties:
+      interval:
+        type: string
+        description: Interval (annual or hourly)
+        enum:
+        - YEARLY
+        - MONTHLY
+        - WEEKLY
+        - DAILY
+        - HOURLY
+      pay:
+        description: Pay over the given interval
+        $ref: '#/definitions/Money'
+      hoursPerWeek:
+        type: integer
+        format: int32
+        description: working hours per week if interval=hourly
+        example: '40'
+      weeksPerYear:
+        type: integer
+        format: int32
+        description: working weeks per year if interval=hourly
+        example: '52'
+      monthsPerYear:
+        type: integer
+        format: int32
+        description: months per year if interval=month
+        example: '52'
+      daysPerYear:
+        type: integer
+        format: int32
+        description: days per year if interval=day
+        example: '250'
+  Layout:
+    type: object
+    required:
+    - rows
+    properties:
+      rows:
+        type: array
+        items:
+          $ref: '#/definitions/LayoutRow'
+  ResultsProfileTab:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ProfileTab'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  FormQuestionInfo:
+    type: object
+    required:
+    - id
+    - question
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      question:
+        type: string
+      questionTr:
+        $ref: '#/definitions/Translations'
+  ProfileTabSummary:
+    type: object
+    required:
+    - id
+    - label
+    - isBuiltin
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+      labelTr:
+        $ref: '#/definitions/Translations'
+      isBuiltin:
+        type: boolean
+      isSensitive:
+        type: boolean
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/Block'
+      layout:
+        $ref: '#/definitions/Layout'
+  LayoutButton:
+    type: object
+    required:
+    - url
+    - label
+    properties:
+      url:
+        type: string
+      label:
+        type: string
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  VariableComp:
+    type: object
+    required:
+    - type
+    - interval
+    properties:
+      type:
+        type: string
+        description: compensation type
+        enum:
+        - BONUS
+        - COMMISSION
+      interval:
+        type: string
+        description: compensation interval
+        enum:
+        - YEARLY
+    description: 'variable compensation
+
+      Implementations: VariableCompPercent, VariableCompPercent'
+    discriminator: compType
+  Change:
+    type: object
+    required:
+    - id
+    - jobId
+    - orgId
+    - type
+    - date
+    - status
+    properties:
+      id:
+        type: string
+        description: unique id
+        example: 588f7ee98f138b19220041a7
+      jobId:
+        type: string
+        description: job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      scenarioId:
+        type: string
+        description: scenario that this change belongs to
+        example: 588f7ee98f138b19220041a7
+      mergeScenarioId:
+        type: string
+        description: scenario that this change was merged in from, if the change originally came from a scenario
+        example: 588f7ee98f138b19220041a7
+      parentChangeId:
+        type: string
+        description: change that this change emanates from
+        example: 588f7ee98f138b19220041a7
+      priorStateChangeId:
+        type: string
+        description: connects this change to a previous version if itself that you might want to roll back to because of bad edits
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        description: type of change
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+        description: date of change
+      sort:
+        type: integer
+        format: int64
+        description: sort order of change
+      announceDate:
+        type: string
+        format: date
+        description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+      status:
+        type: string
+        description: whether the change is active or not
+        enum:
+        - ACTIVE
+        - STRUCK
+        - CONFLICT
+        - INACTIVE
+        - PROPOSED
+      personId:
+        type: string
+        description: the id of the person involved, or empty if no person attached to job
+        example: 588f7ee98f138b19220041a7
+      otherJobId:
+        type: string
+        description: for MOVE changes, the id of the job moving from; for RELATE changes, the id of the other job
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        description: for MOVE changes, the id of the other person involved in the move
+        example: 588f7ee98f138b19220041a7
+      departType:
+        type: string
+        description: for DEPART changes, the type of departure
+        enum:
+        - VOLUNTARY
+        - INVOLUNTARY
+      departRegret:
+        type: string
+        description: for DEPART changes, whether the departure was regrettable
+        enum:
+        - REGRET
+        - NONREGRET
+      promotionType:
+        type: string
+        description: if it's a promotion or a demotion
+        enum:
+        - PROMOTION
+        - DEMOTION
+        - NONE
+      reason:
+        type: string
+        description: the reason for the change
+      relateType:
+        type: string
+        description: for RELATE changes, the type of the relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE
+      refs:
+        type: array
+        description: list of ids referenced in text field body, for indexing purposes only
+        items:
+          type: object
+      job:
+        description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+        $ref: '#/definitions/PartialJob'
+      otherJob:
+        description: if otherJobId present, contains title and person.startDate of the other job at the time of change
+        $ref: '#/definitions/PartialJob'
+      formId:
+        type: string
+        description: if this change was data submitted by a form, the id of that form
+        example: 588f7ee98f138b19220041a7
+      formResponseId:
+        type: string
+        description: if this change is associated with a form response, the id of that form response
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: if this change is associated with a assessment, the id of that assessment
+        example: 588f7ee98f138b19220041a7
+      update:
+        description: for UPDATE changes, the data being updated
+        $ref: '#/definitions/JobUpdate'
+      upcoming:
+        description: for UPCOMING changes, the change ahead
+        $ref: '#/definitions/UpcomingChange'
+      conflict:
+        type: string
+        description: for changes that have been struck due to a merge conflict, the description of the conflict
+      note:
+        type: string
+        description: note on the change
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        description: attribution for the create
+        $ref: '#/definitions/Attribution'
+      mergeId:
+        type: string
+        description: merged by user id, if this change was merged
+        example: 588f7ee98f138b19220041a7
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateAt:
+        type: string
+        description: updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        description: attribution for the last update
+        $ref: '#/definitions/Attribution'
+      statusAt:
+        type: string
+        description: timestamp of status change
+      approvalAt:
+        type: string
+        description: timestamp of approval
+      approvalId:
+        type: string
+        description: approved by user id
+        example: 588f7ee98f138b19220041a7
+      approvalNote:
+        type: string
+        description: approval/rejection note
+        example: Not acceptable
+      approval:
+        type: string
+        description: if approval is required, who is allowed to approve
+        enum:
+        - MANAGER
+        - GRAND_MANAGER
+      authorSensitive:
+        type: string
+        description: view sensitivity for the author author of this form - the level of view access required to view the createId and updateId fields
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      canEdit:
+        type: boolean
+        description: flag indicating whether authorized user can modify this change (will vary depending on user)
+  TimeOff:
+    type: object
+    required:
+    - id
+    - startDate
+    - endDate
+    properties:
+      id:
+        type: string
+        description: unique id of a time off request
+      startDate:
+        type: string
+        format: date
+        description: start date of time off, inclusive
+      endDate:
+        type: string
+        format: date
+        description: end date of time off, inclusive
+      days:
+        type: number
+        description: number of days used
+      hours:
+        type: number
+        description: number of hours used
+      type:
+        type: string
+        description: type of time off
+      note:
+        type: string
+        description: notes on the time off
+      approval:
+        type: string
+        description: approval status of the time off
+        enum:
+        - APPROVED
+        - PENDING
+        - CANCELLED
+        - REJECTED
+        - SUPERSEDED
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  FormResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      externalId:
+        type: string
+        description: if the response was imported from an external system, the unique identifier of the response from that system
+        example: google:1234567890
+      formId:
+        type: string
+        description: form id that the response is a response for
+        example: 588f7ee98f138b19220041a7
+      formVersionId:
+        type: string
+        description: form version id that the response is a response for
+        example: 588f7ee98f138b19220041a7
+      submitPersonId:
+        type: string
+        description: person id who filled out the form response (null if anonymous)
+        example: 588f7ee98f138b19220041a7
+      submitUserId:
+        type: string
+        description: user id who filled out the form response (can be null if anonymous or imported data)
+        example: 588f7ee98f138b19220041a7
+      submitAttribution:
+        description: attribution information, if an agent completed the form on behalf of a principal
+        $ref: '#/definitions/Attribution'
+      changeId:
+        type: string
+        description: change id, if the form response is linked to a DATA change
+        example: 588f7ee98f138b19220041a7
+      assessmentId:
+        type: string
+        description: assessment id, if the form response is related to an assesment
+        example: 588f7ee98f138b19220041a7
+      createProcessId:
+        type: string
+        description: process id, if the form response was created from an import process
+        example: 588f7ee98f138b19220041a7
+      updateProcessId:
+        type: string
+        description: process id, if the form response was updated from an import process
+        example: 588f7ee98f138b19220041a7
+      shareAccess:
+        type: array
+        description: list of share access, if the form response has been shared with anyone
+        items:
+          $ref: '#/definitions/ShareAccess'
+      authorSensitive:
+        type: string
+        description: sensitivity level of the author of the form response, if it differs from the form response
+        enum:
+        - ANONYMOUS
+        - PRIVATE
+        - HIGH
+        - MANAGER
+      authorData:
+        type: object
+        description: demographic field data connected with the author of the form response
+        additionalProperties:
+          type: object
+      targetEntityId:
+        type: string
+        description: target entity id -- the entity that the form response is about
+        example: 588f7ee98f138b19220041a7
+      targetEntityType:
+        type: string
+        description: target entity type -- the entity that the form response is about
+        enum:
+        - NONE
+        - PERSON
+      answers:
+        type: array
+        description: list of answers in the form response
+        items:
+          $ref: '#/definitions/FormResponseAnswer'
+      submitAt:
+        type: string
+        description: timestamp that the form response was submitted
+      approvalAt:
+        type: string
+        description: timestamp that the form response was approved
+      approvalId:
+        type: string
+        description: user id who approved the form response
+        example: 588f7ee98f138b19220041a7
+      approvalNote:
+        type: string
+        description: note left by the user who approved -- this is for backwards compatibility with the old approval system
+      releaseAt:
+        type: string
+        description: timestamp that the form response was released
+      releaseId:
+        type: string
+        description: user id who released the form response
+        example: 588f7ee98f138b19220041a7
+      fileId:
+        type: string
+        description: if the form response was exported into a file for signature, the id of that file
+        example: 588f7ee98f138b19220041a7
+      signAt:
+        type: string
+        description: timestamp that the form response's associated file was fully signed
+      signerUserIds:
+        type: array
+        description: user ids who signed the form response, if it was signed
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: status of form response
+        enum:
+        - ACTIVE
+        - PROPOSED
+        - REJECTED
+        - AWAITING_CHANGES
+        - UNRELEASED
+      commentCount:
+        type: integer
+        format: int32
+        description: number of comments
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      places:
+        type: integer
+        format: int32
+  Block:
+    type: object
+    properties:
+      type:
+        type: string
+        description: the type of this block, or null if legacy
+        enum:
+        - CONTENT
+        - TASK
+        - CALENDAR
+      label:
+        type: string
+        description: human readable label for this block
+      height:
+        type: object
+        description: fixed height in px, or expand if “stretch”, or fit to contents if null
+      targetFilter:
+        type: string
+        description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
+      readFilter:
+        type: string
+        description: filter condition expression applied to this block, relative to the viewer
+      formIds:
+        type: array
+        description: form ids to surface responses in this block
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      fields:
+        type: array
+        description: fields retrieved in this block
+        items:
+          type: string
+      title:
+        type: string
+        description: title to show in block header
+      content:
+        type: string
+        description: template content returned in this block
+      contentTr:
+        description: template content returned in this block, translated
+        $ref: '#/definitions/Translations'
+      primaryButton:
+        description: primary CTA button
+        $ref: '#/definitions/LayoutButton'
+      secondaryButton:
+        description: secondary CTA button
+        $ref: '#/definitions/LayoutButton'
+  Comp:
+    type: object
+    properties:
+      baseComp:
+        description: base pay (money) with interval (annual or hourly)
+        $ref: '#/definitions/PayInterval'
+      variableTargets:
+        type: array
+        description: variable compensation (money or percent)
+        items:
+          $ref: '#/definitions/VariableComp'
+      grantShares:
+        type: integer
+        format: int32
+        description: planned stock grant, in shares
+        example: '5000'
+      grantValue:
+        type: integer
+        format: int32
+        description: planned stock grant, in value (based on the stock's currency, not the comp)
+        example: '5000'
+      grantType:
+        type: string
+        description: planned stock grant type
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+  UpcomingChange:
+    type: object
+    required:
+    - date
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - HIRE
+        - DEPART
+        - MOVE
+        - UPCOMING
+        - CREATE
+        - UPDATE
+        - DATA
+        - DELETE
+        - RELATE
+        - BACKFILL
+      date:
+        type: string
+        format: date
+      announceDate:
+        type: string
+        format: date
+      personId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      otherPersonId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+  LayoutColumn:
+    type: object
+    required:
+    - blocks
+    properties:
+      blocks:
+        type: array
+        items:
+          $ref: '#/definitions/Block'
+  FormResponseAnswer:
+    type: object
+    required:
+    - id
+    - questionId
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      questionId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      value:
+        type: object
+      type:
+        type: string
+        enum:
+        - ADDRESS
+        - AUDIO
+        - BOOLEAN
+        - COMP
+        - COMPOUND
+        - COMP_BAND
+        - CONTACTS
+        - CURRENCY
+        - DATE
+        - DECIMAL
+        - ELAPSED_DAYS
+        - ELAPSED_MONTHS
+        - ELAPSED_YEARS
+        - EMAIL
+        - ENUM
+        - ENUM_EXPR
+        - ENUM_MULTI
+        - ENUM_SCALE
+        - EXPR
+        - FILE
+        - GROUP
+        - GROUPS
+        - GROUP_ASSIGNMENTS
+        - GROUP_TYPE
+        - GROUP_POSITION_ASSIGNMENTS
+        - IMAGE
+        - INTEGER
+        - JOB
+        - JOB_CODE
+        - JOBS
+        - JOB_TIER
+        - LIST
+        - MAP
+        - MONEY
+        - NAME
+        - OBJECT
+        - PAY_INTERVAL
+        - PERCENT
+        - PERSON
+        - PERSONS
+        - PHONE
+        - STOCKGRANT
+        - STRING
+        - TABLE_REF
+        - TEXT
+        - TIMEOFF
+        - TIMESTAMP
+        - TRACKED_GROUP
+        - URL
+        - USER
+        - VARIABLE_COMP
+        - VARIABLE_COMPS
+      plural:
+        type: string
+        enum:
+        - SINGLE
+        - LIST
+        - SET
+  ResultsProfileTabSummary:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ProfileTabSummary'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  StockGrant:
+    type: object
+    required:
+    - id
+    - stock
+    - date
+    - shares
+    - price
+    - type
+    - vestSchedule
+    properties:
+      id:
+        type: string
+        description: unique identifier of grant
+      stock:
+        type: string
+        description: ticker symbol of this stock
+        example: GOOG
+      date:
+        type: string
+        format: date
+        description: date of grant
+      vestStartDate:
+        type: string
+        format: date
+        description: vesting start date of grant
+      expireDate:
+        type: string
+        format: date
+        description: expiration date of grant
+      shares:
+        type: number
+        description: number of shares granted
+      price:
+        type: number
+        description: per share strike price
+      type:
+        type: string
+        description: type of grant
+        enum:
+        - ISO
+        - NSO
+        - RSU
+        - SAR
+        - PERFORMANCE_SHARES
+        - PHANTOM_STOCK
+        - RSA
+      vestSchedule:
+        type: string
+        description: vesting schedule
+      originalPrice:
+        type: number
+        description: original per share value of stock (grant price at time of issue)
+      currentPrice:
+        type: number
+        description: current per share value of stock
+      vestedShares:
+        type: number
+        description: current number of shares vested
+      vestedSharesNextYear:
+        type: number
+        description: number of shares vested one year from today
+      vestedSharesByDate:
+        type: object
+        description: number of shares vested, by future date
+        additionalProperties:
+          type: number
+      vestEndDate:
+        type: string
+        format: date
+        description: vesting end date
+      cancelDate:
+        type: string
+        format: date
+        description: cancellation date
+      terminationDate:
+        type: string
+        format: date
+        description: termination date — vesting freezes on this date when the holder separates
+      lastExercisableDate:
+        type: string
+        format: date
+        description: last date on which vested shares can be exercised; after this the grant is forfeited
+      details:
+        type: string
+        description: details of the grant (arbitrary text)
+      description:
+        type: string
+        description: human-readable description of vesting schedule
+  ProfileTab:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - blocks
+    - status
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable name of profile tab
+        example: Performance
+      labelTr:
+        description: translations for the human-readable label
+        $ref: '#/definitions/Translations'
+      blocks:
+        type: array
+        description: ordered list of blocks contained by profile tab
+        items:
+          $ref: '#/definitions/Block'
+      layout:
+        description: block layout configuration
+        $ref: '#/definitions/Layout'
+      status:
+        type: string
+        description: status of the profile tab
+        enum:
+        - ACTIVE
+        - INACTIVE
+      targetFilter:
+        type: string
+        description: filter that controls on which profiles this tab will appear
+      readFilter:
+        type: string
+        description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
+      sort:
+        type: integer
+        format: int32
+        description: sort order
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  PartialJob:
+    type: object
+    properties:
+      jobId:
+        type: string
+        description: globally unique job id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      snapshotId:
+        type: string
+        description: snapshot that this job belongs to
+        example: 588f7ee98f138b19220041a7
+      title:
+        type: string
+        description: job title
+        example: Senior Engineer
+        minItems: 1
+        maxItems: 160
+      comp:
+        description: compensation
+        $ref: '#/definitions/Comp'
+      sensitive:
+        type: string
+        description: view sensitive of the job while open
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      relationships:
+        type: array
+        description: relationship to other jobs
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/JobRelationship'
+      groupIds:
+        type: array
+        description: groups that this job is a member of
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIdsByType:
+        type: object
+        description: groups that this job is a member of, mapped by group type id
+        additionalProperties:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+      placement:
+        type: string
+        description: guidance on placement
+        enum:
+        - NORMAL
+        - ASSISTANT
+      employment:
+        type: string
+        description: employment status
+        enum:
+        - FULL
+        - PART
+        - TEMP
+        - CONTRACT
+        - INTERN
+        - EXPAT
+      state:
+        type: string
+        description: current state - whether the job is open, filled, or has someone departed or hired
+        enum:
+        - OPEN
+        - FILLED
+        - DEPART
+        - START
+      fields:
+        type: object
+        description: fields containing custom data
+        additionalProperties:
+          type: object
+      fieldDates:
+        type: object
+        description: dates of the field data
+        additionalProperties:
+          type: string
+          format: date
+      fieldsProposed:
+        type: object
+        description: proposed values for fields
+        additionalProperties:
+          type: object
+      createDate:
+        type: string
+        format: date
+        description: job creation date
+      startDate:
+        type: string
+        format: date
+        description: for empty jobs, expected start date - for filled jobs, confirmed start date
+      startDatePlanned:
+        type: string
+        format: date
+        description: expected start date whether job is open or has been filled - doesn't change when job is filled
+      personStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the org after the latest departure (if any)
+      personEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing, the last day of that person in the org
+      personJobStartDate:
+        type: string
+        format: date
+        description: if personId is present, the first day of that person in the job
+      personIdDate:
+        type: string
+        format: date
+        description: if personId is present, the first day that the personId actually filled the job
+      personJobEndDate:
+        type: string
+        format: date
+        description: if personId is present and the person is departing or moving out, the last day of that person in the job
+      personId:
+        type: string
+        description: the person holding this job -- either currently in the job, or upcoming announced hire
+        example: 588f7ee98f138b19220041a7
+      backfillPersonId:
+        type: string
+        description: the person who most recently held the job, who this represents a backfill for
+        example: 588f7ee98f138b19220041a7
+      jobCodeId:
+        type: string
+        description: the ID of the job code for this job
+        example: 588f7ee98f138b19220041a7
+      backfillByJobId:
+        type: string
+        description: another job which is planned to be a backfill for this job
+        example: 588f7ee98f138b19220041a7
+      upcoming:
+        type: array
+        description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+        items:
+          $ref: '#/definitions/UpcomingChange'
+      scenarioId:
+        type: string
+        description: scenario that the job was created in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      scenarioChangedId:
+        type: string
+        description: scenario that the job was changed in (null if job is on primary timeline)
+        example: 588f7ee98f138b19220041a7
+      fetchState:
+        type: string
+        description: scenario that the job was changed in (null if job is on primary timeline)
+        enum:
+        - PERSON
+        - STRUCTURE
+        - ALL
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  JobRelationship:
+    type: object
+    required:
+    - jobId
+    - type
+    properties:
+      jobId:
+        type: string
+        description: destination job id
+        example: 5887a7718f138b6a2a0041a7
+      type:
+        type: string
+        description: type of relationship
+        enum:
+        - MANAGER
+        - DIRECT
+        - INDIRECT_MANAGER
+        - INDIRECT
+        - NONE

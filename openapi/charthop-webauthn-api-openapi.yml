@@ -1,0 +1,236 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access webauthn API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: webauthn
+paths:
+  /v1/webauthn:
+    get:
+      tags:
+      - webauthn
+      summary: List registered credentials for the current user
+      operationId: listRegisteredCredentials
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/WebRegisteredCredential'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/webauthn/register:
+    get:
+      tags:
+      - webauthn
+      summary: Check for an existing physical key for this user
+      operationId: startRegisterWebAuthn
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/WebAuthnStartRegisterResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - webauthn
+      summary: Check for an existing WebAuthn key for this user
+      operationId: completeRegisterWebAuthn
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/WebAuthnRequest'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/webauthn/register/{emailBase64}:
+    delete:
+      tags:
+      - webauthn
+      summary: Delete registered credentials by the given email
+      operationId: deleteRegisteredCredentials
+      produces:
+      - application/json
+      parameters:
+      - name: emailBase64
+        in: path
+        description: Email
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: integer
+            format: int32
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/webauthn/verify:
+    get:
+      tags:
+      - webauthn
+      summary: Check for an existing physical key for this user
+      operationId: startVerifyWebAuthn
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/WebAuthnStartVerifyResponse'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+    post:
+      tags:
+      - webauthn
+      summary: Check for an existing physical key for this user
+      operationId: completeVerifyWebAuthn
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/WebAuthnRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+  /v1/webauthn/{credentialId}:
+    delete:
+      tags:
+      - webauthn
+      summary: Delete registered credentials by the given credential ID
+      operationId: deleteRegisteredCredentialById
+      produces:
+      - application/json
+      parameters:
+      - name: credentialId
+        in: path
+        description: Credential ID
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+definitions:
+  WebAuthnStartVerifyResponse:
+    type: object
+    required:
+    - requestId
+    - assertionRequest
+    properties:
+      requestId:
+        type: string
+        description: String id of the request, this needs to be sent back from the client to finish the registration
+        example: abajlijj
+      assertionRequest:
+        type: object
+  WebRegisteredCredential:
+    type: object
+    required:
+    - credentialId
+    - publicKeyBase64
+    - userHandleBase64
+    - signatureCount
+    - createdAt
+    properties:
+      credentialId:
+        type: string
+        description: Credential id
+      publicKeyBase64:
+        type: string
+        description: The public key we're saving
+      userHandleBase64:
+        type: string
+        description: The user handle - a random 64 bits of data
+      signatureCount:
+        type: integer
+        format: int64
+        description: This is used to protect against duplicated key attacks
+      createdAt:
+        type: string
+        description: When was this created
+  WebAuthnRequest:
+    type: object
+    required:
+    - requestId
+    - credentialResponse
+    properties:
+      requestId:
+        type: string
+      credentialResponse:
+        type: string
+  WebAuthnStartRegisterResponse:
+    type: object
+    required:
+    - requestId
+    - publicKeyCredentialCreationOptions
+    properties:
+      requestId:
+        type: string
+        description: String id of the request, this needs to be sent back from the client to finish the registration
+        example: abajlijj
+      publicKeyCredentialCreationOptions:
+        type: object

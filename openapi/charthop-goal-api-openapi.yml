@@ -1,0 +1,1037 @@
+swagger: '2.0'
+info:
+  description: REST API for ChartHop
+  version: V1.0.0
+  title: ChartHop access goal API
+  contact:
+    name: ChartHop
+    url: https://www.charthop.com
+    email: support@charthop.com
+host: localhost
+schemes:
+- https
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: goal
+paths:
+  /v1/org/{orgId}/goal:
+    get:
+      tags:
+      - goal
+      summary: Find goals
+      operationId: findGoals
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: personId
+        in: query
+        description: Person id to filter goals by (owner or support)
+        required: false
+        type: string
+      - name: groupId
+        in: query
+        description: Group id to filter goals by
+        required: false
+        type: string
+      - name: personFilter
+        in: query
+        description: Person filter
+        required: false
+        type: string
+      - name: originalGoalId
+        in: query
+        description: Original goal id to filter by
+        required: false
+        type: string
+      - name: date
+        in: query
+        description: Date to filter goals as-of
+        required: false
+        type: string
+        format: date
+      - name: fromId
+        in: query
+        description: Starting goal id for pagination
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGoal'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    post:
+      tags:
+      - goal
+      summary: Create a new goal
+      operationId: createGoal
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Goal data to create
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGoal'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/Goal'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: org not found
+  /v1/org/{orgId}/goal/export:
+    post:
+      tags:
+      - goal
+      summary: Export goals to CSV format
+      operationId: exportGoals
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to filter goals as-of
+        required: false
+        type: string
+        format: date
+      - name: personFilter
+        in: query
+        description: Person filter
+        required: false
+        type: string
+      - name: format
+        in: query
+        description: Output format (e.g. readable for friendly column headers)
+        required: false
+        type: string
+      responses:
+        '201':
+          description: process started
+          schema:
+            $ref: '#/definitions/Process'
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/goal/{goalId}:
+    get:
+      tags:
+      - goal
+      summary: Get a goal by id
+      operationId: getGoal
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: path
+        description: Goal id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/Goal'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+    patch:
+      tags:
+      - goal
+      summary: Update an existing goal
+      operationId: updateGoal
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: path
+        description: Goal id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Goal data to update
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGoal'
+      responses:
+        '200':
+          description: updated
+          schema:
+            $ref: '#/definitions/Goal'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+    delete:
+      tags:
+      - goal
+      summary: Delete a goal
+      operationId: deleteGoal
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: path
+        description: Goal id
+        required: true
+        type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/goal/{goalId}/copy:
+    post:
+      tags:
+      - goal
+      summary: Copy a goal and its targets into a new goal
+      operationId: copyGoal
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: path
+        description: Goal id to copy
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Optional property overrides for the copied goal
+        required: false
+        schema:
+          $ref: '#/definitions/UpdateGoal'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/Goal'
+        '400':
+          description: invalid data
+        '401':
+          description: not authorized
+        '403':
+          description: permission denied
+        '404':
+          description: not found
+  /v1/org/{orgId}/goal/{goalId}/graph:
+    get:
+      tags:
+      - goal
+      summary: Find parent and child goals, from a starting goal id
+      operationId: findGoalsGraph
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: orgId
+        in: path
+        description: Org identifier (either id or slug)
+        required: true
+        type: string
+      - name: goalId
+        in: path
+        description: Starting goal id to look upwards and downwards from
+        required: true
+        type: string
+      - name: date
+        in: query
+        description: Date to filter goals as-of
+        required: false
+        type: string
+        format: date
+      - name: depth
+        in: query
+        description: Number of levels down to search child goals (defaults to 1)
+        required: false
+        type: integer
+        format: int32
+      - name: returnAccess
+        in: query
+        description: 'Return access information -- pass a list of actions to check, for example: create,update,delete'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ResultsGoal'
+        '400':
+          description: bad request
+        '401':
+          description: not authorized
+        '404':
+          description: not found
+definitions:
+  AccessAction:
+    type: object
+    required:
+    - action
+    properties:
+      action:
+        type: string
+      fields:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      types:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+  Goal:
+    type: object
+    required:
+    - id
+    - orgId
+    - status
+    - goalTypeId
+    - label
+    - slug
+    - startDate
+    - endDate
+    - sensitive
+    - shareAccess
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent organization id
+        example: 588f7ee98f138b19220041a7
+      status:
+        type: string
+        description: status
+        enum:
+        - DRAFT
+        - ACTIVE
+        - DONE
+      goalTypeId:
+        type: string
+        description: goal type
+        example: 588f7ee98f138b19220041a7
+      parentGoalId:
+        type: string
+        description: parent goal id, for cascading goals
+        example: 588f7ee98f138b19220041a7
+      originalGoalId:
+        type: string
+        description: original goal id, linking this goal to the goal it was copied from
+        example: 588f7ee98f138b19220041a7
+      relatedGoalIds:
+        type: array
+        description: list of other goals that are related to this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      ownerPersonIds:
+        type: array
+        description: list of persons who are responsible for this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      supportPersonIds:
+        type: array
+        description: list of persons who help support this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: list of groups who are responsible for this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable name of the goal
+        example: Increase Revenue at least 10%
+      slug:
+        type: string
+        description: url-safe slug for the goal, auto-generated from label if not provided
+      description:
+        type: string
+        description: human-readable description of the goal
+      startDate:
+        type: string
+        format: date
+        description: start date for this goal
+      endDate:
+        type: string
+        format: date
+        description: end date for this goal
+      sensitive:
+        type: string
+        description: sensitivity level of goal
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this goal
+        items:
+          $ref: '#/definitions/ShareAccess'
+      progressUpdateConfig:
+        description: configuration for automated progress update reminders
+        $ref: '#/definitions/GoalProgressUpdateConfig'
+      progressSummary:
+        description: overall progress summary, denormalized and calculated periodically
+        $ref: '#/definitions/GoalProgressSummary'
+      createId:
+        type: string
+        description: created by user id
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      deleteId:
+        type: string
+        description: deleted by user id
+        example: 588f7ee98f138b19220041a7
+      deleteBehalfId:
+        type: string
+        description: deleted on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      deleteAttribution:
+        $ref: '#/definitions/Attribution'
+      deleteAt:
+        type: string
+        description: deleted timestamp
+        example: '2017-01-24T13:57:52Z'
+  GoalTargetWithValue:
+    type: object
+    required:
+    - goalTargetId
+    - label
+    - value
+    properties:
+      goalTargetId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+      value:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+      color:
+        type: string
+  ResultsAccess:
+    type: object
+    required:
+    - allowed
+    properties:
+      ids:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      allowed:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/AccessAction'
+  GoalTargetActual:
+    type: object
+    required:
+    - goalTargetId
+    properties:
+      goalTargetId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      value:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+  Process:
+    type: object
+    required:
+    - id
+    - orgId
+    - label
+    - type
+    - status
+    - runUserId
+    - createId
+    - createAt
+    - options
+    properties:
+      id:
+        type: string
+        description: globally unique id
+        example: 588f7ee98f138b19220041a7
+      orgId:
+        type: string
+        description: parent org id
+        example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable label that identifies this process
+      type:
+        type: string
+        description: process type
+      status:
+        type: string
+        description: current status of process
+        enum:
+        - PENDING
+        - RUNNING
+        - DONE
+        - ERROR
+      filePath:
+        type: string
+        description: data file path
+      logPath:
+        type: string
+        description: data log path
+      runUserId:
+        type: string
+        description: user id who is running the process
+        example: 588f7ee98f138b19220041a7
+      parentProcessId:
+        type: string
+        description: process id of parent process
+        example: 588f7ee98f138b19220041a7
+      createId:
+        type: string
+        description: created by user id (user who requested the process run)
+        example: 588f7ee98f138b19220041a7
+      createBehalfId:
+        type: string
+        description: created on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      createAttribution:
+        $ref: '#/definitions/Attribution'
+      createAt:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      updateId:
+        type: string
+        description: last updated by user id
+        example: 588f7ee98f138b19220041a7
+      updateBehalfId:
+        type: string
+        description: last updated on behalf of user id
+        example: 588f7ee98f138b19220041a7
+      updateAttribution:
+        $ref: '#/definitions/Attribution'
+      updateAt:
+        type: string
+        description: last updated timestamp
+        example: '2017-01-24T13:57:52Z'
+      startAt:
+        type: string
+        description: started at timestamp
+        example: '2017-01-24T13:57:52Z'
+      endAt:
+        type: string
+        description: ended at timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+        description: status or error message
+      progress:
+        type: number
+        format: double
+        description: percent progress so far
+      internalError:
+        type: string
+        description: internal-only error message
+      options:
+        type: object
+        description: options passed to the process
+      results:
+        type: object
+        description: results summary for the process
+        additionalProperties:
+          type: object
+      logDataList:
+        type: array
+        description: list of log data that occurred during running of this process
+        items:
+          $ref: '#/definitions/LogData'
+      state:
+        type: object
+        description: process-specific state data
+      summary:
+        type: string
+        description: human-readable, searchable summary of what this process did
+      appId:
+        type: string
+        description: app id of the process
+        example: 588f7ee98f138b19220041a7
+      uuid:
+        type: string
+        description: unique ID of the process at queue time
+        example: 84db3c6e-0877-4436-8af1-768c06b29586
+  LogData:
+    type: object
+    required:
+    - level
+    - at
+    - data
+    properties:
+      level:
+        type: string
+        enum:
+        - INFO
+        - WARN
+        - ERROR
+      at:
+        type: string
+        description: created timestamp
+        example: '2017-01-24T13:57:52Z'
+      message:
+        type: string
+      data:
+        type: object
+        additionalProperties:
+          type: object
+  ResultsGoal:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Goal'
+      next:
+        type: string
+      access:
+        type: array
+        items:
+          $ref: '#/definitions/ResultsAccess'
+  GoalProgressForecast:
+    type: object
+    required:
+    - goalTargetId
+    - type
+    - value
+    properties:
+      goalTargetId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      type:
+        type: string
+        enum:
+        - WORST
+        - COMMIT
+        - CALL
+        - LIKELY
+        - BEST
+      label:
+        type: string
+      value:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+  MessageChannelConfig:
+    type: object
+    required:
+    - channels
+    - alwaysEmail
+    properties:
+      channels:
+        type: array
+        items:
+          type: string
+          enum:
+          - EMAIL
+          - CHAT
+          - CHAT_SLACK
+          - CHAT_TEAMS
+      alwaysEmail:
+        type: boolean
+  CreateGoal:
+    type: object
+    required:
+    - goalTypeId
+    - label
+    - startDate
+    - endDate
+    - sensitive
+    properties:
+      goalTypeId:
+        type: string
+        description: goal type
+        example: 588f7ee98f138b19220041a7
+      parentGoalId:
+        type: string
+        description: parent goal id, for cascading goals
+        example: 588f7ee98f138b19220041a7
+      originalGoalId:
+        type: string
+        description: original goal id, linking this goal to the goal it was copied from
+        example: 588f7ee98f138b19220041a7
+      relatedGoalIds:
+        type: array
+        description: list of other goals that are related to this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      ownerPersonIds:
+        type: array
+        description: list of persons who are responsible for this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      supportPersonIds:
+        type: array
+        description: list of persons who help support this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: list of groups who are responsible for this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable name of the goal
+        example: Increase Revenue at least 10%
+      slug:
+        type: string
+        description: url-safe slug for the goal, auto-generated from label if not provided
+      description:
+        type: string
+        description: human-readable description of the goal
+      startDate:
+        type: string
+        format: date
+        description: start date for this goal
+      endDate:
+        type: string
+        format: date
+        description: end date for this goal
+      sensitive:
+        type: string
+        description: sensitivity level of goal
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this goal
+        items:
+          $ref: '#/definitions/ShareAccess'
+      progressUpdateConfig:
+        description: configuration for automated progress update reminders
+        $ref: '#/definitions/GoalProgressUpdateConfig'
+  ShareAccess:
+    type: object
+    required:
+    - access
+    properties:
+      access:
+        type: string
+        description: access permission level
+        enum:
+        - NONE
+        - LIMITED_READ
+        - LIMITED_WRITE
+        - STANDARD_READ
+        - STANDARD_WRITE
+        - COMPENSATION_READ
+        - FULL_READ
+        - COMP_PLANNING_PARTICIPANT
+        - COMPENSATION_WRITE
+        - WRITE
+        - COMPENSATION_OWNER
+        - OWNER
+      userId:
+        type: string
+        description: user id
+        example: 5887a7718f138b6a2a0041a7
+      groupId:
+        type: string
+        description: group id
+        example: 5887a7718f138b6a2a0041a7
+      fields:
+        type: string
+        description: fields
+        example: name,image,title
+  Attribution:
+    type: object
+    properties:
+      principalUserId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      agentUserIds:
+        type: array
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      eventId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiChatId:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      aiToolUseId:
+        type: string
+      channel:
+        type: string
+        enum:
+        - WEB
+        - MOBILE
+        - SLACK
+        - TEAMS
+        - MCP
+  GoalProgressSummary:
+    type: object
+    properties:
+      id:
+        type: string
+        example: 588f7ee98f138b19220041a7
+      percent:
+        type: number
+      confidence:
+        type: integer
+        format: int32
+      done:
+        type: integer
+        format: int32
+      progressAt:
+        type: string
+      at:
+        type: string
+      actuals:
+        type: array
+        items:
+          $ref: '#/definitions/GoalTargetActual'
+      forecasts:
+        type: array
+        items:
+          $ref: '#/definitions/GoalProgressForecast'
+      targetValues:
+        type: array
+        items:
+          $ref: '#/definitions/GoalTargetWithValue'
+      comment:
+        type: string
+  GoalProgressUpdateConfig:
+    type: object
+    required:
+    - schedule
+    properties:
+      schedule:
+        type: string
+        description: schedule to send progress reminders, in crontab format
+        example: 5 4 * * *
+      messageChannel:
+        description: the channel to send progress reminders to
+        $ref: '#/definitions/MessageChannelConfig'
+      message:
+        type: string
+        description: custom message, if any, to include with progress reminders
+  UpdateGoal:
+    type: object
+    properties:
+      goalTypeId:
+        type: string
+        description: goal type
+        example: 588f7ee98f138b19220041a7
+      parentGoalId:
+        type: string
+        description: parent goal id, for cascading goals
+        example: 588f7ee98f138b19220041a7
+      originalGoalId:
+        type: string
+        description: original goal id, linking this goal to the goal it was copied from
+        example: 588f7ee98f138b19220041a7
+      relatedGoalIds:
+        type: array
+        description: list of other goals that are related to this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      ownerPersonIds:
+        type: array
+        description: list of persons who are responsible for this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      supportPersonIds:
+        type: array
+        description: list of persons who help support this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      groupIds:
+        type: array
+        description: list of groups who are responsible for this goal
+        items:
+          type: string
+          example: 588f7ee98f138b19220041a7
+      label:
+        type: string
+        description: human-readable name of the goal
+        example: Increase Revenue at least 10%
+      slug:
+        type: string
+        description: url-safe slug for the goal, auto-generated from label if not provided
+      description:
+        type: string
+        description: human-readable description of the goal
+      startDate:
+        type: string
+        format: date
+        description: start date for this goal
+      endDate:
+        type: string
+        format: date
+        description: end date for this goal
+      sensitive:
+        type: string
+        description: sensitivity level of goal
+        enum:
+        - GLOBAL
+        - ORG
+        - SENSITIVE
+        - PERSONAL
+        - MANAGER
+        - HIGH
+        - PRIVATE
+      shareAccess:
+        type: array
+        description: users who are specifically granted permission to view or edit this goal
+        items:
+          $ref: '#/definitions/ShareAccess'
+      progressUpdateConfig:
+        description: configuration for automated progress update reminders
+        $ref: '#/definitions/GoalProgressUpdateConfig'
