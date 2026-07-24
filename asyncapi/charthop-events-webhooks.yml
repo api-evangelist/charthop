@@ -1,0 +1,56 @@
+generated: '2026-07-18'
+method: searched
+type: Webhooks
+source: https://docs.charthop.com/events
+spec_type: Webhooks
+note: >-
+  ChartHop documents a webhook/event surface but does not publish a formal AsyncAPI
+  document. Apps subscribe to event patterns (with wildcard + CQL filters) and receive
+  HTTPS POST deliveries within a few seconds of the event occurring. Events are also
+  queryable via the Event REST API.
+delivery:
+  mechanism: HTTPS POST to a subscriber-configured webhook URL
+  timing: within a few seconds of the event occurring
+subscription:
+  model: pattern subscription with wildcard matching and CQL filter expressions
+  example: 'change create hire [department engineering directs > 0]'
+  custom_payload: subscribers may define the delivered payload via CQL expressions
+envelope:
+  id: event id
+  orgid: org id
+  userid: acting user id
+  username: acting user name
+  appid: app id
+  appname: app name
+  type: event type
+  subtype: event subtype
+  entitytype: entity type
+  entityid: entity id
+  matchfilters: matched subscription filters
+  at: timestamp
+  payload: event data (CQL-shaped)
+event_categories:
+- Changes (hire, departure, move, job create/update/delete)
+- People & Jobs
+- Groups
+- Goals
+- AI
+- Approvals
+- Compensation
+- Equity
+- Time Off
+- Calendar
+- Tasks
+- Forms
+- Policies
+- Roles & Access
+- Apps & Integrations
+- Scenarios
+- Tables
+- Transcripts
+- Content & Reports
+- Fields & Configuration
+- Media & Files
+- Org
+- Processes
+- Comments

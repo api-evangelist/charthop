@@ -1,0 +1,51 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/charthop-openapi-original.json
+docs: https://docs.charthop.com/developer-basics
+authentication:
+  style: Authorization Bearer app token (see authentication/charthop-authentication.yml)
+base_url: https://api.charthop.com
+org_scoping:
+  note: >-
+    Nearly every operation is org-scoped via an orgId path parameter (present on 615
+    operations); most resources live under /v1/org/{orgId}/... paths.
+pagination:
+  style: offset-limit
+  params:
+    from: zero-based offset into the result set (58 operations)
+    limit: maximum number of records to return (78 operations)
+  note: Cursor/page-token pagination was not observed in the spec.
+field_selection:
+  param: fields
+  description: >-
+    Sparse fieldsets — the fields parameter (26 operations) selects which columns/
+    attributes are returned, using ChartHop field expressions.
+query:
+  search_param: q
+  filter_param: filter
+  sort_param: sort
+  filter_language: >-
+    ChartHop supports CQL (Carrot Query Language / "carrot") expressions for filtering
+    and custom payloads. See https://docs.charthop.com/carrot-reference.
+formats:
+  param: format
+  note: Several export/report operations accept a format parameter (csv/json/xlsx).
+idempotency:
+  supported: false
+  note: >-
+    No Idempotency-Key header or idempotency parameter is documented or present in the
+    OpenAPI. Not emitting an Idempotency pointer.
+error_envelope:
+  shape: '{"code": <int>, "message": <string>}'
+  spec: not RFC 9457 problem+json
+  see: errors/charthop-problem-types.yml
+rate_limiting:
+  documented: false
+  note: No published rate-limit numbers or rate-limit response headers were found.
+versioning:
+  scheme: uri-path
+  current: v1
+  note: Resource paths are prefixed /v1/; the OpenAPI info.version is V1.0.0.
+webhooks:
+  supported: true
+  see: asyncapi/charthop-events-webhooks.yml

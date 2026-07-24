@@ -1,0 +1,60 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/charthop-openapi-original.json
+format: code-message
+note: 'ChartHop returns a simple JSON error envelope {"code": <int>, "message": <string>}
+  (observed live at api.charthop.com). Responses are not RFC 9457 application/problem+json.'
+envelope:
+  code: HTTP status code (int)
+  message: human-readable error string
+problems:
+- status: 400
+  title: Bad request
+  occurrences: 627
+  sample_descriptions:
+  - bad request
+  - invalid data
+  - invalid parameters
+- status: 401
+  title: Not authorized
+  occurrences: 565
+  sample_descriptions:
+  - not authorized
+  - unauthorized
+  - Not authorized
+- status: 403
+  title: Forbidden
+  occurrences: 329
+  sample_descriptions:
+  - permission denied
+  - Permission denied
+  - forbidden
+- status: 404
+  title: Not found
+  occurrences: 582
+  sample_descriptions:
+  - not found
+  - org not found
+  - feature not enabled
+- status: 405
+  title: Method not allowed
+  occurrences: 2
+  sample_descriptions:
+  - method not allowed
+- status: 409
+  title: Conflict
+  occurrences: 2
+  sample_descriptions:
+  - duplicate outbound field mapper or value mapper id
+- status: 500
+  title: Internal server error
+  occurrences: 31
+  sample_descriptions:
+  - Not Implemented
+  - internal server error
+  - Service error
+- status: 501
+  title: Not implemented
+  occurrences: 6
+  sample_descriptions:
+  - not implemented

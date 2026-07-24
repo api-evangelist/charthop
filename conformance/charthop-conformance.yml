@@ -1,0 +1,35 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/charthop-openapi-original.json
+docs: https://security.charthop.com/
+standards:
+- id: openapi-swagger-2.0
+  conforms: true
+  evidence: published Swagger 2.0 document at https://api.charthop.com/swagger.json (738 operations)
+- id: oauth2
+  conforms: true
+  evidence: OAuth 2.1 authorization-code flow (well-known/charthop-oauth-authorization-server.json)
+- id: oauth2-pkce
+  conforms: true
+  evidence: code_challenge_methods_supported [S256]
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server served (also per-agent MCP variant)
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource/mcp/{agent}/{orgId} operation present
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: /.well-known/security.txt with Contact security@charthop.com
+- id: mcp
+  conforms: true
+  evidence: JSON-RPC 2.0 over Streamable HTTP MCP server (handleMessageForOrg)
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors use a {code,message} envelope, not application/problem+json
+- id: soc2
+  conforms: true
+  evidence: SOC 2 stated on https://security.charthop.com/ (Trust Center)
+- id: gdpr
+  conforms: true
+  evidence: GDPR stated on https://security.charthop.com/ (Trust Center)

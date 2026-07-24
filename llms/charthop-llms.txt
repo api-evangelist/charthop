@@ -1,0 +1,40 @@
+# ChartHop
+
+> ChartHop is an AI-powered people-analytics and workforce-planning platform that unifies HR, finance, and business data. Its REST API (738 operations, Swagger 2.0) programmatically reads and updates the org roster, jobs, groups, compensation, goals, forms, time off, approvals, and more, and it ships a built-in MCP server for AI agents.
+
+## APIs
+- [ChartHop REST API (Swagger/OpenAPI)](https://api.charthop.com/swagger): 738 operations over people, jobs, comp, goals, forms, time off, approvals, events.
+- [MCP server](https://api.charthop.com/mcp/{agent}/{orgId}): JSON-RPC 2.0 over Streamable HTTP, OAuth 2.1 + PKCE.
+
+## Specs
+- OpenAPI (Swagger 2.0): openapi/charthop-openapi-original.json
+- Webhooks / events: asyncapi/charthop-events-webhooks.yml
+- Agentic access contracts: agentic-access/charthop-agentic-access.yml
+
+## Docs
+- [Developer basics](https://docs.charthop.com/developer-basics)
+- [ChartHop for developers](https://docs.charthop.com/charthop-for-developers)
+- [Events / webhooks](https://docs.charthop.com/events)
+- [Carrot (CQL) query reference](https://docs.charthop.com/carrot-reference)
+- [Release notes](https://docs.charthop.com/release-notes)
+- [Help center](https://docs.charthop.com/)
+
+## Auth
+- Authorization: Bearer app token (server-to-server apps); OAuth 2.1 + PKCE for agent/MCP sessions.
+- authentication/charthop-authentication.yml
+
+## Operations & conventions
+- Pagination: offset/limit (from, limit). Sparse fields via `fields`. CQL filter/search via `q`, `filter`.
+- Errors: {"code": <int>, "message": <string>}. See errors/charthop-problem-types.yml
+- Conventions: conventions/charthop-conventions.yml
+
+## Security
+- Trust center: https://security.charthop.com/ (SOC 2, GDPR)
+- security.txt: https://api.charthop.com/.well-known/security.txt (security@charthop.com)
+- Status: https://status.charthop.com
+
+## Company
+- [Website](https://www.charthop.com)
+- [Pricing](https://www.charthop.com/pricing)
+- [Blog](https://www.charthop.com/content-type/blog)
+- [GitHub](https://github.com/charthop)

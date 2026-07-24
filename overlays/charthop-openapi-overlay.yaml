@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for ChartHop API
+  version: 1.0.0
+extends: openapi/charthop-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enrichment: '2026-07-18'
+    x-apievangelist-notes: >-
+      Published host in the source document is "localhost"; the real production host is
+      api.charthop.com over https. ChartHop ships a built-in MCP server (JSON-RPC 2.0
+      over Streamable HTTP) authorized by OAuth 2.1 + PKCE.
+    x-production-host: api.charthop.com
+- target: $.host
+  update: api.charthop.com
+- target: $.schemes
+  update:
+  - https
+- target: $.info.x-artifacts
+  update:
+    authentication: authentication/charthop-authentication.yml
+    conventions: conventions/charthop-conventions.yml
+    errors: errors/charthop-problem-types.yml
+    data-model: data-model/charthop-data-model.yml
+    mcp: mcp/charthop-mcp.yml
+    webhooks: asyncapi/charthop-events-webhooks.yml
+    agentic-access: agentic-access/charthop-agentic-access.yml
