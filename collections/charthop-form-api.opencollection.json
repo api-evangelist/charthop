@@ -1,0 +1,583 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access form API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "form",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all forms in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status to filter by"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Form id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return all forms in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a form"
+        },
+        {
+          "info": {
+            "name": "Return all active forms applicable to a particular entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/available",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target id"
+              },
+              {
+                "name": "targetType",
+                "value": "",
+                "type": "query",
+                "description": "Target type"
+              }
+            ]
+          },
+          "docs": "Return all active forms applicable to a particular entity"
+        },
+        {
+          "info": {
+            "name": "Delete forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Delete forms"
+        },
+        {
+          "info": {
+            "name": "Return all active forms applicable to a particular person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/person/:personId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              }
+            ]
+          },
+          "docs": "Return all active forms applicable to a particular person"
+        },
+        {
+          "info": {
+            "name": "Update status for existing forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/status",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Update status for existing forms"
+        },
+        {
+          "info": {
+            "name": "Return a particular form by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Return a particular form by id"
+        },
+        {
+          "info": {
+            "name": "Submit data from a form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Org id"
+              }
+            ]
+          },
+          "docs": "Submit data from a form"
+        },
+        {
+          "info": {
+            "name": "Update an existing form",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Update an existing form"
+        },
+        {
+          "info": {
+            "name": "Delete a form",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Delete a form"
+        },
+        {
+          "info": {
+            "name": "Collect data for an existing form, sending emails and chat notifications to people being requested",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/collect",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Collect data for an existing form, sending emails and chat notifications to people being requested"
+        },
+        {
+          "info": {
+            "name": "Get the current state of form draft data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/draft",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "query",
+                "description": "Person id"
+              }
+            ]
+          },
+          "docs": "Get the current state of form draft data"
+        },
+        {
+          "info": {
+            "name": "Duplicate a form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/duplicate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id to duplicate"
+              }
+            ]
+          },
+          "docs": "Duplicate a form"
+        },
+        {
+          "info": {
+            "name": "Render a preview of a form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/preview-render",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Render a preview of a form"
+        },
+        {
+          "info": {
+            "name": "Sends reminder for a form with existing tasks, sending emails/chat notifications to people being requested",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/remind",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Sends reminder for a form with existing tasks, sending emails/chat notifications to people being requested"
+        },
+        {
+          "info": {
+            "name": "Render a form for display",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/render",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target id"
+              },
+              {
+                "name": "targetType",
+                "value": "",
+                "type": "query",
+                "description": "Target type"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "query",
+                "description": "Form response id, if editing a prior form response"
+              },
+              {
+                "name": "formResponseChangeId",
+                "value": "",
+                "type": "query",
+                "description": "Form response change id, if editing a prior form response (deprecated)"
+              },
+              {
+                "name": "formVersionId",
+                "value": "",
+                "type": "query",
+                "description": "Form version id, if rendering a previous version of the form"
+              }
+            ]
+          },
+          "docs": "Render a form for display"
+        },
+        {
+          "info": {
+            "name": "Re-render form blocks based on changes to the form values",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/rerender/question/:updateQuestionId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              },
+              {
+                "name": "updateQuestionId",
+                "value": "",
+                "type": "path",
+                "description": "The question id that is being updated to trigger the re-render"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target id"
+              },
+              {
+                "name": "targetType",
+                "value": "",
+                "type": "query",
+                "description": "Target type"
+              },
+              {
+                "name": "formVersionId",
+                "value": "",
+                "type": "query",
+                "description": "Form version id, if rendering a previous version of the form"
+              }
+            ]
+          },
+          "docs": "Re-render form blocks based on changes to the form values"
+        },
+        {
+          "info": {
+            "name": "Submit data from a form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/submit",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target id"
+              },
+              {
+                "name": "targetType",
+                "value": "",
+                "type": "query",
+                "description": "Target type"
+              }
+            ]
+          },
+          "docs": "Submit data from a form"
+        },
+        {
+          "info": {
+            "name": "Submit data from a form draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form/:formId/submit/draft",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target id"
+              },
+              {
+                "name": "targetType",
+                "value": "",
+                "type": "query",
+                "description": "Target type"
+              }
+            ]
+          },
+          "docs": "Submit data from a form draft"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

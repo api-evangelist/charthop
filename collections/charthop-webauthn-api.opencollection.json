@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access webauthn API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "webauthn",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List registered credentials for the current user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/webauthn"
+          },
+          "docs": "List registered credentials for the current user"
+        },
+        {
+          "info": {
+            "name": "Check for an existing physical key for this user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/webauthn/register"
+          },
+          "docs": "Check for an existing physical key for this user"
+        },
+        {
+          "info": {
+            "name": "Check for an existing WebAuthn key for this user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/webauthn/register"
+          },
+          "docs": "Check for an existing WebAuthn key for this user"
+        },
+        {
+          "info": {
+            "name": "Delete registered credentials by the given email",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/webauthn/register/:emailBase64",
+            "params": [
+              {
+                "name": "emailBase64",
+                "value": "",
+                "type": "path",
+                "description": "Email"
+              }
+            ]
+          },
+          "docs": "Delete registered credentials by the given email"
+        },
+        {
+          "info": {
+            "name": "Check for an existing physical key for this user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/webauthn/verify"
+          },
+          "docs": "Check for an existing physical key for this user"
+        },
+        {
+          "info": {
+            "name": "Check for an existing physical key for this user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/webauthn/verify"
+          },
+          "docs": "Check for an existing physical key for this user"
+        },
+        {
+          "info": {
+            "name": "Delete registered credentials by the given credential ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/webauthn/:credentialId",
+            "params": [
+              {
+                "name": "credentialId",
+                "value": "",
+                "type": "path",
+                "description": "Credential ID"
+              }
+            ]
+          },
+          "docs": "Delete registered credentials by the given credential ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

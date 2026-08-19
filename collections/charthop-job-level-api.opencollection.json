@@ -1,0 +1,179 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access job-level API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "job-level",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find job levels in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-level",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Job level id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted job levels"
+              }
+            ]
+          },
+          "docs": "Find job levels in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a job level",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-level",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of job level creation"
+              }
+            ]
+          },
+          "docs": "Create a job level"
+        },
+        {
+          "info": {
+            "name": "Return a particular job level by id on an effective date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-level/:jobLevelId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobLevelId",
+                "value": "",
+                "type": "path",
+                "description": "Job level id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              }
+            ]
+          },
+          "docs": "Return a particular job level by id on an effective date"
+        },
+        {
+          "info": {
+            "name": "Update a job level",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-level/:jobLevelId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobLevelId",
+                "value": "",
+                "type": "path",
+                "description": "Job level id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of jobLevel update"
+              }
+            ]
+          },
+          "docs": "Update a job level"
+        },
+        {
+          "info": {
+            "name": "Delete a job level",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-level/:jobLevelId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobLevelId",
+                "value": "",
+                "type": "path",
+                "description": "Job level id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of group update"
+              }
+            ]
+          },
+          "docs": "Delete a job level"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,2008 @@
+{
+  "item": [
+    {
+      "id": "ed1a61d9-d145-41ec-b1de-f9f7b1ba9e30",
+      "name": "budget",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d2ada77d-020b-4247-9e06-c4ba19cb0a5e",
+          "name": "Find budgets",
+          "request": {
+            "name": "Find budgets",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "budget"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "groupId",
+                  "value": "<string>",
+                  "description": "Group id to filter budgets by"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date to filter budgets as-of (defaults to today)"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromId",
+                  "value": "<string>",
+                  "description": "Starting budget id for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Status to filter budgets by (DRAFT, ACTIVE, or ARCHIVED)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "returnAccess",
+                  "value": "<string>",
+                  "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d6e2861f-0dad-4499-9c37-755b00c16707",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"slug\": \"string\",\n      \"startDate\": \"1961-11-14\",\n      \"endDate\": \"1998-11-03\",\n      \"sensitive\": \"MANAGER\",\n      \"shareAccess\": [\n        {\n          \"access\": \"COMPENSATION_WRITE\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        },\n        {\n          \"access\": \"LIMITED_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        }\n      ],\n      \"status\": \"ARCHIVED\",\n      \"createDate\": \"1997-10-15\",\n      \"label\": \"string\",\n      \"ownerPersonIds\": [\n        \"588f7ee98f138b19220041a7\",\n        \"588f7ee98f138b19220041a7\"\n      ],\n      \"groupIds\": [\n        \"588f7ee98f138b19220041a7\",\n        \"588f7ee98f138b19220041a7\"\n      ],\n      \"color\": \"#f956dd\",\n      \"costExpr\": \"string\",\n      \"usage\": {\n        \"amount\": 9306.838309477997,\n        \"currency\": \"string\",\n        \"places\": 2656\n      },\n      \"amount\": {\n        \"amount\": 4206.410955174599,\n        \"currency\": \"string\",\n        \"places\": 2167\n      },\n      \"deleteDate\": \"1953-08-21\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"slug\": \"string\",\n      \"startDate\": \"1960-01-22\",\n      \"endDate\": \"1996-10-18\",\n      \"sensitive\": \"ORG\",\n      \"shareAccess\": [\n        {\n          \"access\": \"FULL_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        },\n        {\n          \"access\": \"LIMITED_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        }\n      ],\n      \"status\": \"ARCHIVED\",\n      \"createDate\": \"1993-04-08\",\n      \"label\": \"string\",\n      \"ownerPersonIds\": [\n        \"588f7ee98f138b19220041a7\",\n        \"588f7ee98f138b19220041a7\"\n      ],\n      \"groupIds\": [\n        \"588f7ee98f138b19220041a7\",\n        \"588f7ee98f138b19220041a7\"\n      ],\n      \"color\": \"#566cbe\",\n      \"costExpr\": \"string\",\n      \"usage\": {\n        \"amount\": 9037.37773749495,\n        \"currency\": \"string\",\n        \"places\": 3341\n      },\n      \"amount\": {\n        \"amount\": 9363.180244217116,\n        \"currency\": \"string\",\n        \"places\": 2548\n      },\n      \"deleteDate\": \"1990-09-20\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"TEAMS\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ff5bcf9-a922-4675-8e5b-992d1b43f562",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8b970547-4803-4919-a35c-9d3ec844317f",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "85c708af-75ac-446e-b593-2ea0796a93f9",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c7451715-968a-4d11-991a-67749878b53b",
+          "name": "Create a new budget",
+          "request": {
+            "name": "Create a new budget",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "budget"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"groupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"color\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "77a2b25d-6cae-4951-8c82-fd6566a7d483",
+              "name": "created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"slug\": \"string\",\n  \"startDate\": \"1964-10-20\",\n  \"endDate\": \"2017-08-14\",\n  \"sensitive\": \"PRIVATE\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"status\": \"ACTIVE\",\n  \"createDate\": \"2025-09-26\",\n  \"label\": \"string\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"#36226b\",\n  \"costExpr\": \"string\",\n  \"usage\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  },\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  },\n  \"deleteDate\": \"1989-09-22\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84c00ad2-e1e5-4721-84d7-d893c7083c10",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ecda9af3-cd86-41e6-bf25-3e30be64a176",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e1aef8c4-b792-4f24-bd03-2fb84284ebb3",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "20651c94-9d95-4c06-bd54-312b7383e5ae",
+              "name": "org not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f94e2d59-9910-4066-83c9-a7947de56dde",
+          "name": "Calculate potential budget usage, for use while creating/setting budgets",
+          "request": {
+            "name": "Calculate potential budget usage, for use while creating/setting budgets",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "budget",
+                "calculate-usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "groupIds",
+                  "value": "<string>",
+                  "description": "Group ids"
+                },
+                {
+                  "disabled": false,
+                  "key": "costExpr",
+                  "value": "<string>",
+                  "description": "Cost expression to calculate"
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "<string>",
+                  "description": "Currency to calculate in"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date to retrieve as of"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3b0754fe-d32a-4a27-a63d-2e395e90c3b4",
+              "name": "deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    "calculate-usage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "costExpr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9bdb1903-c239-4f37-87bd-1d64441b9f9c",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    "calculate-usage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "costExpr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d0ccf8e0-54a8-4df9-a261-bda32fde1d14",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    "calculate-usage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "costExpr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d80a6548-4430-4869-81f0-b8df31306b7e",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    "calculate-usage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "costExpr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7d14f3c5-261a-43c7-a418-4f887fb82952",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    "calculate-usage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "costExpr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a5dd4b4-c971-431e-a275-5cc78967d86c",
+          "name": "Get a budget by id or slug",
+          "request": {
+            "name": "Get a budget by id or slug",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "budget",
+                ":budgetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date to get budget data as-of (defaults to today)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "budgetId",
+                  "description": "(Required) Budget id or slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5775d790-45ec-4ad8-ae9a-e31566533a8a",
+              "name": "ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id or slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"slug\": \"string\",\n  \"startDate\": \"1964-10-20\",\n  \"endDate\": \"2017-08-14\",\n  \"sensitive\": \"PRIVATE\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"status\": \"ACTIVE\",\n  \"createDate\": \"2025-09-26\",\n  \"label\": \"string\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"#36226b\",\n  \"costExpr\": \"string\",\n  \"usage\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  },\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  },\n  \"deleteDate\": \"1989-09-22\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e8fdbc8-b0ec-4473-9f2e-33ed1947e83c",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id or slug"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d314115b-9b87-422c-8749-65877e988f3c",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id or slug"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d846663c-1a65-4bb5-a51f-4ac8ec2d524a",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id or slug"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ad42adec-e38c-4685-801c-b4e36d514f2b",
+          "name": "Update an existing budget",
+          "request": {
+            "name": "Update an existing budget",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "budget",
+                ":budgetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date to update budget on (defaults to today)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "budgetId",
+                  "description": "(Required) Budget id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"groupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"color\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6d850d0a-3404-4058-96d3-6f3ae28782be",
+              "name": "updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"slug\": \"string\",\n  \"startDate\": \"1964-10-20\",\n  \"endDate\": \"2017-08-14\",\n  \"sensitive\": \"PRIVATE\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"status\": \"ACTIVE\",\n  \"createDate\": \"2025-09-26\",\n  \"label\": \"string\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"#36226b\",\n  \"costExpr\": \"string\",\n  \"usage\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  },\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  },\n  \"deleteDate\": \"1989-09-22\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7166c225-a78d-46f9-b5f3-e06d05b7029c",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "72e79a4f-816d-425f-980e-d1b4cf8d1def",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b9bb8f2f-da43-4a84-a0d2-d1b63b0b105c",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f470b4fa-4ea9-4e89-930d-7e4cc8efa585",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"slug\": \"<string>\",\n  \"label\": \"<string>\",\n  \"ownerPersonIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"groupIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"color\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"costExpr\": \"<string>\",\n  \"status\": \"<string>\",\n  \"amount\": {\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"places\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cece70b8-a02c-4fdb-93aa-db11930ed3c1",
+          "name": "Delete a budget",
+          "request": {
+            "name": "Delete a budget",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "budget",
+                ":budgetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date to delete budget on (defaults to today)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "budgetId",
+                  "description": "(Required) Budget id"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "58c0c0b3-6b01-4d3d-985d-161f16904264",
+              "name": "deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0a8c800e-3def-4824-a2d0-c3ee017016b4",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7e8cb338-d93e-4680-8bfa-356735cc7a90",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "925b5972-6e0c-4fa0-801a-eff3cec5b57e",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fdca5937-dbaa-49b5-914c-036a6e2c4896",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "budget",
+                    ":budgetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "budgetId",
+                      "description": "(Required) Budget id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e2e933d2-26b2-4a39-bdbc-ec5512abe858",
+    "name": "ChartHop access budget API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

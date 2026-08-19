@@ -1,0 +1,664 @@
+{
+  "item": [
+    {
+      "id": "330e9838-085d-40bd-a78c-1fa83594ba81",
+      "name": "guideline",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "35eca1d2-784e-45d2-8e15-3735ac06d49f",
+          "name": "Get all guidelines for a given comp review",
+          "request": {
+            "name": "Get all guidelines for a given comp review",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "guideline"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "compReviewId",
+                  "value": "<string>",
+                  "description": "(Required) comp review id"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDeleted",
+                  "value": "<boolean>",
+                  "description": "include deleted guidelines"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fb29965e-0fae-4413-a513-1e2461ee5969",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "guideline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "compReviewId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDeleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"compReviewId\": \"588f7ee98f138b19220041a7\",\n      \"label\": \"Merit Guideline\",\n      \"appliedField\": \"'base' or 'grantShares'\",\n      \"sourceField\": \"'base' or 'grantShares'\",\n      \"calculationType\": \"TARGET\",\n      \"flagMode\": \"NONE\",\n      \"enablePopulateValue\": true,\n      \"basisType\": \"CUSTOM\",\n      \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n      \"participantsExpr\": \"is:person and tenure>=12\",\n      \"flagDeviationThreshold\": 6774.880489022001,\n      \"basisExpr\": \"tenure>12 ? (base * 0.04) : (base * 0.02)\",\n      \"basisFieldMatrix\": {\n        \"includedFields\": [\n          \"string\",\n          \"string\"\n        ],\n        \"conditions\": [\n          {\n            \"conditionExpr\": \"string\",\n            \"amountRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"valueRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"conditionExpr\": \"string\",\n            \"amountRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"valueRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"fixedAmountRange\": {\n        \"max\": {\n          \"amount\": 7676.452291361901,\n          \"currency\": \"string\",\n          \"places\": 407\n        },\n        \"min\": {\n          \"amount\": 4970.991577022873,\n          \"currency\": \"string\",\n          \"places\": 8004\n        },\n        \"target\": {\n          \"amount\": 2068.2265934198363,\n          \"currency\": \"string\",\n          \"places\": 1980\n        }\n      },\n      \"fixedValueRange\": {\n        \"max\": 3627.090691877988,\n        \"min\": 1677.3264047286784,\n        \"target\": 4977.086744970937\n      },\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"WEB\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"compReviewId\": \"588f7ee98f138b19220041a7\",\n      \"label\": \"Merit Guideline\",\n      \"appliedField\": \"'base' or 'grantShares'\",\n      \"sourceField\": \"'base' or 'grantShares'\",\n      \"calculationType\": \"TARGET\",\n      \"flagMode\": \"NONE\",\n      \"enablePopulateValue\": false,\n      \"basisType\": \"CUSTOM\",\n      \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n      \"participantsExpr\": \"is:person and tenure>=12\",\n      \"flagDeviationThreshold\": 1608.299120048513,\n      \"basisExpr\": \"tenure>12 ? (base * 0.04) : (base * 0.02)\",\n      \"basisFieldMatrix\": {\n        \"includedFields\": [\n          \"string\",\n          \"string\"\n        ],\n        \"conditions\": [\n          {\n            \"conditionExpr\": \"string\",\n            \"amountRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"valueRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"conditionExpr\": \"string\",\n            \"amountRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"valueRange\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"fixedAmountRange\": {\n        \"max\": {\n          \"amount\": 7865.892524246593,\n          \"currency\": \"string\",\n          \"places\": 5774\n        },\n        \"min\": {\n          \"amount\": 9248.04691526546,\n          \"currency\": \"string\",\n          \"places\": 6236\n        },\n        \"target\": {\n          \"amount\": 7554.201126744694,\n          \"currency\": \"string\",\n          \"places\": 1246\n        }\n      },\n      \"fixedValueRange\": {\n        \"max\": 4343.759289030989,\n        \"min\": 1685.7592270285193,\n        \"target\": 2503.380860519487\n      },\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"WEB\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0ec085a-24dc-4c44-862a-353d4c9e1d88",
+          "name": "Create a new guideline",
+          "request": {
+            "name": "Create a new guideline",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "guideline"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"compReviewId\": \"<string>\",\n  \"label\": \"<string>\",\n  \"appliedField\": \"<string>\",\n  \"sourceField\": \"<string>\",\n  \"calculationType\": \"<string>\",\n  \"flagMode\": \"<string>\",\n  \"enablePopulateValue\": \"<boolean>\",\n  \"basisType\": \"<string>\",\n  \"budgetPoolId\": \"<string>\",\n  \"participantsExpr\": \"<string>\",\n  \"flagDeviationThreshold\": \"<number>\",\n  \"basisExpr\": \"<string>\",\n  \"basisFieldMatrix\": {\n    \"includedFields\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conditions\": [\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      },\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      }\n    ]\n  },\n  \"fixedAmountRange\": {\n    \"max\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"min\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"target\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    }\n  },\n  \"fixedValueRange\": {\n    \"max\": \"<number>\",\n    \"min\": \"<number>\",\n    \"target\": \"<number>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "299bad2b-d714-4226-97e8-0581ed86f344",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "guideline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"compReviewId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"Merit Guideline\",\n  \"appliedField\": \"'base' or 'grantShares'\",\n  \"sourceField\": \"'base' or 'grantShares'\",\n  \"calculationType\": \"TARGET\",\n  \"flagMode\": \"NONE\",\n  \"enablePopulateValue\": \"<boolean>\",\n  \"basisType\": \"CUSTOM\",\n  \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n  \"participantsExpr\": \"is:person and tenure>=12\",\n  \"flagDeviationThreshold\": \"<number>\",\n  \"basisExpr\": \"tenure>12 ? (base * 0.04) : (base * 0.02)\",\n  \"basisFieldMatrix\": {\n    \"includedFields\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conditions\": [\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      },\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      }\n    ]\n  },\n  \"fixedAmountRange\": {\n    \"max\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"min\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"target\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    }\n  },\n  \"fixedValueRange\": {\n    \"max\": \"<number>\",\n    \"min\": \"<number>\",\n    \"target\": \"<number>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ba1457b-c388-489e-9ad7-2ec5b2be0f7a",
+          "name": "Get a specific guideline",
+          "request": {
+            "name": "Get a specific guideline",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "guideline",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the desired guideline"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b21d9fd1-ce6a-405a-8734-ff3f3f44ffc8",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "guideline",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the desired guideline"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"compReviewId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"Merit Guideline\",\n  \"appliedField\": \"'base' or 'grantShares'\",\n  \"sourceField\": \"'base' or 'grantShares'\",\n  \"calculationType\": \"TARGET\",\n  \"flagMode\": \"NONE\",\n  \"enablePopulateValue\": true,\n  \"basisType\": \"CUSTOM\",\n  \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n  \"participantsExpr\": \"is:person and tenure>=12\",\n  \"flagDeviationThreshold\": 377.9209940834438,\n  \"basisExpr\": \"tenure>12 ? (base * 0.04) : (base * 0.02)\",\n  \"basisFieldMatrix\": {\n    \"includedFields\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conditions\": [\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      },\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      }\n    ]\n  },\n  \"fixedAmountRange\": {\n    \"max\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"min\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"target\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    }\n  },\n  \"fixedValueRange\": {\n    \"max\": \"<number>\",\n    \"min\": \"<number>\",\n    \"target\": \"<number>\"\n  },\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"SLACK\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"WEB\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f0bb870c-5652-43f0-82d2-af13fed674cc",
+          "name": "Update a guideline",
+          "request": {
+            "name": "Update a guideline",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "guideline",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"<string>\",\n  \"budgetPoolId\": \"<string>\",\n  \"participantsExpr\": \"<string>\",\n  \"appliedField\": \"<string>\",\n  \"sourceField\": \"<string>\",\n  \"calculationType\": \"<string>\",\n  \"flagMode\": \"<string>\",\n  \"flagDeviationThreshold\": \"<number>\",\n  \"enablePopulateValue\": \"<boolean>\",\n  \"basisType\": \"<string>\",\n  \"basisExpr\": \"<string>\",\n  \"basisFieldMatrix\": {\n    \"includedFields\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conditions\": [\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      },\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      }\n    ]\n  },\n  \"fixedAmountRange\": {\n    \"max\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"min\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"target\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    }\n  },\n  \"fixedValueRange\": {\n    \"max\": \"<number>\",\n    \"min\": \"<number>\",\n    \"target\": \"<number>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d08d0c7b-3455-41bc-a736-f1a9e80f27e8",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "guideline",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"label\": \"Merit Guideline\",\n  \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n  \"participantsExpr\": \"is:person and tenure>=12\",\n  \"appliedField\": \"'base' or 'grantShares'\",\n  \"sourceField\": \"'base' or 'grantShares'\",\n  \"calculationType\": \"TARGET\",\n  \"flagMode\": \"NONE\",\n  \"flagDeviationThreshold\": \"<number>\",\n  \"enablePopulateValue\": \"<boolean>\",\n  \"basisType\": \"CUSTOM\",\n  \"basisExpr\": \"tenure>12 ? (base * 0.04) : (base * 0.02)\",\n  \"basisFieldMatrix\": {\n    \"includedFields\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conditions\": [\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      },\n      {\n        \"conditionExpr\": \"<string>\",\n        \"amountRange\": {\n          \"max\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"min\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"target\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"places\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"valueRange\": {\n          \"max\": \"<number>\",\n          \"min\": \"<number>\",\n          \"target\": \"<number>\"\n        }\n      }\n    ]\n  },\n  \"fixedAmountRange\": {\n    \"max\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"min\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    },\n    \"target\": {\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"places\": \"<integer>\"\n    }\n  },\n  \"fixedValueRange\": {\n    \"max\": \"<number>\",\n    \"min\": \"<number>\",\n    \"target\": \"<number>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54ca7f08-785b-4602-bf82-ff5e49cc1f6e",
+          "name": "Delete a guideline",
+          "request": {
+            "name": "Delete a guideline",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "guideline",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4094cef0-fed7-4d32-b0ca-8e84cf58f7fc",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "guideline",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0cdbe9a-9901-474c-b430-bd102905ed3e",
+          "name": "Calculate the matrix values for a specific guideline (which may apply to multiple scenarios in the comp review)",
+          "request": {
+            "name": "Calculate the matrix values for a specific guideline (which may apply to multiple scenarios in the comp review)",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "guideline",
+                ":id",
+                "calculate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the desired guideline"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "28daf708-e6c2-46f7-bcd2-c8924654d5a1",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "guideline",
+                    ":id",
+                    "calculate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the desired guideline"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"guidelineId\": \"588f7ee98f138b19220041a7\",\n      \"jobId\": \"588f7ee98f138b19220041a7\",\n      \"compReviewId\": \"588f7ee98f138b19220041a7\",\n      \"guidelineLabel\": \"string\",\n      \"appliedField\": \"string\",\n      \"flagMode\": \"DEVIATION_THRESHOLD\",\n      \"isDeviated\": true,\n      \"deviation\": {\n        \"min\": {},\n        \"max\": {}\n      },\n      \"fields\": {\n        \"key_0\": {}\n      },\n      \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n      \"min\": {},\n      \"max\": {},\n      \"target\": {},\n      \"flagDeviationThreshold\": 9227.253740378324\n    },\n    {\n      \"guidelineId\": \"588f7ee98f138b19220041a7\",\n      \"jobId\": \"588f7ee98f138b19220041a7\",\n      \"compReviewId\": \"588f7ee98f138b19220041a7\",\n      \"guidelineLabel\": \"string\",\n      \"appliedField\": \"string\",\n      \"flagMode\": \"DEVIATION_THRESHOLD\",\n      \"isDeviated\": false,\n      \"deviation\": {\n        \"min\": {},\n        \"max\": {}\n      },\n      \"fields\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"budgetPoolId\": \"588f7ee98f138b19220041a7\",\n      \"min\": {},\n      \"max\": {},\n      \"target\": {},\n      \"flagDeviationThreshold\": 1434.1557414933204\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4ca5ccd5-bde7-407f-b70c-0b94a03bfafa",
+    "name": "ChartHop access guideline API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

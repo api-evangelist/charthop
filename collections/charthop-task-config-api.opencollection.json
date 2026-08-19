@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access task-config API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "task-config",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all task configs for an org",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/task-config",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "TaskConfig id to start paginating from"
+              },
+              {
+                "name": "parentEntityId",
+                "value": "",
+                "type": "query",
+                "description": "ParentEntityId to query for"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "query",
+                "description": "AssessmentId to query for"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "EntityId to query for"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Get all task configs for an org"
+        },
+        {
+          "info": {
+            "name": "Create a new task config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/task-config",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              }
+            ]
+          },
+          "docs": "Create a new task config"
+        },
+        {
+          "info": {
+            "name": "Get a specific task config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/task-config/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired task config"
+              }
+            ]
+          },
+          "docs": "Get a specific task config"
+        },
+        {
+          "info": {
+            "name": "Update an existing task config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/task-config/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired task config"
+              }
+            ]
+          },
+          "docs": "Update an existing task config"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

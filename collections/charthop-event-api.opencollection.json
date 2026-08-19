@@ -1,0 +1,226 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access event API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "event",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return past events, paginated, without payloads present",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/event",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "User id"
+              },
+              {
+                "name": "agentUserId",
+                "value": "",
+                "type": "query",
+                "description": "Agent user id (filter to events done by a specific agent)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity id"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type"
+              },
+              {
+                "name": "parentEntityId",
+                "value": "",
+                "type": "query",
+                "description": "Parent entity id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields that were modified"
+              },
+              {
+                "name": "code",
+                "value": "",
+                "type": "query",
+                "description": "Event code to search for"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp to start search at"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return past events, paginated, without payloads present"
+        },
+        {
+          "info": {
+            "name": "Create an inbound event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/event/notify/inbound/:appId/:inboundId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              },
+              {
+                "name": "inboundId",
+                "value": "",
+                "type": "path",
+                "description": "Inbound id"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id"
+              }
+            ]
+          },
+          "docs": "Create an inbound event"
+        },
+        {
+          "info": {
+            "name": "Create an outbound event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/event/notify/outbound/app/:appId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id"
+              }
+            ]
+          },
+          "docs": "Create an outbound event"
+        },
+        {
+          "info": {
+            "name": "Return individual event, including payload",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/event/:eventId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return individual event, including payload"
+        },
+        {
+          "info": {
+            "name": "Resend all associated notifications for a previous event (superusers only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/event/:eventId/notify",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event id"
+              },
+              {
+                "name": "app",
+                "value": "",
+                "type": "query",
+                "description": "App name to restrict notifications to"
+              }
+            ]
+          },
+          "docs": "Resend all associated notifications for a previous event (superusers only)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

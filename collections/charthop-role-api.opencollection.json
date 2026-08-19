@@ -1,0 +1,199 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access role API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "role",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all or a set of roles in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/role",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Comma separated Role Ids to find"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Return only default or custom roles"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Expand each role's policies and user count. Off by default: roles come back bare for a fast bulk lookup. Full user objects are only returned by the get-by-id endpoint."
+              }
+            ]
+          },
+          "docs": "Return all or a set of roles in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/role",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a role"
+        },
+        {
+          "info": {
+            "name": "Export roles to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/role/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export roles to CSV format"
+        },
+        {
+          "info": {
+            "name": "Return a particular role by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/role/:roleId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "path",
+                "description": "Role id"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Expand the role's policies and full user list."
+              }
+            ]
+          },
+          "docs": "Return a particular role by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/role/:roleId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "path",
+                "description": "Role id"
+              }
+            ]
+          },
+          "docs": "Update an existing role"
+        },
+        {
+          "info": {
+            "name": "Delete a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/role/:roleId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "path",
+                "description": "Role id"
+              }
+            ]
+          },
+          "docs": "Delete a role"
+        },
+        {
+          "info": {
+            "name": "Copy an existing role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/role/:roleId/copy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "path",
+                "description": "Role id"
+              }
+            ]
+          },
+          "docs": "Copy an existing role"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

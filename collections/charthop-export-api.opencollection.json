@@ -1,0 +1,301 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access export API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "export",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Export a changelog to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/change",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export a changelog to CSV format"
+        },
+        {
+          "info": {
+            "name": "Export compensation history (one row per comp change, enriched with title/manager/department) to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/compensation-history",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export compensation history (one row per comp change, enriched with title/manager/department) to CSV format"
+        },
+        {
+          "info": {
+            "name": "Export a CSV of custom fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/fields",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export a CSV of custom fields"
+        },
+        {
+          "info": {
+            "name": "Export a CSV changelog of a scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/scenario/:scenarioId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Export a CSV changelog of a scenario"
+        },
+        {
+          "info": {
+            "name": "Export a csv log of a scenario comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/scenario/:scenarioId/comments",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Export a csv log of a scenario comments"
+        },
+        {
+          "info": {
+            "name": "Export the org's scenario list to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/scenarios",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export the org's scenario list to CSV format"
+        },
+        {
+          "info": {
+            "name": "Export a snapshot of a current roster to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/snapshot",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export a snapshot of a current roster to CSV format"
+        },
+        {
+          "info": {
+            "name": "Export tasks for a review to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/task/:reviewId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reviewId",
+                "value": "",
+                "type": "path",
+                "description": "review id"
+              }
+            ]
+          },
+          "docs": "Export tasks for a review to CSV format"
+        },
+        {
+          "info": {
+            "name": "Export users for a review to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/csv/users",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export users for a review to CSV format"
+        },
+        {
+          "info": {
+            "name": "Export a snapshot of a current roster to JSONL format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/jsonl/snapshot",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export a snapshot of a current roster to JSONL format"
+        },
+        {
+          "info": {
+            "name": "Export reviews in PDF format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/pdf/review/:assessmentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Export reviews in PDF format"
+        },
+        {
+          "info": {
+            "name": "Export org chart to Powerpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/powerpoint/org",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "date to export the data from"
+              }
+            ]
+          },
+          "docs": "Export org chart to Powerpoint"
+        },
+        {
+          "info": {
+            "name": "Export report to Powerpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/export/powerpoint/report/:reportId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "report id"
+              }
+            ]
+          },
+          "docs": "Export report to Powerpoint"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

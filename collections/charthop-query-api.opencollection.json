@@ -1,0 +1,173 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access query API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of query tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/query",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Action id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Get a list of query tokens"
+        },
+        {
+          "info": {
+            "name": "Create a live query token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/query",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a live query token"
+        },
+        {
+          "info": {
+            "name": "Return the results of a previously created live query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/query/:queryToken",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "queryToken",
+                "value": "",
+                "type": "path",
+                "description": "Query token"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex-datatype columns"
+              }
+            ]
+          },
+          "docs": "Return the results of a previously created live query"
+        },
+        {
+          "info": {
+            "name": "Expire a previously created live query immediately",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/query/:queryToken",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "queryToken",
+                "value": "",
+                "type": "path",
+                "description": "Query token (either id or token string)"
+              }
+            ]
+          },
+          "docs": "Expire a previously created live query immediately"
+        },
+        {
+          "info": {
+            "name": "Download an IQY file for a previously created live query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/query/:queryToken/iqy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "queryToken",
+                "value": "",
+                "type": "path",
+                "description": "Query token"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is html-display, can also use html-export"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex-datatype columns"
+              }
+            ]
+          },
+          "docs": "Download an IQY file for a previously created live query"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

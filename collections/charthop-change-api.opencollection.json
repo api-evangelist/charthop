@@ -1,0 +1,670 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access change API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "change",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return recent changes across an org, or for a particular person or job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/change",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to start from"
+              },
+              {
+                "name": "untilDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get changes through (exclusive)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Types of change to filter by"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Return changes that modify these fields"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "query",
+                "description": "Person id to filter by"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "query",
+                "description": "Job id to filter by"
+              },
+              {
+                "name": "includeBackfill",
+                "value": "",
+                "type": "query",
+                "description": "Find and include first backfill if it exists"
+              },
+              {
+                "name": "refs",
+                "value": "",
+                "type": "query",
+                "description": "References to filter by"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Query to filter against"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Change id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "open",
+                "value": "",
+                "type": "query",
+                "description": "Whether the role is open or not"
+              },
+              {
+                "name": "desc",
+                "value": "",
+                "type": "query",
+                "description": "Descending (default false)"
+              },
+              {
+                "name": "scenarioOnly",
+                "value": "",
+                "type": "query",
+                "description": "Scenario only (exclude primary changes)"
+              },
+              {
+                "name": "parentOnly",
+                "value": "",
+                "type": "query",
+                "description": "Parent changes only (exclude child changes)"
+              },
+              {
+                "name": "excludeAtsRecruitingFields",
+                "value": "",
+                "type": "query",
+                "description": "Whether to exclude ats recruiting fields. Only applies when fieldEntityTypeString is passed"
+              },
+              {
+                "name": "includeStruck",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated parameter for backwards-compatibility (use statuses) - whether to include STRUCK and PROPOSED changes, or just ACTIVE changes"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Statuses to filter by"
+              },
+              {
+                "name": "stripUpdates",
+                "value": "",
+                "type": "query",
+                "description": "Whether to strip returned update changes of update types that were not explicitly requested"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "fieldEntityTypes",
+                "value": "",
+                "type": "query",
+                "description": "Only return changes which set fields with these entity types"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return recent changes across an org, or for a particular person or job"
+        },
+        {
+          "info": {
+            "name": "Perform a series of changes at once",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/bulkchange",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Perform a series of changes at once"
+        },
+        {
+          "info": {
+            "name": "Perform a bulk update on a number of jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/bulkupdate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Perform a bulk update on a number of jobs"
+        },
+        {
+          "info": {
+            "name": "Return enriched compensation history rows (one row per comp change), in descending date order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/compensation-history",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to start from"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get changes through (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Filter query string"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for paginating from a previous response"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return enriched compensation history rows (one row per comp change), in descending date order"
+        },
+        {
+          "info": {
+            "name": "Create a depart-rehire pair of changes, for filling in historical data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/depart-rehire",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Rehire start date"
+              }
+            ]
+          },
+          "docs": "Create a depart-rehire pair of changes, for filling in historical data"
+        },
+        {
+          "info": {
+            "name": "Return all changes for a particular scenario, with before job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/scenario/:scenarioId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return all changes for a particular scenario, with before job"
+        },
+        {
+          "info": {
+            "name": "Sync a change (create the change only if it does not already exist)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/sync/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Change type"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id of person creation"
+              }
+            ]
+          },
+          "docs": "Sync a change (create the change only if it does not already exist)"
+        },
+        {
+          "info": {
+            "name": "Return a particular change by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:changeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change id"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return a particular change by id"
+        },
+        {
+          "info": {
+            "name": "Make a change to a change",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:changeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change id"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id of person creation"
+              }
+            ]
+          },
+          "docs": "Make a change to a change"
+        },
+        {
+          "info": {
+            "name": "Delete a previous change",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:changeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change id"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id of person creation"
+              }
+            ]
+          },
+          "docs": "Delete a previous change"
+        },
+        {
+          "info": {
+            "name": "Approve or reject a change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:changeId/approve",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change id"
+              }
+            ]
+          },
+          "docs": "Approve or reject a change"
+        },
+        {
+          "info": {
+            "name": "Given a of change id, see if the person can approve/reject",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:changeId/approver",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change Id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to check the approval on"
+              }
+            ]
+          },
+          "docs": "Given a of change id, see if the person can approve/reject"
+        },
+        {
+          "info": {
+            "name": "Create a new change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Change type"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Source of change"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "query",
+                "description": "Process id of change creation"
+              }
+            ]
+          },
+          "docs": "Create a new change"
+        },
+        {
+          "info": {
+            "name": "Validate a change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/change/:type/validate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Change type"
+              }
+            ]
+          },
+          "docs": "Validate a change"
+        },
+        {
+          "info": {
+            "name": "Amend a change within a scenario, and potentially return the updated data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/change/:changeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change id"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve"
+              },
+              {
+                "name": "includeUpdatedFields",
+                "value": "",
+                "type": "query",
+                "description": "Include all updated fields in the response, including change.after.fieldName for each updated field"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to return; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Amend a change within a scenario, and potentially return the updated data"
+        },
+        {
+          "info": {
+            "name": "Get the status of a running change within a scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/change/:changeId/status/:processId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              },
+              {
+                "name": "changeId",
+                "value": "",
+                "type": "path",
+                "description": "Change id"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "path",
+                "description": "Process id"
+              }
+            ]
+          },
+          "docs": "Get the status of a running change within a scenario"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

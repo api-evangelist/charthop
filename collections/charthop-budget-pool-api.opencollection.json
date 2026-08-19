@@ -1,0 +1,187 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access budget-pool API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "budget-pool",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all budget pools for an org",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "compReviewId",
+                "value": "",
+                "type": "query",
+                "description": "Comp Review Id to filter on"
+              }
+            ]
+          },
+          "docs": "Get all budget pools for an org"
+        },
+        {
+          "info": {
+            "name": "Create a new budget pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              }
+            ]
+          },
+          "docs": "Create a new budget pool"
+        },
+        {
+          "info": {
+            "name": "Get a specific budget pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired budget pool"
+              }
+            ]
+          },
+          "docs": "Get a specific budget pool"
+        },
+        {
+          "info": {
+            "name": "Update a budget pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired budget pool"
+              }
+            ]
+          },
+          "docs": "Update a budget pool"
+        },
+        {
+          "info": {
+            "name": "Delete a budget pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired budget pool"
+              }
+            ]
+          },
+          "docs": "Delete a budget pool"
+        },
+        {
+          "info": {
+            "name": "Get the guidelines associated with a budget pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool/:id/guidelines",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired budget pool"
+              }
+            ]
+          },
+          "docs": "Get the guidelines associated with a budget pool"
+        },
+        {
+          "info": {
+            "name": "Generate tiering & preview with the given budget calculated for the compensation review",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget-pool/:id/preview",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired budget pool"
+              }
+            ]
+          },
+          "docs": "Generate tiering & preview with the given budget calculated for the compensation review"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

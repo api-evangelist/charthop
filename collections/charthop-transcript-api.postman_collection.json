@@ -1,0 +1,2092 @@
+{
+  "item": [
+    {
+      "id": "9c694c7e-e11a-4dee-b388-27fe228d9e7b",
+      "name": "transcript",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7a158bf7-46e0-4c1e-b9f3-f93159df0fd7",
+          "name": "Return transcripts in the organization",
+          "request": {
+            "name": "Return transcripts in the organization",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Only include transcripts starting at or after this timestamp (inclusive)"
+                },
+                {
+                  "disabled": false,
+                  "key": "until",
+                  "value": "<string>",
+                  "description": "Only include transcripts starting before this timestamp (exclusive)"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromId",
+                  "value": "<string>",
+                  "description": "Transcript id to start paginating from"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "returnAccess",
+                  "value": "<string>",
+                  "description": "Return access information"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "49f729f7-c2fd-4d4c-8d7a-19aa855402f1",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"665f3aabe88164e4ef6c3a22\",\n      \"orgId\": \"665f3ad1e47a82bf1d3d180b\",\n      \"externalId\": \"string\",\n      \"recordingSystem\": \"gong\",\n      \"startAt\": \"2017-01-24T13:57:52Z\",\n      \"untilAt\": \"2017-01-24T14:57:52Z\",\n      \"attendees\": [\n        {\n          \"id\": \"string\",\n          \"personId\": \"588f7ee98f138b19220041a7\",\n          \"email\": \"string\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"orgId\": \"588f7ee98f138b19220041a7\",\n          \"orgName\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"personId\": \"588f7ee98f138b19220041a7\",\n          \"email\": \"string\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"orgId\": \"588f7ee98f138b19220041a7\",\n          \"orgName\": \"string\"\n        }\n      ],\n      \"label\": \"string\",\n      \"hasTranscriptContent\": true,\n      \"sensitive\": \"HIGH\",\n      \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n      \"externalCalendarEntryId\": \"string\",\n      \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"language\": \"en\",\n      \"description\": \"string\",\n      \"summary\": \"string\",\n      \"shareAccess\": [\n        {\n          \"access\": \"NONE\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        },\n        {\n          \"access\": \"COMPENSATION_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        }\n      ],\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"665f3aabe88164e4ef6c3a22\",\n      \"orgId\": \"665f3ad1e47a82bf1d3d180b\",\n      \"externalId\": \"string\",\n      \"recordingSystem\": \"gong\",\n      \"startAt\": \"2017-01-24T13:57:52Z\",\n      \"untilAt\": \"2017-01-24T14:57:52Z\",\n      \"attendees\": [\n        {\n          \"id\": \"string\",\n          \"personId\": \"588f7ee98f138b19220041a7\",\n          \"email\": \"string\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"orgId\": \"588f7ee98f138b19220041a7\",\n          \"orgName\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"personId\": \"588f7ee98f138b19220041a7\",\n          \"email\": \"string\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"orgId\": \"588f7ee98f138b19220041a7\",\n          \"orgName\": \"string\"\n        }\n      ],\n      \"label\": \"string\",\n      \"hasTranscriptContent\": false,\n      \"sensitive\": \"SENSITIVE\",\n      \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n      \"externalCalendarEntryId\": \"string\",\n      \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"language\": \"en\",\n      \"description\": \"string\",\n      \"summary\": \"string\",\n      \"shareAccess\": [\n        {\n          \"access\": \"STANDARD_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        },\n        {\n          \"access\": \"COMPENSATION_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        }\n      ],\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0dd555de-43aa-4982-87e4-4bebba6476b9",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a3a4388e-1ad1-49d7-919b-9608e2d80c4f",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "253ae1af-bed9-4a67-bc62-a4ba801ca926",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a41a4ca4-5816-4ca7-8d72-c36e8dfc8ae6",
+          "name": "Create a transcript",
+          "request": {
+            "name": "Create a transcript",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalId\": \"<string>\",\n  \"recordingSystem\": \"<string>\",\n  \"startAt\": \"<string>\",\n  \"untilAt\": \"<string>\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"<string>\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"<string>\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"calendarEntryId\": \"<string>\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalUrl\": \"<string>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9a052daf-3390-456e-84f6-b815e1171459",
+              "name": "transcript created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"665f3aabe88164e4ef6c3a22\",\n  \"orgId\": \"665f3ad1e47a82bf1d3d180b\",\n  \"externalId\": \"string\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"string\",\n  \"hasTranscriptContent\": false,\n  \"sensitive\": \"PERSONAL\",\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"string\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"language\": \"en\",\n  \"description\": \"string\",\n  \"summary\": \"string\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95657326-623a-4f4d-8038-87a48dd1a8f0",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fae0ef43-5aa7-4254-ace6-19b833520906",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3a540510-8f20-476e-bfd2-c191042fa078",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f45c9b7-04d0-4060-a076-d1b2584d51fd",
+          "name": "Import transcripts from a JSONL file",
+          "request": {
+            "name": "Import transcripts from a JSONL file",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript",
+                "import"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "(Required) JSONL file containing transcript data"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1c5e0cec-d5e9-418b-92fb-c828548b63f0",
+              "name": "import process started",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing transcript data",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"ERROR\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 5145.811106049543,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"ERROR\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08137793-9e1e-4f1c-a4a0-e843ce4dcbd6",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing transcript data",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cb257843-46de-42e4-bf0a-bfba10b58a09",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing transcript data",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8d418d72-e62e-456c-abc5-e56457edbf5a",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing transcript data",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "69372b6a-7260-4e3a-bf00-73ed0b25328d",
+          "name": "Import transcripts from a JSONL file already stored (by process file path)",
+          "request": {
+            "name": "Import transcripts from a JSONL file already stored (by process file path)",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript",
+                "import",
+                "filepath"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filePath",
+                  "value": "<string>",
+                  "description": "(Required) path to the JSONL file in storage"
+                },
+                {
+                  "disabled": false,
+                  "key": "parentProcessId",
+                  "value": "<string>",
+                  "description": "process id of the parent process"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "deb3a2c1-bd74-4715-9ca4-c15d71158286",
+              "name": "import process started",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"RUNNING\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 9155.454800990126,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"ERROR\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {},\n        \"key_3\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a33c59a-74d2-441c-93a4-9e8878e783a4",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "209a9b92-c612-4698-8757-7e4ab55464cc",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "67a4d1de-b98b-4201-87ac-3888d0fdb46c",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    "import",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "328059f8-de7e-40e5-b748-d47774b886a1",
+          "name": "Return a particular transcript by id",
+          "request": {
+            "name": "Return a particular transcript by id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript",
+                ":transcriptId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transcriptId",
+                  "description": "(Required) Transcript id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ee5ac96d-9807-4101-bec8-9d66b830e5d2",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"665f3aabe88164e4ef6c3a22\",\n  \"orgId\": \"665f3ad1e47a82bf1d3d180b\",\n  \"externalId\": \"string\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"label\": \"string\",\n  \"hasTranscriptContent\": false,\n  \"sensitive\": \"PERSONAL\",\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"string\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"language\": \"en\",\n  \"description\": \"string\",\n  \"summary\": \"string\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10547fa1-95a7-496c-a7c7-05617b1365a6",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a8bbb4e6-7cab-4dba-befe-03747e8d2984",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb436dec-7f99-4405-93f6-a262697e4be5",
+          "name": "Update a transcript",
+          "request": {
+            "name": "Update a transcript",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript",
+                ":transcriptId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transcriptId",
+                  "description": "(Required) Transcript id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calendarEntryId\": \"<string>\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalId\": \"<string>\",\n  \"externalUrl\": \"<string>\",\n  \"recordingSystem\": \"<string>\",\n  \"startAt\": \"<string>\",\n  \"untilAt\": \"<string>\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"<string>\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"<string>\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"<string>\",\n  \"label\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "80b28446-1414-4cb0-a7c3-709506a6048f",
+              "name": "transcript updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"label\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "408fd5ef-9400-46d3-935e-9ea7298eee65",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"label\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a9861e85-fadc-4442-a8bb-d9fdcfc20529",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"label\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cca764d4-ccb7-4187-aa11-af28d6f746de",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"label\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fc0cd74a-848d-4c73-97e4-45edf09f4e44",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"calendarEntryId\": \"588f7ee98f138b19220041a7\",\n  \"externalCalendarEntryId\": \"<string>\",\n  \"externalId\": \"<string>\",\n  \"externalUrl\": \"https://app.gong.io/call?id=7815638069569786872\",\n  \"recordingSystem\": \"gong\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"untilAt\": \"2017-01-24T14:57:52Z\",\n  \"attendees\": [\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"orgName\": \"<string>\"\n    }\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"language\": \"en\",\n  \"label\": \"<string>\",\n  \"description\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"sensitive\": \"<string>\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "99227f0d-5a09-468e-b85a-e0312d2247c8",
+          "name": "Delete a transcript",
+          "request": {
+            "name": "Delete a transcript",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript",
+                ":transcriptId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transcriptId",
+                  "description": "(Required) Transcript id"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3c07d991-6328-42c5-bbaa-1ed1eee193bb",
+              "name": "transcript deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d8460daf-9dd4-49f8-b8ee-2be1694b0046",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4a7d81fd-e21d-4083-aabb-6ddbb6c92081",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "25318dac-5952-4484-91ae-6306ccb563aa",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce3c24b4-c3f4-4794-86b2-49889208d8b7",
+          "name": "Return the transcript's content as speaker-attributed lines",
+          "request": {
+            "name": "Return the transcript's content as speaker-attributed lines",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "transcript",
+                ":transcriptId",
+                "content"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transcriptId",
+                  "description": "(Required) Transcript id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a15c30c9-cda4-443d-86b9-3a60969ddd45",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId",
+                    "content"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"text\": \"string\",\n      \"speakerId\": \"string\",\n      \"startAt\": \"2017-01-24T13:57:52Z\",\n      \"endAt\": \"2017-01-24T13:57:55Z\"\n    },\n    {\n      \"text\": \"string\",\n      \"speakerId\": \"string\",\n      \"startAt\": \"2017-01-24T13:57:52Z\",\n      \"endAt\": \"2017-01-24T13:57:55Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d79d7f2-9a30-4235-9584-42bd9734e20a",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "transcript",
+                    ":transcriptId",
+                    "content"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transcriptId",
+                      "description": "(Required) Transcript id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4ecbcd6b-4e66-4c92-9b09-9132e73bd483",
+    "name": "ChartHop access transcript API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

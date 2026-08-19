@@ -1,0 +1,392 @@
+{
+  "item": [
+    {
+      "id": "01749c3c-3b41-4bdb-8030-964cb10cff25",
+      "name": "legalDoc",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7764898f-c64b-4d89-9f4f-a0faf4e373ec",
+          "name": "Create a legal doc",
+          "request": {
+            "name": "Create a legal doc",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "legaldoc"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"content\": \"<string>\",\n  \"date\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "19603155-2aa8-41b6-89d8-9e9d93a50f05",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"ChartHop Service Agreement\",\n  \"content\": \"<string>\",\n  \"date\": \"<date>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aea4f541-136b-4778-a8ab-b263dde1473d",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"ChartHop Service Agreement\",\n  \"content\": \"<string>\",\n  \"date\": \"<date>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "483143fb-2179-48f3-b30d-7a5bbb2c54a8",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"ChartHop Service Agreement\",\n  \"content\": \"<string>\",\n  \"date\": \"<date>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7f1de56e-6002-4e2b-bd75-820ee4157e9c",
+          "name": "Retrieve the legal doc by name",
+          "request": {
+            "name": "Retrieve the legal doc by name",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "legaldoc",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c67f9844-bf83-4469-9bac-acb7ac9b75f3",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"ChartHop Service Agreement\",\n  \"date\": \"2000-11-09\",\n  \"content\": \"string\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  },\n  \"createAt\": \"2017-01-24T13:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1309bfa0-c7bc-40c2-9ca7-efde97e2734f",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) name"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f48ff3ff-d3c7-4469-a96b-2b17cc133edc",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) name"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "19523e74-1dca-4b05-a8a8-fa7600f33562",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "legaldoc",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) name"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5c2c818e-dba4-42c6-9cea-c348aeea20f0",
+    "name": "ChartHop access legalDoc API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

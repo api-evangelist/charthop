@@ -1,0 +1,2997 @@
+{
+  "item": [
+    {
+      "id": "ab59d544-4b99-463e-a5fe-a160c9c02b30",
+      "name": "timeoff",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab93e0eb-b5c6-4598-bf96-04ad0c02677e",
+          "name": "Retrieve time off requests",
+          "request": {
+            "name": "Retrieve time off requests",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "personId",
+                  "value": "<string>",
+                  "description": "Person id to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "From date, inclusive"
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Until date, exclusive"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Time off id to start paginating from"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "returnAccess",
+                  "value": "<string>",
+                  "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fba41208-3d62-4a57-8350-7d384c97330e",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"1999-04-12\",\n      \"endDate\": \"1949-07-12\",\n      \"externalId\": \"string\",\n      \"startDatePartialDay\": 895.950249324724,\n      \"startDatePartialDayPeriod\": \"AM\",\n      \"endDatePartialDay\": 245.55387445001742,\n      \"endDatePartialDayPeriod\": \"PM\",\n      \"days\": 3152.6029351961415,\n      \"hours\": 4717.441822696542,\n      \"typeDescription\": \"string\",\n      \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n      \"note\": \"string\",\n      \"approval\": \"APPROVED\",\n      \"approvalAt\": \"2017-01-24T13:57:52Z\",\n      \"approvalUserId\": \"588f7ee98f138b19220041a7\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"WEB\"\n      },\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"WEB\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\",\n      \"requestAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"2008-04-03\",\n      \"endDate\": \"1986-05-02\",\n      \"externalId\": \"string\",\n      \"startDatePartialDay\": 7351.872338263199,\n      \"startDatePartialDayPeriod\": \"PM\",\n      \"endDatePartialDay\": 7233.0746816609435,\n      \"endDatePartialDayPeriod\": \"PM\",\n      \"days\": 5400.44545979534,\n      \"hours\": 7134.404238385667,\n      \"typeDescription\": \"string\",\n      \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n      \"note\": \"string\",\n      \"approval\": \"SUPERSEDED\",\n      \"approvalAt\": \"2017-01-24T13:57:52Z\",\n      \"approvalUserId\": \"588f7ee98f138b19220041a7\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\",\n      \"requestAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c1ae4a1-574f-4dd3-ac10-a83c89ce7b3c",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "db98f907-284d-4fdb-ac64-e27ace4ba8ae",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1dd8a61a-5ddc-4e76-a884-0d6cc6540ccc",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8e53ee88-a98b-4440-aa0c-0a9c9f5e5b51",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3be281af-31ff-4d7c-9e7e-dfcc7c34b609",
+          "name": "Create a time off request",
+          "request": {
+            "name": "Create a time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgId\": \"<string>\",\n  \"personId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"externalId\": \"<string>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"<string>\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c36fca5-53ae-40c4-ab8a-3e74ec2760f0",
+              "name": "time off created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"externalId\": \"<string>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"startDate\": \"1978-04-17\",\n  \"endDate\": \"1999-06-15\",\n  \"days\": 1903.6957997873228,\n  \"hours\": 8552.609942598494,\n  \"type\": \"string\",\n  \"note\": \"string\",\n  \"approval\": \"PENDING\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d908ab61-ddbb-4ffb-8852-a2f5949cac21",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"externalId\": \"<string>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aabf06b6-1a7a-4377-b920-9c3b6fe3916c",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"externalId\": \"<string>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "436ebff1-3e72-42c1-bbb8-c91b6ca10cfd",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"externalId\": \"<string>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7c47f619-3d2d-426b-b672-5485c6f29ac2",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"externalId\": \"<string>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f55761c2-9db3-490c-b4e6-5949d49390bf",
+          "name": "Request time off",
+          "request": {
+            "name": "Request time off",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "request"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"personId\": \"<string>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "59d13aee-51c3-4b34-8f53-edfdbe3684c4",
+              "name": "time off created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"1988-08-04\",\n  \"endDate\": \"1962-04-17\",\n  \"externalId\": \"string\",\n  \"startDatePartialDay\": 9015.389227812182,\n  \"startDatePartialDayPeriod\": \"AM\",\n  \"endDatePartialDay\": 1375.946740560753,\n  \"endDatePartialDayPeriod\": \"AM\",\n  \"days\": 1174.4317685769945,\n  \"hours\": 6059.148913034746,\n  \"typeDescription\": \"string\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"string\",\n  \"approval\": \"PENDING\",\n  \"approvalAt\": \"2017-01-24T13:57:52Z\",\n  \"approvalUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"WEB\"\n  },\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"deleteAt\": \"2017-01-24T13:57:52Z\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "410490ba-af8a-48c4-bcba-7ea75d6d1660",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "592a8642-bf31-4539-83a9-e3080f216f0d",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d47bfb0a-23af-4e0c-9b7f-1580e334bcde",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "730e6dc0-f34f-4fe0-9612-3ccb356077c0",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e6ce3a7-5528-4e78-99f5-7972a34eed6d",
+          "name": "Validate a time off request",
+          "request": {
+            "name": "Validate a time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "request",
+                "validate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ignoreRequestId",
+                  "value": "<string>",
+                  "description": "Request ID to ignore during validation (for editing)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"personId\": \"<string>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8f5f7c2a-e50c-48ac-bf70-9fca658c5d0f",
+              "name": "time off validated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ignoreRequestId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"daysTaken\": 9582.380619310554,\n  \"hoursTaken\": 5060.254918322171,\n  \"excludedDays\": [\n    {\n      \"date\": \"1947-05-08\",\n      \"dayLabel\": \"string\"\n    },\n    {\n      \"date\": \"1957-03-30\",\n      \"dayLabel\": \"string\"\n    }\n  ],\n  \"balanceBeforeRequest\": 592.0112392943777,\n  \"carryOverBeforeRequest\": 8140.355748634538,\n  \"balanceAfterRequest\": 1334.7351648621852,\n  \"carryOverAfterRequest\": 9984.986141578443,\n  \"approverJobId\": \"588f7ee98f138b19220041a7\",\n  \"errorMessage\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1483cf3-051c-4622-b730-1be81862311c",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ignoreRequestId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "154ca9df-9c09-44e1-b54a-20dea7990ff0",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ignoreRequestId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6d1e2c20-18fc-4048-806a-95b84cd66384",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ignoreRequestId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "41f2717d-2dd0-40ba-9bb6-31f5f456dcfc",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "request",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ignoreRequestId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3732bc89-551c-43e4-a020-13217ae2293f",
+          "name": "Return a particular time off request by id",
+          "request": {
+            "name": "Return a particular time off request by id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                ":timeOffId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timeOffId",
+                  "description": "(Required) TimeOff id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "44d04add-0611-47cd-899c-af59d941a5b7",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"startDate\": \"1988-08-04\",\n  \"endDate\": \"1962-04-17\",\n  \"externalId\": \"string\",\n  \"startDatePartialDay\": 9015.389227812182,\n  \"startDatePartialDayPeriod\": \"AM\",\n  \"endDatePartialDay\": 1375.946740560753,\n  \"endDatePartialDayPeriod\": \"AM\",\n  \"days\": 1174.4317685769945,\n  \"hours\": 6059.148913034746,\n  \"typeDescription\": \"string\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"string\",\n  \"approval\": \"PENDING\",\n  \"approvalAt\": \"2017-01-24T13:57:52Z\",\n  \"approvalUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"WEB\"\n  },\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"deleteAt\": \"2017-01-24T13:57:52Z\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5581bfd5-95ea-40af-869e-9ed6f6fd4709",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9d2794aa-7252-4f14-9b0e-cf2272a61cdd",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0b801a6b-3bc6-424c-86de-c171d45d2e6a",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0f77fe41-ddd0-4a7a-b5b6-cd1f279e0348",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07b82016-b8a0-47a1-b4b6-13f9c55901b5",
+          "name": "Update an existing time off request",
+          "request": {
+            "name": "Update an existing time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                ":timeOffId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timeOffId",
+                  "description": "(Required) TimeOff id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDate\": \"<date>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"<string>\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3f905e42-e417-49b5-b994-cffd2a3eee9b",
+              "name": "time off updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDate\": \"<date>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "090a8fa7-fbdd-43b2-b5f9-d51886699efe",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDate\": \"<date>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f4956c1f-e443-480f-9502-0ffd8df1dcc7",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDate\": \"<date>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "874cf705-7d9c-45ee-a9f6-2b1f7ea51a74",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDate\": \"<date>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c98f356-c311-46e0-95d5-9ac0e51ba1a1",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalId\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"startDatePartialDay\": \"<number>\",\n  \"startDatePartialDayPeriod\": \"<string>\",\n  \"endDate\": \"<date>\",\n  \"endDatePartialDay\": \"<number>\",\n  \"endDatePartialDayPeriod\": \"<string>\",\n  \"days\": \"<number>\",\n  \"hours\": \"<number>\",\n  \"typeDescription\": \"<string>\",\n  \"timeOffPolicyId\": \"588f7ee98f138b19220041a7\",\n  \"note\": \"<string>\",\n  \"approval\": \"<string>\",\n  \"requestAt\": \"2017-01-24T13:57:52Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "20840805-1b2d-4e43-9f71-815d6014929d",
+          "name": "Delete a time off request",
+          "request": {
+            "name": "Delete a time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                ":timeOffId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timeOffId",
+                  "description": "(Required) TimeOff id"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec0c0816-3948-4490-95c9-a994232fd340",
+              "name": "time off deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "72f94f96-dff3-4426-afd4-7c3fdf417382",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "661a6e9a-6cf7-47e1-a67e-a9790031fd2a",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fe855a3f-69f0-449d-b929-49e10740b7e6",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7f4fc31d-ca39-4252-b40f-aaf0e7cfcef5",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bacddf20-a662-4595-9d25-5675599cf652",
+          "name": "Approve a pending time off request",
+          "request": {
+            "name": "Approve a pending time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                ":timeOffId",
+                "approve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "targetApproverJobId",
+                  "value": "<string>",
+                  "description": "jobId of the approver the caller is acting for as their approval delegate"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timeOffId",
+                  "description": "(Required) TimeOff id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "076dc971-ada6-404f-9b6e-20f51b6b68bc",
+              "name": "time off approved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4934a3de-923f-4953-9abd-a646b460be2b",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b78d9466-c985-4c09-bc9c-77652a1bf630",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0fc71104-ae81-4e2a-ad82-c4f384a34675",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a514b327-ce01-48f1-ac31-85f06558360e",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f7fe4a8f-cd07-428e-bc07-4b10b8918b14",
+          "name": "Reject a pending time off request",
+          "request": {
+            "name": "Reject a pending time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                ":timeOffId",
+                "reject"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "targetApproverJobId",
+                  "value": "<string>",
+                  "description": "jobId of the approver the caller is acting for as their approval delegate"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timeOffId",
+                  "description": "(Required) TimeOff id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3a1773de-5538-497c-8691-ef67615fbadd",
+              "name": "time off rejected",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6678a5a8-fe19-4944-b342-80324b8f0044",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fbfb65e-f6ea-4dfe-a299-2de6393226d1",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2a1decfe-d3ed-4e1e-8c28-f9fe31120c1b",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "372fec17-40fb-4862-aad0-a2e3f700eee5",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    ":timeOffId",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "targetApproverJobId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timeOffId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8697bb87-f3e4-4d83-a06a-47eaa2be1540",
+    "name": "ChartHop access timeoff API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

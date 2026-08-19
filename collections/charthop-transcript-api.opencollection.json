@@ -1,0 +1,236 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access transcript API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "transcript",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return transcripts in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Only include transcripts starting at or after this timestamp (inclusive)"
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Only include transcripts starting before this timestamp (exclusive)"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "Transcript id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information"
+              }
+            ]
+          },
+          "docs": "Return transcripts in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a transcript",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a transcript"
+        },
+        {
+          "info": {
+            "name": "Import transcripts from a JSONL file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript/import",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Import transcripts from a JSONL file"
+        },
+        {
+          "info": {
+            "name": "Import transcripts from a JSONL file already stored (by process file path)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript/import/filepath",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "filePath",
+                "value": "",
+                "type": "query",
+                "description": "path to the JSONL file in storage"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "process id of the parent process"
+              }
+            ]
+          },
+          "docs": "Import transcripts from a JSONL file already stored (by process file path)"
+        },
+        {
+          "info": {
+            "name": "Return a particular transcript by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript/:transcriptId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "transcriptId",
+                "value": "",
+                "type": "path",
+                "description": "Transcript id"
+              }
+            ]
+          },
+          "docs": "Return a particular transcript by id"
+        },
+        {
+          "info": {
+            "name": "Update a transcript",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript/:transcriptId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "transcriptId",
+                "value": "",
+                "type": "path",
+                "description": "Transcript id"
+              }
+            ]
+          },
+          "docs": "Update a transcript"
+        },
+        {
+          "info": {
+            "name": "Delete a transcript",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript/:transcriptId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "transcriptId",
+                "value": "",
+                "type": "path",
+                "description": "Transcript id"
+              }
+            ]
+          },
+          "docs": "Delete a transcript"
+        },
+        {
+          "info": {
+            "name": "Return the transcript's content as speaker-attributed lines",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/transcript/:transcriptId/content",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "transcriptId",
+                "value": "",
+                "type": "path",
+                "description": "Transcript id"
+              }
+            ]
+          },
+          "docs": "Return the transcript's content as speaker-attributed lines"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

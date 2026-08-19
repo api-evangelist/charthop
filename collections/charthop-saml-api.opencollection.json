@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access saml API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "saml",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Save per org Xml Cert from IDP",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/saml/org/:orgId/xml-cert",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "idp",
+                "value": "",
+                "type": "query",
+                "description": "Identifier Provider"
+              }
+            ]
+          },
+          "docs": "Save per org Xml Cert from IDP"
+        },
+        {
+          "info": {
+            "name": "Save per org Xml Cert from IDP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/saml/org/:orgId/xml-cert",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "idp",
+                "value": "",
+                "type": "query",
+                "description": "Identifier Provider"
+              }
+            ]
+          },
+          "docs": "Save per org Xml Cert from IDP"
+        },
+        {
+          "info": {
+            "name": "Single sign on URL, where SAML assertion is perform",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/saml/sso/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "Org slug"
+              }
+            ]
+          },
+          "docs": "Single sign on URL, where SAML assertion is perform"
+        },
+        {
+          "info": {
+            "name": "Return an redirect to the designated Idp, given an identity provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/saml/:org/login",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "Org slug"
+              },
+              {
+                "name": "idp",
+                "value": "",
+                "type": "query",
+                "description": "Identifier Provider"
+              },
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "clientId"
+              },
+              {
+                "name": "codeChallenge",
+                "value": "",
+                "type": "query",
+                "description": "codeChallenge"
+              },
+              {
+                "name": "codeChallengeMethod",
+                "value": "",
+                "type": "query",
+                "description": "codeChallengeMethod"
+              },
+              {
+                "name": "redirectUri",
+                "value": "",
+                "type": "query",
+                "description": "redirectUri"
+              }
+            ]
+          },
+          "docs": "Return an redirect to the designated Idp, given an identity provider"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

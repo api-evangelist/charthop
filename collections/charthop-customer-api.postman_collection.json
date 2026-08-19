@@ -1,0 +1,1522 @@
+{
+  "item": [
+    {
+      "id": "81bf5775-d569-4638-a7e7-47b8316f7ba6",
+      "name": "customer",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cff7eac7-9092-45f4-986a-d4bdce384d31",
+          "name": "Return all visible customers, paginated by name",
+          "request": {
+            "name": "Return all visible customers, paginated by name",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Customer id to start from"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Customer.Status. (ACTIVE/INACTIVE/TRAIL)"
+                },
+                {
+                  "disabled": false,
+                  "key": "trialAsOf",
+                  "value": "<date>",
+                  "description": "Only return customers with a product trial in progress as of this date (range inclusive)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "048f0c19-6c0a-4d59-905c-a02cd1009c72",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trialAsOf",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"name\": \"string\",\n      \"status\": \"CHURN\",\n      \"email\": \"string\",\n      \"billAddress\": {\n        \"country\": \"NY\",\n        \"street1\": \"123 Anywhere Street\",\n        \"street2\": \"Apt 6L\",\n        \"street3\": \"Sixth Floor\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"postal\": \"10001\",\n        \"geo\": {\n          \"type\": \"string\",\n          \"coordinates\": [\n            2346.077294282265,\n            9925.60373785047\n          ]\n        },\n        \"approxGeo\": {\n          \"type\": \"string\",\n          \"coordinates\": [\n            3726.0548239538616,\n            5131.453892454746\n          ]\n        }\n      },\n      \"industry\": \"string\",\n      \"source\": \"ADP_MARKETPLACE\",\n      \"stripeCustomerId\": \"string\",\n      \"salesforceAccountId\": \"G5t0bkEiovCyG5EMqh\",\n      \"products\": [\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"stripePriceId\": \"string\"\n        },\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"stripePriceId\": \"string\"\n        }\n      ],\n      \"trialProducts\": [\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"startDate\": \"1965-02-23\",\n          \"endDate\": \"2015-05-01\"\n        },\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"startDate\": \"2006-07-14\",\n          \"endDate\": \"1960-12-01\"\n        }\n      ],\n      \"restrictedFeatures\": [\n        \"SURVEY\",\n        \"FORM_SIGNATURE\"\n      ],\n      \"featureOptionOverrides\": [\n        {\n          \"name\": \"APP_FIELD_MAPPERS\",\n          \"type\": \"FULL_ACCESS\",\n          \"description\": \"string\",\n          \"limit\": 6235\n        },\n        {\n          \"name\": \"MULTI_PAYROLL_INSTALLS\",\n          \"type\": \"FULL_ACCESS\",\n          \"description\": \"string\",\n          \"limit\": 5801\n        }\n      ],\n      \"startDate\": \"1993-10-22\",\n      \"endDate\": \"1963-03-18\",\n      \"nextInvoiceDate\": \"1993-04-10\",\n      \"orgCount\": 4367,\n      \"primaryHeadCount\": 2401,\n      \"secondaryHeadCount\": 2222,\n      \"tertiaryHeadCount\": 6708,\n      \"primaryHeadCountFilter\": \"string\",\n      \"secondaryHeadCountFilter\": \"string\",\n      \"tertiaryHeadCountFilter\": \"string\",\n      \"arr\": 2330.8036354363403,\n      \"trialStartDate\": \"2002-08-04\",\n      \"trialEndDate\": \"2015-05-03\",\n      \"stripeSubscriptionSync\": \"SYNC\",\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      }\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"name\": \"string\",\n      \"status\": \"CHURN\",\n      \"email\": \"string\",\n      \"billAddress\": {\n        \"country\": \"NY\",\n        \"street1\": \"123 Anywhere Street\",\n        \"street2\": \"Apt 6L\",\n        \"street3\": \"Sixth Floor\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"postal\": \"10001\",\n        \"geo\": {\n          \"type\": \"string\",\n          \"coordinates\": [\n            8947.572404373817,\n            407.8769841453922\n          ]\n        },\n        \"approxGeo\": {\n          \"type\": \"string\",\n          \"coordinates\": [\n            9957.845202264156,\n            4647.281239657067\n          ]\n        }\n      },\n      \"industry\": \"string\",\n      \"source\": \"SELF_SERVE\",\n      \"stripeCustomerId\": \"string\",\n      \"salesforceAccountId\": \"ehFGjVNuoPNwHtd\",\n      \"products\": [\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"stripePriceId\": \"string\"\n        },\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"stripePriceId\": \"string\"\n        }\n      ],\n      \"trialProducts\": [\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"startDate\": \"1979-07-04\",\n          \"endDate\": \"1999-01-20\"\n        },\n        {\n          \"productId\": \"588f7ee98f138b19220041a7\",\n          \"startDate\": \"2006-12-05\",\n          \"endDate\": \"2020-12-20\"\n        }\n      ],\n      \"restrictedFeatures\": [\n        \"SIGNATURE\",\n        \"PAYROLL_OUTBOUND\"\n      ],\n      \"featureOptionOverrides\": [\n        {\n          \"name\": \"MULTI_PAYROLL_INSTALLS\",\n          \"type\": \"LIMIT\",\n          \"description\": \"string\",\n          \"limit\": 6200\n        },\n        {\n          \"name\": \"CONFIGURED_ROLES\",\n          \"type\": \"FULL_ACCESS\",\n          \"description\": \"string\",\n          \"limit\": 3317\n        }\n      ],\n      \"startDate\": \"1954-09-09\",\n      \"endDate\": \"1966-01-10\",\n      \"nextInvoiceDate\": \"1947-09-11\",\n      \"orgCount\": 8324,\n      \"primaryHeadCount\": 9314,\n      \"secondaryHeadCount\": 46,\n      \"tertiaryHeadCount\": 2393,\n      \"primaryHeadCountFilter\": \"string\",\n      \"secondaryHeadCountFilter\": \"string\",\n      \"tertiaryHeadCountFilter\": \"string\",\n      \"arr\": 2911.7407946516137,\n      \"trialStartDate\": \"1960-05-06\",\n      \"trialEndDate\": \"1955-08-23\",\n      \"stripeSubscriptionSync\": \"DELETE\",\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      }\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ee1985d-6496-41e9-b80c-f2b932542b88",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trialAsOf",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "126c17e7-9189-4fbc-aef9-d04046d531e5",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "trialAsOf",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bc47cc53-e7d3-42d6-a6a6-a8e1540a2580",
+          "name": "Create a new customer",
+          "request": {
+            "name": "Create a new customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"billAddress\": {\n    \"country\": \"<string>\",\n    \"street1\": \"<string>\",\n    \"street2\": \"<string>\",\n    \"street3\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postal\": \"<string>\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"<string>\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"<string>\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"<string>\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"<string>\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b97afef-9450-4d48-a038-4f4f1a56941f",
+              "name": "customer created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"string\",\n  \"status\": \"ACTIVE\",\n  \"email\": \"string\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {\n      \"type\": \"string\",\n      \"coordinates\": [\n        1772.6600777940616,\n        723.4084731239099\n      ]\n    },\n    \"approxGeo\": {\n      \"type\": \"string\",\n      \"coordinates\": [\n        4371.158211339712,\n        1461.075385356505\n      ]\n    }\n  },\n  \"industry\": \"string\",\n  \"source\": \"SELF_SERVE_TEST\",\n  \"stripeCustomerId\": \"string\",\n  \"salesforceAccountId\": \"V1KvZk813aYrGK1\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"CONTENT\",\n    \"SIMPLE_WORKFLOWS\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"1961-04-02\",\n  \"endDate\": \"1952-07-25\",\n  \"nextInvoiceDate\": \"1987-07-06\",\n  \"orgCount\": 3682,\n  \"primaryHeadCount\": 5788,\n  \"secondaryHeadCount\": 5473,\n  \"tertiaryHeadCount\": 5131,\n  \"primaryHeadCountFilter\": \"string\",\n  \"secondaryHeadCountFilter\": \"string\",\n  \"tertiaryHeadCountFilter\": \"string\",\n  \"arr\": 5163.186826720185,\n  \"trialStartDate\": \"1973-03-07\",\n  \"trialEndDate\": \"2009-06-05\",\n  \"stripeSubscriptionSync\": \"DELETE\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1ebf204-9f00-4019-bd08-116505fc3716",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "42cc87bd-d2ba-467a-9d23-73fc667c2036",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9e4f46ab-a98a-4cf8-b451-c3e1009724ee",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"startDate\": \"<date>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d32d518c-ef8e-43d0-a2fa-7507aa88c2e0",
+          "name": "Return a particular customer by id",
+          "request": {
+            "name": "Return a particular customer by id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer",
+                ":customerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customerId",
+                  "description": "(Required) Customer id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6dc696a6-234e-4b70-848d-f5cebad79da5",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"string\",\n  \"status\": \"ACTIVE\",\n  \"email\": \"string\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {\n      \"type\": \"string\",\n      \"coordinates\": [\n        1772.6600777940616,\n        723.4084731239099\n      ]\n    },\n    \"approxGeo\": {\n      \"type\": \"string\",\n      \"coordinates\": [\n        4371.158211339712,\n        1461.075385356505\n      ]\n    }\n  },\n  \"industry\": \"string\",\n  \"source\": \"SELF_SERVE_TEST\",\n  \"stripeCustomerId\": \"string\",\n  \"salesforceAccountId\": \"V1KvZk813aYrGK1\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"CONTENT\",\n    \"SIMPLE_WORKFLOWS\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"1961-04-02\",\n  \"endDate\": \"1952-07-25\",\n  \"nextInvoiceDate\": \"1987-07-06\",\n  \"orgCount\": 3682,\n  \"primaryHeadCount\": 5788,\n  \"secondaryHeadCount\": 5473,\n  \"tertiaryHeadCount\": 5131,\n  \"primaryHeadCountFilter\": \"string\",\n  \"secondaryHeadCountFilter\": \"string\",\n  \"tertiaryHeadCountFilter\": \"string\",\n  \"arr\": 5163.186826720185,\n  \"trialStartDate\": \"1973-03-07\",\n  \"trialEndDate\": \"2009-06-05\",\n  \"stripeSubscriptionSync\": \"DELETE\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "114f832f-bc2e-4b7c-aa61-04c125353b0d",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7cc4507f-5ff4-4941-b399-d0daddd2575e",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "25f6f405-f834-4f62-bf47-04cb664deec0",
+          "name": "Update an existing customer",
+          "request": {
+            "name": "Update an existing customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer",
+                ":customerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customerId",
+                  "description": "(Required) Customer id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"billAddress\": {\n    \"country\": \"<string>\",\n    \"street1\": \"<string>\",\n    \"street2\": \"<string>\",\n    \"street3\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postal\": \"<string>\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"<string>\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"<string>\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"<string>\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"<string>\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ff9f11f0-829c-429f-98ea-f6591751bec0",
+              "name": "customer updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0e243d09-a2cf-4ddd-b85e-f47d48ec623f",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "825fc6ba-6739-4cc9-8b66-9a7a6362c30f",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7ce713c0-6631-4ef7-b440-c53049a0f7c3",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6e67c535-2b4d-4f5f-9a98-c33cd2472c41",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"email\": \"<string>\",\n  \"billAddress\": {\n    \"country\": \"NY\",\n    \"street1\": \"123 Anywhere Street\",\n    \"street2\": \"Apt 6L\",\n    \"street3\": \"Sixth Floor\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal\": \"10001\",\n    \"geo\": {},\n    \"approxGeo\": {}\n  },\n  \"industry\": \"<string>\",\n  \"source\": \"<string>\",\n  \"status\": \"<string>\",\n  \"salesforceAccountId\": \"<string>\",\n  \"products\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"stripePriceId\": \"<string>\"\n    }\n  ],\n  \"trialProducts\": [\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    },\n    {\n      \"productId\": \"588f7ee98f138b19220041a7\",\n      \"startDate\": \"<date>\",\n      \"endDate\": \"<date>\"\n    }\n  ],\n  \"restrictedFeatures\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"featureOptionOverrides\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"limit\": \"<integer>\"\n    }\n  ],\n  \"startDate\": \"<date>\",\n  \"endDate\": \"<date>\",\n  \"nextInvoiceDate\": \"<date>\",\n  \"primaryHeadCountFilter\": \"<string>\",\n  \"secondaryHeadCountFilter\": \"<string>\",\n  \"tertiaryHeadCountFilter\": \"<string>\",\n  \"arr\": \"<number>\",\n  \"trialStartDate\": \"<date>\",\n  \"trialEndDate\": \"<date>\",\n  \"stripeSubscriptionSync\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8dbd4e3d-d9c3-483f-a224-c3e0064d65e4",
+          "name": "Returns a list of all the invoices for the given customer",
+          "request": {
+            "name": "Returns a list of all the invoices for the given customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer",
+                ":customerId",
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customerId",
+                  "description": "(Required) Customer id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d0223866-af0f-4f8a-901a-61828fe09c6e",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"invoices\": [\n    {\n      \"number\": \"F38A6C8-0010\",\n      \"amount\": 8306.563075718599,\n      \"status\": \"PAID\",\n      \"createAt\": \"2019-07-27T20:56:10Z\",\n      \"hostedInvoiceUrl\": \"https://pay.stripe.com/invoice/invst_Nv8DFERQvTsBJqnZ4z19cGZBU1\",\n      \"invoicePdf\": \"https://pay.stripe.com/invoice/invst_wNK0BvV4iUOWOn5mzLT1ybQ2LC/pdf\"\n    },\n    {\n      \"number\": \"F38A6C8-0010\",\n      \"amount\": 481.9425490557605,\n      \"status\": \"PAID\",\n      \"createAt\": \"2019-07-27T20:56:10Z\",\n      \"hostedInvoiceUrl\": \"https://pay.stripe.com/invoice/invst_Nv8DFERQvTsBJqnZ4z19cGZBU1\",\n      \"invoicePdf\": \"https://pay.stripe.com/invoice/invst_wNK0BvV4iUOWOn5mzLT1ybQ2LC/pdf\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f082b377-0f8d-434d-ae62-1a722d184233",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8d646f70-f7f2-46d6-9e00-fec299af6604",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f34e11e1-2cdd-4056-9b6a-199292767a4a",
+          "name": "Returns information about the Charthop subscription for the given customer",
+          "request": {
+            "name": "Returns information about the Charthop subscription for the given customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer",
+                ":customerId",
+                "subscription"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customerId",
+                  "description": "(Required) Customer id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4a9f7be8-1d9f-4a8d-8622-bf2f9ac02c77",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"nextInvoiceAt\": \"2019-07-27T20:56:10Z\",\n  \"plan\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"interval\": \"DAY\",\n    \"intervalCount\": 6674,\n    \"tiers\": [\n      {\n        \"unitAmount\": 537.5536071986431,\n        \"upTo\": 8754\n      },\n      {\n        \"unitAmount\": 6500.098894603448,\n        \"upTo\": 8644\n      }\n    ],\n    \"stripeProductId\": \"string\"\n  },\n  \"paymentInfo\": {\n    \"paymentType\": \"CREDIT_CARD\",\n    \"creditCardEndDigits\": \"4242\",\n    \"brand\": \"Visa\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "489c3b16-27f3-4a2f-b723-8ffe2d589030",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ef346574-6b61-4164-9847-372af1e12dc2",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "94b980ff-be46-449f-b0c8-c5b7d4fd18bf",
+          "name": "Update a subscription on a customer",
+          "request": {
+            "name": "Update a subscription on a customer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "customer",
+                ":customerId",
+                "subscription"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customerId",
+                  "description": "(Required) Customer id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethod\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "96744a52-82be-423a-9b48-32917df654c9",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8af30fee-9870-4d65-9f62-370e23e90a15",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c898a928-82d4-43ef-8bce-3986541aa181",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "39a7f06a-9279-4bf4-abd3-ba524579c734",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6d2b3cbb-d695-4f4f-98b0-001ed5682932",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customer",
+                    ":customerId",
+                    "subscription"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customerId",
+                      "description": "(Required) Customer id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentMethod\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e4d9c1bd-f500-41cf-af99-90be10e1f995",
+    "name": "ChartHop access customer API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

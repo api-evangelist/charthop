@@ -1,0 +1,359 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access org API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "org",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return validation for a org by slug",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/org/:slug",
+            "params": [
+              {
+                "name": "slug",
+                "value": "",
+                "type": "path",
+                "description": "Org slug"
+              }
+            ]
+          },
+          "docs": "Return validation for a org by slug"
+        },
+        {
+          "info": {
+            "name": "Return all visible orgs, paginated by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Org id to start from"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "query",
+                "description": "Find orgs belonging to a particular customer id"
+              },
+              {
+                "name": "realOnly",
+                "value": "",
+                "type": "query",
+                "description": "Include only orgs where type is REAL?"
+              },
+              {
+                "name": "lastCreateAt",
+                "value": "",
+                "type": "query",
+                "description": "Only include orgs whose last createAt occurred after the date"
+              },
+              {
+                "name": "lastActiveAt",
+                "value": "",
+                "type": "query",
+                "description": "Only include orgs whose last activeAt occurred after the date"
+              },
+              {
+                "name": "internalOptions",
+                "value": "",
+                "type": "query",
+                "description": "Filter orgs by internal option key-value pair"
+              }
+            ]
+          },
+          "docs": "Return all visible orgs, paginated by name"
+        },
+        {
+          "info": {
+            "name": "Create a new org",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org"
+          },
+          "docs": "Create a new org"
+        },
+        {
+          "info": {
+            "name": "Validate authorization code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/app-install-code/validate"
+          },
+          "docs": "Validate authorization code"
+        },
+        {
+          "info": {
+            "name": "Return a particular org by slug",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/slug/:slug",
+            "params": [
+              {
+                "name": "slug",
+                "value": "",
+                "type": "path",
+                "description": "Org slug"
+              }
+            ]
+          },
+          "docs": "Return a particular org by slug"
+        },
+        {
+          "info": {
+            "name": "Return a particular org by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return a particular org by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing org",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Update an existing org"
+        },
+        {
+          "info": {
+            "name": "Return information on current user's access",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/access",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return information on current user's access"
+        },
+        {
+          "info": {
+            "name": "Consent on Terms of Service agreement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/agreement",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Consent on Terms of Service agreement"
+        },
+        {
+          "info": {
+            "name": "Copy self serve demo data into an org",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/copy-self-serve-demo-data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Copy self serve demo data into an org"
+        },
+        {
+          "info": {
+            "name": "Gets the count of joined users, invited users, and org members who are not yet invited",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-user-person-count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Gets the count of joined users, invited users, and org members who are not yet invited"
+        },
+        {
+          "info": {
+            "name": "Gets a list of org users (joined or invited) and org members (not yet invited)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-users-persons",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "limit"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "offset"
+              },
+              {
+                "name": "includeUsersOnly",
+                "value": "",
+                "type": "query",
+                "description": "Include created users only"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Gets a list of org users (joined or invited) and org members (not yet invited)"
+        },
+        {
+          "info": {
+            "name": "Send a test welcome email to oneself",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/test-email",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Send a test welcome email to oneself"
+        },
+        {
+          "info": {
+            "name": "Gets the custom setting or default for the welcome email's subject, body, cta button label",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/welcome-email",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "isPreboarding",
+                "value": "",
+                "type": "query",
+                "description": "Is preboarding"
+              }
+            ]
+          },
+          "docs": "Gets the custom setting or default for the welcome email's subject, body, cta button label"
+        },
+        {
+          "info": {
+            "name": "Retrieve an Oauth2 authorization code to install an app at this org",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:org/app-install-code",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Retrieve an Oauth2 authorization code to install an app at this org"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

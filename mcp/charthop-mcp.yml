@@ -5,11 +5,10 @@ source: https://api.charthop.com/swagger.json
 docs: https://docs.charthop.com/charthop-for-developers
 server:
   name: charthop
-  description: >-
-    ChartHop ships a first-party MCP server built into its REST API. The MCP message
-    endpoint speaks JSON-RPC 2.0 over Streamable HTTP and is authorized with OAuth 2.1
-    (authorization_code + PKCE S256, dynamic client-id metadata documents). Both an
-    org-scoped and an org-less agent endpoint are exposed.
+  description: ChartHop ships a first-party MCP server built into its REST API. The MCP message endpoint
+    speaks JSON-RPC 2.0 over Streamable HTTP and is authorized with OAuth 2.1 (authorization_code + PKCE
+    S256, dynamic client-id metadata documents). Both an org-scoped and an org-less agent endpoint are
+    exposed.
   transport: http
   protocol: JSON-RPC 2.0 over Streamable HTTP
   endpoints:
@@ -28,14 +27,22 @@ authorization:
   issuer: https://api.charthop.com
   authorization_endpoint: https://app.charthop.com/oauth/mcp/authorize
   token_endpoint: https://api.charthop.com/oauth/token
-  grant_types: [authorization_code, refresh_token]
-  code_challenge_methods: [S256]
+  grant_types:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods:
+  - S256
   client_id_metadata_document_supported: true
   metadata_documents:
   - /.well-known/oauth-authorization-server/mcp/{agent}/{orgId}
   - /.well-known/oauth-protected-resource/mcp/{agent}/{orgId}
-notes: >-
-  Tool surface is served dynamically by the MCP server per authorized agent/org and is
-  not enumerated statically in the OpenAPI. The 738-operation REST API is the underlying
-  capability surface; see agentic-access/charthop-agentic-access.yml for the classified
-  operation contracts.
+notes: Tool surface is served dynamically by the MCP server per authorized agent/org and is not enumerated
+  statically in the OpenAPI. The 738-operation REST API is the underlying capability surface; see agentic-access/charthop-agentic-access.yml
+  for the classified operation contracts.
+deployment:
+  mode: remote
+  endpoint: https://api.charthop.com/mcp/{agent}/{orgId}
+  verified: probed
+  probe: http-400
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,142 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access approval-request API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "approval-request",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all approval request scenario responses for an org",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-request/entity/scenario",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "entityIds",
+                "value": "",
+                "type": "query",
+                "description": "entity ids to filter on"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted approval requests"
+              },
+              {
+                "name": "includeCompReviewScenarios",
+                "value": "",
+                "type": "query",
+                "description": "Include scenario approval requests in comp reviews"
+              }
+            ]
+          },
+          "docs": "Return all approval request scenario responses for an org"
+        },
+        {
+          "info": {
+            "name": "Return a particular approval request timeoff response by entity id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-request/entity/timeoff/:timeOffId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "timeOffId",
+                "value": "",
+                "type": "path",
+                "description": "Time off entity id"
+              }
+            ]
+          },
+          "docs": "Return a particular approval request timeoff response by entity id"
+        },
+        {
+          "info": {
+            "name": "Return a particular approval request scenario response by jobId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-request/scenario-job/:jobId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job id"
+              }
+            ]
+          },
+          "docs": "Return a particular approval request scenario response by jobId"
+        },
+        {
+          "info": {
+            "name": "Return a particular approval request scenario response by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-request/:approvalRequestId/scenario-response",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Approval request id"
+              }
+            ]
+          },
+          "docs": "Return a particular approval request scenario response by id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

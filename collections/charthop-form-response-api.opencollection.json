@@ -1,0 +1,512 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access form-response API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "form-response",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return form responses by form",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "query",
+                "description": "Form id to filter by"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "query",
+                "description": "Assessment id to filter by"
+              },
+              {
+                "name": "submitPersonId",
+                "value": "",
+                "type": "query",
+                "description": "Person id to filter by (person who submitted the form)"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target id to filter by"
+              },
+              {
+                "name": "submitPersonFilter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply on the submitter"
+              },
+              {
+                "name": "targetFilter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply on the target"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "FormResponse id to start paginating from"
+              },
+              {
+                "name": "fromSubmitAt",
+                "value": "",
+                "type": "query",
+                "description": "Submit timestamp to start from (inclusive)"
+              },
+              {
+                "name": "untilSubmitAt",
+                "value": "",
+                "type": "query",
+                "description": "Submit timestamp to go until (exclusive)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "desc",
+                "value": "",
+                "type": "query",
+                "description": "Whether to return results sorted in descending timestamp order"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "returnFormVersions",
+                "value": "",
+                "type": "query",
+                "description": "Return form versions (question ids / text) alongside the responses"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return form responses by form"
+        },
+        {
+          "info": {
+            "name": "Return the total count of form responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "query",
+                "description": "Form id to filter by"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "query",
+                "description": "Assessment id to filter by"
+              },
+              {
+                "name": "submitPersonFilter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply on the submitter"
+              },
+              {
+                "name": "targetFilter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply on the target"
+              },
+              {
+                "name": "fromSubmitAt",
+                "value": "",
+                "type": "query",
+                "description": "Submit timestamp to start from (inclusive)"
+              },
+              {
+                "name": "untilSubmitAt",
+                "value": "",
+                "type": "query",
+                "description": "Submit timestamp to go until (exclusive)"
+              },
+              {
+                "name": "questionId",
+                "value": "",
+                "type": "query",
+                "description": "Question id to filter by"
+              }
+            ]
+          },
+          "docs": "Return the total count of form responses"
+        },
+        {
+          "info": {
+            "name": "Export form responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export form responses"
+        },
+        {
+          "info": {
+            "name": "Import form response data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/import",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "query",
+                "description": "Form id to update"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              },
+              {
+                "name": "createEnumValues",
+                "value": "",
+                "type": "query",
+                "description": "Whether to create enum values on the fly on questions if they don't previously exist"
+              },
+              {
+                "name": "importFromProcessId",
+                "value": "",
+                "type": "query",
+                "description": "Import a file from another process, instead of directly uploading it"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "Parent process id to attach to"
+              }
+            ]
+          },
+          "docs": "Import form response data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Download a CSV template for a form import",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/import/download-template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "query",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Download a CSV template for a form import"
+        },
+        {
+          "info": {
+            "name": "Return a particular form response by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "FormResponse id"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use for answers; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return a particular form response by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing form response's answers without re-submitting",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "FormResponse id"
+              },
+              {
+                "name": "submit",
+                "value": "",
+                "type": "query",
+                "description": "If true, will re-submit the form response"
+              }
+            ]
+          },
+          "docs": "Update an existing form response's answers without re-submitting"
+        },
+        {
+          "info": {
+            "name": "Update an existing form response's metadata, such as shareAccess information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "FormResponse id"
+              }
+            ]
+          },
+          "docs": "Update an existing form response's metadata, such as shareAccess information"
+        },
+        {
+          "info": {
+            "name": "Delete a form response",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "FormResponse id"
+              }
+            ]
+          },
+          "docs": "Delete a form response"
+        },
+        {
+          "info": {
+            "name": "Approve a form response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId/approve",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "Form response id"
+              }
+            ]
+          },
+          "docs": "Approve a form response"
+        },
+        {
+          "info": {
+            "name": "Export a particular form response as a PDF document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "Form response id"
+              }
+            ]
+          },
+          "docs": "Export a particular form response as a PDF document"
+        },
+        {
+          "info": {
+            "name": "Reject a form response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId/reject",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "Form response id"
+              }
+            ]
+          },
+          "docs": "Reject a form response"
+        },
+        {
+          "info": {
+            "name": "Release a form response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId/release",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "Form response id"
+              }
+            ]
+          },
+          "docs": "Release a form response"
+        },
+        {
+          "info": {
+            "name": "Request changes for a form response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/form-response/:formResponseId/request-changes",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "formResponseId",
+                "value": "",
+                "type": "path",
+                "description": "Form response id"
+              }
+            ]
+          },
+          "docs": "Request changes for a form response"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

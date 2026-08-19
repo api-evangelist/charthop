@@ -1,0 +1,304 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access timeOffPolicy API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "timeOffPolicy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all policies in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From result id"
+              }
+            ]
+          },
+          "docs": "Return all policies in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a time off policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a time off policy"
+        },
+        {
+          "info": {
+            "name": "Return time off balances for a given policy and date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/balances",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policies",
+                "value": "",
+                "type": "query",
+                "description": "Policy Ids to retrieve, comma-separated"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return time off balances for a given policy and date"
+        },
+        {
+          "info": {
+            "name": "Return time off balances per policy for a given person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/balances/:personId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person ID"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return time off balances per policy for a given person"
+        },
+        {
+          "info": {
+            "name": "Adjust time off balances for a group of people on a given policy and effective date",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/balances/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "Policy id associated with balances"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective Date"
+              },
+              {
+                "name": "enterMatching",
+                "value": "",
+                "type": "query",
+                "description": "Add adjustment even if it matches current balance"
+              }
+            ]
+          },
+          "docs": "Adjust time off balances for a group of people on a given policy and effective date"
+        },
+        {
+          "info": {
+            "name": "Return a particular time off policy by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff policy id"
+              }
+            ]
+          },
+          "docs": "Return a particular time off policy by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing time off policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff id"
+              }
+            ]
+          },
+          "docs": "Update an existing time off policy"
+        },
+        {
+          "info": {
+            "name": "Delete a time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff policy id"
+              }
+            ]
+          },
+          "docs": "Delete a time off request"
+        },
+        {
+          "info": {
+            "name": "Duplicate a time off policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/:policyId/duplicate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff policy id"
+              }
+            ]
+          },
+          "docs": "Duplicate a time off policy"
+        },
+        {
+          "info": {
+            "name": "Estimate accrual value for policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/policy/:policyId/estimateAccruals",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff policy id"
+              }
+            ]
+          },
+          "docs": "Estimate accrual value for policy"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

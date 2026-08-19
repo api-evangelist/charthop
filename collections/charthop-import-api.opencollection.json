@@ -1,0 +1,624 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access import API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "import",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Import data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/import/csv/columnMatch",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "scenario id to import into"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              },
+              {
+                "name": "upsert",
+                "value": "",
+                "type": "query",
+                "description": "whether to create persons/jobs that are not matched"
+              },
+              {
+                "name": "createGroups",
+                "value": "",
+                "type": "query",
+                "description": "whether to create groups that are not matched"
+              },
+              {
+                "name": "disableSyncHireDate",
+                "value": "",
+                "type": "query",
+                "description": "whether to disable adjusting dates of hires in cases where the start dates differ"
+              },
+              {
+                "name": "useTitleManagerMatcher",
+                "value": "",
+                "type": "query",
+                "description": "whether to fall back to job title and manager for job matching"
+              },
+              {
+                "name": "updateTypes",
+                "value": "",
+                "type": "query",
+                "description": "types of updates to apply (default all: title,comp,group,relationship,data,other)"
+              },
+              {
+                "name": "notifyUserIds",
+                "value": "",
+                "type": "query",
+                "description": "comma-separated list of user ids who should be notified when the import is complete"
+              },
+              {
+                "name": "notifyAppName",
+                "value": "",
+                "type": "query",
+                "description": "name of the app that should be listed in the notify"
+              },
+              {
+                "name": "defaultChangeDate",
+                "value": "",
+                "type": "query",
+                "description": "date of the changes - if not presented on the csv file"
+              },
+              {
+                "name": "disableOverwritePerson",
+                "value": "",
+                "type": "query",
+                "description": "disable overwriting changes to persons' data -- only update data if the person field is null"
+              },
+              {
+                "name": "importDryRun",
+                "value": "",
+                "type": "query",
+                "description": "import dry run"
+              },
+              {
+                "name": "importAfterDryRun",
+                "value": "",
+                "type": "query",
+                "description": "whether to automatically import if dry run succeeds"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "process id of parent process"
+              },
+              {
+                "name": "importSource",
+                "value": "",
+                "type": "query",
+                "description": "self identified source caller into this method"
+              },
+              {
+                "name": "syncImages",
+                "value": "",
+                "type": "query",
+                "description": "import images from csv"
+              },
+              {
+                "name": "ignoreResumeParentProcess",
+                "value": "",
+                "type": "query",
+                "description": "Ignore resumption of parent process"
+              },
+              {
+                "name": "transformer",
+                "value": "",
+                "type": "query",
+                "description": "Data transformer"
+              },
+              {
+                "name": "postProcessor",
+                "value": "",
+                "type": "query",
+                "description": "Post processor"
+              },
+              {
+                "name": "useImporterV3",
+                "value": "",
+                "type": "query",
+                "description": "Use importer V3"
+              },
+              {
+                "name": "performImportPhases",
+                "value": "",
+                "type": "query",
+                "description": "Group import phases to perform"
+              },
+              {
+                "name": "overwriteGroupTypes",
+                "value": "",
+                "type": "query",
+                "description": "Group types to overwrite"
+              },
+              {
+                "name": "retainOpenReportingLines",
+                "value": "",
+                "type": "query",
+                "description": "Don't reassign manager if the assigned manager is already a grand-manager and there are only open jobs between"
+              },
+              {
+                "name": "enrichLinkedFields",
+                "value": "",
+                "type": "query",
+                "description": "whether to enrich jobs with job code linked field defaults during import"
+              },
+              {
+                "name": "createJobCodes",
+                "value": "",
+                "type": "query",
+                "description": "whether to create job codes that don't exist when found in import data"
+              },
+              {
+                "name": "adjustCreateDate",
+                "value": "",
+                "type": "query",
+                "description": "whether to adjust the create date of existing jobs when the import row date is earlier"
+              },
+              {
+                "name": "createJobsWithMissingManager",
+                "value": "",
+                "type": "query",
+                "description": "whether to create jobs whose manager could not be resolved during import"
+              },
+              {
+                "name": "reassignDirectReportsOnMove",
+                "value": "",
+                "type": "query",
+                "description": "when a person moves out of a job, reassign that job's direct and indirect reports to the target job"
+              },
+              {
+                "name": "adjustDeleteOnDepartDate",
+                "value": "",
+                "type": "query",
+                "description": "when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it"
+              }
+            ]
+          },
+          "docs": "Import data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Import data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/import/csv/data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "scenario id to import into"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              },
+              {
+                "name": "upsert",
+                "value": "",
+                "type": "query",
+                "description": "whether to create persons/jobs that are not matched"
+              },
+              {
+                "name": "createGroups",
+                "value": "",
+                "type": "query",
+                "description": "whether to create groups that are not matched"
+              },
+              {
+                "name": "disableSyncHireDate",
+                "value": "",
+                "type": "query",
+                "description": "whether to disable adjusting dates of hires in cases where the start dates differ"
+              },
+              {
+                "name": "useTitleManagerMatcher",
+                "value": "",
+                "type": "query",
+                "description": "whether to fall back to job title and manager for job matching"
+              },
+              {
+                "name": "updateTypes",
+                "value": "",
+                "type": "query",
+                "description": "types of updates to apply (default all: title,comp,group,relationship,data,other)"
+              },
+              {
+                "name": "notifyUserIds",
+                "value": "",
+                "type": "query",
+                "description": "comma-separated list of user ids who should be notified when the import is complete"
+              },
+              {
+                "name": "notifyAppName",
+                "value": "",
+                "type": "query",
+                "description": "name of the app that should be listed in the notify"
+              },
+              {
+                "name": "defaultChangeDate",
+                "value": "",
+                "type": "query",
+                "description": "date of the changes - if not presented on the csv file"
+              },
+              {
+                "name": "disableOverwritePerson",
+                "value": "",
+                "type": "query",
+                "description": "disable overwriting changes to persons' data -- only update data if the person field is null"
+              },
+              {
+                "name": "importDryRun",
+                "value": "",
+                "type": "query",
+                "description": "import dry run"
+              },
+              {
+                "name": "importAfterDryRun",
+                "value": "",
+                "type": "query",
+                "description": "whether to automatically import if dry run succeeds"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "process id of parent process"
+              },
+              {
+                "name": "importSource",
+                "value": "",
+                "type": "query",
+                "description": "self identified source caller into this method"
+              },
+              {
+                "name": "ignoreResumeParentProcess",
+                "value": "",
+                "type": "query",
+                "description": "Ignore resumption of parent process"
+              },
+              {
+                "name": "adjustCreateDate",
+                "value": "",
+                "type": "query",
+                "description": "whether to adjust the create date of existing jobs when the import row date is earlier"
+              },
+              {
+                "name": "createJobsWithMissingManager",
+                "value": "",
+                "type": "query",
+                "description": "whether to create jobs whose manager could not be resolved during import"
+              },
+              {
+                "name": "reassignDirectReportsOnMove",
+                "value": "",
+                "type": "query",
+                "description": "when a person moves out of a job, reassign that job's direct and indirect reports to the target job"
+              },
+              {
+                "name": "adjustDeleteOnDepartDate",
+                "value": "",
+                "type": "query",
+                "description": "when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it"
+              },
+              {
+                "name": "overwriteGroupTypes",
+                "value": "",
+                "type": "query",
+                "description": "Group types to overwrite"
+              },
+              {
+                "name": "postProcessor",
+                "value": "",
+                "type": "query",
+                "description": "Post processor"
+              }
+            ]
+          },
+          "docs": "Import data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Import data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/import/csv/filepath",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "filePath",
+                "value": "",
+                "type": "query",
+                "description": "filePath"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "scenario id to import into"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              },
+              {
+                "name": "upsert",
+                "value": "",
+                "type": "query",
+                "description": "whether to create persons/jobs that are not matched"
+              },
+              {
+                "name": "createGroups",
+                "value": "",
+                "type": "query",
+                "description": "whether to create groups that are not matched"
+              },
+              {
+                "name": "disableSyncHireDate",
+                "value": "",
+                "type": "query",
+                "description": "whether to disable adjusting dates of hires in cases where the start dates differ"
+              },
+              {
+                "name": "useTitleManagerMatcher",
+                "value": "",
+                "type": "query",
+                "description": "whether to fall back to job title and manager for job matching"
+              },
+              {
+                "name": "updateTypes",
+                "value": "",
+                "type": "query",
+                "description": "types of updates to apply (default all: title,comp,group,relationship,data,other)"
+              },
+              {
+                "name": "notifyUserIds",
+                "value": "",
+                "type": "query",
+                "description": "comma-separated list of user ids who should be notified when the import is complete"
+              },
+              {
+                "name": "notifyAppName",
+                "value": "",
+                "type": "query",
+                "description": "name of the app that should be listed in the notify"
+              },
+              {
+                "name": "defaultChangeDate",
+                "value": "",
+                "type": "query",
+                "description": "date of the changes - if not presented on the csv file"
+              },
+              {
+                "name": "disableOverwritePerson",
+                "value": "",
+                "type": "query",
+                "description": "disable overwriting changes to persons' data -- only update data if the person field is null"
+              },
+              {
+                "name": "importDryRun",
+                "value": "",
+                "type": "query",
+                "description": "import dry run"
+              },
+              {
+                "name": "importAfterDryRun",
+                "value": "",
+                "type": "query",
+                "description": "whether to automatically import if dry run succeeds"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "process id of parent process"
+              },
+              {
+                "name": "importSource",
+                "value": "",
+                "type": "query",
+                "description": "self identified source caller into this method"
+              },
+              {
+                "name": "ignoreResumeParentProcess",
+                "value": "",
+                "type": "query",
+                "description": "Ignore resumption of parent process"
+              },
+              {
+                "name": "performImportPhases",
+                "value": "",
+                "type": "query",
+                "description": "Group import phases to perform"
+              },
+              {
+                "name": "useImporterV3",
+                "value": "",
+                "type": "query",
+                "description": "Use importer V3"
+              },
+              {
+                "name": "enrichLinkedFields",
+                "value": "",
+                "type": "query",
+                "description": "whether to enrich jobs with job code linked field defaults during import"
+              },
+              {
+                "name": "createJobCodes",
+                "value": "",
+                "type": "query",
+                "description": "whether to create job codes that don't exist when found in import data"
+              },
+              {
+                "name": "adjustCreateDate",
+                "value": "",
+                "type": "query",
+                "description": "whether to adjust the create date of existing jobs when the import row date is earlier"
+              },
+              {
+                "name": "createJobsWithMissingManager",
+                "value": "",
+                "type": "query",
+                "description": "whether to create jobs whose manager could not be resolved during import"
+              },
+              {
+                "name": "reassignDirectReportsOnMove",
+                "value": "",
+                "type": "query",
+                "description": "when a person moves out of a job, reassign that job's direct and indirect reports to the target job"
+              },
+              {
+                "name": "adjustDeleteOnDepartDate",
+                "value": "",
+                "type": "query",
+                "description": "when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it"
+              },
+              {
+                "name": "overwriteGroupTypes",
+                "value": "",
+                "type": "query",
+                "description": "Group types to overwrite"
+              },
+              {
+                "name": "postProcessor",
+                "value": "",
+                "type": "query",
+                "description": "Post processor"
+              },
+              {
+                "name": "transformer",
+                "value": "",
+                "type": "query",
+                "description": "Data transformer"
+              }
+            ]
+          },
+          "docs": "Import data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Parse a CSV file in preparation for column matching as part of spreadsheet import process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/import/csv/initialColumnMatch",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Parse a CSV file in preparation for column matching as part of spreadsheet import process"
+        },
+        {
+          "info": {
+            "name": "Import time off balance data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/import/csv/time-off-balances",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "query",
+                "description": "time off policy id to import into"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "effective date of the balances"
+              }
+            ]
+          },
+          "docs": "Import time off balance data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Check if a spreadsheet file is valid to be imported",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/import/spreadsheet/validateFormat",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "maxRows",
+                "value": "",
+                "type": "query",
+                "description": "Max rows allowed in an imported spreadsheet file"
+              }
+            ]
+          },
+          "docs": "Check if a spreadsheet file is valid to be imported"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

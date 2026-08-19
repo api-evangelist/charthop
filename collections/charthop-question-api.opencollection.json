@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access question API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "question",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all questions in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/question",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Question id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated Question Ids to find"
+              }
+            ]
+          },
+          "docs": "Return all questions in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a question",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/question",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a question"
+        },
+        {
+          "info": {
+            "name": "Return a particular question by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/question/:questionId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "questionId",
+                "value": "",
+                "type": "path",
+                "description": "Question id"
+              }
+            ]
+          },
+          "docs": "Return a particular question by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing question",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/question/:questionId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "questionId",
+                "value": "",
+                "type": "path",
+                "description": "Question id"
+              }
+            ]
+          },
+          "docs": "Update an existing question"
+        },
+        {
+          "info": {
+            "name": "Delete a question",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/question/:questionId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "questionId",
+                "value": "",
+                "type": "path",
+                "description": "Question id"
+              }
+            ]
+          },
+          "docs": "Delete a question"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

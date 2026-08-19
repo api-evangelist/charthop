@@ -1,0 +1,237 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access policy API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "policy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all or a set of policies in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Comma separated Policy Ids to find"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Return only default or custom policies"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Expand each policy's roles and user count. Off by default: policies come back bare for a fast bulk lookup. Full user objects are only returned by the get-by-id endpoint."
+              }
+            ]
+          },
+          "docs": "Return all or a set of policies in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a policy"
+        },
+        {
+          "info": {
+            "name": "Return all entity:action maps allowed on a policy rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/action",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return all entity:action maps allowed on a policy rule"
+        },
+        {
+          "info": {
+            "name": "Export policies to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export policies to CSV format"
+        },
+        {
+          "info": {
+            "name": "Return if a policy is valid",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/validate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return if a policy is valid"
+        },
+        {
+          "info": {
+            "name": "Return a particular policy by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "Policy id"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "(Optional) Expand the policy's roles and full user list."
+              }
+            ]
+          },
+          "docs": "Return a particular policy by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "Policy id"
+              }
+            ]
+          },
+          "docs": "Update an existing policy"
+        },
+        {
+          "info": {
+            "name": "Delete a policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/:policyId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "Policy id"
+              }
+            ]
+          },
+          "docs": "Delete a policy"
+        },
+        {
+          "info": {
+            "name": "Copy an existing policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/policy/:policyId/copy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "path",
+                "description": "Policy id"
+              }
+            ]
+          },
+          "docs": "Copy an existing policy"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

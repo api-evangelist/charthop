@@ -1,0 +1,304 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access signature-request API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "signature-request",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return signature requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "requestUserId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by signature requests requested by an individual"
+              },
+              {
+                "name": "signUserId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by signature requests requested for signature of an individual"
+              },
+              {
+                "name": "fromCreateAt",
+                "value": "",
+                "type": "query",
+                "description": "Filter by signature requests requested from a particular timestamp"
+              },
+              {
+                "name": "untilCreateAt",
+                "value": "",
+                "type": "query",
+                "description": "Filter by signature requests requested up until a particular timestamp"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Signature request id to start from, when paginating"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return signature requests"
+        },
+        {
+          "info": {
+            "name": "Retrieve an individual signature request on an existing file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/file/:fileId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "File identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve an individual signature request on an existing file"
+        },
+        {
+          "info": {
+            "name": "Create a new signature request on a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/file/:fileId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "File identifier"
+              }
+            ]
+          },
+          "docs": "Create a new signature request on a file"
+        },
+        {
+          "info": {
+            "name": "Retrieve current signature request usage for the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/usage",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Retrieve current signature request usage for the organization"
+        },
+        {
+          "info": {
+            "name": "Retrieve an individual signature request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Filter by signature requests requested by an individual"
+              }
+            ]
+          },
+          "docs": "Retrieve an individual signature request"
+        },
+        {
+          "info": {
+            "name": "Cancel an existing signature request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/:id/cancel",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The signature request id to cancel"
+              }
+            ]
+          },
+          "docs": "Cancel an existing signature request"
+        },
+        {
+          "info": {
+            "name": "Decline to sign a signature request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/:id/decline",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The signature request id to decline"
+              }
+            ]
+          },
+          "docs": "Decline to sign a signature request"
+        },
+        {
+          "info": {
+            "name": "Retrieve an individual signature request's signing URL if using an external service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/:id/external-url",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Signature request ID"
+              },
+              {
+                "name": "redirectPath",
+                "value": "",
+                "type": "query",
+                "description": "Redirect path to send user to when signature is complete"
+              }
+            ]
+          },
+          "docs": "Retrieve an individual signature request's signing URL if using an external service"
+        },
+        {
+          "info": {
+            "name": "Sign a signature request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/:id/sign",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The signature request id to sign"
+              }
+            ]
+          },
+          "docs": "Sign a signature request"
+        },
+        {
+          "info": {
+            "name": "Retrieve all of the signatures relating to a signature request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/signature-request/:id/signature",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Filter by signature requests requested by an individual"
+              }
+            ]
+          },
+          "docs": "Retrieve all of the signatures relating to a signature request"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

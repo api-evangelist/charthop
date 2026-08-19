@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access data-view API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "data-view",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all data views in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-view",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Data view id to start paginating from"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Data view type to filter by"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma delimited of ids to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by associated entity id (e.g. assessment id)"
+              }
+            ]
+          },
+          "docs": "Return all data views in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a data view",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-view",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a data view"
+        },
+        {
+          "info": {
+            "name": "Return a particular data view by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-view/:dataViewId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "dataViewId",
+                "value": "",
+                "type": "path",
+                "description": "Data view id"
+              }
+            ]
+          },
+          "docs": "Return a particular data view by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing data view",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-view/:dataViewId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "dataViewId",
+                "value": "",
+                "type": "path",
+                "description": "Data view id"
+              }
+            ]
+          },
+          "docs": "Update an existing data view"
+        },
+        {
+          "info": {
+            "name": "Delete a data  view",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/data-view/:dataViewId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "dataViewId",
+                "value": "",
+                "type": "path",
+                "description": "Data view id"
+              }
+            ]
+          },
+          "docs": "Delete a data  view"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

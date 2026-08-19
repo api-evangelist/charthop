@@ -1,0 +1,740 @@
+{
+  "item": [
+    {
+      "id": "67f83108-dfcb-4303-87f8-d11db432531f",
+      "name": "stockgrant",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "aed4dc73-b240-478c-8f59-16602763c443",
+          "name": "Retrieve stock grants",
+          "request": {
+            "name": "Retrieve stock grants",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "stockgrant"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "personId",
+                  "value": "<string>",
+                  "description": "Person id to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "From date, inclusive"
+                },
+                {
+                  "disabled": false,
+                  "key": "untilDate",
+                  "value": "<date>",
+                  "description": "Until date, exclusive"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Stock grant id to start paginating from"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "returnAccess",
+                  "value": "<string>",
+                  "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "42cfb0f1-1bc3-413e-8d85-312f779f2fe0",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"stock\": \"GOOG\",\n      \"date\": \"1958-05-20\",\n      \"shares\": 9120.374057952158,\n      \"price\": 9557.58360012134,\n      \"type\": \"RSU\",\n      \"vestSchedule\": \"string\",\n      \"externalId\": \"588f7ee98f138b19220041a7\",\n      \"vestStartDate\": \"1960-02-04\",\n      \"expireDate\": \"1991-04-22\",\n      \"originalPrice\": 5404.898034887269,\n      \"currentPrice\": 6033.087654024589,\n      \"vestedShares\": 2036.268035133517,\n      \"vestedSharesNextYear\": 5295.120138690382,\n      \"vestedSharesByDate\": {\n        \"key_0\": 8464.59809717706,\n        \"key_1\": 5271.63677889038,\n        \"key_2\": 4329.393779495739\n      },\n      \"vestEndDate\": \"1948-12-23\",\n      \"cancelDate\": \"1964-08-17\",\n      \"terminationDate\": \"1968-09-11\",\n      \"lastExercisableDate\": \"2023-03-07\",\n      \"details\": \"string\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"stock\": \"GOOG\",\n      \"date\": \"1991-03-08\",\n      \"shares\": 2887.9811615671833,\n      \"price\": 251.0450445242207,\n      \"type\": \"RSU\",\n      \"vestSchedule\": \"string\",\n      \"externalId\": \"588f7ee98f138b19220041a7\",\n      \"vestStartDate\": \"2003-09-30\",\n      \"expireDate\": \"1990-03-13\",\n      \"originalPrice\": 1394.2040779233655,\n      \"currentPrice\": 2067.4483561672087,\n      \"vestedShares\": 1793.8684795377524,\n      \"vestedSharesNextYear\": 14.663843741404836,\n      \"vestedSharesByDate\": {\n        \"key_0\": 5791.916016952241\n      },\n      \"vestEndDate\": \"1976-08-01\",\n      \"cancelDate\": \"2022-04-11\",\n      \"terminationDate\": \"2026-07-09\",\n      \"lastExercisableDate\": \"2014-03-17\",\n      \"details\": \"string\",\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0c2967d-6ac2-4fdf-b5e8-a36ac7bd9c60",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "37afeb42-62e7-43b3-b980-8aee97159b76",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "63b62ff6-e433-4864-9a08-dae9141d9a35",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6e68bbae-3db2-4fcc-88b3-38294aad72f6",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "personId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "untilDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b235fe03-4de9-4861-a425-fd3607e2f709",
+          "name": "Return a particular stock grant by id",
+          "request": {
+            "name": "Return a particular stock grant by id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "stockgrant",
+                ":stockGrantId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "stockGrantId",
+                  "description": "(Required) Stock grant id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d9b9ea9a-143b-448a-aa78-17209a18b891",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant",
+                    ":stockGrantId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stockGrantId",
+                      "description": "(Required) Stock grant id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"personId\": \"588f7ee98f138b19220041a7\",\n  \"stock\": \"GOOG\",\n  \"date\": \"1984-03-26\",\n  \"shares\": 8042.0879291331985,\n  \"price\": 9963.147087484173,\n  \"type\": \"ISO\",\n  \"vestSchedule\": \"string\",\n  \"externalId\": \"588f7ee98f138b19220041a7\",\n  \"vestStartDate\": \"1969-09-05\",\n  \"expireDate\": \"1966-08-21\",\n  \"originalPrice\": 1650.4077201044797,\n  \"currentPrice\": 2135.228468365472,\n  \"vestedShares\": 6679.859477666182,\n  \"vestedSharesNextYear\": 3103.6670226277597,\n  \"vestedSharesByDate\": {\n    \"key_0\": 1930.6826950632826,\n    \"key_1\": 9137.36216867399,\n    \"key_2\": 7479.899799486288\n  },\n  \"vestEndDate\": \"1994-09-17\",\n  \"cancelDate\": \"1982-10-04\",\n  \"terminationDate\": \"2018-12-27\",\n  \"lastExercisableDate\": \"2024-04-19\",\n  \"details\": \"string\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a89795c0-4934-4ac5-b63d-a795f0cec013",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant",
+                    ":stockGrantId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stockGrantId",
+                      "description": "(Required) Stock grant id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "48aa0726-c597-4320-9da7-0ba8f2654cf0",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant",
+                    ":stockGrantId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stockGrantId",
+                      "description": "(Required) Stock grant id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "71cc13a2-cc86-4616-aa56-95213c281ea6",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant",
+                    ":stockGrantId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stockGrantId",
+                      "description": "(Required) Stock grant id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "de9e30b3-209c-4b6f-8760-564ac7a5611b",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "stockgrant",
+                    ":stockGrantId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stockGrantId",
+                      "description": "(Required) Stock grant id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "edd5e6b8-c227-451c-be6f-203f525fd857",
+    "name": "ChartHop access stockgrant API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

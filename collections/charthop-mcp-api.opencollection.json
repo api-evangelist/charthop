@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access mcp API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mcp",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Org-less MCP server SSE stream (not supported)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/mcp/:agent",
+            "params": [
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "Org-less MCP server SSE stream (not supported)"
+        },
+        {
+          "info": {
+            "name": "Org-less MCP server message endpoint (JSON-RPC 2.0 over Streamable HTTP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/mcp/:agent",
+            "params": [
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "Org-less MCP server message endpoint (JSON-RPC 2.0 over Streamable HTTP)"
+        },
+        {
+          "info": {
+            "name": "MCP server SSE stream (not supported)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/mcp/:agent/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "MCP server SSE stream (not supported)"
+        },
+        {
+          "info": {
+            "name": "MCP server message endpoint (JSON-RPC 2.0 over Streamable HTTP)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/mcp/:agent/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "MCP server message endpoint (JSON-RPC 2.0 over Streamable HTTP)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

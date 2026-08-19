@@ -1,0 +1,179 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access multiplier API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "multiplier",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find comp band multipliers in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/multiplier",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Multiplier id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted multipliers"
+              }
+            ]
+          },
+          "docs": "Find comp band multipliers in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a multiplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/multiplier",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of multiplier creation"
+              }
+            ]
+          },
+          "docs": "Create a multiplier"
+        },
+        {
+          "info": {
+            "name": "Return a particular comp band multiplier by id on an effective date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/multiplier/:multiplierId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "multiplierId",
+                "value": "",
+                "type": "path",
+                "description": "Comp band multiplier id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              }
+            ]
+          },
+          "docs": "Return a particular comp band multiplier by id on an effective date"
+        },
+        {
+          "info": {
+            "name": "Update a multiplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/multiplier/:multiplierId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "multiplierId",
+                "value": "",
+                "type": "path",
+                "description": "Multiplier id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of multiplier update"
+              }
+            ]
+          },
+          "docs": "Update a multiplier"
+        },
+        {
+          "info": {
+            "name": "Delete a multiplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/multiplier/:multiplierId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "multiplierId",
+                "value": "",
+                "type": "path",
+                "description": "Multiplier id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of group update"
+              }
+            ]
+          },
+          "docs": "Delete a multiplier"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,228 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access budget API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "budget",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find budgets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Group id to filter budgets by"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to filter budgets as-of (defaults to today)"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "Starting budget id for pagination"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status to filter budgets by (DRAFT, ACTIVE, or ARCHIVED)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find budgets"
+        },
+        {
+          "info": {
+            "name": "Create a new budget",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new budget"
+        },
+        {
+          "info": {
+            "name": "Calculate potential budget usage, for use while creating/setting budgets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget/calculate-usage",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupIds",
+                "value": "",
+                "type": "query",
+                "description": "Group ids"
+              },
+              {
+                "name": "costExpr",
+                "value": "",
+                "type": "query",
+                "description": "Cost expression to calculate"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to calculate in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to retrieve as of"
+              }
+            ]
+          },
+          "docs": "Calculate potential budget usage, for use while creating/setting budgets"
+        },
+        {
+          "info": {
+            "name": "Get a budget by id or slug",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget/:budgetId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "budgetId",
+                "value": "",
+                "type": "path",
+                "description": "Budget id or slug"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to get budget data as-of (defaults to today)"
+              }
+            ]
+          },
+          "docs": "Get a budget by id or slug"
+        },
+        {
+          "info": {
+            "name": "Update an existing budget",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget/:budgetId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "budgetId",
+                "value": "",
+                "type": "path",
+                "description": "Budget id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to update budget on (defaults to today)"
+              }
+            ]
+          },
+          "docs": "Update an existing budget"
+        },
+        {
+          "info": {
+            "name": "Delete a budget",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/budget/:budgetId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "budgetId",
+                "value": "",
+                "type": "path",
+                "description": "Budget id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to delete budget on (defaults to today)"
+              }
+            ]
+          },
+          "docs": "Delete a budget"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

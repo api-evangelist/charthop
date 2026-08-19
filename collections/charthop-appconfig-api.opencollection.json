@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access appConfig API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "appConfig",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new app config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app-config"
+          },
+          "docs": "Create a new app config"
+        },
+        {
+          "info": {
+            "name": "Return default app configuration by app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app-config/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              }
+            ]
+          },
+          "docs": "Return default app configuration by app"
+        },
+        {
+          "info": {
+            "name": "Return user app configuration by app and user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app-config/:appId/:userId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User id"
+              }
+            ]
+          },
+          "docs": "Return user app configuration by app and user"
+        },
+        {
+          "info": {
+            "name": "Update an existing app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/app-config/:appId/:userId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User id"
+              }
+            ]
+          },
+          "docs": "Update an existing app"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

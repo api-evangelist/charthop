@@ -1,0 +1,317 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access job-code API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "job-code",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all job codes in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Job code id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to return fields in; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "filterValues",
+                "value": "",
+                "type": "query",
+                "description": "JSON map of field filters as {fieldId: value} to filter job codes. All filters are applied with AND logic. Field IDs must be ObjectIds of valid job code fields."
+              },
+              {
+                "name": "includeFieldValues",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include fieldValues in the response (default: false)"
+              }
+            ]
+          },
+          "docs": "Return all job codes in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a job code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a job code"
+        },
+        {
+          "info": {
+            "name": "Export job codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export job codes"
+        },
+        {
+          "info": {
+            "name": "Import data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/import",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              }
+            ]
+          },
+          "docs": "Import data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Download a CSV template for a job code import",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/import/download-template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Download a CSV template for a job code import"
+        },
+        {
+          "info": {
+            "name": "Return all job code linked field IDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/linked-fields",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobCodeId",
+                "value": "",
+                "type": "query",
+                "description": "Job Code ID"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to return fields in; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to apply time tracked fields as of"
+              }
+            ]
+          },
+          "docs": "Return all job code linked field IDs"
+        },
+        {
+          "info": {
+            "name": "Start an async process that uses AI to suggest a JobCode for each job that does not yet have one. Poll GET /v1/org/{orgId}/process/{processId} for status; suggestions are written to process.results once status is DONE. Read-only — writes nothing to jobs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/match",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Start an async process that uses AI to suggest a JobCode for each job that does not yet have one. Poll GET /v1/org/{orgId}/process/{processId} for status; suggestions are written to process.results once status is DONE. Read-only — writes nothing to jobs."
+        },
+        {
+          "info": {
+            "name": "Mark a completed JobCodeMatchProcessor process as reset. Writes state.hasReset = true so the frontend can force the matcher UI to reset after the user applies changes, instead of redisplaying the matching table.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/match/:processId/reset",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "processId",
+                "value": "",
+                "type": "path",
+                "description": "JobCodeMatchProcessor process id"
+              }
+            ]
+          },
+          "docs": "Mark a completed JobCodeMatchProcessor process as reset. Writes state.hasReset = true so the frontend can force the matcher UI to reset after the user applies changes, instead of redisplaying the matching table."
+        },
+        {
+          "info": {
+            "name": "Return a particular job code by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/:jobCodeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobCodeId",
+                "value": "",
+                "type": "path",
+                "description": "Job code id"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to return fields in; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return a particular job code by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing job code",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/:jobCodeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobCodeId",
+                "value": "",
+                "type": "path",
+                "description": "Job code id"
+              }
+            ]
+          },
+          "docs": "Update an existing job code"
+        },
+        {
+          "info": {
+            "name": "Delete a job code",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/job-code/:jobCodeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobCodeId",
+                "value": "",
+                "type": "path",
+                "description": "Job code id"
+              }
+            ]
+          },
+          "docs": "Delete a job code"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

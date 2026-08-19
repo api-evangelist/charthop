@@ -1,0 +1,155 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access goalProgress API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "goalProgress",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find goal progress for a goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-progress",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "query",
+                "description": "Goal id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find goal progress for a goal"
+        },
+        {
+          "info": {
+            "name": "Create a new goal progress update",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-progress",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new goal progress update"
+        },
+        {
+          "info": {
+            "name": "Get a goal progress by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-progress/:goalProgressId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              },
+              {
+                "name": "goalProgressId",
+                "value": "",
+                "type": "path",
+                "description": "Goal progress id"
+              }
+            ]
+          },
+          "docs": "Get a goal progress by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing goal progress",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-progress/:goalProgressId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalProgressId",
+                "value": "",
+                "type": "path",
+                "description": "Goal progress id"
+              }
+            ]
+          },
+          "docs": "Update an existing goal progress"
+        },
+        {
+          "info": {
+            "name": "Delete a goal progress",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-progress/:goalProgressId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalProgressId",
+                "value": "",
+                "type": "path",
+                "description": "Goal progress id"
+              }
+            ]
+          },
+          "docs": "Delete a goal progress"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

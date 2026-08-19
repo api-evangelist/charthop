@@ -1,0 +1,757 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access job API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "job",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find jobs in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "compReviewId",
+                "value": "",
+                "type": "query",
+                "description": "Comp review id to query"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "query",
+                "description": "Approval chain id to query; only relevant when there is a comp review id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if retrieving jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if retrieving jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of job ids to look up"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Job id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by fields, comma-separated. For descending sort, prepend a -"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "fieldsList",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, list syntax"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              },
+              {
+                "name": "useScenarioChanges",
+                "value": "",
+                "type": "query",
+                "description": "Find jobs only based on the changes that are in the scenario. This option also allows you to reference the change within the filter, which is otherwise not allowed"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find jobs in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/job",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to create the job in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of job creation"
+              }
+            ]
+          },
+          "docs": "Create a job"
+        },
+        {
+          "info": {
+            "name": "Perform a bulk update on a number of jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/bulkupdate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "enrichLinkedFields",
+                "value": "",
+                "type": "query",
+                "description": "Whether to enrich linked fields from the job code when set; defaults to true"
+              }
+            ]
+          },
+          "docs": "Perform a bulk update on a number of jobs"
+        },
+        {
+          "info": {
+            "name": "Count jobs or people in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if counting jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if counting jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              }
+            ]
+          },
+          "docs": "Count jobs or people in the organization"
+        },
+        {
+          "info": {
+            "name": "Retrieve jobs from a region of the job graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/graph",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Job id to use as the starting point for the search"
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "Number of levels down to search"
+              },
+              {
+                "name": "approxLimit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return, approximately"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Query string to filter by"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "useScenarioChanges",
+                "value": "",
+                "type": "query",
+                "description": "Find jobs only based on the changes that are in the scenario. This option also allows you to reference the change within the filter, which is otherwise not allowed"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Retrieve jobs from a region of the job graph"
+        },
+        {
+          "info": {
+            "name": "Find jobs in the organization, grouped by an expression",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/group-by",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if retrieving jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if retrieving jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve with their aggregation function, comma-separated"
+              },
+              {
+                "name": "groupBy",
+                "value": "",
+                "type": "query",
+                "description": "Expression to group by"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by fields, comma-separated. For descending sort, prepend a -"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              }
+            ]
+          },
+          "docs": "Find jobs in the organization, grouped by an expression"
+        },
+        {
+          "info": {
+            "name": "Find jobs by person ids",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/person/:personIds",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personIds",
+                "value": "",
+                "type": "path",
+                "description": "Comma-separated list of person ids to look up jobs for"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Find jobs by person ids"
+        },
+        {
+          "info": {
+            "name": "Compute top-N + Other subcounts for one or more fields, for jobs in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/subcounts",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if counting jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if counting jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to compute subcounts for"
+              },
+              {
+                "name": "topN",
+                "value": "",
+                "type": "query",
+                "description": "Number of top values to return per field; remainder is rolled into an Other bucket (default 10, max 25)"
+              }
+            ]
+          },
+          "docs": "Compute top-N + Other subcounts for one or more fields, for jobs in the organization"
+        },
+        {
+          "info": {
+            "name": "Find jobs in the organization returned as a time-series",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/timeseries",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date to start from (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date to start from (exclusive)"
+              },
+              {
+                "name": "interval",
+                "value": "",
+                "type": "query",
+                "description": "Interval to separate by (default is 'month')"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "expr",
+                "value": "",
+                "type": "query",
+                "description": "Expression to calculate as-of the end of each interval"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find jobs in the organization returned as a time-series"
+        },
+        {
+          "info": {
+            "name": "Compute aggregated totals for jobs matching a query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/total",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if retrieving jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if retrieving jobs that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Fields to aggregate with their aggregation function, comma-separated"
+              }
+            ]
+          },
+          "docs": "Compute aggregated totals for jobs matching a query"
+        },
+        {
+          "info": {
+            "name": "Return a particular job by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/:jobId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return a particular job by id"
+        },
+        {
+          "info": {
+            "name": "Update a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/:jobId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the job in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of job update"
+              }
+            ]
+          },
+          "docs": "Update a job"
+        },
+        {
+          "info": {
+            "name": "Delete a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/job/:jobId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the job in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of job update"
+              }
+            ]
+          },
+          "docs": "Delete a job"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

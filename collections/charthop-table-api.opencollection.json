@@ -1,0 +1,688 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access table API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "table",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all tables in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/table",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Table id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "includeBuiltIns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include built-in tables"
+              },
+              {
+                "name": "names",
+                "value": "",
+                "type": "query",
+                "description": "Table names to filter to"
+              }
+            ]
+          },
+          "docs": "Return all tables in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/table",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a table"
+        },
+        {
+          "info": {
+            "name": "Return a particular table by id or name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or name"
+              }
+            ]
+          },
+          "docs": "Return a particular table by id or name"
+        },
+        {
+          "info": {
+            "name": "Update an existing table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or name"
+              }
+            ]
+          },
+          "docs": "Update an existing table"
+        },
+        {
+          "info": {
+            "name": "Delete a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or name"
+              }
+            ]
+          },
+          "docs": "Delete a table"
+        },
+        {
+          "info": {
+            "name": "Retrieve all rows from the table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to retrieve"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to retrieve from"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Filter to query by"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Job id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by fields, comma-separated. For descending sort, prepend a -"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Columns to retrieve, comma-separated (defaults to all columns)"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended, json-readable, or csv"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Retrieve all rows from the table"
+        },
+        {
+          "info": {
+            "name": "Upsert row data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to update as of"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update"
+              }
+            ]
+          },
+          "docs": "Upsert row data"
+        },
+        {
+          "info": {
+            "name": "Retrieve a particular row",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data/:keyColumn/:keyValue",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to retrieve"
+              },
+              {
+                "name": "keyColumn",
+                "value": "",
+                "type": "path",
+                "description": "Column name to look up the row by (for example: id)"
+              },
+              {
+                "name": "keyValue",
+                "value": "",
+                "type": "path",
+                "description": "Value of the column"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to retrieve from"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Columns to retrieve, comma-separated (defaults to all columns)"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended, json-readable, or csv"
+              }
+            ]
+          },
+          "docs": "Retrieve a particular row"
+        },
+        {
+          "info": {
+            "name": "Update an existing row",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data/:keyColumn/:keyValue",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              },
+              {
+                "name": "keyColumn",
+                "value": "",
+                "type": "path",
+                "description": "Column name to look up the row by (for example: id)"
+              },
+              {
+                "name": "keyValue",
+                "value": "",
+                "type": "path",
+                "description": "Value of the key column"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to update as of"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update"
+              }
+            ]
+          },
+          "docs": "Update an existing row"
+        },
+        {
+          "info": {
+            "name": "Delete an existing row",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data/:keyColumn/:keyValue",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              },
+              {
+                "name": "keyColumn",
+                "value": "",
+                "type": "path",
+                "description": "Column name to look up the row by (for example: id)"
+              },
+              {
+                "name": "keyValue",
+                "value": "",
+                "type": "path",
+                "description": "Value of the key column"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to delete as of"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to delete from"
+              }
+            ]
+          },
+          "docs": "Delete an existing row"
+        },
+        {
+          "info": {
+            "name": "Retrieve the history of a particular row",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data/:keyColumn/:keyValue/history",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to retrieve"
+              },
+              {
+                "name": "keyColumn",
+                "value": "",
+                "type": "path",
+                "description": "Column name to look up the row by (for example: id)"
+              },
+              {
+                "name": "keyValue",
+                "value": "",
+                "type": "path",
+                "description": "Value of the column"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date to retrieve from, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date to retrieve through, inclusive"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to retrieve from"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Columns to retrieve, comma-separated (defaults to all columns)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "History id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended, json-readable, or csv"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Retrieve the history of a particular row"
+        },
+        {
+          "info": {
+            "name": "Delete an existing row, purging from history entirely",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/data/:keyColumn/:keyValue/purge",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              },
+              {
+                "name": "keyColumn",
+                "value": "",
+                "type": "path",
+                "description": "Column name to look up the row by (for example: id)"
+              },
+              {
+                "name": "keyValue",
+                "value": "",
+                "type": "path",
+                "description": "Value of the key column"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to look up as of"
+              }
+            ]
+          },
+          "docs": "Delete an existing row, purging from history entirely"
+        },
+        {
+          "info": {
+            "name": "Export table data to CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              }
+            ]
+          },
+          "docs": "Export table data to CSV file"
+        },
+        {
+          "info": {
+            "name": "Import data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/import",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to update as of"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              },
+              {
+                "name": "importFromProcessId",
+                "value": "",
+                "type": "query",
+                "description": "Import a file from another process, instead of directly uploading it"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "Parent process id to attach to"
+              }
+            ]
+          },
+          "docs": "Import data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Download a CSV template for a table import",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/import/download-template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or unique name to update"
+              }
+            ]
+          },
+          "docs": "Download a CSV template for a table import"
+        },
+        {
+          "info": {
+            "name": "Reorder the default order that columns in a table will appear",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/table/:tableId/reorder",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "Table id or name"
+              }
+            ]
+          },
+          "docs": "Reorder the default order that columns in a table will appear"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

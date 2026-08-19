@@ -1,0 +1,432 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access report API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "report",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all reports in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "Offset"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return all reports in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a report"
+        },
+        {
+          "info": {
+            "name": "Delete a set of reports",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/bulk-delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Delete a set of reports"
+        },
+        {
+          "info": {
+            "name": "Duplicate a set of reports",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/bulk-duplicate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Duplicate a set of reports"
+        },
+        {
+          "info": {
+            "name": "Return count of reports in an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return count of reports in an organization"
+        },
+        {
+          "info": {
+            "name": "Return timeseries data from arbitrary queries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/query",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return timeseries data from arbitrary queries"
+        },
+        {
+          "info": {
+            "name": "Return a particular report by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              }
+            ]
+          },
+          "docs": "Return a particular report by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing report",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              },
+              {
+                "name": "referencedReportUrl",
+                "value": "",
+                "type": "query",
+                "description": "Displayed report url"
+              }
+            ]
+          },
+          "docs": "Update an existing report"
+        },
+        {
+          "info": {
+            "name": "Delete a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              }
+            ]
+          },
+          "docs": "Delete a report"
+        },
+        {
+          "info": {
+            "name": "Export a particular chart in a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/chart/:chartId/export/csv",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              },
+              {
+                "name": "chartId",
+                "value": "",
+                "type": "path",
+                "description": "Chart id"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, exclusive"
+              },
+              {
+                "name": "interval",
+                "value": "",
+                "type": "query",
+                "description": "Interval"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id"
+              },
+              {
+                "name": "projectHires",
+                "value": "",
+                "type": "query",
+                "description": "Project future hires"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Additional filter to apply"
+              },
+              {
+                "name": "changeGroupingType",
+                "value": "",
+                "type": "query",
+                "description": "Type of change grouping"
+              },
+              {
+                "name": "changeGroupingId",
+                "value": "",
+                "type": "query",
+                "description": "Change grouping id to query (null for primary)"
+              }
+            ]
+          },
+          "docs": "Export a particular chart in a report"
+        },
+        {
+          "info": {
+            "name": "Create an exact copy of an existing report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/clone",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              }
+            ]
+          },
+          "docs": "Create an exact copy of an existing report"
+        },
+        {
+          "info": {
+            "name": "Query all the charts in a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/query",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, exclusive"
+              },
+              {
+                "name": "interval",
+                "value": "",
+                "type": "query",
+                "description": "Interval"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id"
+              },
+              {
+                "name": "projectHires",
+                "value": "",
+                "type": "query",
+                "description": "Project future hires"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply to all results"
+              },
+              {
+                "name": "changeGroupingType",
+                "value": "",
+                "type": "query",
+                "description": "Type of change grouping"
+              },
+              {
+                "name": "changeGroupingId",
+                "value": "",
+                "type": "query",
+                "description": "Change grouping id to query (null for primary)"
+              }
+            ]
+          },
+          "docs": "Query all the charts in a report"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

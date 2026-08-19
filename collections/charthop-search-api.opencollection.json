@@ -1,0 +1,103 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access search API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return people, job, group, field, goal, and other entity data for a particular org that match a provided search string",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/search",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Query search term"
+              },
+              {
+                "name": "entityTypes",
+                "value": "",
+                "type": "query",
+                "description": "Entity types"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit"
+              },
+              {
+                "name": "includeFormer",
+                "value": "",
+                "type": "query",
+                "description": "Include former users or persons"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario Id"
+              },
+              {
+                "name": "canAccess",
+                "value": "",
+                "type": "query",
+                "description": "entity action pairs that can be accessed"
+              },
+              {
+                "name": "returnEntityBody",
+                "value": "",
+                "type": "query",
+                "description": "Include full entity body in results"
+              },
+              {
+                "name": "terminatedWithoutBackfill",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only terminated jobs without backfill"
+              },
+              {
+                "name": "jobState",
+                "value": "",
+                "type": "query",
+                "description": "Filter jobs by state (OPEN or FILLED)"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "CQL filter expression applied to job results (currently only the jobs entity type honors this)"
+              }
+            ]
+          },
+          "docs": "Return people, job, group, field, goal, and other entity data for a particular org that match a provided search string"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

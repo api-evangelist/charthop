@@ -1,0 +1,454 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access scenario API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "scenario",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all scenarios in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to start paginating from"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Scenario status to filter by"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return all scenarios in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "silent",
+                "value": "",
+                "type": "query",
+                "description": "Suppress notification emails"
+              },
+              {
+                "name": "skipChangeCreation",
+                "value": "",
+                "type": "query",
+                "description": "Skip over change creation for PROMOTION scenarios"
+              }
+            ]
+          },
+          "docs": "Create a scenario"
+        },
+        {
+          "info": {
+            "name": "Archive a set of scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/bulk/archive",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Archive a set of scenarios"
+        },
+        {
+          "info": {
+            "name": "Delete a set of scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/bulk/delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Delete a set of scenarios"
+        },
+        {
+          "info": {
+            "name": "Unarchive a set of scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/bulk/unarchive",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Unarchive a set of scenarios"
+        },
+        {
+          "info": {
+            "name": "Return a particular scenario by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Return a particular scenario by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              },
+              {
+                "name": "silent",
+                "value": "",
+                "type": "query",
+                "description": "Suppress notification emails"
+              }
+            ]
+          },
+          "docs": "Update an existing scenario"
+        },
+        {
+          "info": {
+            "name": "Delete a scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Delete a scenario"
+        },
+        {
+          "info": {
+            "name": "Return past audit log events for a scenario, paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/audit-log",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp to start search at"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return past audit log events for a scenario, paginated"
+        },
+        {
+          "info": {
+            "name": "Combine multiple scenarios into another scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/combine",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id to combine the other scenarios into"
+              }
+            ]
+          },
+          "docs": "Combine multiple scenarios into another scenario"
+        },
+        {
+          "info": {
+            "name": "Adjust the dates of the changes in a scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/dates",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Adjust the dates of the changes in a scenario"
+        },
+        {
+          "info": {
+            "name": "Export a scenario's audit log",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/export/audit",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Export a scenario's audit log"
+        },
+        {
+          "info": {
+            "name": "Merge a scenario into the primary timeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/merge",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id to merge"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "If passed, will skip any changes that fail validation"
+              }
+            ]
+          },
+          "docs": "Merge a scenario into the primary timeline"
+        },
+        {
+          "info": {
+            "name": "Manually recalculate a scenario's metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/recalculate-metadata",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Manually recalculate a scenario's metadata"
+        },
+        {
+          "info": {
+            "name": "Update a scenario view config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/update-shared-view",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Update a scenario view config"
+        },
+        {
+          "info": {
+            "name": "Upsert multiple scenario view configs in a single atomic request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/scenario/:scenarioId/update-shared-views",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "path",
+                "description": "Scenario id"
+              }
+            ]
+          },
+          "docs": "Upsert multiple scenario view configs in a single atomic request"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

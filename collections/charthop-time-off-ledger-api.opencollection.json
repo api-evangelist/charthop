@@ -1,0 +1,173 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access Time off ledger API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Time off ledger",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a time off ledger entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff-ledger",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a time off ledger entry"
+        },
+        {
+          "info": {
+            "name": "Query time off ledger entries in the organization, returning particular time off, job, and person data fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff-ledger/data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "From date, inclusive"
+              },
+              {
+                "name": "untilDate",
+                "value": "",
+                "type": "query",
+                "description": "Until date, exclusive"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply on the person"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "query",
+                "description": "If retrieving from specific people, their personIds, comma-separated"
+              },
+              {
+                "name": "policyId",
+                "value": "",
+                "type": "query",
+                "description": "If retrieving for specific time off policies, the policyIds, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              }
+            ]
+          },
+          "docs": "Query time off ledger entries in the organization, returning particular time off, job, and person data fields"
+        },
+        {
+          "info": {
+            "name": "Payroll export of time off ledger",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff-ledger/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Payroll export of time off ledger"
+        },
+        {
+          "info": {
+            "name": "Get a time off ledger entry by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff-ledger/:entryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "entryId",
+                "value": "",
+                "type": "path",
+                "description": "Ledger entry id"
+              }
+            ]
+          },
+          "docs": "Get a time off ledger entry by ID"
+        },
+        {
+          "info": {
+            "name": "Delete a time off ledger entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff-ledger/:entryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "entryId",
+                "value": "",
+                "type": "path",
+                "description": "Ledger entry id"
+              }
+            ]
+          },
+          "docs": "Delete a time off ledger entry"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

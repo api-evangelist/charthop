@@ -1,0 +1,666 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access ai API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ai",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List memories for an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/agent-memory",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "agentUserId",
+                "value": "",
+                "type": "query",
+                "description": "Agent user ID"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "User ID (defaults to current user)"
+              },
+              {
+                "name": "actionId",
+                "value": "",
+                "type": "query",
+                "description": "Action ID, if filtering for a particular action"
+              }
+            ]
+          },
+          "docs": "List memories for an agent"
+        },
+        {
+          "info": {
+            "name": "Create a new memory",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/agent-memory",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new memory"
+        },
+        {
+          "info": {
+            "name": "Get a single memory",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/agent-memory/:memoryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "memoryId",
+                "value": "",
+                "type": "path",
+                "description": "Memory ID"
+              }
+            ]
+          },
+          "docs": "Get a single memory"
+        },
+        {
+          "info": {
+            "name": "Update a memory",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/agent-memory/:memoryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "memoryId",
+                "value": "",
+                "type": "path",
+                "description": "Memory ID"
+              }
+            ]
+          },
+          "docs": "Update a memory"
+        },
+        {
+          "info": {
+            "name": "Delete a memory",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/agent-memory/:memoryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "memoryId",
+                "value": "",
+                "type": "path",
+                "description": "Memory ID"
+              }
+            ]
+          },
+          "docs": "Delete a memory"
+        },
+        {
+          "info": {
+            "name": "Retrieve previous AI chats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "User id"
+              },
+              {
+                "name": "agentUserId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by agent user id"
+              },
+              {
+                "name": "fromAt",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp to search from"
+              },
+              {
+                "name": "untilAt",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp to search up until"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Identifier to paginate from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by (default is createAt, can also use updateAt)"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Retrieve previous AI chats"
+        },
+        {
+          "info": {
+            "name": "Start a new AI chat with an initial message or question",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Start a new AI chat with an initial message or question"
+        },
+        {
+          "info": {
+            "name": "Retrieve some suggested prompts for starting an AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/prompt-suggest",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of suggestions to return (defaults to 5)"
+              }
+            ]
+          },
+          "docs": "Retrieve some suggested prompts for starting an AI chat"
+        },
+        {
+          "info": {
+            "name": "Find users with the most AI chats over a date range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/top-users",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date (inclusive)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "CQL filter to apply on the person"
+              }
+            ]
+          },
+          "docs": "Find users with the most AI chats over a date range"
+        },
+        {
+          "info": {
+            "name": "Retrieve a previous AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve a previous AI chat"
+        },
+        {
+          "info": {
+            "name": "Update an existing AI chat's metadata, such as label or shareAccess information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Update an existing AI chat's metadata, such as label or shareAccess information"
+        },
+        {
+          "info": {
+            "name": "Delete an AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Delete an AI chat"
+        },
+        {
+          "info": {
+            "name": "Answer a pending AskUserQuestion tool call in an AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId/answer-tool",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Answer a pending AskUserQuestion tool call in an AI chat"
+        },
+        {
+          "info": {
+            "name": "Approve pending tool calls in an AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId/approve-tool",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Approve pending tool calls in an AI chat"
+        },
+        {
+          "info": {
+            "name": "Send an additional message to an existing AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId/message",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Send an additional message to an existing AI chat"
+        },
+        {
+          "info": {
+            "name": "Retrieve an individual message from an existing AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId/message/:messageId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path",
+                "description": "Message identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve an individual message from an existing AI chat"
+        },
+        {
+          "info": {
+            "name": "Send feedback on a message in an AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId/message/:messageId/feedback",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path",
+                "description": "Message identifier"
+              }
+            ]
+          },
+          "docs": "Send feedback on a message in an AI chat"
+        },
+        {
+          "info": {
+            "name": "Reject pending tool calls in an AI chat",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/chat/:chatId/reject-tool",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chatId",
+                "value": "",
+                "type": "path",
+                "description": "Chat identifier"
+              }
+            ]
+          },
+          "docs": "Reject pending tool calls in an AI chat"
+        },
+        {
+          "info": {
+            "name": "Update configuration of AI models for this org (ChartHop staff only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/config",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Update configuration of AI models for this org (ChartHop staff only)"
+        },
+        {
+          "info": {
+            "name": "Use AI to generate a summary of text form responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/form-response/summary",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Use AI to generate a summary of text form responses"
+        },
+        {
+          "info": {
+            "name": "Translate from one language to another using AI",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/translate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Translate from one language to another using AI"
+        },
+        {
+          "info": {
+            "name": "Detect the dominant language of a text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/translate/detect-language",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Detect the dominant language of a text"
+        },
+        {
+          "info": {
+            "name": "Translate natural language into a CQL filter expression",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/translate/expression",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Translate natural language into a CQL filter expression"
+        },
+        {
+          "info": {
+            "name": "Invalidate all cached expression translation responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/ai/translate/expression",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Invalidate all cached expression translation responses"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

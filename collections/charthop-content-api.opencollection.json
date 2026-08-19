@@ -1,0 +1,249 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access content API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "content",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all content in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/content",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Content id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "includeBlocks",
+                "value": "",
+                "type": "query",
+                "description": "Include content blocks in results"
+              }
+            ]
+          },
+          "docs": "Return all content in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a new piece of content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/content",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new piece of content"
+        },
+        {
+          "info": {
+            "name": "Update the homepage content",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/homepage",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Update the homepage content"
+        },
+        {
+          "info": {
+            "name": "Render the contents of the homepage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/homepage/render",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Render the contents of the homepage"
+        },
+        {
+          "info": {
+            "name": "Return a particular content by path",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/path/:path",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "path",
+                "description": "Path"
+              }
+            ]
+          },
+          "docs": "Return a particular content by path"
+        },
+        {
+          "info": {
+            "name": "Return a particular content by path, and render its contents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/path/:path/render",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "path",
+                "description": "Path"
+              }
+            ]
+          },
+          "docs": "Return a particular content by path, and render its contents"
+        },
+        {
+          "info": {
+            "name": "Return a particular content by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/:contentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "contentId",
+                "value": "",
+                "type": "path",
+                "description": "Content id"
+              }
+            ]
+          },
+          "docs": "Return a particular content by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing piece of content",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/:contentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "contentId",
+                "value": "",
+                "type": "path",
+                "description": "Content id"
+              }
+            ]
+          },
+          "docs": "Update an existing piece of content"
+        },
+        {
+          "info": {
+            "name": "Delete a content",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/content/:contentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "contentId",
+                "value": "",
+                "type": "path",
+                "description": "Content id"
+              },
+              {
+                "name": "deleteChildren",
+                "value": "",
+                "type": "query",
+                "description": "Whether to delete the children resources"
+              }
+            ]
+          },
+          "docs": "Delete a content"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access ai-prompt API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ai-prompt",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find prompts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/ai-prompt",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Identifier to paginate from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find prompts"
+        },
+        {
+          "info": {
+            "name": "Create a prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/ai-prompt"
+          },
+          "docs": "Create a prompt"
+        },
+        {
+          "info": {
+            "name": "Test a prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/ai-prompt/test"
+          },
+          "docs": "Test a prompt"
+        },
+        {
+          "info": {
+            "name": "List prompt types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/ai-prompt/types"
+          },
+          "docs": "List prompt types"
+        },
+        {
+          "info": {
+            "name": "Get a prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/ai-prompt/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Prompt identifier"
+              }
+            ]
+          },
+          "docs": "Get a prompt"
+        },
+        {
+          "info": {
+            "name": "Update a prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/ai-prompt/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Prompt identifier"
+              }
+            ]
+          },
+          "docs": "Update a prompt"
+        },
+        {
+          "info": {
+            "name": "Delete a prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/ai-prompt/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Prompt identifier"
+              }
+            ]
+          },
+          "docs": "Delete a prompt"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

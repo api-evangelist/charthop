@@ -1,0 +1,351 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access file API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "file",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns a list of files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/file",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity id"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Field name(s) to filter by, comma-separated"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Target entity filter"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From result id"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "personFields",
+                "value": "",
+                "type": "query",
+                "description": "Person field name(s) to include in response, comma-separated"
+              }
+            ]
+          },
+          "docs": "Returns a list of files"
+        },
+        {
+          "info": {
+            "name": "Upload a new file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/file",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "entity id (if not passed, defaults to user id, not used if entity type is ORG)"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "entity type (if not passed, defaults to user)"
+              },
+              {
+                "name": "fieldId",
+                "value": "",
+                "type": "query",
+                "description": "field id - can leave blank for a general upload"
+              },
+              {
+                "name": "sensitive",
+                "value": "",
+                "type": "query",
+                "description": "file sensitivity level - defaults to PERSONAL"
+              },
+              {
+                "name": "uploadPersonId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the person who originally uploaded the file, only settable by apps"
+              },
+              {
+                "name": "uploadAt",
+                "value": "",
+                "type": "query",
+                "description": "Date when the file was originally uploaded, only settable by apps"
+              }
+            ]
+          },
+          "docs": "Upload a new file"
+        },
+        {
+          "info": {
+            "name": "Query files with additional person field data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity id"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Field name(s) to filter by, comma-separated"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Target entity filter"
+              },
+              {
+                "name": "personFields",
+                "value": "",
+                "type": "query",
+                "description": "Person field name(s) to include in response, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From result id"
+              }
+            ]
+          },
+          "docs": "Query files with additional person field data"
+        },
+        {
+          "info": {
+            "name": "Export a zipfile of files matching some criteria",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export a zipfile of files matching some criteria"
+        },
+        {
+          "info": {
+            "name": "Export a CSV of file metadata matching some criteria",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/export-csv",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Export a CSV of file metadata matching some criteria"
+        },
+        {
+          "info": {
+            "name": "Returns metadata about a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/:fileId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "File id"
+              }
+            ]
+          },
+          "docs": "Returns metadata about a file"
+        },
+        {
+          "info": {
+            "name": "Update a file's metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/:fileId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "File id"
+              }
+            ]
+          },
+          "docs": "Update a file's metadata"
+        },
+        {
+          "info": {
+            "name": "Delete a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/:fileId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "File id"
+              }
+            ]
+          },
+          "docs": "Delete a file"
+        },
+        {
+          "info": {
+            "name": "Download a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/file/:fileId/download",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "File id"
+              }
+            ]
+          },
+          "docs": "Download a file"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

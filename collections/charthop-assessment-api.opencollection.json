@@ -1,0 +1,478 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access assessment API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "assessment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all assessments in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type of assessment to filter by"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Assessment id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of ids to filter by"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Return all assessments in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a assessment"
+        },
+        {
+          "info": {
+            "name": "Delete a set of assessments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/bulk/delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Delete a set of assessments"
+        },
+        {
+          "info": {
+            "name": "Duplicate a set of assessments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/bulk/duplicate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Duplicate a set of assessments"
+        },
+        {
+          "info": {
+            "name": "Update the types of a set of assessments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/bulk/move",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Update the types of a set of assessments"
+        },
+        {
+          "info": {
+            "name": "Return a particular assessment by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Return a particular assessment by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              },
+              {
+                "name": "silent",
+                "value": "",
+                "type": "query",
+                "description": "Suppress notification emails"
+              }
+            ]
+          },
+          "docs": "Update an existing assessment"
+        },
+        {
+          "info": {
+            "name": "Delete a assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Delete a assessment"
+        },
+        {
+          "info": {
+            "name": "Release all un-approved responses for a form of an assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/approve",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "query",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Release all un-approved responses for a form of an assessment"
+        },
+        {
+          "info": {
+            "name": "Retrieve all persons who were targets of form submissions, retrieving both fields as well as question responses. This endpoint is typically used for calibrations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/calibration/person",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filter to apply"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve"
+              },
+              {
+                "name": "questionIds",
+                "value": "",
+                "type": "query",
+                "description": "Question ids to retrieve"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              }
+            ]
+          },
+          "docs": "Retrieve all persons who were targets of form submissions, retrieving both fields as well as question responses. This endpoint is typically used for calibrations."
+        },
+        {
+          "info": {
+            "name": "Complete a assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/complete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Complete a assessment"
+        },
+        {
+          "info": {
+            "name": "Expire all pending tasks for a form of an assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/form/:formId/expire",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Expire all pending tasks for a form of an assessment"
+        },
+        {
+          "info": {
+            "name": "Return an overview of the forms and questions used in the assessment. If the user has read access to the assessment, then the forms and questions are visible, even if they would not otherwise be visible on their own",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/forms-questions",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Return an overview of the forms and questions used in the assessment. If the user has read access to the assessment, then the forms and questions are visible, even if they would not otherwise be visible on their own"
+        },
+        {
+          "info": {
+            "name": "Reactivate a assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/reactivate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Reactivate a assessment"
+        },
+        {
+          "info": {
+            "name": "Release all un-released responses for a form of an assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/release",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "query",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Release all un-released responses for a form of an assessment"
+        },
+        {
+          "info": {
+            "name": "Return a summary of the tasks for a given assessment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/assessment/:assessmentId/task-summary",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              }
+            ]
+          },
+          "docs": "Return a summary of the tasks for a given assessment"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

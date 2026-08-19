@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access usage API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Signal interest in upgrading to a paid plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/usage/upgrade",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "module",
+                "value": "",
+                "type": "query",
+                "description": "Module name"
+              }
+            ]
+          },
+          "docs": "Signal interest in upgrading to a paid plan"
+        },
+        {
+          "info": {
+            "name": "Record usage of a product feature",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/usage/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Type of usage"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity id, if applicable"
+              }
+            ]
+          },
+          "docs": "Record usage of a product feature"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

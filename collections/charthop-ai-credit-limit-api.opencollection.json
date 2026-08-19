@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access ai-credit-limit API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ai-credit-limit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find AI credit limits, optionally filtered by customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/ai-credit-limit",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "query",
+                "description": "Customer identifier"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Find AI credit limits, optionally filtered by customer"
+        },
+        {
+          "info": {
+            "name": "Create an AI credit limit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/ai-credit-limit"
+          },
+          "docs": "Create an AI credit limit"
+        },
+        {
+          "info": {
+            "name": "Get an AI credit limit by customer and month",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/ai-credit-limit/by-customer-month",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "query",
+                "description": "Customer identifier"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date within the month to look up"
+              }
+            ]
+          },
+          "docs": "Get an AI credit limit by customer and month"
+        },
+        {
+          "info": {
+            "name": "Export the AI credit usage report as CSV (ChartHop staff only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/ai-credit-limit/export-report",
+            "params": [
+              {
+                "name": "startMonth",
+                "value": "",
+                "type": "query",
+                "description": "First month to include (inclusive), in YYYY-MM format"
+              },
+              {
+                "name": "endMonth",
+                "value": "",
+                "type": "query",
+                "description": "Last month to include (inclusive), in YYYY-MM format"
+              }
+            ]
+          },
+          "docs": "Export the AI credit usage report as CSV (ChartHop staff only)"
+        },
+        {
+          "info": {
+            "name": "Get an AI credit limit by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/ai-credit-limit/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "AI credit limit identifier"
+              }
+            ]
+          },
+          "docs": "Get an AI credit limit by id"
+        },
+        {
+          "info": {
+            "name": "Update an AI credit limit",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/ai-credit-limit/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "AI credit limit identifier"
+              }
+            ]
+          },
+          "docs": "Update an AI credit limit"
+        },
+        {
+          "info": {
+            "name": "Delete an AI credit limit",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/ai-credit-limit/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "AI credit limit identifier"
+              }
+            ]
+          },
+          "docs": "Delete an AI credit limit"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

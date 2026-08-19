@@ -1,0 +1,128 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access well-known API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "well-known",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "OAuth authorization server metadata (RFC 8414)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/oauth-authorization-server"
+          },
+          "docs": "OAuth authorization server metadata (RFC 8414)"
+        },
+        {
+          "info": {
+            "name": "OAuth authorization server metadata for an org-less agent MCP server (RFC 8414)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/oauth-authorization-server/mcp/:agent",
+            "params": [
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "OAuth authorization server metadata for an org-less agent MCP server (RFC 8414)"
+        },
+        {
+          "info": {
+            "name": "OAuth authorization server metadata for an agent MCP server (RFC 8414)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/oauth-authorization-server/mcp/:agent/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "OAuth authorization server metadata for an agent MCP server (RFC 8414)"
+        },
+        {
+          "info": {
+            "name": "OAuth protected resource metadata for an org-less agent MCP server (RFC 9728)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/oauth-protected-resource/mcp/:agent",
+            "params": [
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "OAuth protected resource metadata for an org-less agent MCP server (RFC 9728)"
+        },
+        {
+          "info": {
+            "name": "OAuth protected resource metadata for an agent MCP server (RFC 9728)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/oauth-protected-resource/mcp/:agent/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "agent",
+                "value": "",
+                "type": "path",
+                "description": "Agent app name"
+              }
+            ]
+          },
+          "docs": "OAuth protected resource metadata for an agent MCP server (RFC 9728)"
+        },
+        {
+          "info": {
+            "name": "security.txt (RFC 9116)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/security.txt"
+          },
+          "docs": "security.txt (RFC 9116)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

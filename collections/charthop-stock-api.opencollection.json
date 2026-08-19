@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access stock API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "stock",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return the history of stock prices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/stock",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "query",
+                "description": "Symbol to query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Types of valuations to retrieve"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Date to start from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return the history of stock prices"
+        },
+        {
+          "info": {
+            "name": "Delete a stock price",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/stock/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Stock entry id"
+              }
+            ]
+          },
+          "docs": "Delete a stock price"
+        },
+        {
+          "info": {
+            "name": "Get a stock price as of a particular date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/stock/:symbol/:date/:type",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "path",
+                "description": "Stock symbol"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to update information for"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Type of stock price to retrieve (for example 'public')"
+              }
+            ]
+          },
+          "docs": "Get a stock price as of a particular date"
+        },
+        {
+          "info": {
+            "name": "Upsert a stock price",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/stock/:symbol/:date/:type",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "path",
+                "description": "Stock symbol"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to update information for"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Type of stock price to upsert"
+              }
+            ]
+          },
+          "docs": "Upsert a stock price"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

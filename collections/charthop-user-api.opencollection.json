@@ -1,0 +1,355 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access user API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "user",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all users within an org or across orgs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "query",
+                "description": "Org id to search within"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of user ids to look up"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "User id to start from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by: id, name, email, inviteStatus, activeAt, updateAt. Prepend - for descending (e.g. -activeAt). Without orgId (cross-org admin only), 'activeAt' takes the legacy iterateAllActive path."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Substring search across name (first/last/preferred) and email"
+              },
+              {
+                "name": "inviteStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by invite status: JOINED (user has logged in) or INVITED (not yet logged in). NOT_INVITED is not valid here — by definition findUsers returns only users with accounts."
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "query",
+                "description": "Custom role id to filter by. Requires orgId."
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a comma-separated list of actions to check (e.g. update,delete). Requires orgId."
+              }
+            ]
+          },
+          "docs": "Return all users within an org or across orgs"
+        },
+        {
+          "info": {
+            "name": "Create a new user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/user"
+          },
+          "docs": "Create a new user"
+        },
+        {
+          "info": {
+            "name": "Assign or remove multiple users a role within an org",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/user/assign"
+          },
+          "docs": "Assign or remove multiple users a role within an org"
+        },
+        {
+          "info": {
+            "name": "Count users matching the same filters as findUsers, broken down by invite status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "query",
+                "description": "Org id to count within"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Substring search across name (first/last/preferred) and email"
+              },
+              {
+                "name": "inviteStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by invite status: JOINED or INVITED. NOT_INVITED is not valid."
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "query",
+                "description": "Custom role id to filter by"
+              }
+            ]
+          },
+          "docs": "Count users matching the same filters as findUsers, broken down by invite status"
+        },
+        {
+          "info": {
+            "name": "Return a particular user by email",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/email/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path",
+                "description": "Email"
+              }
+            ]
+          },
+          "docs": "Return a particular user by email"
+        },
+        {
+          "info": {
+            "name": "Create/invite multiple new users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/user/invite"
+          },
+          "docs": "Create/invite multiple new users"
+        },
+        {
+          "info": {
+            "name": "Return the login options for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/login/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path",
+                "description": "User email"
+              },
+              {
+                "name": "orgSlug",
+                "value": "",
+                "type": "query",
+                "description": "Org slug"
+              }
+            ]
+          },
+          "docs": "Return the login options for a user"
+        },
+        {
+          "info": {
+            "name": "Return the currently logged in user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/me"
+          },
+          "docs": "Return the currently logged in user"
+        },
+        {
+          "info": {
+            "name": "Return the user the user is currently viewing as",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/me/view"
+          },
+          "docs": "Return the user the user is currently viewing as"
+        },
+        {
+          "info": {
+            "name": "Return a particular user by its corresponding person id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/person/:personId",
+            "params": [
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id to fetch user for"
+              },
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "query",
+                "description": "Org id to search within"
+              }
+            ]
+          },
+          "docs": "Return a particular user by its corresponding person id"
+        },
+        {
+          "info": {
+            "name": "Send a password reset email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/user/sendreset"
+          },
+          "docs": "Send a password reset email"
+        },
+        {
+          "info": {
+            "name": "Revoke multiple user's access tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/user/token"
+          },
+          "docs": "Revoke multiple user's access tokens"
+        },
+        {
+          "info": {
+            "name": "Return a particular user by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/user/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User id"
+              }
+            ]
+          },
+          "docs": "Return a particular user by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing user",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/user/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User id"
+              }
+            ]
+          },
+          "docs": "Update an existing user"
+        },
+        {
+          "info": {
+            "name": "Change a user's password, or switch a user to SSO",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/user/:userId/password",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User id"
+              }
+            ]
+          },
+          "docs": "Change a user's password, or switch a user to SSO"
+        },
+        {
+          "info": {
+            "name": "Revoke a user's access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/user/:userId/token",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User id"
+              }
+            ]
+          },
+          "docs": "Revoke a user's access token"
+        },
+        {
+          "info": {
+            "name": "Create/invite multiple new users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/user/invite"
+          },
+          "docs": "Create/invite multiple new users"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

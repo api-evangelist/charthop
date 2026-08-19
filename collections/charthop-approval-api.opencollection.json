@@ -1,0 +1,681 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access approval API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "approval",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return approval chains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "The type of entity"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "the id of the entity"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Approval chain id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return approval chains"
+        },
+        {
+          "info": {
+            "name": "Create an approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "createDefaultStages",
+                "value": "",
+                "type": "query",
+                "description": "Create default stages"
+              }
+            ]
+          },
+          "docs": "Create an approval chain"
+        },
+        {
+          "info": {
+            "name": "Return a particular approval chain by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              }
+            ]
+          },
+          "docs": "Return a particular approval chain by id"
+        },
+        {
+          "info": {
+            "name": "Update a approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "approval chain id"
+              }
+            ]
+          },
+          "docs": "Update a approval chain"
+        },
+        {
+          "info": {
+            "name": "Delete a approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              }
+            ]
+          },
+          "docs": "Delete a approval chain"
+        },
+        {
+          "info": {
+            "name": "Duplicate an approval chain including all of its stages and settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/duplicate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id to duplicate"
+              }
+            ]
+          },
+          "docs": "Duplicate an approval chain including all of its stages and settings"
+        },
+        {
+          "info": {
+            "name": "Export an approval chain's stages to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              }
+            ]
+          },
+          "docs": "Export an approval chain's stages to CSV format"
+        },
+        {
+          "info": {
+            "name": "Return all approval requests for an approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "entity type to filter on"
+              },
+              {
+                "name": "entityIds",
+                "value": "",
+                "type": "query",
+                "description": "entity ids to filter on"
+              }
+            ]
+          },
+          "docs": "Return all approval requests for an approval chain"
+        },
+        {
+          "info": {
+            "name": "Create an approval request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry run without creating real request"
+              },
+              {
+                "name": "previewJobId",
+                "value": "",
+                "type": "query",
+                "description": "preview-as job id"
+              }
+            ]
+          },
+          "docs": "Create an approval request"
+        },
+        {
+          "info": {
+            "name": "Return all approval request comp review responses for an approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/entity/comp-review",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "entityIds",
+                "value": "",
+                "type": "query",
+                "description": "entity ids to filter on"
+              }
+            ]
+          },
+          "docs": "Return all approval request comp review responses for an approval chain"
+        },
+        {
+          "info": {
+            "name": "Return all approval request scenario responses for an approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/entity/scenario",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "entityIds",
+                "value": "",
+                "type": "query",
+                "description": "entity ids to filter on"
+              }
+            ]
+          },
+          "docs": "Return all approval request scenario responses for an approval chain"
+        },
+        {
+          "info": {
+            "name": "Return an approval request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/:approvalRequestId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Approval request id"
+              }
+            ]
+          },
+          "docs": "Return an approval request"
+        },
+        {
+          "info": {
+            "name": "Update an existing approval request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/:approvalRequestId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalRequestId",
+                "value": "",
+                "type": "path",
+                "description": "approval request id"
+              },
+              {
+                "name": "previewJobId",
+                "value": "",
+                "type": "query",
+                "description": "preview-as job id"
+              },
+              {
+                "name": "targetApproverJobId",
+                "value": "",
+                "type": "query",
+                "description": "jobId of the approver the caller is acting for as their approval delegate"
+              }
+            ]
+          },
+          "docs": "Update an existing approval request"
+        },
+        {
+          "info": {
+            "name": "Delete an approval request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/:approvalRequestId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Approval request id"
+              }
+            ]
+          },
+          "docs": "Delete an approval request"
+        },
+        {
+          "info": {
+            "name": "Reassigning an approver at a stage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/:approvalRequestId/reassign-approver",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalRequestId",
+                "value": "",
+                "type": "path",
+                "description": "approval request id"
+              }
+            ]
+          },
+          "docs": "Reassigning an approver at a stage"
+        },
+        {
+          "info": {
+            "name": "Send a reminder for a stage reviewer in an existing approval request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/request/:approvalRequestId/send-reminder",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalRequestId",
+                "value": "",
+                "type": "path",
+                "description": "approval request id"
+              }
+            ]
+          },
+          "docs": "Send a reminder for a stage reviewer in an existing approval request"
+        },
+        {
+          "info": {
+            "name": "Return all approval chain stages for an approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/stage",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return all approval chain stages for an approval chain"
+        },
+        {
+          "info": {
+            "name": "Create an approval chain stage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/stage",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              }
+            ]
+          },
+          "docs": "Create an approval chain stage"
+        },
+        {
+          "info": {
+            "name": "Return all approval chain stages for an approval chain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/stage/:approvalChainStageId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalChainStageId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain stage id"
+              }
+            ]
+          },
+          "docs": "Return all approval chain stages for an approval chain"
+        },
+        {
+          "info": {
+            "name": "Update an existing approval chain stage",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/stage/:approvalChainStageId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalChainStageId",
+                "value": "",
+                "type": "path",
+                "description": "approval chain stage id"
+              }
+            ]
+          },
+          "docs": "Update an existing approval chain stage"
+        },
+        {
+          "info": {
+            "name": "Delete an approval chain stage",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/approval-chain/:approvalChainId/stage/:approvalChainStageId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "approvalChainId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain id"
+              },
+              {
+                "name": "approvalChainStageId",
+                "value": "",
+                "type": "path",
+                "description": "Approval chain stage id"
+              }
+            ]
+          },
+          "docs": "Delete an approval chain stage"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access message API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "message",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/message",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new message"
+        },
+        {
+          "info": {
+            "name": "Sets each of the designated message's `readAt` property",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/message/bulk/read",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Sets each of the designated message's `readAt` property"
+        },
+        {
+          "info": {
+            "name": "Marks each message as `seen`",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/message/bulk/seen",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Marks each message as `seen`"
+        },
+        {
+          "info": {
+            "name": "Return all messages for a particular user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/message/me",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Message \"type\" (WEB, CHAT, or EMAIL)"
+              },
+              {
+                "name": "unreadOnly",
+                "value": "",
+                "type": "query",
+                "description": "Message \"status\" (read or unread)"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "MessageId to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit"
+              }
+            ]
+          },
+          "docs": "Return all messages for a particular user"
+        },
+        {
+          "info": {
+            "name": "Return a particular message by key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/message/me/:messageKey",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "messageKey",
+                "value": "",
+                "type": "path",
+                "description": "Message key"
+              }
+            ]
+          },
+          "docs": "Return a particular message by key"
+        },
+        {
+          "info": {
+            "name": "Return a particular message by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/message/:messageId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path",
+                "description": "Message id"
+              }
+            ]
+          },
+          "docs": "Return a particular message by id"
+        },
+        {
+          "info": {
+            "name": "Sets the designated message's `readAt` property",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/message/:messageId/read",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path",
+                "description": "Message id"
+              }
+            ]
+          },
+          "docs": "Sets the designated message's `readAt` property"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

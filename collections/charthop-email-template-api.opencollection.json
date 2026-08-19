@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access email-template API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "email-template",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new email template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/email-template"
+          },
+          "docs": "Create a new email template"
+        },
+        {
+          "info": {
+            "name": "Return all essential email templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/email-template/essential"
+          },
+          "docs": "Return all essential email templates"
+        },
+        {
+          "info": {
+            "name": "Return the email template by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/email-template/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Email template name"
+              }
+            ]
+          },
+          "docs": "Return the email template by name"
+        },
+        {
+          "info": {
+            "name": "Return all non-essential email templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/email-template/non-essential"
+          },
+          "docs": "Return all non-essential email templates"
+        },
+        {
+          "info": {
+            "name": "Update an existing email template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/email-template/:emailTemplateId",
+            "params": [
+              {
+                "name": "emailTemplateId",
+                "value": "",
+                "type": "path",
+                "description": "Email template id"
+              }
+            ]
+          },
+          "docs": "Update an existing email template"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,3066 @@
+{
+  "item": [
+    {
+      "id": "ea98d571-fd7e-4288-a736-5443ca5e44fe",
+      "name": "timeOffPolicy",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "391e6551-2858-401e-b915-dea8e79575e8",
+          "name": "Create a time off policy",
+          "request": {
+            "name": "Create a time off policy",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"guidelines\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"holidayCalendarId\": \"<string>\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9af5b41d-56cd-4e7d-a7bf-e6fe1cf3372b",
+              "name": "created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"US Part-Time/Intern\",\n  \"status\": \"ACTIVE\",\n  \"filter\": \"string\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"string\",\n  \"type\": \"SICK\",\n  \"allocationType\": \"ACCRUAL\",\n  \"annualAllocation\": 7051.332139373399,\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": 6907.2966728619,\n  \"minBalance\": 147.89478936586664,\n  \"enableCarryOverBalance\": true,\n  \"maxCarryOverBalance\": 5030.946679210339,\n  \"carryOverExpirationDate\": \"string\",\n  \"carryOverExpirationMonths\": 1649,\n  \"enablePartialDayRequests\": false,\n  \"partialDayGranularity\": 5101.732875448593,\n  \"enablePartialDayPeriod\": true,\n  \"disableRequests\": true,\n  \"noteRequired\": true,\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": false,\n  \"prorationRounding\": \"HALF\",\n  \"yearStartDate\": \"string\",\n  \"policyFromDate\": \"1999-09-26\",\n  \"policyUntilDate\": \"1953-05-13\",\n  \"workDays\": [\n    \"WEDNESDAY\",\n    \"SATURDAY\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ],\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"WEB\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6b1fbb0-d8aa-4c26-b8e1-2a653f8eadd5",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "53c502cb-8e1b-46ed-94cf-3057536de7bb",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "017aa6e9-8876-4b80-b6e1-21e59e744d50",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ecbb791-d7c9-4ef1-83a4-3ab1d31fd4c7",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6b3ad4ec-1c07-4666-9695-96bc704f7aa6",
+          "name": "Return all policies in the organization",
+          "request": {
+            "name": "Return all policies in the organization",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "From result id"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dfea22a0-c243-41fc-8445-4abb9e5370ea",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"name\": \"US Part-Time/Intern\",\n      \"status\": \"ACTIVE\",\n      \"filter\": \"string\",\n      \"displayName\": \"PTO\",\n      \"description\": \"Annual sick days allotted to employees\",\n      \"guidelines\": \"string\",\n      \"type\": \"MILITARY\",\n      \"allocationType\": \"UNLIMITED\",\n      \"annualAllocation\": 4520.670291593715,\n      \"accrualConfig\": {\n        \"frequency\": \"<string>\",\n        \"accrualOffsetFromStartDate\": \"<integer>\",\n        \"monthlyDaysOfMonth\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"weeklyStartDate\": \"<date>\",\n        \"weeklyIncrement\": \"<integer>\",\n        \"balanceCapInWholeDays\": \"<integer>\"\n      },\n      \"maxConsecutiveDaysPerRequest\": 2865.542548568245,\n      \"minBalance\": 2414.542374428831,\n      \"enableCarryOverBalance\": false,\n      \"maxCarryOverBalance\": 7694.267890201446,\n      \"carryOverExpirationDate\": \"string\",\n      \"carryOverExpirationMonths\": 2220,\n      \"enablePartialDayRequests\": true,\n      \"partialDayGranularity\": 1121.8396766258743,\n      \"enablePartialDayPeriod\": true,\n      \"disableRequests\": false,\n      \"noteRequired\": false,\n      \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n      \"disableProratedAllocation\": true,\n      \"prorationRounding\": \"NEAREST\",\n      \"yearStartDate\": \"string\",\n      \"policyFromDate\": \"1967-12-24\",\n      \"policyUntilDate\": \"1962-07-28\",\n      \"workDays\": [\n        \"FRIDAY\",\n        \"TUESDAY\"\n      ],\n      \"policyEvents\": [\n        {\n          \"dateExpr\": \"<string>\",\n          \"action\": {\n            \"type\": \"<string>\",\n            \"exprString\": \"<string>\"\n          },\n          \"noteExpr\": \"<string>\",\n          \"groupId\": \"588f7ee98f138b19220041a7\",\n          \"title\": \"Tenure milestones\"\n        },\n        {\n          \"dateExpr\": \"<string>\",\n          \"action\": {\n            \"type\": \"<string>\",\n            \"exprString\": \"<string>\"\n          },\n          \"noteExpr\": \"<string>\",\n          \"groupId\": \"588f7ee98f138b19220041a7\",\n          \"title\": \"Tenure milestones\"\n        }\n      ],\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"name\": \"US Part-Time/Intern\",\n      \"status\": \"ACTIVE\",\n      \"filter\": \"string\",\n      \"displayName\": \"PTO\",\n      \"description\": \"Annual sick days allotted to employees\",\n      \"guidelines\": \"string\",\n      \"type\": \"PARENTAL\",\n      \"allocationType\": \"UPFRONT\",\n      \"annualAllocation\": 9179.25299735272,\n      \"accrualConfig\": {\n        \"frequency\": \"<string>\",\n        \"accrualOffsetFromStartDate\": \"<integer>\",\n        \"monthlyDaysOfMonth\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"weeklyStartDate\": \"<date>\",\n        \"weeklyIncrement\": \"<integer>\",\n        \"balanceCapInWholeDays\": \"<integer>\"\n      },\n      \"maxConsecutiveDaysPerRequest\": 8268.974155076006,\n      \"minBalance\": 1211.7878483319043,\n      \"enableCarryOverBalance\": false,\n      \"maxCarryOverBalance\": 3968.497855492089,\n      \"carryOverExpirationDate\": \"string\",\n      \"carryOverExpirationMonths\": 833,\n      \"enablePartialDayRequests\": true,\n      \"partialDayGranularity\": 5126.815097215656,\n      \"enablePartialDayPeriod\": true,\n      \"disableRequests\": true,\n      \"noteRequired\": false,\n      \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n      \"disableProratedAllocation\": false,\n      \"prorationRounding\": \"UP\",\n      \"yearStartDate\": \"string\",\n      \"policyFromDate\": \"1968-06-06\",\n      \"policyUntilDate\": \"2008-02-22\",\n      \"workDays\": [\n        \"WEDNESDAY\",\n        \"SUNDAY\"\n      ],\n      \"policyEvents\": [\n        {\n          \"dateExpr\": \"<string>\",\n          \"action\": {\n            \"type\": \"<string>\",\n            \"exprString\": \"<string>\"\n          },\n          \"noteExpr\": \"<string>\",\n          \"groupId\": \"588f7ee98f138b19220041a7\",\n          \"title\": \"Tenure milestones\"\n        },\n        {\n          \"dateExpr\": \"<string>\",\n          \"action\": {\n            \"type\": \"<string>\",\n            \"exprString\": \"<string>\"\n          },\n          \"noteExpr\": \"<string>\",\n          \"groupId\": \"588f7ee98f138b19220041a7\",\n          \"title\": \"Tenure milestones\"\n        }\n      ],\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab1d158a-b44b-4917-bbbc-853e46f5568c",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3bd771a7-34f0-4c01-ad58-c8bb50946cff",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5b62cf47-ac64-4604-8142-55461f94ee0f",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "129bfe74-5927-4228-b712-bd3d4d98f0af",
+          "name": "Return time off balances for a given policy and date",
+          "request": {
+            "name": "Return time off balances for a given policy and date",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                "balances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "policies",
+                  "value": "<string>",
+                  "description": "Policy Ids to retrieve, comma-separated"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date"
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "<string>",
+                  "description": "Data format to use; default is json, can also use json-extended or json-readable"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0c1690ec-e6d2-4a59-8c18-5ae33516a6a4",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policies",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7d73c00-3f7a-4866-a31c-b63316c15e6c",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policies",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c1cc9a0f-e3c5-474f-9374-0b1a0ef7359c",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policies",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c2918b4c-6135-4dbd-9324-664ca6bfcfbe",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policies",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f32611c-7a3b-4e74-bfdf-e3ef709063c9",
+          "name": "Return time off balances per policy for a given person",
+          "request": {
+            "name": "Return time off balances per policy for a given person",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                "balances",
+                ":personId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date"
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "<string>",
+                  "description": "Data format to use; default is json, can also use json-extended or json-readable"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "personId",
+                  "description": "(Required) Person ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a0e7368e-edd7-4dcb-a0a8-dfd6e3126d2d",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":personId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "personId",
+                      "description": "(Required) Person ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b02bab07-0a7c-4cfd-b9ce-603463281811",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":personId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "personId",
+                      "description": "(Required) Person ID"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3d05b87-275a-436e-b56b-9ea789d9dec1",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":personId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "personId",
+                      "description": "(Required) Person ID"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "60e5959c-2879-4919-9f15-2d0da5f545d9",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":personId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "personId",
+                      "description": "(Required) Person ID"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0e8102c4-dc6f-4db5-8724-40705d479d76",
+          "name": "Adjust time off balances for a group of people on a given policy and effective date",
+          "request": {
+            "name": "Adjust time off balances for a group of people on a given policy and effective date",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                "balances",
+                ":policyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Effective Date"
+                },
+                {
+                  "disabled": false,
+                  "key": "enterMatching",
+                  "value": "<boolean>",
+                  "description": "Add adjustment even if it matches current balance"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "policyId",
+                  "description": "(Required) Policy id associated with balances"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"balances\": [\n    {\n      \"personId\": \"<string>\",\n      \"days\": \"<number>\"\n    },\n    {\n      \"personId\": \"<string>\",\n      \"days\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7108f53a-81ec-4960-9ad5-b29fbf44da88",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "enterMatching",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) Policy id associated with balances"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"balances\": [\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    },\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"ERROR\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MCP\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 7433.461323904718,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40a68368-0699-40c6-adb9-a88c506dc488",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "enterMatching",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) Policy id associated with balances"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"balances\": [\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    },\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0357a9c8-f1e0-44c1-b1f4-c9603c1c182f",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "enterMatching",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) Policy id associated with balances"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"balances\": [\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    },\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0a7c566b-9732-44a2-ab72-ede1a09f322b",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    "balances",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "enterMatching",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) Policy id associated with balances"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"balances\": [\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    },\n    {\n      \"personId\": \"588f7ee98f138b19220041a7\",\n      \"days\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d505fdd-41de-43c7-953a-93774ec6325c",
+          "name": "Return a particular time off policy by id",
+          "request": {
+            "name": "Return a particular time off policy by id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                ":policyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "policyId",
+                  "description": "(Required) TimeOff policy id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7967edbf-a085-487e-82de-af69b9c486e6",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"US Part-Time/Intern\",\n  \"status\": \"INACTIVE\",\n  \"filter\": \"string\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"string\",\n  \"type\": \"OFFSITE\",\n  \"allocationType\": \"UNLIMITED\",\n  \"annualAllocation\": 4778.854328446608,\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": 5730.914048414826,\n  \"minBalance\": 6855.189393950829,\n  \"enableCarryOverBalance\": false,\n  \"maxCarryOverBalance\": 3571.295291943437,\n  \"carryOverExpirationDate\": \"string\",\n  \"carryOverExpirationMonths\": 3782,\n  \"enablePartialDayRequests\": true,\n  \"partialDayGranularity\": 7298.8280158393945,\n  \"enablePartialDayPeriod\": false,\n  \"disableRequests\": true,\n  \"noteRequired\": false,\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": false,\n  \"prorationRounding\": \"HALF\",\n  \"yearStartDate\": \"string\",\n  \"policyFromDate\": \"1955-11-13\",\n  \"policyUntilDate\": \"1958-12-31\",\n  \"workDays\": [\n    \"SATURDAY\",\n    \"TUESDAY\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ],\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90af552f-7f5f-4fbc-8678-f7fe72469bfc",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f7ee8aa4-1a2f-4902-b6ba-4c8d0918eb10",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4b420271-5ec8-412a-87b1-c417a186ac0a",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9749dc09-51f0-48f3-a718-f9a651872d6f",
+          "name": "Update an existing time off policy",
+          "request": {
+            "name": "Update an existing time off policy",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                ":policyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "policyId",
+                  "description": "(Required) TimeOff id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"<string>\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5cf6bdd5-476d-461f-9508-13f4bbeb9c99",
+              "name": "no content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fc04ec11-5329-4924-a893-2edcd88433c4",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bd7ee49b-2dfe-46d5-ab3d-69c8061b066b",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5fb10451-bbc9-4bd5-9176-94cfdfda0378",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bffd89e5-453a-4ade-83a3-2988db303d1d",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0f5d5890-d70c-4e83-a0a8-8e32a775642a",
+          "name": "Delete a time off request",
+          "request": {
+            "name": "Delete a time off request",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                ":policyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "policyId",
+                  "description": "(Required) TimeOff policy id"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3d00be12-71ba-4ef1-a03b-848e79f843ad",
+              "name": "time off policy deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ed085beb-431a-411a-9884-58e00000a625",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6812d968-233c-450d-a5ae-91e32116de80",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "316bf2c0-c92a-4884-b9cf-77396a247d79",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "80844a8d-126c-456f-a5b7-51d1fc8f34ec",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c6ed00c-e021-4bfb-8c8d-62772df32526",
+          "name": "Duplicate a time off policy",
+          "request": {
+            "name": "Duplicate a time off policy",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                ":policyId",
+                "duplicate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "policyId",
+                  "description": "(Required) TimeOff policy id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2d2aabda-9eea-4222-901f-896e4202e8f4",
+              "name": "created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "duplicate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"US Part-Time/Intern\",\n  \"status\": \"INACTIVE\",\n  \"filter\": \"string\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"string\",\n  \"type\": \"OFFSITE\",\n  \"allocationType\": \"UNLIMITED\",\n  \"annualAllocation\": 4778.854328446608,\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": 5730.914048414826,\n  \"minBalance\": 6855.189393950829,\n  \"enableCarryOverBalance\": false,\n  \"maxCarryOverBalance\": 3571.295291943437,\n  \"carryOverExpirationDate\": \"string\",\n  \"carryOverExpirationMonths\": 3782,\n  \"enablePartialDayRequests\": true,\n  \"partialDayGranularity\": 7298.8280158393945,\n  \"enablePartialDayPeriod\": false,\n  \"disableRequests\": true,\n  \"noteRequired\": false,\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": false,\n  \"prorationRounding\": \"HALF\",\n  \"yearStartDate\": \"string\",\n  \"policyFromDate\": \"1955-11-13\",\n  \"policyUntilDate\": \"1958-12-31\",\n  \"workDays\": [\n    \"SATURDAY\",\n    \"TUESDAY\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ],\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"MOBILE\"\n  },\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62f6a020-a358-4256-81f1-232c41fff938",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "duplicate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5d935d0a-895c-4682-b2aa-4338338beab5",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "duplicate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "00c4b8ed-be5f-403c-a657-b0e07d913e86",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "duplicate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e0d20ee-02aa-4ef8-bc30-091df33f623e",
+          "name": "Estimate accrual value for policy",
+          "request": {
+            "name": "Estimate accrual value for policy",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "timeoff",
+                "policy",
+                ":policyId",
+                "estimateAccruals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "policyId",
+                  "description": "(Required) TimeOff policy id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"<string>\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2dff98a4-c19e-448d-9180-6e8f7ddc0f8c",
+              "name": "accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "estimateAccruals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"daysPerPeriod\": 8820.911670218446\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1bdc8e1-09e7-44c8-a965-783e7cf793cf",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "estimateAccruals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7ed55beb-1c97-4bb5-9e64-e90cc4111657",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "estimateAccruals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f2321003-0dd4-453f-9265-667d4b297a71",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "estimateAccruals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3c1c1a9-3d06-499a-8071-c99b0a6287c8",
+              "name": "Not Implemented",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "timeoff",
+                    "policy",
+                    ":policyId",
+                    "estimateAccruals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "policyId",
+                      "description": "(Required) TimeOff policy id"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Part-Time/Intern\",\n  \"displayName\": \"PTO\",\n  \"description\": \"Annual sick days allotted to employees\",\n  \"guidelines\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"allocationType\": \"<string>\",\n  \"annualAllocation\": \"<number>\",\n  \"accrualConfig\": {\n    \"frequency\": \"<string>\",\n    \"accrualOffsetFromStartDate\": \"<integer>\",\n    \"monthlyDaysOfMonth\": [\n      \"<integer>\",\n      \"<integer>\"\n    ],\n    \"weeklyStartDate\": \"<date>\",\n    \"weeklyIncrement\": \"<integer>\",\n    \"balanceCapInWholeDays\": \"<integer>\"\n  },\n  \"maxConsecutiveDaysPerRequest\": \"<number>\",\n  \"minBalance\": \"<number>\",\n  \"enableCarryOverBalance\": \"<boolean>\",\n  \"maxCarryOverBalance\": \"<number>\",\n  \"carryOverExpirationDate\": \"<string>\",\n  \"carryOverExpirationMonths\": \"<integer>\",\n  \"enablePartialDayRequests\": \"<boolean>\",\n  \"partialDayGranularity\": \"<number>\",\n  \"enablePartialDayPeriod\": \"<boolean>\",\n  \"disableRequests\": \"<boolean>\",\n  \"noteRequired\": \"<boolean>\",\n  \"filter\": \"<string>\",\n  \"holidayCalendarId\": \"588f7ee98f138b19220041a7\",\n  \"disableProratedAllocation\": \"<boolean>\",\n  \"prorationRounding\": \"<string>\",\n  \"yearStartDate\": \"<string>\",\n  \"policyFromDate\": \"<date>\",\n  \"policyUntilDate\": \"<date>\",\n  \"workDays\": [\n    \"<string>\"\n  ],\n  \"policyEvents\": [\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    },\n    {\n      \"dateExpr\": \"<string>\",\n      \"action\": {\n        \"type\": \"<string>\",\n        \"exprString\": \"<string>\"\n      },\n      \"noteExpr\": \"<string>\",\n      \"groupId\": \"588f7ee98f138b19220041a7\",\n      \"title\": \"Tenure milestones\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5d9ee520-ce9b-4765-9a86-c35db61d6256",
+    "name": "ChartHop access timeOffPolicy API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

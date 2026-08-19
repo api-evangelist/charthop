@@ -1,0 +1,433 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access template API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "template",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all templates in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type of template to filter by"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Template id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return all templates in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a template"
+        },
+        {
+          "info": {
+            "name": "Delete a set of templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/bulk/delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Delete a set of templates"
+        },
+        {
+          "info": {
+            "name": "Duplicate a set of templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/bulk/duplicate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Duplicate a set of templates"
+        },
+        {
+          "info": {
+            "name": "Create a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/email"
+          },
+          "docs": "Create a template"
+        },
+        {
+          "info": {
+            "name": "Return a particular email template by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/email/:templateName",
+            "params": [
+              {
+                "name": "templateName",
+                "value": "",
+                "type": "path",
+                "description": "Template name"
+              }
+            ]
+          },
+          "docs": "Return a particular email template by name"
+        },
+        {
+          "info": {
+            "name": "Update an existing template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/email/:templateName",
+            "params": [
+              {
+                "name": "templateName",
+                "value": "",
+                "type": "path",
+                "description": "Template name"
+              }
+            ]
+          },
+          "docs": "Update an existing template"
+        },
+        {
+          "info": {
+            "name": "Delete a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/email/:templateName",
+            "params": [
+              {
+                "name": "templateName",
+                "value": "",
+                "type": "path",
+                "description": "Template name"
+              }
+            ]
+          },
+          "docs": "Delete a template"
+        },
+        {
+          "info": {
+            "name": "Return a particular template by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template id"
+              }
+            ]
+          },
+          "docs": "Return a particular template by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template id"
+              }
+            ]
+          },
+          "docs": "Update an existing template"
+        },
+        {
+          "info": {
+            "name": "Delete a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template id"
+              }
+            ]
+          },
+          "docs": "Delete a template"
+        },
+        {
+          "info": {
+            "name": "If the template is a file template, download the file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId/download",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template id"
+              }
+            ]
+          },
+          "docs": "If the template is a file template, download the file"
+        },
+        {
+          "info": {
+            "name": "Automatically generate PDFs of the templates, and distribute emails to managers and people to download",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId/generate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template id"
+              }
+            ]
+          },
+          "docs": "Automatically generate PDFs of the templates, and distribute emails to managers and people to download"
+        },
+        {
+          "info": {
+            "name": "Preview template content without saving it",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId/preview",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "query",
+                "description": "Job id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Format"
+              },
+              {
+                "name": "changeGroupingType",
+                "value": "",
+                "type": "query",
+                "description": "Type of change grouping"
+              },
+              {
+                "name": "changeGroupingId",
+                "value": "",
+                "type": "query",
+                "description": "Change grouping id to query (null for primary)"
+              },
+              {
+                "name": "useScenarioChanges",
+                "value": "",
+                "type": "query",
+                "description": "Generate documents for only the changes that are in the scenario. This option also allows you to reference the change within the template, which is otherwise not allowed"
+              }
+            ]
+          },
+          "docs": "Preview template content without saving it"
+        },
+        {
+          "info": {
+            "name": "Render a template by evaluating it against an existing job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/template/:templateId/render",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template id"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "query",
+                "description": "Job id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Format"
+              },
+              {
+                "name": "changeGroupingType",
+                "value": "",
+                "type": "query",
+                "description": "Type of change grouping"
+              },
+              {
+                "name": "changeGroupingId",
+                "value": "",
+                "type": "query",
+                "description": "Change grouping id to query (null for primary)"
+              },
+              {
+                "name": "useScenarioChanges",
+                "value": "",
+                "type": "query",
+                "description": "Generate documents for only the changes that are in the scenario. This option also allows you to reference the change within the template, which is otherwise not allowed"
+              }
+            ]
+          },
+          "docs": "Render a template by evaluating it against an existing job"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

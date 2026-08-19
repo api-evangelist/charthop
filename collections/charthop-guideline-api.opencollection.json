@@ -1,0 +1,163 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access guideline API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "guideline",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all guidelines for a given comp review",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/guideline",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "compReviewId",
+                "value": "",
+                "type": "query",
+                "description": "comp review id"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "include deleted guidelines"
+              }
+            ]
+          },
+          "docs": "Get all guidelines for a given comp review"
+        },
+        {
+          "info": {
+            "name": "Create a new guideline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/guideline",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Create a new guideline"
+        },
+        {
+          "info": {
+            "name": "Get a specific guideline",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/guideline/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired guideline"
+              }
+            ]
+          },
+          "docs": "Get a specific guideline"
+        },
+        {
+          "info": {
+            "name": "Update a guideline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/guideline/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Update a guideline"
+        },
+        {
+          "info": {
+            "name": "Delete a guideline",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/guideline/:id",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a guideline"
+        },
+        {
+          "info": {
+            "name": "Calculate the matrix values for a specific guideline (which may apply to multiple scenarios in the comp review)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/guideline/:id/calculate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the desired guideline"
+              }
+            ]
+          },
+          "docs": "Calculate the matrix values for a specific guideline (which may apply to multiple scenarios in the comp review)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,730 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access app API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "app",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all publicly visible global apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app",
+            "params": [
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Tag to filter by"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "App id to start from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return all publicly visible global apps"
+        },
+        {
+          "info": {
+            "name": "Create a new app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app"
+          },
+          "docs": "Create a new app"
+        },
+        {
+          "info": {
+            "name": "Get all active installs of this app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/install/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              },
+              {
+                "name": "orgTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of org types to include. Defaults to all org types."
+              },
+              {
+                "name": "hasRunProcess",
+                "value": "",
+                "type": "query",
+                "description": "Whether to require that the app has run at least one process. Defaults to true."
+              },
+              {
+                "name": "internalOptions",
+                "value": "",
+                "type": "query",
+                "description": "Filter app users by internal option key-value pair"
+              }
+            ]
+          },
+          "docs": "Get all active installs of this app"
+        },
+        {
+          "info": {
+            "name": "Return a particular app by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/name/:appName",
+            "params": [
+              {
+                "name": "appName",
+                "value": "",
+                "type": "path",
+                "description": "App name"
+              }
+            ]
+          },
+          "docs": "Return a particular app by name"
+        },
+        {
+          "info": {
+            "name": "Send an email notification to the configured notify users, on behalf of an app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/notify"
+          },
+          "docs": "Send an email notification to the configured notify users, on behalf of an app"
+        },
+        {
+          "info": {
+            "name": "Return all active apps available for a particular org",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by type (app, bundle)"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tags"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "App id to start from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return all active apps available for a particular org"
+        },
+        {
+          "info": {
+            "name": "Find installed app users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by type (app, bundle)"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tag"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Filter by App User statuses, comma-separated. Accepted values: ['NORMAL', 'INACTIVE', 'UNINSTALLED']"
+              },
+              {
+                "name": "includeFormer",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include app users with NONE access to orgs they pertain to.  Default is false"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "App id to start from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Find installed app users"
+        },
+        {
+          "info": {
+            "name": "Install an app for a particular org",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Install an app for a particular org"
+        },
+        {
+          "info": {
+            "name": "Get an installed app by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/name/:appName",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appName",
+                "value": "",
+                "type": "path",
+                "description": "App name"
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "If the installed appUser is inactive, load inactive instead"
+              }
+            ]
+          },
+          "docs": "Get an installed app by name"
+        },
+        {
+          "info": {
+            "name": "Validate the installation of an app for a particular org",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/validate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Validate the installation of an app for a particular org"
+        },
+        {
+          "info": {
+            "name": "Get an installed app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Get an installed app"
+        },
+        {
+          "info": {
+            "name": "Update the settings of an installed app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "If the installed appUser is inactive, load inactive instead"
+              }
+            ]
+          },
+          "docs": "Update the settings of an installed app"
+        },
+        {
+          "info": {
+            "name": "Uninstall an app",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              },
+              {
+                "name": "keepEntityIds",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of bundle-installed entities to delete -- if this parameter is omitted, all bundle-installed entities will be deleted"
+              }
+            ]
+          },
+          "docs": "Uninstall an app"
+        },
+        {
+          "info": {
+            "name": "Execute one configured external API operation against the live external service (the app config 'Test' action). Requires readExternal for a read-only operation, writeExternal otherwise; a non-read-only operation runs against the live API and may create, change, or delete real data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/api-operation/:operation",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              },
+              {
+                "name": "operation",
+                "value": "",
+                "type": "path",
+                "description": "Operation id"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor (opaque 'next' from a prior result)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return"
+              },
+              {
+                "name": "tokenLevel",
+                "value": "",
+                "type": "query",
+                "description": "OAuth identity to call as: USER (caller's own connection) or ORG (shared connection). Defaults to the installation's mode."
+              }
+            ]
+          },
+          "docs": "Execute one configured external API operation against the live external service (the app config 'Test' action). Requires readExternal for a read-only operation, writeExternal otherwise; a non-read-only operation runs against the live API and may create, change, or delete real data."
+        },
+        {
+          "info": {
+            "name": "Retrieve an Oauth2 authorization code for this app, which can be exchanged for an access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/code",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Scopes"
+              }
+            ]
+          },
+          "docs": "Retrieve an Oauth2 authorization code for this app, which can be exchanged for an access token"
+        },
+        {
+          "info": {
+            "name": "List an installed agent's active MCP connections (one per connected user token)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/connections",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "List an installed agent's active MCP connections (one per connected user token)"
+        },
+        {
+          "info": {
+            "name": "Revoke MCP connections for an installed agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/connections",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Revoke MCP connections for an installed agent"
+        },
+        {
+          "info": {
+            "name": "Disable automatic sync for an app installation whose credentials are failing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/disable-sync",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Disable automatic sync for an app installation whose credentials are failing"
+        },
+        {
+          "info": {
+            "name": "Retrieve the current token for this app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/installdata/:installDataName",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              },
+              {
+                "name": "installDataName",
+                "value": "",
+                "type": "path",
+                "description": "Name"
+              }
+            ]
+          },
+          "docs": "Retrieve the current token for this app"
+        },
+        {
+          "info": {
+            "name": "Force-refresh the vendor OAuth token for an app installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/oauth-token/refresh",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Force-refresh the vendor OAuth token for an app installation"
+        },
+        {
+          "info": {
+            "name": "Run an installed app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/run",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Run an installed app"
+        },
+        {
+          "info": {
+            "name": "Retrieve the current token for this app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/token",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Retrieve the current token for this app"
+        },
+        {
+          "info": {
+            "name": "Generate or regenerate a long-lived access token for the app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/app/org/:orgId/install/:appUserId/token",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Generate or regenerate a long-lived access token for the app"
+        },
+        {
+          "info": {
+            "name": "Return a particular app by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/app/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              }
+            ]
+          },
+          "docs": "Return a particular app by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/app/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              }
+            ]
+          },
+          "docs": "Update an existing app"
+        },
+        {
+          "info": {
+            "name": "Delete an app",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/app/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "App id"
+              }
+            ]
+          },
+          "docs": "Delete an app"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

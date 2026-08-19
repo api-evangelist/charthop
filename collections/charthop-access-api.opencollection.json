@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "access",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return the appropriate actions that can be performed on an entity or set of entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/access/entity/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Entity type"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Entity ids"
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query",
+                "description": "Actions, defaults to update,delete"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to check, defaults to all fields"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date, defaults to today"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id, defaults to primary"
+              }
+            ]
+          },
+          "docs": "Return the appropriate actions that can be performed on an entity or set of entities"
+        },
+        {
+          "info": {
+            "name": "Return the appropriate actions that can be performed on the ui.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/access/ui",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Return the appropriate actions that can be performed on the ui."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

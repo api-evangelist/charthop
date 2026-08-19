@@ -1,0 +1,403 @@
+{
+  "item": [
+    {
+      "id": "2741c46b-f574-4b8a-8bb1-8ffbeeec58df",
+      "name": "search",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fbb43765-4d90-46e3-9eb4-22ef0e7af9ba",
+          "name": "Return people, job, group, field, goal, and other entity data for a particular org that match a provided search string",
+          "request": {
+            "name": "Return people, job, group, field, goal, and other entity data for a particular org that match a provided search string",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Query search term"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityTypes",
+                  "value": "<string>",
+                  "description": "Entity types"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Limit"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeFormer",
+                  "value": "<boolean>",
+                  "description": "Include former users or persons"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date"
+                },
+                {
+                  "disabled": false,
+                  "key": "scenarioId",
+                  "value": "<string>",
+                  "description": "Scenario Id"
+                },
+                {
+                  "disabled": false,
+                  "key": "canAccess",
+                  "value": "<string>",
+                  "description": "entity action pairs that can be accessed"
+                },
+                {
+                  "disabled": false,
+                  "key": "returnEntityBody",
+                  "value": "<boolean>",
+                  "description": "Include full entity body in results"
+                },
+                {
+                  "disabled": false,
+                  "key": "terminatedWithoutBackfill",
+                  "value": "<boolean>",
+                  "description": "Filter to only terminated jobs without backfill"
+                },
+                {
+                  "disabled": false,
+                  "key": "jobState",
+                  "value": "<string>",
+                  "description": "Filter jobs by state (OPEN or FILLED)"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "CQL filter expression applied to job results (currently only the jobs entity type honors this)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2e55883f-9afb-4748-ac37-7b05000180d7",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeFormer",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "canAccess",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "returnEntityBody",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "terminatedWithoutBackfill",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "jobState",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4e79b5b-c572-49f9-84f5-bfbcf34c4ac6",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeFormer",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "canAccess",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "returnEntityBody",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "terminatedWithoutBackfill",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "jobState",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9fe63ba3-9e04-4567-809a-f4dabf982324",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeFormer",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "canAccess",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "returnEntityBody",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "terminatedWithoutBackfill",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "jobState",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8e43bc0a-a9ee-4e6d-ae48-493aaa8df398",
+    "name": "ChartHop access search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

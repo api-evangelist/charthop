@@ -1,0 +1,150 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access approval-delegate API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "approval-delegate",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the acting user's approval delegates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/approval-delegate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (id or slug)"
+              }
+            ]
+          },
+          "docs": "List the acting user's approval delegates"
+        },
+        {
+          "info": {
+            "name": "List every approver's delegates in the org, grouped by approver and enriched with user/job refs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/approval-delegate/all",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (id or slug)"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated actions to return per-approver access for (e.g. update)"
+              }
+            ]
+          },
+          "docs": "List every approver's delegates in the org, grouped by approver and enriched with user/job refs"
+        },
+        {
+          "info": {
+            "name": "Set or remove approval delegates on behalf of users in a single atomic batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/approval-delegate/bulk",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (id or slug)"
+              }
+            ]
+          },
+          "docs": "Set or remove approval delegates on behalf of users in a single atomic batch"
+        },
+        {
+          "info": {
+            "name": "List the approvers the acting user is a delegate for",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/approval-delegate/delegated-to-me",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (id or slug)"
+              }
+            ]
+          },
+          "docs": "List the approvers the acting user is a delegate for"
+        },
+        {
+          "info": {
+            "name": "Set (or replace) the delegate for the given approval type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v2/org/:orgId/approval-delegate/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Approval type"
+              }
+            ]
+          },
+          "docs": "Set (or replace) the delegate for the given approval type"
+        },
+        {
+          "info": {
+            "name": "Remove the delegate for the given approval type",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/approval-delegate/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Approval type"
+              }
+            ]
+          },
+          "docs": "Remove the delegate for the given approval type"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

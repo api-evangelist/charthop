@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access product API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "product",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/product"
+          },
+          "docs": "Return all products"
+        },
+        {
+          "info": {
+            "name": "Create a new product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/product"
+          },
+          "docs": "Create a new product"
+        },
+        {
+          "info": {
+            "name": "Return all features",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/product/features"
+          },
+          "docs": "Return all features"
+        },
+        {
+          "info": {
+            "name": "Return a particular product by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/product/:productId",
+            "params": [
+              {
+                "name": "productId",
+                "value": "",
+                "type": "path",
+                "description": "Product id"
+              }
+            ]
+          },
+          "docs": "Return a particular product by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing product",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/product/:productId",
+            "params": [
+              {
+                "name": "productId",
+                "value": "",
+                "type": "path",
+                "description": "Product id"
+              }
+            ]
+          },
+          "docs": "Update an existing product"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

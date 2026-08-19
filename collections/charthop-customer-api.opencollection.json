@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access customer API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "customer",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all visible customers, paginated by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/customer",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Customer id to start from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Customer.Status. (ACTIVE/INACTIVE/TRAIL)"
+              },
+              {
+                "name": "trialAsOf",
+                "value": "",
+                "type": "query",
+                "description": "Only return customers with a product trial in progress as of this date (range inclusive)"
+              }
+            ]
+          },
+          "docs": "Return all visible customers, paginated by name"
+        },
+        {
+          "info": {
+            "name": "Create a new customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/customer"
+          },
+          "docs": "Create a new customer"
+        },
+        {
+          "info": {
+            "name": "Return a particular customer by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/customer/:customerId",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Return a particular customer by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/customer/:customerId",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Update an existing customer"
+        },
+        {
+          "info": {
+            "name": "Returns a list of all the invoices for the given customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/customer/:customerId/invoices",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Returns a list of all the invoices for the given customer"
+        },
+        {
+          "info": {
+            "name": "Returns information about the Charthop subscription for the given customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/customer/:customerId/subscription",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Returns information about the Charthop subscription for the given customer"
+        },
+        {
+          "info": {
+            "name": "Update a subscription on a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/customer/:customerId/subscription",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Update a subscription on a customer"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

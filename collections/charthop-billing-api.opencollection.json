@@ -1,0 +1,75 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access billing API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "billing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return billing information for a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/customer/:customerId/billing",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Return billing information for a customer"
+        },
+        {
+          "info": {
+            "name": "Cancel a subscription for a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/customer/:customerId/billing/cancel",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Cancel a subscription for a customer"
+        },
+        {
+          "info": {
+            "name": "Checks out customer to upgrade to pay for their subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/customer/:customerId/billing/checkout",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer id"
+              }
+            ]
+          },
+          "docs": "Checks out customer to upgrade to pay for their subscription"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

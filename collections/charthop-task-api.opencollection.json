@@ -1,0 +1,456 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access task API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "task",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all existing tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/task",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Task User id"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "query",
+                "description": "Assessment id"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Task.Status. (PENDING/DONE)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Task.Type of task (form)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity Id"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target Id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return all existing tasks"
+        },
+        {
+          "info": {
+            "name": "Create a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/task",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a task"
+        },
+        {
+          "info": {
+            "name": "Bulk delete tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/bulk-delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Bulk delete tasks"
+        },
+        {
+          "info": {
+            "name": "Return the tasks for the current user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/me",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "query",
+                "description": "Assessment id"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Task.Status. (PENDING/ACTIVE)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Task.Type of task (form)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity Id"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target Id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return the tasks for the current user"
+        },
+        {
+          "info": {
+            "name": "Query tasks for assessments in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/query",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Task User id"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "query",
+                "description": "Assessment id"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Task.Status. (PENDING/DONE)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Task.Type. (FORM_SUBMIT/CHANGE_APPROVE)"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity Id"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "query",
+                "description": "Target Id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Job id to start paginating from"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "returnFormCompletionLinks",
+                "value": "",
+                "type": "query",
+                "description": "Return links that employees would use to complete a task if true else return links that direct to the form settings"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "query",
+                "description": "Task id"
+              },
+              {
+                "name": "createAtFrom",
+                "value": "",
+                "type": "query",
+                "description": "Created at from (inclusive)"
+              },
+              {
+                "name": "createAtUntil",
+                "value": "",
+                "type": "query",
+                "description": "Created at until (exclusive)"
+              }
+            ]
+          },
+          "docs": "Query tasks for assessments in the organization"
+        },
+        {
+          "info": {
+            "name": "Send a reminder notification for a particular task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/remind",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Send a reminder notification for a particular task"
+        },
+        {
+          "info": {
+            "name": "Delete task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/:assessmentId/:formId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "assessmentId",
+                "value": "",
+                "type": "path",
+                "description": "Assessment id"
+              },
+              {
+                "name": "formId",
+                "value": "",
+                "type": "path",
+                "description": "Form id"
+              }
+            ]
+          },
+          "docs": "Delete task"
+        },
+        {
+          "info": {
+            "name": "Update an existing task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/:taskId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "Task id"
+              }
+            ]
+          },
+          "docs": "Update an existing task"
+        },
+        {
+          "info": {
+            "name": "Delete task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/:taskId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "Task id"
+              }
+            ]
+          },
+          "docs": "Delete task"
+        },
+        {
+          "info": {
+            "name": "Mark task done",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/:taskId/mark-done",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "Task id"
+              }
+            ]
+          },
+          "docs": "Mark task done"
+        },
+        {
+          "info": {
+            "name": "Reassign an existing task to a different user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/:taskId/reassign",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "Task id"
+              }
+            ]
+          },
+          "docs": "Reassign an existing task to a different user"
+        },
+        {
+          "info": {
+            "name": "Skip task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/task/:taskId/skip",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "Task id"
+              }
+            ]
+          },
+          "docs": "Skip task"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

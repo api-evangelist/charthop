@@ -1,0 +1,273 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access timeoff API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "timeoff",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve time off requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "query",
+                "description": "Person id to filter by"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "From date, inclusive"
+              },
+              {
+                "name": "untilDate",
+                "value": "",
+                "type": "query",
+                "description": "Until date, exclusive"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Time off id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Retrieve time off requests"
+        },
+        {
+          "info": {
+            "name": "Create a time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a time off request"
+        },
+        {
+          "info": {
+            "name": "Request time off",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/request",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Request time off"
+        },
+        {
+          "info": {
+            "name": "Validate a time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/request/validate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "ignoreRequestId",
+                "value": "",
+                "type": "query",
+                "description": "Request ID to ignore during validation (for editing)"
+              }
+            ]
+          },
+          "docs": "Validate a time off request"
+        },
+        {
+          "info": {
+            "name": "Return a particular time off request by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/:timeOffId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "timeOffId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff id"
+              }
+            ]
+          },
+          "docs": "Return a particular time off request by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/:timeOffId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "timeOffId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff id"
+              }
+            ]
+          },
+          "docs": "Update an existing time off request"
+        },
+        {
+          "info": {
+            "name": "Delete a time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/:timeOffId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "timeOffId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff id"
+              }
+            ]
+          },
+          "docs": "Delete a time off request"
+        },
+        {
+          "info": {
+            "name": "Approve a pending time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/:timeOffId/approve",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "timeOffId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff id"
+              },
+              {
+                "name": "targetApproverJobId",
+                "value": "",
+                "type": "query",
+                "description": "jobId of the approver the caller is acting for as their approval delegate"
+              }
+            ]
+          },
+          "docs": "Approve a pending time off request"
+        },
+        {
+          "info": {
+            "name": "Reject a pending time off request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/timeoff/:timeOffId/reject",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "timeOffId",
+                "value": "",
+                "type": "path",
+                "description": "TimeOff id"
+              },
+              {
+                "name": "targetApproverJobId",
+                "value": "",
+                "type": "query",
+                "description": "jobId of the approver the caller is acting for as their approval delegate"
+              }
+            ]
+          },
+          "docs": "Reject a pending time off request"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

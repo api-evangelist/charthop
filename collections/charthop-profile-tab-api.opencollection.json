@@ -1,0 +1,364 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access profile-tab API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "profile-tab",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all profile tabs in the organization paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Status to filter by"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Content id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              }
+            ]
+          },
+          "docs": "Return all profile tabs in the organization paginated"
+        },
+        {
+          "info": {
+            "name": "Create a profile tab",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a profile tab"
+        },
+        {
+          "info": {
+            "name": "Return all profile tabs applicable to a particular job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/job/:jobId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Return profile tabs that contain particular fields (comma-separated)"
+              },
+              {
+                "name": "formIds",
+                "value": "",
+                "type": "query",
+                "description": "Return profile tabs that contain particular formIds (comma-separated)"
+              }
+            ]
+          },
+          "docs": "Return all profile tabs applicable to a particular job"
+        },
+        {
+          "info": {
+            "name": "Fetch and evaluate the content of a particular profile tab id, relative to a particular job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/job/:jobId/profile-tab/:tabId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "Job id"
+              },
+              {
+                "name": "tabId",
+                "value": "",
+                "type": "path",
+                "description": "Profile tab id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              }
+            ]
+          },
+          "docs": "Fetch and evaluate the content of a particular profile tab id, relative to a particular job"
+        },
+        {
+          "info": {
+            "name": "Return all profile tabs applicable to a particular person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/person/:personId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Return profile tabs that contain particular fields (comma-separated)"
+              },
+              {
+                "name": "formIds",
+                "value": "",
+                "type": "query",
+                "description": "Return profile tabs that contain particular formIds (comma-separated)"
+              }
+            ]
+          },
+          "docs": "Return all profile tabs applicable to a particular person"
+        },
+        {
+          "info": {
+            "name": "Fetch and evaluate the content of a particular profile tab id, relative to a particular person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/person/:personId/profile-tab/:tabId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              },
+              {
+                "name": "tabId",
+                "value": "",
+                "type": "path",
+                "description": "Profile tab id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              }
+            ]
+          },
+          "docs": "Fetch and evaluate the content of a particular profile tab id, relative to a particular person"
+        },
+        {
+          "info": {
+            "name": "Evaluate the history (in the form of various cards) on a particular profile tab id, relative to a particular person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/person/:personId/profile-tab/:tabId/history",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              },
+              {
+                "name": "tabId",
+                "value": "",
+                "type": "path",
+                "description": "Profile tab id"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Search backwards in time from timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Evaluate the history (in the form of various cards) on a particular profile tab id, relative to a particular person"
+        },
+        {
+          "info": {
+            "name": "Return a particular profile tab by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/:profileTabId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "profileTabId",
+                "value": "",
+                "type": "path",
+                "description": "Content id"
+              }
+            ]
+          },
+          "docs": "Return a particular profile tab by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing profile tab",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/:profileTabId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "profileTabId",
+                "value": "",
+                "type": "path",
+                "description": "Profile tab id"
+              }
+            ]
+          },
+          "docs": "Update an existing profile tab"
+        },
+        {
+          "info": {
+            "name": "Delete a profile tab",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/profile-tab/:profileTabId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "profileTabId",
+                "value": "",
+                "type": "path",
+                "description": "Profile tab id"
+              }
+            ]
+          },
+          "docs": "Delete a profile tab"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

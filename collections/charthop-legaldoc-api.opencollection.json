@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access legalDoc API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "legalDoc",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a legal doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/legaldoc"
+          },
+          "docs": "Create a legal doc"
+        },
+        {
+          "info": {
+            "name": "Retrieve the legal doc by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/legaldoc/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "name"
+              }
+            ]
+          },
+          "docs": "Retrieve the legal doc by name"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

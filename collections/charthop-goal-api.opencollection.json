@@ -1,0 +1,284 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access goal API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "goal",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find goals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "query",
+                "description": "Person id to filter goals by (owner or support)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Group id to filter goals by"
+              },
+              {
+                "name": "personFilter",
+                "value": "",
+                "type": "query",
+                "description": "Person filter"
+              },
+              {
+                "name": "originalGoalId",
+                "value": "",
+                "type": "query",
+                "description": "Original goal id to filter by"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to filter goals as-of"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "Starting goal id for pagination"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find goals"
+        },
+        {
+          "info": {
+            "name": "Create a new goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new goal"
+        },
+        {
+          "info": {
+            "name": "Export goals to CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/export",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to filter goals as-of"
+              },
+              {
+                "name": "personFilter",
+                "value": "",
+                "type": "query",
+                "description": "Person filter"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format (e.g. readable for friendly column headers)"
+              }
+            ]
+          },
+          "docs": "Export goals to CSV format"
+        },
+        {
+          "info": {
+            "name": "Get a goal by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              }
+            ]
+          },
+          "docs": "Get a goal by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              }
+            ]
+          },
+          "docs": "Update an existing goal"
+        },
+        {
+          "info": {
+            "name": "Delete a goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              }
+            ]
+          },
+          "docs": "Delete a goal"
+        },
+        {
+          "info": {
+            "name": "Copy a goal and its targets into a new goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/copy",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id to copy"
+              }
+            ]
+          },
+          "docs": "Copy a goal and its targets into a new goal"
+        },
+        {
+          "info": {
+            "name": "Find parent and child goals, from a starting goal id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/graph",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Starting goal id to look upwards and downwards from"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to filter goals as-of"
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "Number of levels down to search child goals (defaults to 1)"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find parent and child goals, from a starting goal id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,210 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access goalTarget API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "goalTarget",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find goal targets for a goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/target",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find goal targets for a goal"
+        },
+        {
+          "info": {
+            "name": "Create a new goal target",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/target",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              }
+            ]
+          },
+          "docs": "Create a new goal target"
+        },
+        {
+          "info": {
+            "name": "Get a goal target by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/target/:goalTargetId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              },
+              {
+                "name": "goalTargetId",
+                "value": "",
+                "type": "path",
+                "description": "Goal target id"
+              }
+            ]
+          },
+          "docs": "Get a goal target by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing goal target",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/target/:goalTargetId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              },
+              {
+                "name": "goalTargetId",
+                "value": "",
+                "type": "path",
+                "description": "Goal target id"
+              }
+            ]
+          },
+          "docs": "Update an existing goal target"
+        },
+        {
+          "info": {
+            "name": "Delete a goal target",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/target/:goalTargetId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              },
+              {
+                "name": "goalTargetId",
+                "value": "",
+                "type": "path",
+                "description": "Goal target id"
+              }
+            ]
+          },
+          "docs": "Delete a goal target"
+        },
+        {
+          "info": {
+            "name": "Get a goal target's current actual value",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal/:goalId/target/:goalTargetId/actual",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalId",
+                "value": "",
+                "type": "path",
+                "description": "Goal id"
+              },
+              {
+                "name": "goalTargetId",
+                "value": "",
+                "type": "path",
+                "description": "Goal target id"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date"
+              }
+            ]
+          },
+          "docs": "Get a goal target's current actual value"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

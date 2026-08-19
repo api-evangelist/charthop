@@ -1,0 +1,761 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access group API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "group",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find groups in the organization of a certain type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Group type"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Group id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "jobFields",
+                "value": "",
+                "type": "query",
+                "description": "job fields to return, comma-separated"
+              },
+              {
+                "name": "timeFilter",
+                "value": "",
+                "type": "query",
+                "description": "Temporal filter for groups: CURRENT (default, groups existing on date), ARCHIVED (deleted groups), FUTURE (future-dated groups), ALL (all groups)"
+              },
+              {
+                "name": "includeAll",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated: use timeFilter=ALL instead. Include all groups, including deleted groups."
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search string to filter on code & name"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of group ids to look up"
+              }
+            ]
+          },
+          "docs": "Find groups in the organization of a certain type"
+        },
+        {
+          "info": {
+            "name": "Mark multiple groups as deleted",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/bulk-delete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the group in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of group deletion"
+              }
+            ]
+          },
+          "docs": "Mark multiple groups as deleted"
+        },
+        {
+          "info": {
+            "name": "Get organized group counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "scenario id to query"
+              },
+              {
+                "name": "groupFilter",
+                "value": "",
+                "type": "query",
+                "description": "query string to filter group by"
+              },
+              {
+                "name": "groupType",
+                "value": "",
+                "type": "query",
+                "description": "groupType"
+              },
+              {
+                "name": "groupTypeId",
+                "value": "",
+                "type": "query",
+                "description": "groupTypeId"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "date to count as of"
+              }
+            ]
+          },
+          "docs": "Get organized group counts"
+        },
+        {
+          "info": {
+            "name": "Find groups in the organization of a certain type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/graph",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "group id to use as the starting point"
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "number of levels down"
+              },
+              {
+                "name": "groupApproxLimit",
+                "value": "",
+                "type": "query",
+                "description": "limit number of groups"
+              },
+              {
+                "name": "jobLimit",
+                "value": "",
+                "type": "query",
+                "description": "limit number of jobs"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "scenario id to query"
+              },
+              {
+                "name": "jobFilter",
+                "value": "",
+                "type": "query",
+                "description": "query string to filter jobs by"
+              },
+              {
+                "name": "groupFilter",
+                "value": "",
+                "type": "query",
+                "description": "query string to filter group by"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "date to search as of"
+              },
+              {
+                "name": "groupFields",
+                "value": "",
+                "type": "query",
+                "description": "group fields to return"
+              },
+              {
+                "name": "jobFields",
+                "value": "",
+                "type": "query",
+                "description": "job/person fields to return"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "groupType",
+                "value": "",
+                "type": "query",
+                "description": "groupType"
+              },
+              {
+                "name": "groupTypeId",
+                "value": "",
+                "type": "query",
+                "description": "groupTypeId"
+              }
+            ]
+          },
+          "docs": "Find groups in the organization of a certain type"
+        },
+        {
+          "info": {
+            "name": "Import data from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/import",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to update as of"
+              },
+              {
+                "name": "skipErrors",
+                "value": "",
+                "type": "query",
+                "description": "Whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+              }
+            ]
+          },
+          "docs": "Import data from CSV file"
+        },
+        {
+          "info": {
+            "name": "Download a CSV template for group import",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/import/download-template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Download a CSV template for group import"
+        },
+        {
+          "info": {
+            "name": "Undelete groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/undelete",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the group in"
+              }
+            ]
+          },
+          "docs": "Undelete groups"
+        },
+        {
+          "info": {
+            "name": "Return a particular group by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Group type"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "jobFields",
+                "value": "",
+                "type": "query",
+                "description": "job fields to return, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Return a particular group by id"
+        },
+        {
+          "info": {
+            "name": "Delete a group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the group in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of group deletion"
+              }
+            ]
+          },
+          "docs": "Delete a group"
+        },
+        {
+          "info": {
+            "name": "Add members to a grouip",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/addmembers",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the group in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of member additions"
+              }
+            ]
+          },
+          "docs": "Add members to a grouip"
+        },
+        {
+          "info": {
+            "name": "Check whether a group is eligible to be deleted from history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/can-purge",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              }
+            ]
+          },
+          "docs": "Check whether a group is eligible to be deleted from history"
+        },
+        {
+          "info": {
+            "name": "Combine two groups together, including updating the historical record so that the two groups were never different",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/combine",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              }
+            ]
+          },
+          "docs": "Combine two groups together, including updating the historical record so that the two groups were never different"
+        },
+        {
+          "info": {
+            "name": "Get the history of changes for each field on a group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/history",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              }
+            ]
+          },
+          "docs": "Get the history of changes for each field on a group"
+        },
+        {
+          "info": {
+            "name": "Permanently delete a group from history",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/purge",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              }
+            ]
+          },
+          "docs": "Permanently delete a group from history"
+        },
+        {
+          "info": {
+            "name": "Remove members from a grouip",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/removemembers",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the group in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of member removals"
+              }
+            ]
+          },
+          "docs": "Remove members from a grouip"
+        },
+        {
+          "info": {
+            "name": "Render the group description, resolving Carrot template expressions to live data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:groupId/render",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Group type"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              }
+            ]
+          },
+          "docs": "Render the group description, resolving Carrot template expressions to live data"
+        },
+        {
+          "info": {
+            "name": "Create a group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Group type"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to create the group in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of group creation"
+              }
+            ]
+          },
+          "docs": "Create a group"
+        },
+        {
+          "info": {
+            "name": "Update a group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/group/:type/:groupId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Group type"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the group in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of group update"
+              }
+            ]
+          },
+          "docs": "Update a group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

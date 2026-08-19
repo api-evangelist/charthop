@@ -1,0 +1,324 @@
+{
+  "item": [
+    {
+      "id": "b56cb097-e646-4dd4-beb8-c9b0587bfcce",
+      "name": "notification",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "df90466c-601b-4e17-bd1a-c8ea2c7043f2",
+          "name": "Send a email or in-app notification",
+          "request": {
+            "name": "Send a email or in-app notification",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "notification"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"templateName\": \"<string>\",\n  \"toUserIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"jobData\": {\n    \"jobId\": \"<string>\",\n    \"title\": \"<string>\",\n    \"jobUrl\": \"<uri>\",\n    \"jobProfileUrl\": \"<uri>\",\n    \"atsJobUrl\": \"<uri>\",\n    \"atsJobId\": \"<string>\",\n    \"atsJobReq\": \"<string>\",\n    \"atsJobReqField\": \"<string>\",\n    \"openJobsUrl\": \"<uri>\",\n    \"department\": \"<string>\",\n    \"location\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"backfill\": \"<string>\",\n    \"hireMgr\": \"<string>\",\n    \"recruiter\": \"<string>\",\n    \"recruitPriority\": \"<string>\",\n    \"recruit\": \"<string>\",\n    \"sensitive\": \"<string>\",\n    \"startDate\": \"<date>\",\n    \"estStartDate\": \"<date>\",\n    \"announceDate\": \"<date>\",\n    \"hireName\": \"<string>\"\n  },\n  \"atsName\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"userName\": \"<string>\",\n  \"syncSummary\": \"<string>\",\n  \"processId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ebd626a1-a2d4-442f-9301-fe2ad54361d0",
+              "name": "notification sent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"templateName\": \"<string>\",\n  \"toUserIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"jobData\": {\n    \"jobId\": \"588f7ee98f138b19220041a7\",\n    \"title\": \"<string>\",\n    \"jobUrl\": \"<uri>\",\n    \"jobProfileUrl\": \"<uri>\",\n    \"atsJobUrl\": \"<uri>\",\n    \"atsJobId\": \"<string>\",\n    \"atsJobReq\": \"<string>\",\n    \"atsJobReqField\": \"<string>\",\n    \"openJobsUrl\": \"<uri>\",\n    \"department\": \"<string>\",\n    \"location\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"backfill\": \"<string>\",\n    \"hireMgr\": \"<string>\",\n    \"recruiter\": \"<string>\",\n    \"recruitPriority\": \"<string>\",\n    \"recruit\": \"<string>\",\n    \"sensitive\": \"<string>\",\n    \"startDate\": \"<date>\",\n    \"estStartDate\": \"<date>\",\n    \"announceDate\": \"<date>\",\n    \"hireName\": \"<string>\"\n  },\n  \"atsName\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"userName\": \"<string>\",\n  \"syncSummary\": \"<string>\",\n  \"processId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fe72088a-a75b-436e-9cee-a86687c2b9c4",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"templateName\": \"<string>\",\n  \"toUserIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"jobData\": {\n    \"jobId\": \"588f7ee98f138b19220041a7\",\n    \"title\": \"<string>\",\n    \"jobUrl\": \"<uri>\",\n    \"jobProfileUrl\": \"<uri>\",\n    \"atsJobUrl\": \"<uri>\",\n    \"atsJobId\": \"<string>\",\n    \"atsJobReq\": \"<string>\",\n    \"atsJobReqField\": \"<string>\",\n    \"openJobsUrl\": \"<uri>\",\n    \"department\": \"<string>\",\n    \"location\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"backfill\": \"<string>\",\n    \"hireMgr\": \"<string>\",\n    \"recruiter\": \"<string>\",\n    \"recruitPriority\": \"<string>\",\n    \"recruit\": \"<string>\",\n    \"sensitive\": \"<string>\",\n    \"startDate\": \"<date>\",\n    \"estStartDate\": \"<date>\",\n    \"announceDate\": \"<date>\",\n    \"hireName\": \"<string>\"\n  },\n  \"atsName\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"userName\": \"<string>\",\n  \"syncSummary\": \"<string>\",\n  \"processId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b2601239-fcc5-4111-9c6b-767fa005f7be",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"templateName\": \"<string>\",\n  \"toUserIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"jobData\": {\n    \"jobId\": \"588f7ee98f138b19220041a7\",\n    \"title\": \"<string>\",\n    \"jobUrl\": \"<uri>\",\n    \"jobProfileUrl\": \"<uri>\",\n    \"atsJobUrl\": \"<uri>\",\n    \"atsJobId\": \"<string>\",\n    \"atsJobReq\": \"<string>\",\n    \"atsJobReqField\": \"<string>\",\n    \"openJobsUrl\": \"<uri>\",\n    \"department\": \"<string>\",\n    \"location\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"backfill\": \"<string>\",\n    \"hireMgr\": \"<string>\",\n    \"recruiter\": \"<string>\",\n    \"recruitPriority\": \"<string>\",\n    \"recruit\": \"<string>\",\n    \"sensitive\": \"<string>\",\n    \"startDate\": \"<date>\",\n    \"estStartDate\": \"<date>\",\n    \"announceDate\": \"<date>\",\n    \"hireName\": \"<string>\"\n  },\n  \"atsName\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"userName\": \"<string>\",\n  \"syncSummary\": \"<string>\",\n  \"processId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fd7277e6-a2b6-4640-9dc7-d38ba385b164",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"templateName\": \"<string>\",\n  \"toUserIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"jobData\": {\n    \"jobId\": \"588f7ee98f138b19220041a7\",\n    \"title\": \"<string>\",\n    \"jobUrl\": \"<uri>\",\n    \"jobProfileUrl\": \"<uri>\",\n    \"atsJobUrl\": \"<uri>\",\n    \"atsJobId\": \"<string>\",\n    \"atsJobReq\": \"<string>\",\n    \"atsJobReqField\": \"<string>\",\n    \"openJobsUrl\": \"<uri>\",\n    \"department\": \"<string>\",\n    \"location\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"backfill\": \"<string>\",\n    \"hireMgr\": \"<string>\",\n    \"recruiter\": \"<string>\",\n    \"recruitPriority\": \"<string>\",\n    \"recruit\": \"<string>\",\n    \"sensitive\": \"<string>\",\n    \"startDate\": \"<date>\",\n    \"estStartDate\": \"<date>\",\n    \"announceDate\": \"<date>\",\n    \"hireName\": \"<string>\"\n  },\n  \"atsName\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"userName\": \"<string>\",\n  \"syncSummary\": \"<string>\",\n  \"processId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fcefaf62-1aaa-4322-9255-8f318fefe5fe",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"templateName\": \"<string>\",\n  \"toUserIds\": [\n    \"588f7ee98f138b19220041a7\",\n    \"588f7ee98f138b19220041a7\"\n  ],\n  \"jobData\": {\n    \"jobId\": \"588f7ee98f138b19220041a7\",\n    \"title\": \"<string>\",\n    \"jobUrl\": \"<uri>\",\n    \"jobProfileUrl\": \"<uri>\",\n    \"atsJobUrl\": \"<uri>\",\n    \"atsJobId\": \"<string>\",\n    \"atsJobReq\": \"<string>\",\n    \"atsJobReqField\": \"<string>\",\n    \"openJobsUrl\": \"<uri>\",\n    \"department\": \"<string>\",\n    \"location\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"backfill\": \"<string>\",\n    \"hireMgr\": \"<string>\",\n    \"recruiter\": \"<string>\",\n    \"recruitPriority\": \"<string>\",\n    \"recruit\": \"<string>\",\n    \"sensitive\": \"<string>\",\n    \"startDate\": \"<date>\",\n    \"estStartDate\": \"<date>\",\n    \"announceDate\": \"<date>\",\n    \"hireName\": \"<string>\"\n  },\n  \"atsName\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"userName\": \"<string>\",\n  \"syncSummary\": \"<string>\",\n  \"processId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "dc76e459-224f-4185-b980-bf2af02d5196",
+    "name": "ChartHop access notification API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

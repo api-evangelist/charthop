@@ -1,0 +1,259 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access reportChart API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "reportChart",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return a particular report chart by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/chart/:chartId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chartId",
+                "value": "",
+                "type": "path",
+                "description": "Chart id"
+              }
+            ]
+          },
+          "docs": "Return a particular report chart by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing report chart",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/chart/:chartId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chartId",
+                "value": "",
+                "type": "path",
+                "description": "Chart id"
+              }
+            ]
+          },
+          "docs": "Update an existing report chart"
+        },
+        {
+          "info": {
+            "name": "Delete a chart from a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/chart/:chartId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "chartId",
+                "value": "",
+                "type": "path",
+                "description": "Chart id"
+              }
+            ]
+          },
+          "docs": "Delete a chart from a report"
+        },
+        {
+          "info": {
+            "name": "Return all of the charts for a particular report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/chart",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              }
+            ]
+          },
+          "docs": "Return all of the charts for a particular report"
+        },
+        {
+          "info": {
+            "name": "Create a new chart in a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/chart",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              }
+            ]
+          },
+          "docs": "Create a new chart in a report"
+        },
+        {
+          "info": {
+            "name": "Clone a chart in a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/chart/:chartId/clone",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              },
+              {
+                "name": "chartId",
+                "value": "",
+                "type": "path",
+                "description": "Chart id"
+              },
+              {
+                "name": "chartLabel",
+                "value": "",
+                "type": "query",
+                "description": "New label"
+              }
+            ]
+          },
+          "docs": "Clone a chart in a report"
+        },
+        {
+          "info": {
+            "name": "Export a particular chart's data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/report/:reportId/chart/:chartId/data",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report id"
+              },
+              {
+                "name": "chartId",
+                "value": "",
+                "type": "path",
+                "description": "Chart id"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, exclusive"
+              },
+              {
+                "name": "interval",
+                "value": "",
+                "type": "query",
+                "description": "Interval"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id"
+              },
+              {
+                "name": "projectHires",
+                "value": "",
+                "type": "query",
+                "description": "Project future hires"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use html"
+              },
+              {
+                "name": "changeGroupingType",
+                "value": "",
+                "type": "query",
+                "description": "Type of change grouping"
+              },
+              {
+                "name": "changeGroupingId",
+                "value": "",
+                "type": "query",
+                "description": "Change grouping id to query (null for primary)"
+              }
+            ]
+          },
+          "docs": "Export a particular chart's data"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

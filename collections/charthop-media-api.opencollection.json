@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access media API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "media",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload a new piece of media",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/media",
+            "params": [
+              {
+                "name": "syncVersions",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of image versions to resize synchronously (e.g. 50x50,250x250)"
+              }
+            ]
+          },
+          "docs": "Upload a new piece of media"
+        },
+        {
+          "info": {
+            "name": "Returns metadata about a piece of media",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/media/:mediaId",
+            "params": [
+              {
+                "name": "mediaId",
+                "value": "",
+                "type": "path",
+                "description": "Media id"
+              }
+            ]
+          },
+          "docs": "Returns metadata about a piece of media"
+        },
+        {
+          "info": {
+            "name": "Upload a new piece of media",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/media",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "syncVersions",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of image versions to resize synchronously (e.g. 50x50,250x250)"
+              }
+            ]
+          },
+          "docs": "Upload a new piece of media"
+        },
+        {
+          "info": {
+            "name": "Returns metadata about a piece of media",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/media/:mediaId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "mediaId",
+                "value": "",
+                "type": "path",
+                "description": "Media id"
+              }
+            ]
+          },
+          "docs": "Returns metadata about a piece of media"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,417 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access oauth API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "oauth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Process an Oauth2 redirect request from an access request for an app installation, storing the accessToken and refreshToken as secrets for the app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/app/:appName",
+            "params": [
+              {
+                "name": "appName",
+                "value": "",
+                "type": "path",
+                "description": "App name"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "State, containing orgId and appUserId"
+              },
+              {
+                "name": "code",
+                "value": "",
+                "type": "query",
+                "description": "Temporary authorization code"
+              }
+            ]
+          },
+          "docs": "Process an Oauth2 redirect request from an access request for an app installation, storing the accessToken and refreshToken as secrets for the app"
+        },
+        {
+          "info": {
+            "name": "Return a ChartHop authorization token, given a username and password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/credentials"
+          },
+          "docs": "Return a ChartHop authorization token, given a username and password"
+        },
+        {
+          "info": {
+            "name": "Return a JOIN token to be used for new user operations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/join"
+          },
+          "docs": "Return a JOIN token to be used for new user operations"
+        },
+        {
+          "info": {
+            "name": "Return a ChartHop authorization token, given a login token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/loginWithToken",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Requested access scope or scopes (space separated)"
+              }
+            ]
+          },
+          "docs": "Return a ChartHop authorization token, given a login token"
+        },
+        {
+          "info": {
+            "name": "Approve an MCP authorization grant and issue an authorization code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/mcp/approve"
+          },
+          "docs": "Approve an MCP authorization grant and issue an authorization code"
+        },
+        {
+          "info": {
+            "name": "Describe a pending MCP authorization grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/mcp/grant-info",
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "The client's CIMD URL"
+              },
+              {
+                "name": "resource",
+                "value": "",
+                "type": "query",
+                "description": "The MCP server URL being authorized"
+              },
+              {
+                "name": "redirectUri",
+                "value": "",
+                "type": "query",
+                "description": "The client's OAuth redirect URI"
+              }
+            ]
+          },
+          "docs": "Describe a pending MCP authorization grant"
+        },
+        {
+          "info": {
+            "name": "Retrieve the oauth uri the user should be directed to in order to start the oauth flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/org/:orgIdentifier/app/:appName/:appUserId",
+            "params": [
+              {
+                "name": "orgIdentifier",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appName",
+                "value": "",
+                "type": "path",
+                "description": "App name"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              },
+              {
+                "name": "returnTo",
+                "value": "",
+                "type": "query",
+                "description": "Where to return the user"
+              },
+              {
+                "name": "finchAppType",
+                "value": "",
+                "type": "query",
+                "description": "The type of Finch app being installed"
+              },
+              {
+                "name": "tokenLevel",
+                "value": "",
+                "type": "query",
+                "description": "For OAUTH apps, whether to create a shared org or per-user connection"
+              }
+            ]
+          },
+          "docs": "Retrieve the oauth uri the user should be directed to in order to start the oauth flow"
+        },
+        {
+          "info": {
+            "name": "Whether the app installation has an active org-level OAuth connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/org/:orgIdentifier/app/:appUserId/oauth/connection",
+            "params": [
+              {
+                "name": "orgIdentifier",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Whether the app installation has an active org-level OAuth connection"
+        },
+        {
+          "info": {
+            "name": "List the per-user OAuth connections for an app installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/org/:orgIdentifier/app/:appUserId/oauth/user",
+            "params": [
+              {
+                "name": "orgIdentifier",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "List the per-user OAuth connections for an app installation"
+        },
+        {
+          "info": {
+            "name": "Revoke one or more per-user OAuth connections for an app installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/oauth/org/:orgIdentifier/app/:appUserId/oauth/user",
+            "params": [
+              {
+                "name": "orgIdentifier",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "appUserId",
+                "value": "",
+                "type": "path",
+                "description": "App user id"
+              }
+            ]
+          },
+          "docs": "Revoke one or more per-user OAuth connections for an app installation"
+        },
+        {
+          "info": {
+            "name": "Delete the current Oauth2 bearer token (for signout)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/revoke"
+          },
+          "docs": "Delete the current Oauth2 bearer token (for signout)"
+        },
+        {
+          "info": {
+            "name": "Send a login (\"magic link\") email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/sendLoginToken"
+          },
+          "docs": "Send a login (\"magic link\") email"
+        },
+        {
+          "info": {
+            "name": "Exchange a one-time use Auth Code for the IDP access token response",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/sso/:idp/access-token",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "Identity provider of SSO login (e.g. adp)"
+              },
+              {
+                "name": "authCode",
+                "value": "",
+                "type": "query",
+                "description": "A one-time use Auth Code"
+              }
+            ]
+          },
+          "docs": "Exchange a one-time use Auth Code for the IDP access token response"
+        },
+        {
+          "info": {
+            "name": "Login via the auth endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/oauth/sso/:idp/login",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "Identity provider of SSO login (e.g. adp)"
+              }
+            ]
+          },
+          "docs": "Login via the auth endpoint"
+        },
+        {
+          "info": {
+            "name": "Return an Oauth2 Authorization bearer token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/token"
+          },
+          "docs": "Return an Oauth2 Authorization bearer token"
+        },
+        {
+          "info": {
+            "name": "Delete the current Oauth2 bearer token (for signout)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/oauth/token"
+          },
+          "docs": "Delete the current Oauth2 bearer token (for signout)"
+        },
+        {
+          "info": {
+            "name": "Given an existing token, issue a new token with a reduced set of scopes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/token/attenuate",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Requested access scope or scopes (space separated)"
+              }
+            ]
+          },
+          "docs": "Given an existing token, issue a new token with a reduced set of scopes"
+        },
+        {
+          "info": {
+            "name": "Return an Oauth2 Authorization bearer token, given a SSO id token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/token/sso/:type",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "type of SSO request (google or microsoft)"
+              },
+              {
+                "name": "createOrg",
+                "value": "",
+                "type": "query",
+                "description": "automatically create org if possible to do so"
+              },
+              {
+                "name": "signupSource",
+                "value": "",
+                "type": "query",
+                "description": "sign up source (self-serve, connect, or sequoia)"
+              },
+              {
+                "name": "utmParams",
+                "value": "",
+                "type": "query",
+                "description": "utm params (used in salesforce for lead tracking)"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "sign up email address"
+              }
+            ]
+          },
+          "docs": "Return an Oauth2 Authorization bearer token, given a SSO id token"
+        },
+        {
+          "info": {
+            "name": "Return a view-as token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/oauth/token/view"
+          },
+          "docs": "Return a view-as token"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

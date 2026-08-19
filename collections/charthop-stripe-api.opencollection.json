@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access stripe API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "stripe",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return all billing plans directly from Stripe (staff only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/stripe/plan"
+          },
+          "docs": "Return all billing plans directly from Stripe (staff only)"
+        },
+        {
+          "info": {
+            "name": "Return all products directly from Stripe (staff only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/stripe/product"
+          },
+          "docs": "Return all products directly from Stripe (staff only)"
+        },
+        {
+          "info": {
+            "name": "Return a particular product by its Stripe id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/stripe/product/:productId",
+            "params": [
+              {
+                "name": "productId",
+                "value": "",
+                "type": "query",
+                "description": "Stripe product id"
+              }
+            ]
+          },
+          "docs": "Return a particular product by its Stripe id"
+        },
+        {
+          "info": {
+            "name": "Creates a Stripe setupIntent object and returns the secret for that object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/stripe/setup-intent"
+          },
+          "docs": "Creates a Stripe setupIntent object and returns the secret for that object"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,532 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access calendar API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "calendar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return calendar entries in a given time period",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/calendar",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type of calendar entries to retrieve (timeoff, anniversary, birthday)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Query filter to filter for part of the organization"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Format to return data in"
+              }
+            ]
+          },
+          "docs": "Return calendar entries in a given time period"
+        },
+        {
+          "info": {
+            "name": "Return calendars visible to the current user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarIds",
+                "value": "",
+                "type": "query",
+                "description": "Calendar IDs to filter by, comma-separated"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Optional status to filter by"
+              }
+            ]
+          },
+          "docs": "Return calendars visible to the current user"
+        },
+        {
+          "info": {
+            "name": "Create a new calendar",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new calendar"
+        },
+        {
+          "info": {
+            "name": "Returns calendar events visible to the current user with exclusive end dates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events from, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events until, inclusive"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Optional CQL filter to apply to employee events"
+              },
+              {
+                "name": "calendarIds",
+                "value": "",
+                "type": "query",
+                "description": "Calendar IDs to filter by, comma-separated"
+              }
+            ]
+          },
+          "docs": "Returns calendar events visible to the current user with exclusive end dates"
+        },
+        {
+          "info": {
+            "name": "Create a new calendar entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new calendar entry"
+        },
+        {
+          "info": {
+            "name": "Returns calendar events, condensed when there are too many of a single entry on a particular day",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/condensed",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events from, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events until, inclusive"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Optional CQL filter to apply to employee events"
+              },
+              {
+                "name": "calendarIds",
+                "value": "",
+                "type": "query",
+                "description": "Calendar IDs to filter by, comma-separated"
+              },
+              {
+                "name": "maxEntriesPerCalendarPerDay",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of individual entries to show for a particular calendar on any given day (default 6)"
+              }
+            ]
+          },
+          "docs": "Returns calendar events, condensed when there are too many of a single entry on a particular day"
+        },
+        {
+          "info": {
+            "name": "Returns calendar events in iCalendar format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/icalendar",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events from, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events until, inclusive"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Optional CQL filter to apply to employee events"
+              },
+              {
+                "name": "calendarIds",
+                "value": "",
+                "type": "query",
+                "description": "Calendar IDs to filter by, comma-separated"
+              },
+              {
+                "name": "label",
+                "value": "",
+                "type": "query",
+                "description": "Calendar label"
+              }
+            ]
+          },
+          "docs": "Returns calendar events in iCalendar format"
+        },
+        {
+          "info": {
+            "name": "Import calendar events from CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/import",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarId",
+                "value": "",
+                "type": "query",
+                "description": "Calendar id to import events into"
+              },
+              {
+                "name": "importFromProcessId",
+                "value": "",
+                "type": "query",
+                "description": "Import a file from another process, instead of directly uploading it"
+              },
+              {
+                "name": "parentProcessId",
+                "value": "",
+                "type": "query",
+                "description": "Parent process id to attach to"
+              }
+            ]
+          },
+          "docs": "Import calendar events from CSV file"
+        },
+        {
+          "info": {
+            "name": "Download a CSV template for calendar event import",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/import/download-template",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Download a CSV template for calendar event import"
+        },
+        {
+          "info": {
+            "name": "Return a particular calendar entry by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/:calendarEntryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarEntryId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar entry id"
+              }
+            ]
+          },
+          "docs": "Return a particular calendar entry by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing calendar entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/:calendarEntryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarEntryId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar entry id"
+              }
+            ]
+          },
+          "docs": "Update an existing calendar entry"
+        },
+        {
+          "info": {
+            "name": "Delete a calendar entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar-event/:calendarEntryId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarEntryId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar entry id"
+              }
+            ]
+          },
+          "docs": "Delete a calendar entry"
+        },
+        {
+          "info": {
+            "name": "Return a particular calendar by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar/:calendarId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar id"
+              }
+            ]
+          },
+          "docs": "Return a particular calendar by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing calendar",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar/:calendarId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar id"
+              }
+            ]
+          },
+          "docs": "Update an existing calendar"
+        },
+        {
+          "info": {
+            "name": "Delete a calendar",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar/:calendarId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar id"
+              }
+            ]
+          },
+          "docs": "Delete a calendar"
+        },
+        {
+          "info": {
+            "name": "Returns calendar events visible to the current user in a calendar",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/calendar/:calendarId/events",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "calendarId",
+                "value": "",
+                "type": "path",
+                "description": "Calendar id"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events from, inclusive"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Date to get events until, inclusive"
+              }
+            ]
+          },
+          "docs": "Returns calendar events visible to the current user in a calendar"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

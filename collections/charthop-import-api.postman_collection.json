@@ -1,0 +1,3170 @@
+{
+  "item": [
+    {
+      "id": "da033bd8-6215-4612-846c-71a539ea11b3",
+      "name": "import",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "86f1ebd2-28ff-41bd-a837-63f4844c88df",
+          "name": "Import data from CSV file",
+          "request": {
+            "name": "Import data from CSV file",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "import",
+                "csv",
+                "columnMatch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "scenarioId",
+                  "value": "<string>",
+                  "description": "scenario id to import into"
+                },
+                {
+                  "disabled": false,
+                  "key": "skipErrors",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+                },
+                {
+                  "disabled": false,
+                  "key": "upsert",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to create persons/jobs that are not matched"
+                },
+                {
+                  "disabled": false,
+                  "key": "createGroups",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to create groups that are not matched"
+                },
+                {
+                  "disabled": false,
+                  "key": "disableSyncHireDate",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to disable adjusting dates of hires in cases where the start dates differ"
+                },
+                {
+                  "disabled": false,
+                  "key": "useTitleManagerMatcher",
+                  "value": "<boolean>",
+                  "description": "whether to fall back to job title and manager for job matching"
+                },
+                {
+                  "disabled": false,
+                  "key": "updateTypes",
+                  "value": "<string>",
+                  "description": "types of updates to apply (default all: title,comp,group,relationship,data,other)"
+                },
+                {
+                  "disabled": false,
+                  "key": "notifyUserIds",
+                  "value": "<string>",
+                  "description": "comma-separated list of user ids who should be notified when the import is complete"
+                },
+                {
+                  "disabled": false,
+                  "key": "notifyAppName",
+                  "value": "<string>",
+                  "description": "name of the app that should be listed in the notify"
+                },
+                {
+                  "disabled": false,
+                  "key": "defaultChangeDate",
+                  "value": "<date>",
+                  "description": "date of the changes - if not presented on the csv file"
+                },
+                {
+                  "disabled": false,
+                  "key": "disableOverwritePerson",
+                  "value": "<boolean>",
+                  "description": "(Required) disable overwriting changes to persons' data -- only update data if the person field is null"
+                },
+                {
+                  "disabled": false,
+                  "key": "importDryRun",
+                  "value": "<boolean>",
+                  "description": "(Required) import dry run"
+                },
+                {
+                  "disabled": false,
+                  "key": "importAfterDryRun",
+                  "value": "<boolean>",
+                  "description": "whether to automatically import if dry run succeeds"
+                },
+                {
+                  "disabled": false,
+                  "key": "parentProcessId",
+                  "value": "<string>",
+                  "description": "process id of parent process"
+                },
+                {
+                  "disabled": false,
+                  "key": "importSource",
+                  "value": "<string>",
+                  "description": "self identified source caller into this method"
+                },
+                {
+                  "disabled": false,
+                  "key": "syncImages",
+                  "value": "<boolean>",
+                  "description": "import images from csv"
+                },
+                {
+                  "disabled": false,
+                  "key": "ignoreResumeParentProcess",
+                  "value": "<boolean>",
+                  "description": "Ignore resumption of parent process"
+                },
+                {
+                  "disabled": false,
+                  "key": "transformer",
+                  "value": "<string>",
+                  "description": "Data transformer"
+                },
+                {
+                  "disabled": false,
+                  "key": "postProcessor",
+                  "value": "<string>",
+                  "description": "Post processor"
+                },
+                {
+                  "disabled": false,
+                  "key": "useImporterV3",
+                  "value": "<boolean>",
+                  "description": "Use importer V3"
+                },
+                {
+                  "disabled": false,
+                  "key": "performImportPhases",
+                  "value": "<string>",
+                  "description": "Group import phases to perform"
+                },
+                {
+                  "disabled": false,
+                  "key": "overwriteGroupTypes",
+                  "value": "<string>",
+                  "description": "Group types to overwrite"
+                },
+                {
+                  "disabled": false,
+                  "key": "retainOpenReportingLines",
+                  "value": "<boolean>",
+                  "description": "Don't reassign manager if the assigned manager is already a grand-manager and there are only open jobs between"
+                },
+                {
+                  "disabled": false,
+                  "key": "enrichLinkedFields",
+                  "value": "<boolean>",
+                  "description": "whether to enrich jobs with job code linked field defaults during import"
+                },
+                {
+                  "disabled": false,
+                  "key": "createJobCodes",
+                  "value": "<boolean>",
+                  "description": "whether to create job codes that don't exist when found in import data"
+                },
+                {
+                  "disabled": false,
+                  "key": "adjustCreateDate",
+                  "value": "<boolean>",
+                  "description": "whether to adjust the create date of existing jobs when the import row date is earlier"
+                },
+                {
+                  "disabled": false,
+                  "key": "createJobsWithMissingManager",
+                  "value": "<boolean>",
+                  "description": "whether to create jobs whose manager could not be resolved during import"
+                },
+                {
+                  "disabled": false,
+                  "key": "reassignDirectReportsOnMove",
+                  "value": "<boolean>",
+                  "description": "when a person moves out of a job, reassign that job's direct and indirect reports to the target job"
+                },
+                {
+                  "disabled": false,
+                  "key": "adjustDeleteOnDepartDate",
+                  "value": "<boolean>",
+                  "description": "when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "key_0",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "key_1",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7b903adc-acc4-4e8f-8e02-133e5415cdac",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "columnMatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "syncImages",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "retainOpenReportingLines",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_0",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_1",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"DONE\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"WEB\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 5071.193586553323,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"ERROR\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4a08aa6-bc3b-428d-8c15-0722939edc31",
+              "name": "invalid manifest data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "columnMatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "syncImages",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "retainOpenReportingLines",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_0",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_1",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d0cfd3c9-9416-4458-a601-883de6737c61",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "columnMatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "syncImages",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "retainOpenReportingLines",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_0",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_1",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2a0ffb6c-f26a-4366-9001-90cd1a509495",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "columnMatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "syncImages",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "retainOpenReportingLines",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_0",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "key_1",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "332f5b9e-4f83-4f7e-876d-57e9b735810d",
+          "name": "Import data from CSV file",
+          "request": {
+            "name": "Import data from CSV file",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "import",
+                "csv",
+                "data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "scenarioId",
+                  "value": "<string>",
+                  "description": "scenario id to import into"
+                },
+                {
+                  "disabled": false,
+                  "key": "skipErrors",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+                },
+                {
+                  "disabled": false,
+                  "key": "upsert",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to create persons/jobs that are not matched"
+                },
+                {
+                  "disabled": false,
+                  "key": "createGroups",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to create groups that are not matched"
+                },
+                {
+                  "disabled": false,
+                  "key": "disableSyncHireDate",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to disable adjusting dates of hires in cases where the start dates differ"
+                },
+                {
+                  "disabled": false,
+                  "key": "useTitleManagerMatcher",
+                  "value": "<boolean>",
+                  "description": "whether to fall back to job title and manager for job matching"
+                },
+                {
+                  "disabled": false,
+                  "key": "updateTypes",
+                  "value": "<string>",
+                  "description": "types of updates to apply (default all: title,comp,group,relationship,data,other)"
+                },
+                {
+                  "disabled": false,
+                  "key": "notifyUserIds",
+                  "value": "<string>",
+                  "description": "comma-separated list of user ids who should be notified when the import is complete"
+                },
+                {
+                  "disabled": false,
+                  "key": "notifyAppName",
+                  "value": "<string>",
+                  "description": "name of the app that should be listed in the notify"
+                },
+                {
+                  "disabled": false,
+                  "key": "defaultChangeDate",
+                  "value": "<date>",
+                  "description": "date of the changes - if not presented on the csv file"
+                },
+                {
+                  "disabled": false,
+                  "key": "disableOverwritePerson",
+                  "value": "<boolean>",
+                  "description": "(Required) disable overwriting changes to persons' data -- only update data if the person field is null"
+                },
+                {
+                  "disabled": false,
+                  "key": "importDryRun",
+                  "value": "<boolean>",
+                  "description": "(Required) import dry run"
+                },
+                {
+                  "disabled": false,
+                  "key": "importAfterDryRun",
+                  "value": "<boolean>",
+                  "description": "whether to automatically import if dry run succeeds"
+                },
+                {
+                  "disabled": false,
+                  "key": "parentProcessId",
+                  "value": "<string>",
+                  "description": "process id of parent process"
+                },
+                {
+                  "disabled": false,
+                  "key": "importSource",
+                  "value": "<string>",
+                  "description": "self identified source caller into this method"
+                },
+                {
+                  "disabled": false,
+                  "key": "ignoreResumeParentProcess",
+                  "value": "<boolean>",
+                  "description": "Ignore resumption of parent process"
+                },
+                {
+                  "disabled": false,
+                  "key": "adjustCreateDate",
+                  "value": "<boolean>",
+                  "description": "whether to adjust the create date of existing jobs when the import row date is earlier"
+                },
+                {
+                  "disabled": false,
+                  "key": "createJobsWithMissingManager",
+                  "value": "<boolean>",
+                  "description": "whether to create jobs whose manager could not be resolved during import"
+                },
+                {
+                  "disabled": false,
+                  "key": "reassignDirectReportsOnMove",
+                  "value": "<boolean>",
+                  "description": "when a person moves out of a job, reassign that job's direct and indirect reports to the target job"
+                },
+                {
+                  "disabled": false,
+                  "key": "adjustDeleteOnDepartDate",
+                  "value": "<boolean>",
+                  "description": "when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it"
+                },
+                {
+                  "disabled": false,
+                  "key": "overwriteGroupTypes",
+                  "value": "<string>",
+                  "description": "Group types to overwrite"
+                },
+                {
+                  "disabled": false,
+                  "key": "postProcessor",
+                  "value": "<string>",
+                  "description": "Post processor"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "aadd1a85-9c4d-45a0-89b5-4f7790c62811",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"RUNNING\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 1044.9644243553346,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"WARN\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {},\n        \"key_3\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "183506fe-0616-48ee-8a42-3c62f08fe9e3",
+              "name": "invalid manifest data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "856bb380-b76f-4e79-9d1d-ad2c4931c7b2",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "085cd67a-5d94-4e1d-8081-895a8727f354",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b468580-7ff0-4ee9-be7b-923369e7df4b",
+          "name": "Import data from CSV file",
+          "request": {
+            "name": "Import data from CSV file",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "import",
+                "csv",
+                "filepath"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filePath",
+                  "value": "<string>",
+                  "description": "(Required) filePath"
+                },
+                {
+                  "disabled": false,
+                  "key": "scenarioId",
+                  "value": "<string>",
+                  "description": "scenario id to import into"
+                },
+                {
+                  "disabled": false,
+                  "key": "skipErrors",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to skip erroneous rows, or reject the entire upload if any are invalid (default)"
+                },
+                {
+                  "disabled": false,
+                  "key": "upsert",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to create persons/jobs that are not matched"
+                },
+                {
+                  "disabled": false,
+                  "key": "createGroups",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to create groups that are not matched"
+                },
+                {
+                  "disabled": false,
+                  "key": "disableSyncHireDate",
+                  "value": "<boolean>",
+                  "description": "(Required) whether to disable adjusting dates of hires in cases where the start dates differ"
+                },
+                {
+                  "disabled": false,
+                  "key": "useTitleManagerMatcher",
+                  "value": "<boolean>",
+                  "description": "whether to fall back to job title and manager for job matching"
+                },
+                {
+                  "disabled": false,
+                  "key": "updateTypes",
+                  "value": "<string>",
+                  "description": "types of updates to apply (default all: title,comp,group,relationship,data,other)"
+                },
+                {
+                  "disabled": false,
+                  "key": "notifyUserIds",
+                  "value": "<string>",
+                  "description": "comma-separated list of user ids who should be notified when the import is complete"
+                },
+                {
+                  "disabled": false,
+                  "key": "notifyAppName",
+                  "value": "<string>",
+                  "description": "name of the app that should be listed in the notify"
+                },
+                {
+                  "disabled": false,
+                  "key": "defaultChangeDate",
+                  "value": "<date>",
+                  "description": "date of the changes - if not presented on the csv file"
+                },
+                {
+                  "disabled": false,
+                  "key": "disableOverwritePerson",
+                  "value": "<boolean>",
+                  "description": "(Required) disable overwriting changes to persons' data -- only update data if the person field is null"
+                },
+                {
+                  "disabled": false,
+                  "key": "importDryRun",
+                  "value": "<boolean>",
+                  "description": "(Required) import dry run"
+                },
+                {
+                  "disabled": false,
+                  "key": "importAfterDryRun",
+                  "value": "<boolean>",
+                  "description": "whether to automatically import if dry run succeeds"
+                },
+                {
+                  "disabled": false,
+                  "key": "parentProcessId",
+                  "value": "<string>",
+                  "description": "process id of parent process"
+                },
+                {
+                  "disabled": false,
+                  "key": "importSource",
+                  "value": "<string>",
+                  "description": "self identified source caller into this method"
+                },
+                {
+                  "disabled": false,
+                  "key": "ignoreResumeParentProcess",
+                  "value": "<boolean>",
+                  "description": "Ignore resumption of parent process"
+                },
+                {
+                  "disabled": false,
+                  "key": "performImportPhases",
+                  "value": "<string>",
+                  "description": "Group import phases to perform"
+                },
+                {
+                  "disabled": false,
+                  "key": "useImporterV3",
+                  "value": "<boolean>",
+                  "description": "Use importer V3"
+                },
+                {
+                  "disabled": false,
+                  "key": "enrichLinkedFields",
+                  "value": "<boolean>",
+                  "description": "whether to enrich jobs with job code linked field defaults during import"
+                },
+                {
+                  "disabled": false,
+                  "key": "createJobCodes",
+                  "value": "<boolean>",
+                  "description": "whether to create job codes that don't exist when found in import data"
+                },
+                {
+                  "disabled": false,
+                  "key": "adjustCreateDate",
+                  "value": "<boolean>",
+                  "description": "whether to adjust the create date of existing jobs when the import row date is earlier"
+                },
+                {
+                  "disabled": false,
+                  "key": "createJobsWithMissingManager",
+                  "value": "<boolean>",
+                  "description": "whether to create jobs whose manager could not be resolved during import"
+                },
+                {
+                  "disabled": false,
+                  "key": "reassignDirectReportsOnMove",
+                  "value": "<boolean>",
+                  "description": "when a person moves out of a job, reassign that job's direct and indirect reports to the target job"
+                },
+                {
+                  "disabled": false,
+                  "key": "adjustDeleteOnDepartDate",
+                  "value": "<boolean>",
+                  "description": "when a job's occupant departs on the delete date, schedule its deletion for the day after instead of rejecting it"
+                },
+                {
+                  "disabled": false,
+                  "key": "overwriteGroupTypes",
+                  "value": "<string>",
+                  "description": "Group types to overwrite"
+                },
+                {
+                  "disabled": false,
+                  "key": "postProcessor",
+                  "value": "<string>",
+                  "description": "Post processor"
+                },
+                {
+                  "disabled": false,
+                  "key": "transformer",
+                  "value": "<string>",
+                  "description": "Data transformer"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "100d9e3b-8009-4604-bd0e-f34836be3868",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"RUNNING\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 1044.9644243553346,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"WARN\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {},\n        \"key_3\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f494bd15-ae9b-4508-a33a-50e2a8e75f3d",
+              "name": "invalid manifest data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "724a0b87-f843-4e13-ae31-a729f3c6f813",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3ce68402-8514-43df-831c-092abd7c139d",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "filepath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filePath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scenarioId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "skipErrors",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "upsert",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createGroups",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "disableSyncHireDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "useTitleManagerMatcher",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "updateTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyUserIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "notifyAppName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "defaultChangeDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "disableOverwritePerson",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "importAfterDryRun",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "parentProcessId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "importSource",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ignoreResumeParentProcess",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "performImportPhases",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useImporterV3",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "enrichLinkedFields",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobCodes",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustCreateDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "createJobsWithMissingManager",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "reassignDirectReportsOnMove",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "adjustDeleteOnDepartDate",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "overwriteGroupTypes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "postProcessor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transformer",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5c4e89c1-1159-4f10-99de-171b84bc3511",
+          "name": "Parse a CSV file in preparation for column matching as part of spreadsheet import process",
+          "request": {
+            "name": "Parse a CSV file in preparation for column matching as part of spreadsheet import process",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "import",
+                "csv",
+                "initialColumnMatch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "38fe533e-6641-4089-894d-d7bfce426877",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "initialColumnMatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a2fb94b8-5459-4ba1-afe9-4d5d04191692",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "initialColumnMatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2834f8f-7dd1-41fd-8b4e-3d236e9a8ee7",
+          "name": "Import time off balance data from CSV file",
+          "request": {
+            "name": "Import time off balance data from CSV file",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "import",
+                "csv",
+                "time-off-balances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "policyId",
+                  "value": "<string>",
+                  "description": "time off policy id to import into"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "effective date of the balances"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "value": "<binary>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e8f1ec22-9d91-4159-b7d7-39b1d94ee534",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "time-off-balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"label\": \"string\",\n  \"type\": \"string\",\n  \"status\": \"RUNNING\",\n  \"runUserId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"options\": {},\n  \"filePath\": \"string\",\n  \"logPath\": \"string\",\n  \"parentProcessId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAttribution\": {\n    \"principalUserId\": \"588f7ee98f138b19220041a7\",\n    \"agentUserIds\": [\n      \"588f7ee98f138b19220041a7\",\n      \"588f7ee98f138b19220041a7\"\n    ],\n    \"eventId\": \"588f7ee98f138b19220041a7\",\n    \"aiChatId\": \"588f7ee98f138b19220041a7\",\n    \"aiToolUseId\": \"string\",\n    \"channel\": \"TEAMS\"\n  },\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"startAt\": \"2017-01-24T13:57:52Z\",\n  \"endAt\": \"2017-01-24T13:57:52Z\",\n  \"message\": \"string\",\n  \"progress\": 1044.9644243553346,\n  \"internalError\": \"string\",\n  \"results\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"logDataList\": [\n    {\n      \"level\": \"WARN\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"message\": \"string\"\n    },\n    {\n      \"level\": \"INFO\",\n      \"at\": \"2017-01-24T13:57:52Z\",\n      \"data\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {},\n        \"key_3\": {}\n      },\n      \"message\": \"string\"\n    }\n  ],\n  \"state\": {},\n  \"summary\": \"string\",\n  \"appId\": \"588f7ee98f138b19220041a7\",\n  \"uuid\": \"84db3c6e-0877-4436-8af1-768c06b29586\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d853ef97-0660-4ed3-aacf-996e612d4ebe",
+              "name": "invalid manifest data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "time-off-balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "53fda147-fb92-4a94-bda2-605914e178bd",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "time-off-balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "04edbf79-84b1-41d3-8672-115a506dc367",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "csv",
+                    "time-off-balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "policyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "83b0b85c-1fb2-450b-b0f7-63e01f1b931e",
+          "name": "Check if a spreadsheet file is valid to be imported",
+          "request": {
+            "name": "Check if a spreadsheet file is valid to be imported",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "import",
+                "spreadsheet",
+                "validateFormat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "maxRows",
+                  "value": "<integer>",
+                  "description": "Max rows allowed in an imported spreadsheet file"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "value": "<binary>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0ea7d4bb-c3b7-4dba-a97a-130c8c4067d8",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "spreadsheet",
+                    "validateFormat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "maxRows",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3bb59ce4-e9e4-4e18-9151-50f854d70bea",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "import",
+                    "spreadsheet",
+                    "validateFormat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "maxRows",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "eb2a4263-61aa-458e-af5f-5e1525606e5d",
+    "name": "ChartHop access import API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}

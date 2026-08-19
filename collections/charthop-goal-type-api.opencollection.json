@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access goal-type API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "goal-type",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find goal types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "query",
+                "description": "Starting goal type id for pagination"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find goal types"
+        },
+        {
+          "info": {
+            "name": "Create a new goal type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-type",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              }
+            ]
+          },
+          "docs": "Create a new goal type"
+        },
+        {
+          "info": {
+            "name": "Get a goal type by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-type/:goalTypeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalTypeId",
+                "value": "",
+                "type": "path",
+                "description": "Goal type id"
+              }
+            ]
+          },
+          "docs": "Get a goal type by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing goal type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-type/:goalTypeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalTypeId",
+                "value": "",
+                "type": "path",
+                "description": "Goal type id"
+              }
+            ]
+          },
+          "docs": "Update an existing goal type"
+        },
+        {
+          "info": {
+            "name": "Delete a goal type",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/goal-type/:goalTypeId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "goalTypeId",
+                "value": "",
+                "type": "path",
+                "description": "Goal type id"
+              }
+            ]
+          },
+          "docs": "Delete a goal type"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

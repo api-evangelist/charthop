@@ -1,0 +1,611 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access person API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "person",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find persons in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if retrieving persons employed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if retrieving persons employed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of person ids to look up"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Person id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by fields, comma-separated. For descending sort, prepend a -"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "fieldsList",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, list syntax"
+              },
+              {
+                "name": "includeAll",
+                "value": "",
+                "type": "query",
+                "description": "Include all persons in the system, including ex-employees or persons who were never in jobs"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              },
+              {
+                "name": "returnAccess",
+                "value": "",
+                "type": "query",
+                "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+              }
+            ]
+          },
+          "docs": "Find persons in the organization"
+        },
+        {
+          "info": {
+            "name": "Create a person",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v2/org/:orgId/person",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to create the person in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of person creation"
+              }
+            ]
+          },
+          "docs": "Create a person"
+        },
+        {
+          "info": {
+            "name": "Count persons in an org",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/count",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if counting persons employed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if counting persons employed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "includeAll",
+                "value": "",
+                "type": "query",
+                "description": "Include all persons in the system, including ex-employees or persons who were never in jobs"
+              }
+            ]
+          },
+          "docs": "Count persons in an org"
+        },
+        {
+          "info": {
+            "name": "Count persons in the organization available to invite as users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/count-invite-users",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "isPreboarding",
+                "value": "",
+                "type": "query",
+                "description": "Whether you are searching for preboarding or activated users"
+              }
+            ]
+          },
+          "docs": "Count persons in the organization available to invite as users"
+        },
+        {
+          "info": {
+            "name": "Find persons in the organization, grouped by an expression",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/group-by",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if retrieving persons that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if retrieving persons that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve with their aggregation function, comma-separated"
+              },
+              {
+                "name": "groupBy",
+                "value": "",
+                "type": "query",
+                "description": "Expression to group by"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by fields, comma-separated. For descending sort, prepend a -"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "splitColumns",
+                "value": "",
+                "type": "query",
+                "description": "Whether to split complex columns, used for tabular data formats"
+              }
+            ]
+          },
+          "docs": "Find persons in the organization, grouped by an expression"
+        },
+        {
+          "info": {
+            "name": "Find persons in the organization to invite as users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/query-invite-users",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "isPreboarding",
+                "value": "",
+                "type": "query",
+                "description": "Whether you are searching for preboarding or activated users"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Person id to start paginating from"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort field, prefix with - for descending (e.g. name, -name, startDate, -startDate)"
+              }
+            ]
+          },
+          "docs": "Find persons in the organization to invite as users"
+        },
+        {
+          "info": {
+            "name": "Compute top-N + Other subcounts for one or more fields, for persons in the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/subcounts",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if counting persons employed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if counting persons employed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of fields to compute subcounts for"
+              },
+              {
+                "name": "topN",
+                "value": "",
+                "type": "query",
+                "description": "Number of top values to return per field; remainder is rolled into an Other bucket (default 10, max 25)"
+              },
+              {
+                "name": "includeAll",
+                "value": "",
+                "type": "query",
+                "description": "Include all persons in the system, including ex-employees or persons who were never in jobs"
+              }
+            ]
+          },
+          "docs": "Compute top-N + Other subcounts for one or more fields, for persons in the organization"
+        },
+        {
+          "info": {
+            "name": "Compute aggregated totals for persons matching a query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/total",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date to search as of"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date, if retrieving persons that existed between two dates (inclusive)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date, if retrieving persons that existed between two dates (inclusive)"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "includeAll",
+                "value": "",
+                "type": "query",
+                "description": "Include all persons in the system, including ex-employees or persons who were never in jobs"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "Fields to aggregate with their aggregation function, comma-separated"
+              }
+            ]
+          },
+          "docs": "Compute aggregated totals for persons matching a query"
+        },
+        {
+          "info": {
+            "name": "Return a particular person by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/:personId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to query"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to retrieve, comma-separated"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Data format to use; default is json, can also use json-extended or json-readable"
+              }
+            ]
+          },
+          "docs": "Return a particular person by id"
+        },
+        {
+          "info": {
+            "name": "Update a person",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/:personId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              },
+              {
+                "name": "scenarioId",
+                "value": "",
+                "type": "query",
+                "description": "Scenario id to update the person in"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Effective date of person update"
+              }
+            ]
+          },
+          "docs": "Update a person"
+        },
+        {
+          "info": {
+            "name": "Delete a person",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v2/org/:orgId/person/:personId",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "Person id"
+              }
+            ]
+          },
+          "docs": "Delete a person"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

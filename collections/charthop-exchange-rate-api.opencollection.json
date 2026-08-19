@@ -1,0 +1,223 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ChartHop access exchange-rate API",
+    "version": "V1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "exchange-rate",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return the exchange rates on a particular date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              }
+            ]
+          },
+          "docs": "Return the exchange rates on a particular date"
+        },
+        {
+          "info": {
+            "name": "Update the USD-based exchange rates for a particular date. Must be the first of a month.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              }
+            ]
+          },
+          "docs": "Update the USD-based exchange rates for a particular date. Must be the first of a month."
+        },
+        {
+          "info": {
+            "name": "Delete a custom exchange rate on a particular date",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              },
+              {
+                "name": "currencyCode",
+                "value": "",
+                "type": "query",
+                "description": "Currency code"
+              }
+            ]
+          },
+          "docs": "Delete a custom exchange rate on a particular date"
+        },
+        {
+          "info": {
+            "name": "Return org custom exchange rates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date/custom",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              }
+            ]
+          },
+          "docs": "Return org custom exchange rates"
+        },
+        {
+          "info": {
+            "name": "Bulk update custom currency rates in org custom exchange rates",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date/custom/bulkupdate",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              },
+              {
+                "name": "addRates",
+                "value": "",
+                "type": "query",
+                "description": "Boolean to determine whether to add or remove rates from update"
+              }
+            ]
+          },
+          "docs": "Bulk update custom currency rates in org custom exchange rates"
+        },
+        {
+          "info": {
+            "name": "Return the global exchange rates based on USD for a particular date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date/global",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              }
+            ]
+          },
+          "docs": "Return the global exchange rates based on USD for a particular date"
+        },
+        {
+          "info": {
+            "name": "Return org custom exchange rates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/org/:orgId/exchange-rate/:date/history",
+            "params": [
+              {
+                "name": "orgId",
+                "value": "",
+                "type": "path",
+                "description": "Org identifier (either id or slug)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Date to use"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Currency to search for"
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for search"
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for search"
+              }
+            ]
+          },
+          "docs": "Return org custom exchange rates"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

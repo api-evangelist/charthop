@@ -1,0 +1,1440 @@
+{
+  "item": [
+    {
+      "id": "3ac6f524-7cd3-4e8e-ba7f-b305a7679980",
+      "name": "group-type",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "35174dc5-3b00-4278-a965-db5d932edcd2",
+          "name": "Return all groups in the organization paginated",
+          "request": {
+            "name": "Return all groups in the organization paginated",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "group-type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Group Type id to start paginating from"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "returnAccess",
+                  "value": "<string>",
+                  "description": "Return access information -- pass a list of actions to check, for example: create,update,delete"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8fed2dde-161e-419a-8acb-3f268877b42c",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"name\": \"Engineering\",\n      \"fieldName\": \"engineering\",\n      \"membershipType\": \"MULTIPLE\",\n      \"assignmentType\": \"COMBINATION\",\n      \"parentTypesAllowed\": \"OTHER\",\n      \"enableApprovals\": true,\n      \"defaultSensitivity\": \"PERSONAL\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"code\": \"D123\",\n      \"requirePositions\": true,\n      \"description\": \"string\",\n      \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n      \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n      \"hidden\": false,\n      \"positions\": [\n        {\n          \"name\": \"string\",\n          \"allowMultiple\": true,\n          \"eligibilityFilter\": \"string\",\n          \"id\": \"588f7ee98f138b19220041a7\"\n        },\n        {\n          \"name\": \"string\",\n          \"allowMultiple\": true,\n          \"eligibilityFilter\": \"string\",\n          \"id\": \"588f7ee98f138b19220041a7\"\n        }\n      ],\n      \"membershipFieldId\": \"588f7ee98f138b19220041a7\",\n      \"shareAccess\": [\n        {\n          \"access\": \"COMPENSATION_OWNER\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        },\n        {\n          \"access\": \"NONE\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        }\n      ],\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"SLACK\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    },\n    {\n      \"id\": \"588f7ee98f138b19220041a7\",\n      \"name\": \"Engineering\",\n      \"fieldName\": \"engineering\",\n      \"membershipType\": \"SINGLE\",\n      \"assignmentType\": \"COMBINATION\",\n      \"parentTypesAllowed\": \"OTHER\",\n      \"enableApprovals\": false,\n      \"defaultSensitivity\": \"SENSITIVE\",\n      \"orgId\": \"588f7ee98f138b19220041a7\",\n      \"code\": \"D123\",\n      \"requirePositions\": false,\n      \"description\": \"string\",\n      \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n      \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n      \"hidden\": false,\n      \"positions\": [\n        {\n          \"name\": \"string\",\n          \"allowMultiple\": true,\n          \"eligibilityFilter\": \"string\",\n          \"id\": \"588f7ee98f138b19220041a7\"\n        },\n        {\n          \"name\": \"string\",\n          \"allowMultiple\": true,\n          \"eligibilityFilter\": \"string\",\n          \"id\": \"588f7ee98f138b19220041a7\"\n        }\n      ],\n      \"membershipFieldId\": \"588f7ee98f138b19220041a7\",\n      \"shareAccess\": [\n        {\n          \"access\": \"COMPENSATION_READ\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        },\n        {\n          \"access\": \"STANDARD_WRITE\",\n          \"userId\": \"5887a7718f138b6a2a0041a7\",\n          \"groupId\": \"5887a7718f138b6a2a0041a7\",\n          \"fields\": \"name,image,title\"\n        }\n      ],\n      \"createId\": \"588f7ee98f138b19220041a7\",\n      \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"createAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MOBILE\"\n      },\n      \"createAt\": \"2017-01-24T13:57:52Z\",\n      \"updateId\": \"588f7ee98f138b19220041a7\",\n      \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"updateAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"WEB\"\n      },\n      \"updateAt\": \"2017-01-24T13:57:52Z\",\n      \"deleteId\": \"588f7ee98f138b19220041a7\",\n      \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n      \"deleteAttribution\": {\n        \"principalUserId\": \"588f7ee98f138b19220041a7\",\n        \"agentUserIds\": [\n          \"588f7ee98f138b19220041a7\",\n          \"588f7ee98f138b19220041a7\"\n        ],\n        \"eventId\": \"588f7ee98f138b19220041a7\",\n        \"aiChatId\": \"588f7ee98f138b19220041a7\",\n        \"aiToolUseId\": \"string\",\n        \"channel\": \"MCP\"\n      },\n      \"deleteAt\": \"2017-01-24T13:57:52Z\"\n    }\n  ],\n  \"next\": \"string\",\n  \"access\": [\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    },\n    {\n      \"allowed\": [\n        {\n          \"action\": \"string\",\n          \"fields\": [\n            \"string\"\n          ],\n          \"types\": [\n            \"string\"\n          ]\n        }\n      ],\n      \"ids\": [\n        \"588f7ee98f138b19220041a7\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e6007e4-b010-450e-af60-818ae81ae2d0",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3793ebef-d116-48fd-a64b-8994912a5d77",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14016f26-f750-4f3d-8c92-894da5a7579b",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "returnAccess",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "292390a0-2e25-49ed-abe4-e330a1ca7ca5",
+          "name": "Create a group type",
+          "request": {
+            "name": "Create a group type",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "group-type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"fieldName\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"orgId\": \"<string>\",\n  \"code\": \"<string>\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"otherGroupTypeId\": \"<string>\",\n  \"sourceGroupTypeId\": \"<string>\",\n  \"hidden\": \"<boolean>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "22ebdc14-48e4-41ed-a5f3-868faea73849",
+              "name": "group created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": \"<boolean>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"MULTIPLE\",\n  \"assignmentType\": \"EXPR\",\n  \"parentTypesAllowed\": \"OTHER\",\n  \"enableApprovals\": false,\n  \"defaultSensitivity\": \"ORG\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": true,\n  \"description\": \"string\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": true,\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"membershipFieldId\": \"588f7ee98f138b19220041a7\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"PRIVATE\",\n  \"fieldRequired\": false,\n  \"fieldEnableEditDialog\": false,\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff5f8289-cd3d-41bb-ab40-321c3d02bbb4",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": \"<boolean>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "538104d2-4f3b-4b08-92fe-f86d6e50500a",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": \"<boolean>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0bb361f8-dde7-4af3-93a9-94b7e7726582",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": \"<boolean>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5ca3497-5a5f-456d-9300-fc780ad78ec8",
+              "name": "org not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": \"<boolean>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0228252-a9d2-44db-93bb-c1559dbb3ae1",
+          "name": "Return a particular group type by id",
+          "request": {
+            "name": "Return a particular group type by id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "group-type",
+                ":groupTypeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "groupTypeId",
+                  "description": "(Required) Group Type id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8c0418ec-36cd-4fe0-a5e7-847459dcf98a",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"588f7ee98f138b19220041a7\",\n  \"name\": \"Engineering\",\n  \"fieldName\": \"engineering\",\n  \"membershipType\": \"SINGLE\",\n  \"assignmentType\": \"ASSIGNED\",\n  \"parentTypesAllowed\": \"BOTH\",\n  \"enableApprovals\": false,\n  \"defaultSensitivity\": \"HIGH\",\n  \"orgId\": \"588f7ee98f138b19220041a7\",\n  \"code\": \"D123\",\n  \"requirePositions\": true,\n  \"description\": \"string\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"sourceGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"hidden\": false,\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"membershipFieldId\": \"588f7ee98f138b19220041a7\",\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"HIGH\",\n  \"fieldRequired\": true,\n  \"fieldEnableEditDialog\": false,\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\",\n  \"createId\": \"588f7ee98f138b19220041a7\",\n  \"createBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"createAt\": \"2017-01-24T13:57:52Z\",\n  \"updateId\": \"588f7ee98f138b19220041a7\",\n  \"updateBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"updateAt\": \"2017-01-24T13:57:52Z\",\n  \"deleteId\": \"588f7ee98f138b19220041a7\",\n  \"deleteBehalfId\": \"588f7ee98f138b19220041a7\",\n  \"deleteAt\": \"2017-01-24T13:57:52Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ff63092-4e96-426f-9fcb-03385159099e",
+              "name": "bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a2299a91-09bc-4f8b-bff7-704de3ce6d59",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d01580f-111e-4716-a140-e14c31dc8635",
+          "name": "Update an existing group",
+          "request": {
+            "name": "Update an existing group",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "group-type",
+                ":groupTypeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "groupTypeId",
+                  "description": "(Required) Group Type id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"code\": \"<string>\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"otherGroupTypeId\": \"<string>\",\n  \"enableApprovals\": \"<boolean>\",\n  \"hidden\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"<string>\",\n      \"groupId\": \"<string>\",\n      \"fields\": \"<string>\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1d4ca336-bdd8-4892-872c-4e5aae298f7c",
+              "name": "group updatbed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"enableApprovals\": \"<boolean>\",\n  \"hidden\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6e5f097a-ba51-4941-90db-ef8516514220",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"enableApprovals\": \"<boolean>\",\n  \"hidden\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bf2a3f7f-cae3-4d73-99d2-15d8eaeec719",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"enableApprovals\": \"<boolean>\",\n  \"hidden\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5a3be62a-305c-4ab7-b217-fdfa82c12446",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"enableApprovals\": \"<boolean>\",\n  \"hidden\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "72ddf64c-045b-4850-b906-07431ac49c50",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Engineering\",\n  \"code\": \"D123\",\n  \"requirePositions\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"membershipType\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"parentTypesAllowed\": \"<string>\",\n  \"otherGroupTypeId\": \"588f7ee98f138b19220041a7\",\n  \"enableApprovals\": \"<boolean>\",\n  \"hidden\": \"<boolean>\",\n  \"defaultSensitivity\": \"<string>\",\n  \"positions\": [\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"allowMultiple\": \"<boolean>\",\n      \"eligibilityFilter\": \"<string>\",\n      \"id\": \"588f7ee98f138b19220041a7\"\n    }\n  ],\n  \"shareAccess\": [\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    },\n    {\n      \"access\": \"<string>\",\n      \"userId\": \"5887a7718f138b6a2a0041a7\",\n      \"groupId\": \"5887a7718f138b6a2a0041a7\",\n      \"fields\": \"name,image,title\"\n    }\n  ],\n  \"fieldSensitive\": \"<string>\",\n  \"fieldRequired\": \"<boolean>\",\n  \"fieldEnableEditDialog\": \"<boolean>\",\n  \"fieldCategoryId\": \"588f7ee98f138b19220041a7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "399f80c4-3e00-4a27-8179-74fe4135ad2b",
+          "name": "Delete a group",
+          "request": {
+            "name": "Delete a group",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "org",
+                ":orgId",
+                "group-type",
+                ":groupTypeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orgId",
+                  "description": "(Required) Org identifier (either id or slug)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "groupTypeId",
+                  "description": "(Required) Group Type id"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2a1da3d8-2b85-461c-8f80-0f47d1b39d7a",
+              "name": "group deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "df421a68-0495-4c9f-afc9-5b4f78d01c42",
+              "name": "invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e1fd42fb-0500-4166-8259-b118072bd3ec",
+              "name": "not authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "609bfc31-76f9-43e2-9b2e-be7257f94bcf",
+              "name": "permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "908b193e-2b97-4b47-9bf4-f20f0c1f17fd",
+              "name": "not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "org",
+                    ":orgId",
+                    "group-type",
+                    ":groupTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orgId",
+                      "description": "(Required) Org identifier (either id or slug)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupTypeId",
+                      "description": "(Required) Group Type id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://localhost",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6d964770-540c-463b-9674-61fa245dbee8",
+    "name": "ChartHop access group-type API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for ChartHop\n\nContact Support:\n Name: ChartHop\n Email: support@charthop.com",
+      "type": "text/plain"
+    }
+  }
+}
