@@ -1,0 +1,207 @@
+slug: charthop
+provider: Charthop
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 19
+edges:
+- tag: comp-review
+  spec_file: charthop-comp-review-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.95
+  evidence: POST /v1/org/{orgId}/comp-review 'Create a comp review'; POST .../comp-review/{compReviewId}/conclude
+    'Concludes (or closes) the compensation review'; schemas CompReviewEligibleEmployees, BudgetAllocation,
+    GuidelineCalculation
+  reason: The operations run an end-to-end compensation review cycle — eligibility, budget allocation,
+    reviewers/approvers, approval requests, conclusion — which is unambiguously compensation administration.
+- tag: band
+  spec_file: charthop-band-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.9
+  evidence: GET /v1/org/{orgId}/band findCompBands 'Find comp bands in the organization'; schemas CompBand,
+    JobTierFieldSchema, Money
+  reason: Operations manage compensation bands (pay ranges) tied to job tiers for an organisation — squarely
+    compensation structure design within Compensation & Benefits Management, not a generic 'band' object.
+- tag: assessment
+  spec_file: charthop-assessment-api-openapi.yml
+  capability_id: BC-300.20
+  capability_id_l1: BC-300
+  capability_name: Talent Management
+  confidence: 0.85
+  evidence: GET /v1/org/{orgId}/assessment/{assessmentId}/calibration/person — "Retrieve all persons who
+    were targets of form submissions... This endpoint is typically used for calibration"; schemas AssessmentTaskFormSummary,
+    FormSignatureConfig
+  reason: Assessment cycles with review forms, questions, response approval/release and person-level calibration
+    are performance review management on an HR platform, i.e. Talent Management within Human Capital Management.
+    Slight residual ambiguity over whether some assessments serve engagement surveys instead.
+- tag: budget-pool
+  spec_file: charthop-budget-pool-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.85
+  evidence: GET /v1/org/{orgId}/budget-pool/{id}/preview 'Generate tiering & preview with the given budget
+    calculated for the compensation review'; schemas Guideline, VariableComp, BudgetTiersResponse
+  reason: Budget pools here are the merit/comp-increase pools and guidelines used to run a compensation
+    review, so this realises compensation administration rather than generic financial budgeting.
+- tag: guideline
+  spec_file: charthop-guideline-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.85
+  evidence: GET /v1/org/{orgId}/guideline  findGuidelinesForCompReview  Get all guidelines for a given
+    comp review; schemas Money, MoneyRange, BasisFieldMatrix, GuidelineCalculation
+  reason: Operations manage compensation-review guidelines and calculate merit matrix values, which is
+    plainly compensation management within Human Capital Management.
+- tag: multiplier
+  spec_file: charthop-multiplier-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.82
+  evidence: GET /v1/org/{orgId}/multiplier findMultipliers 'Find comp band multipliers in the organization'
+  reason: Operations manage compensation band multipliers within an organisation, i.e. maintenance of
+    pay structures — Compensation & Benefits Management.
+- tag: stockgrant
+  spec_file: charthop-stockgrant-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.82
+  evidence: GET /v1/org/{orgId}/stockgrant findStockGrants Retrieve stock grants; schema StockGrantEntity
+  reason: Employee equity/stock grant records on a people-analytics platform are compensation data; Compensation
+    & Benefits Management explicitly covers equity.
+- tag: scenario
+  spec_file: charthop-scenario-api-openapi.yml
+  capability_id: BC-300.50
+  capability_id_l1: BC-300
+  capability_name: Workforce Planning Management
+  confidence: 0.8
+  evidence: POST /v1/org/{orgId}/scenario/{scenarioId}/combine combineScenarios; schemas ScenarioBudgetImpact,
+    CostImpact, ScenarioSharedViewConfig
+  reason: Scenarios with budget and cost impact over org changes are the headcount/workforce planning
+    construct described by the vendor, i.e. strategic workforce supply-and-demand planning.
+- tag: Time off ledger
+  spec_file: charthop-time-off-ledger-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.78
+  evidence: POST /v1/org/{orgId}/timeoff-ledger createLedgerEntry Create a time off ledger entry; POST
+    /v1/org/{orgId}/timeoff-ledger/export exportTimeOffLedger Payroll export of time off ledger
+  reason: Absence/time-off balance and accrual records (schema CarryOverBalanceEntry) with payroll export
+    — employee record and payroll administration, i.e. HR Operations Management. Slight ambiguity versus
+    Compensation & Benefits (leave as a benefit), hence 0.78.
+- tag: user
+  spec_file: charthop-user-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: assignUsers Assign or remove multiple users a role within an org; sendResetEmail Send a password
+    reset email; revokeUsersTokens Revoke multiple user's access tokens
+  reason: Application user account provisioning, invitation, role assignment, credential reset and token
+    revocation — identity and access management, not employee (person) records.
+- tag: role
+  spec_file: charthop-role-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /v1/org/{orgId}/role createRole; schemas Policy, PolicyRule, PolicyRuleTarget, OrgAccess,
+    User, WebRegisteredCredential
+  reason: Despite the HR context, the Role object carries policies, policy rules and org access for users
+    — i.e. permission roles governing access, which is Identity & Access Management rather than job architecture.
+- tag: person
+  spec_file: charthop-person-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.72
+  evidence: GET /v2/org/{orgId}/person/count-invite-users countPersonsWithoutUser 'Count persons in the
+    organization available to invite as users'; POST /v2/org/{orgId}/person createPerson
+  reason: CRUD and aggregation over person (employee) records in the org graph of an HR/people-analytics
+    platform — employee record keeping, i.e. HR Operations. Some chance the better fit is workforce analytics/planning,
+    hence not maximal confidence.
+- tag: policy
+  spec_file: charthop-policy-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: GET /v1/org/{orgId}/policy/action getPolicyActions 'Return all entity:action maps allowed
+    on a policy rule'; schemas PolicyRule, ShareAccess, Role, OrgAccess
+  reason: Despite the 'policy' homograph with compliance policy management, the operations define access-control
+    rules (entity:action maps, roles, share access) — authorisation policy administration under Identity
+    & Access Management.
+- tag: timeOffPolicy
+  spec_file: charthop-timeoffpolicy-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.72
+  evidence: createTimeOffPolicy Create a time off policy; estimateAccrualForPolicy Estimate accrual value
+    for policy; findTimeOffPolicyBalancesForPerson
+  reason: Leave/absence policy and accrual balance administration is core HR operations (leave administration)
+    on the employee record; could alternatively sit under benefits, hence moderate confidence on the L2.
+- tag: timeoff
+  spec_file: charthop-timeoff-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.72
+  evidence: requestTimeOff Request time off; approveTimeOff Approve a pending time off request
+  reason: Employee absence request, approval and rejection workflow — HR service delivery/leave administration;
+    L2 choice between HR Operations and Benefits leaves some doubt.
+- tag: goal
+  spec_file: charthop-goal-api-openapi.yml
+  capability_id: BC-300.20
+  capability_id_l1: BC-300
+  capability_name: Talent Management
+  confidence: 0.7
+  evidence: '''Create a new goal'', ''Copy a goal and its targets into a new goal'', ''Find parent and
+    child goals, from a starting goal id''; schemas GoalProgressForecast, GoalTargetActual, GoalProgressSummary'
+  reason: Goal/OKR management with targets, progress tracking and parent-child alignment; the vendor states
+    it runs 'performance and goals', so this sits in Talent Management (performance/development). Some
+    ambiguity with Strategy Execution Management (OKRs) keeps confidence at 0.7.
+- tag: report
+  spec_file: charthop-report-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: POST /v1/org/{orgId}/report/query getReportFromQuery 'Return timeseries data from arbitrary
+    queries'; POST .../chart/{chartId}/export/csv exportChartCsv
+  reason: Report definition, querying of chart data and CSV export constitute reporting/BI delivery over
+    org (people) data. Could alternatively be read as management reporting, hence 0.7.
+- tag: reportChart
+  spec_file: charthop-reportchart-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: POST /v1/org/{orgId}/report/{reportId}/chart createChart 'Create a new chart in a report';
+    GET .../chart/{chartId}/data exportChartData 'Export a particular chart's data'
+  reason: Chart authoring and data export inside reports is analytics/BI content management, not an HR-specific
+    business process.
+- tag: timeoffAdjustment
+  spec_file: charthop-timeoffadjustment-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: createAdjustment Create a time off balance adjustment; schema TimeOffBalanceAdjustment
+  reason: Manual adjustment of employee leave balances is leave administration within HR operations.
