@@ -1,38 +1,31 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop access stripe API
+  title: ChartHop Stripe API
   contact:
     name: ChartHop
     url: https://www.charthop.com
     email: support@charthop.com
-host: localhost
-schemes:
-- https
-- http
-consumes:
-- application/json
-produces:
-- application/json
+servers:
+- url: https://localhost
+- url: http://localhost
 tags:
-- name: stripe
+- name: Stripe
 paths:
   /v1/stripe/plan:
     get:
       tags:
-      - stripe
+      - Stripe
       summary: Return all billing plans directly from Stripe (staff only)
       operationId: findStripePlans
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/ResultsPlan'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsPlan'
         '400':
           description: bad request
         '404':
@@ -40,18 +33,16 @@ paths:
   /v1/stripe/product:
     get:
       tags:
-      - stripe
+      - Stripe
       summary: Return all products directly from Stripe (staff only)
       operationId: findStripeProducts
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/ResultsStripeProduct'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsStripeProduct'
         '400':
           description: bad request
         '404':
@@ -59,24 +50,23 @@ paths:
   /v1/stripe/product/{productId}:
     get:
       tags:
-      - stripe
+      - Stripe
       summary: Return a particular product by its Stripe id
       operationId: getStripeProduct
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: productId
         in: query
         description: Stripe product id
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/StripeProduct'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeProduct'
         '400':
           description: bad request
         '404':
@@ -84,111 +74,110 @@ paths:
   /v1/stripe/setup-intent:
     post:
       tags:
-      - stripe
+      - Stripe
       summary: Creates a Stripe setupIntent object and returns the secret for that object
       operationId: getSetupIntent
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/SetupIntent'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetupIntent'
         '400':
           description: bad request
         '404':
           description: not found
-definitions:
-  ResultsPlan:
-    type: object
-    required:
-    - data
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/Plan'
-      next:
-        type: string
-  StripeProduct:
-    type: object
-    required:
-    - stripeId
-    - label
-    properties:
-      stripeId:
-        type: string
-        description: unique Stripe identifier for this product
-      label:
-        type: string
-        description: human-readable nickname for this product
-  SetupIntent:
-    type: object
-    required:
-    - clientSecret
-    properties:
-      clientSecret:
-        type: string
-        description: Secret of setup_intent object created
-        example: st_ersasdfasdf
-  Plan:
-    type: object
-    required:
-    - id
-    - name
-    - interval
-    - intervalCount
-    - tiers
-    - stripeProductId
-    properties:
-      id:
-        type: string
-        description: unique Stripe identifier for this plan
-      name:
-        type: string
-        description: human-readable nickname for this plan
-      interval:
-        type: string
-        description: interval for billing on this plan
-        enum:
-        - DAY
-        - WEEK
-        - MONTH
-        - YEAR
-      intervalCount:
-        type: integer
-        format: int32
-        description: number of intervals, for example 3 for quarterly billing
-      tiers:
-        type: array
-        description: pricing tiers, per employee per interval
-        items:
-          $ref: '#/definitions/PlanTier'
-      stripeProductId:
-        type: string
-        description: stripe product id that this plan belongs to
-  ResultsStripeProduct:
-    type: object
-    required:
-    - data
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/StripeProduct'
-      next:
-        type: string
-  PlanTier:
-    type: object
-    required:
-    - unitAmount
-    properties:
-      upTo:
-        type: integer
-        format: int64
-        description: headcount up to this level is charged at the below rate
-      unitAmount:
-        type: number
-        description: PEPM rate
+components:
+  schemas:
+    PlanTier:
+      type: object
+      required:
+      - unitAmount
+      properties:
+        upTo:
+          type: integer
+          format: int64
+          description: headcount up to this level is charged at the below rate
+        unitAmount:
+          type: number
+          description: PEPM rate
+    ResultsPlan:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plan'
+        next:
+          type: string
+    Plan:
+      type: object
+      required:
+      - id
+      - name
+      - interval
+      - intervalCount
+      - tiers
+      - stripeProductId
+      properties:
+        id:
+          type: string
+          description: unique Stripe identifier for this plan
+        name:
+          type: string
+          description: human-readable nickname for this plan
+        interval:
+          type: string
+          description: interval for billing on this plan
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+        intervalCount:
+          type: integer
+          format: int32
+          description: number of intervals, for example 3 for quarterly billing
+        tiers:
+          type: array
+          description: pricing tiers, per employee per interval
+          items:
+            $ref: '#/components/schemas/PlanTier'
+        stripeProductId:
+          type: string
+          description: stripe product id that this plan belongs to
+    StripeProduct:
+      type: object
+      required:
+      - stripeId
+      - label
+      properties:
+        stripeId:
+          type: string
+          description: unique Stripe identifier for this product
+        label:
+          type: string
+          description: human-readable nickname for this product
+    ResultsStripeProduct:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StripeProduct'
+        next:
+          type: string
+    SetupIntent:
+      type: object
+      required:
+      - clientSecret
+      properties:
+        clientSecret:
+          type: string
+          description: Secret of setup_intent object created
+          example: st_ersasdfasdf

@@ -1,38 +1,31 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop access product API
+  title: ChartHop Product API
   contact:
     name: ChartHop
     url: https://www.charthop.com
     email: support@charthop.com
-host: localhost
-schemes:
-- https
-- http
-consumes:
-- application/json
-produces:
-- application/json
+servers:
+- url: https://localhost
+- url: http://localhost
 tags:
-- name: product
+- name: Product
 paths:
   /v1/product:
     get:
       tags:
-      - product
+      - Product
       summary: Return all products
       operationId: findProducts
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/ResultsProduct'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsProduct'
         '400':
           description: bad request
         '401':
@@ -41,84 +34,80 @@ paths:
           description: not found
     post:
       tags:
-      - product
+      - Product
       summary: Create a new product
       operationId: createProduct
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: body
-        in: body
-        description: Product data to create
-        required: true
-        schema:
-          $ref: '#/definitions/CreateProduct'
       responses:
         '201':
           description: product created
-          schema:
-            $ref: '#/definitions/Product'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
         '400':
           description: invalid data
         '401':
           description: not authorized
         '403':
           description: permission denied
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+        description: Product data to create
+        required: true
   /v1/product/features:
     get:
       tags:
-      - product
+      - Product
       summary: Return all features
       operationId: findFeatures
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: the request has succeeded
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-              - AI_ACTION
-              - AI_AGENT
-              - AI_API_WRITE
-              - AI_SLACK_TEAM_CHAT
-              - ATS_SYNC
-              - BUDGET
-              - COMPENSATION_REVIEW
-              - CUSTOM_CALENDAR
-              - CUSTOM_FIELD
-              - CUSTOM_FIELD_READONLY
-              - CUSTOM_FORM
-              - CUSTOM_PROFILE_TAB
-              - CUSTOM_ROLE
-              - FORM_ANONYMOUS
-              - FORM_RELEASE
-              - FORM_SIGNATURE
-              - GOAL
-              - MULTI_PAYROLL
-              - PERFORMANCE_REVIEW
-              - REPORT
-              - REPORT_READONLY
-              - SCENARIO
-              - SIGNATURE
-              - SIGNATURE_QES
-              - SIMPLE_WORKFLOWS
-              - SURVEY
-              - TABLE
-              - TEMPLATE
-              - WORKDAY_ADAPTIVE
-              - PAYROLL_OUTBOUND
-              - APPROVAL_WORKFLOWS
-              - CONTENT
-              - IDENTITY_OUTBOUND
-              - ONBOARDING_OFFBOARDING
-              - TIMEOFF
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - AI_ACTION
+                  - AI_AGENT
+                  - AI_API_WRITE
+                  - AI_SLACK_TEAM_CHAT
+                  - ATS_SYNC
+                  - BUDGET
+                  - COMPENSATION_REVIEW
+                  - CUSTOM_CALENDAR
+                  - CUSTOM_FIELD
+                  - CUSTOM_FIELD_READONLY
+                  - CUSTOM_FORM
+                  - CUSTOM_PROFILE_TAB
+                  - CUSTOM_ROLE
+                  - FORM_ANONYMOUS
+                  - FORM_RELEASE
+                  - FORM_SIGNATURE
+                  - GOAL
+                  - MULTI_PAYROLL
+                  - PERFORMANCE_REVIEW
+                  - REPORT
+                  - REPORT_READONLY
+                  - SCENARIO
+                  - SIGNATURE
+                  - SIGNATURE_QES
+                  - SIMPLE_WORKFLOWS
+                  - SURVEY
+                  - TABLE
+                  - TEMPLATE
+                  - WORKDAY_ADAPTIVE
+                  - PAYROLL_OUTBOUND
+                  - APPROVAL_WORKFLOWS
+                  - CONTENT
+                  - IDENTITY_OUTBOUND
+                  - ONBOARDING_OFFBOARDING
+                  - TIMEOFF
         '400':
           description: bad request
         '401':
@@ -128,49 +117,39 @@ paths:
   /v1/product/{productId}:
     get:
       tags:
-      - product
+      - Product
       summary: Return a particular product by id
       operationId: getProduct
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: productId
         in: path
         description: Product id
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/Product'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
         '400':
           description: bad request
         '404':
           description: not found
     patch:
       tags:
-      - product
+      - Product
       summary: Update an existing product
       operationId: updateProduct
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: productId
         in: path
         description: Product id
         required: true
-        type: string
-      - name: body
-        in: body
-        description: Product data to update
-        required: true
         schema:
-          $ref: '#/definitions/UpdateProduct'
+          type: string
       responses:
         '204':
           description: product updated
@@ -182,323 +161,331 @@ paths:
           description: permission denied
         '404':
           description: not found
-definitions:
-  AccessAction:
-    type: object
-    required:
-    - action
-    properties:
-      action:
-        type: string
-      fields:
-        type: array
-        uniqueItems: true
-        items:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+        description: Product data to update
+        required: true
+components:
+  schemas:
+    FeatureAccessOption:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        name:
           type: string
-      types:
-        type: array
-        uniqueItems: true
-        items:
+          description: The name of the feature option tied to the feature access
+          example: smart_fields
+          enum:
+          - CONFIGURED_ROLES
+          - SMART_FIELDS
+          - APP_FIELD_MAPPERS
+          - MULTI_PAYROLL_INSTALLS
+        description:
           type: string
-  ResultsAccess:
-    type: object
-    required:
-    - allowed
-    properties:
-      ids:
-        type: array
-        uniqueItems: true
-        items:
+          description: The description of the feature option
+        type:
           type: string
+          description: The feature option type
+          enum:
+          - LIMIT
+          - FULL_ACCESS
+        limit:
+          type: integer
+          format: int32
+          description: The feature option limit
+    UpdateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of product
+          example: Compensation Reviews
+        sku:
+          type: string
+          description: unique sku of product
+          example: compensation-reviews
+        salesforceProductId:
+          type: string
+          description: corresponding product id in salesforce
+          example: 01t4T000000RpgKQAS
+        stripeProductId:
+          type: string
+          description: corresponding product id in stripe
+          example: prod_12345ABC
+        features:
+          type: array
+          description: set of features this product has access to
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - AI_ACTION
+            - AI_AGENT
+            - AI_API_WRITE
+            - AI_SLACK_TEAM_CHAT
+            - ATS_SYNC
+            - BUDGET
+            - COMPENSATION_REVIEW
+            - CUSTOM_CALENDAR
+            - CUSTOM_FIELD
+            - CUSTOM_FIELD_READONLY
+            - CUSTOM_FORM
+            - CUSTOM_PROFILE_TAB
+            - CUSTOM_ROLE
+            - FORM_ANONYMOUS
+            - FORM_RELEASE
+            - FORM_SIGNATURE
+            - GOAL
+            - MULTI_PAYROLL
+            - PERFORMANCE_REVIEW
+            - REPORT
+            - REPORT_READONLY
+            - SCENARIO
+            - SIGNATURE
+            - SIGNATURE_QES
+            - SIMPLE_WORKFLOWS
+            - SURVEY
+            - TABLE
+            - TEMPLATE
+            - WORKDAY_ADAPTIVE
+            - PAYROLL_OUTBOUND
+            - APPROVAL_WORKFLOWS
+            - CONTENT
+            - IDENTITY_OUTBOUND
+            - ONBOARDING_OFFBOARDING
+            - TIMEOFF
+        featureOptions:
+          type: object
+          description: map of options for the feature
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FeatureAccessOption'
+        status:
+          type: string
+          description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
+          enum:
+          - ACTIVE
+          - LEGACY
+          - INACTIVE
+    CreateProduct:
+      type: object
+      required:
+      - name
+      - sku
+      - salesforceProductId
+      - stripeProductId
+      - features
+      - status
+      properties:
+        name:
+          type: string
+          description: name of product
+          example: Compensation Reviews
+        sku:
+          type: string
+          description: unique sku of product
+          example: compensation-reviews
+        salesforceProductId:
+          type: string
+          description: corresponding product id in salesforce
+          example: 01t4T000000RpgKQAS
+        stripeProductId:
+          type: string
+          description: corresponding product id in stripe
+          example: prod_12345ABC
+        features:
+          type: array
+          description: set of features this product has access to
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - AI_ACTION
+            - AI_AGENT
+            - AI_API_WRITE
+            - AI_SLACK_TEAM_CHAT
+            - ATS_SYNC
+            - BUDGET
+            - COMPENSATION_REVIEW
+            - CUSTOM_CALENDAR
+            - CUSTOM_FIELD
+            - CUSTOM_FIELD_READONLY
+            - CUSTOM_FORM
+            - CUSTOM_PROFILE_TAB
+            - CUSTOM_ROLE
+            - FORM_ANONYMOUS
+            - FORM_RELEASE
+            - FORM_SIGNATURE
+            - GOAL
+            - MULTI_PAYROLL
+            - PERFORMANCE_REVIEW
+            - REPORT
+            - REPORT_READONLY
+            - SCENARIO
+            - SIGNATURE
+            - SIGNATURE_QES
+            - SIMPLE_WORKFLOWS
+            - SURVEY
+            - TABLE
+            - TEMPLATE
+            - WORKDAY_ADAPTIVE
+            - PAYROLL_OUTBOUND
+            - APPROVAL_WORKFLOWS
+            - CONTENT
+            - IDENTITY_OUTBOUND
+            - ONBOARDING_OFFBOARDING
+            - TIMEOFF
+        featureOptions:
+          type: object
+          description: map of options for the feature
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FeatureAccessOption'
+        status:
+          type: string
+          description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
+          enum:
+          - ACTIVE
+          - LEGACY
+          - INACTIVE
+    Product:
+      type: object
+      required:
+      - name
+      - sku
+      - salesforceProductId
+      - stripeProductId
+      - features
+      - status
+      properties:
+        id:
+          type: string
+          description: globally unique id
           example: 588f7ee98f138b19220041a7
-      allowed:
-        type: array
-        uniqueItems: true
-        items:
-          $ref: '#/definitions/AccessAction'
-  UpdateProduct:
-    type: object
-    properties:
-      name:
-        type: string
-        description: name of product
-        example: Compensation Reviews
-      sku:
-        type: string
-        description: unique sku of product
-        example: compensation-reviews
-      salesforceProductId:
-        type: string
-        description: corresponding product id in salesforce
-        example: 01t4T000000RpgKQAS
-      stripeProductId:
-        type: string
-        description: corresponding product id in stripe
-        example: prod_12345ABC
-      features:
-        type: array
-        description: set of features this product has access to
-        uniqueItems: true
-        items:
+        name:
           type: string
+          description: name of product
+          example: Compensation Reviews
+        sku:
+          type: string
+          description: unique sku of product
+          example: compensation-reviews
+        salesforceProductId:
+          type: string
+          description: corresponding product id in salesforce
+          example: 01t4T000000RpgKQAS
+        stripeProductId:
+          type: string
+          description: corresponding product id in stripe
+          example: prod_12345ABC
+        features:
+          type: array
+          description: set of features this product has access to
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - AI_ACTION
+            - AI_AGENT
+            - AI_API_WRITE
+            - AI_SLACK_TEAM_CHAT
+            - ATS_SYNC
+            - BUDGET
+            - COMPENSATION_REVIEW
+            - CUSTOM_CALENDAR
+            - CUSTOM_FIELD
+            - CUSTOM_FIELD_READONLY
+            - CUSTOM_FORM
+            - CUSTOM_PROFILE_TAB
+            - CUSTOM_ROLE
+            - FORM_ANONYMOUS
+            - FORM_RELEASE
+            - FORM_SIGNATURE
+            - GOAL
+            - MULTI_PAYROLL
+            - PERFORMANCE_REVIEW
+            - REPORT
+            - REPORT_READONLY
+            - SCENARIO
+            - SIGNATURE
+            - SIGNATURE_QES
+            - SIMPLE_WORKFLOWS
+            - SURVEY
+            - TABLE
+            - TEMPLATE
+            - WORKDAY_ADAPTIVE
+            - PAYROLL_OUTBOUND
+            - APPROVAL_WORKFLOWS
+            - CONTENT
+            - IDENTITY_OUTBOUND
+            - ONBOARDING_OFFBOARDING
+            - TIMEOFF
+        featureOptions:
+          type: object
+          description: map of options for the feature
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FeatureAccessOption'
+        status:
+          type: string
+          description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
           enum:
-          - AI_ACTION
-          - AI_AGENT
-          - AI_API_WRITE
-          - AI_SLACK_TEAM_CHAT
-          - ATS_SYNC
-          - BUDGET
-          - COMPENSATION_REVIEW
-          - CUSTOM_CALENDAR
-          - CUSTOM_FIELD
-          - CUSTOM_FIELD_READONLY
-          - CUSTOM_FORM
-          - CUSTOM_PROFILE_TAB
-          - CUSTOM_ROLE
-          - FORM_ANONYMOUS
-          - FORM_RELEASE
-          - FORM_SIGNATURE
-          - GOAL
-          - MULTI_PAYROLL
-          - PERFORMANCE_REVIEW
-          - REPORT
-          - REPORT_READONLY
-          - SCENARIO
-          - SIGNATURE
-          - SIGNATURE_QES
-          - SIMPLE_WORKFLOWS
-          - SURVEY
-          - TABLE
-          - TEMPLATE
-          - WORKDAY_ADAPTIVE
-          - PAYROLL_OUTBOUND
-          - APPROVAL_WORKFLOWS
-          - CONTENT
-          - IDENTITY_OUTBOUND
-          - ONBOARDING_OFFBOARDING
-          - TIMEOFF
-      featureOptions:
-        type: object
-        description: map of options for the feature
-        additionalProperties:
+          - ACTIVE
+          - LEGACY
+          - INACTIVE
+    ResultsProduct:
+      type: object
+      required:
+      - data
+      properties:
+        data:
           type: array
           items:
-            $ref: '#/definitions/FeatureAccessOption'
-      status:
-        type: string
-        description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
-        enum:
-        - ACTIVE
-        - LEGACY
-        - INACTIVE
-  Product:
-    type: object
-    required:
-    - name
-    - sku
-    - salesforceProductId
-    - stripeProductId
-    - features
-    - status
-    properties:
-      id:
-        type: string
-        description: globally unique id
-        example: 588f7ee98f138b19220041a7
-      name:
-        type: string
-        description: name of product
-        example: Compensation Reviews
-      sku:
-        type: string
-        description: unique sku of product
-        example: compensation-reviews
-      salesforceProductId:
-        type: string
-        description: corresponding product id in salesforce
-        example: 01t4T000000RpgKQAS
-      stripeProductId:
-        type: string
-        description: corresponding product id in stripe
-        example: prod_12345ABC
-      features:
-        type: array
-        description: set of features this product has access to
-        uniqueItems: true
-        items:
+            $ref: '#/components/schemas/Product'
+        next:
           type: string
-          enum:
-          - AI_ACTION
-          - AI_AGENT
-          - AI_API_WRITE
-          - AI_SLACK_TEAM_CHAT
-          - ATS_SYNC
-          - BUDGET
-          - COMPENSATION_REVIEW
-          - CUSTOM_CALENDAR
-          - CUSTOM_FIELD
-          - CUSTOM_FIELD_READONLY
-          - CUSTOM_FORM
-          - CUSTOM_PROFILE_TAB
-          - CUSTOM_ROLE
-          - FORM_ANONYMOUS
-          - FORM_RELEASE
-          - FORM_SIGNATURE
-          - GOAL
-          - MULTI_PAYROLL
-          - PERFORMANCE_REVIEW
-          - REPORT
-          - REPORT_READONLY
-          - SCENARIO
-          - SIGNATURE
-          - SIGNATURE_QES
-          - SIMPLE_WORKFLOWS
-          - SURVEY
-          - TABLE
-          - TEMPLATE
-          - WORKDAY_ADAPTIVE
-          - PAYROLL_OUTBOUND
-          - APPROVAL_WORKFLOWS
-          - CONTENT
-          - IDENTITY_OUTBOUND
-          - ONBOARDING_OFFBOARDING
-          - TIMEOFF
-      featureOptions:
-        type: object
-        description: map of options for the feature
-        additionalProperties:
+        access:
           type: array
           items:
-            $ref: '#/definitions/FeatureAccessOption'
-      status:
-        type: string
-        description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
-        enum:
-        - ACTIVE
-        - LEGACY
-        - INACTIVE
-  CreateProduct:
-    type: object
-    required:
-    - name
-    - sku
-    - salesforceProductId
-    - stripeProductId
-    - features
-    - status
-    properties:
-      name:
-        type: string
-        description: name of product
-        example: Compensation Reviews
-      sku:
-        type: string
-        description: unique sku of product
-        example: compensation-reviews
-      salesforceProductId:
-        type: string
-        description: corresponding product id in salesforce
-        example: 01t4T000000RpgKQAS
-      stripeProductId:
-        type: string
-        description: corresponding product id in stripe
-        example: prod_12345ABC
-      features:
-        type: array
-        description: set of features this product has access to
-        uniqueItems: true
-        items:
+            $ref: '#/components/schemas/ResultsAccess'
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
           type: string
-          enum:
-          - AI_ACTION
-          - AI_AGENT
-          - AI_API_WRITE
-          - AI_SLACK_TEAM_CHAT
-          - ATS_SYNC
-          - BUDGET
-          - COMPENSATION_REVIEW
-          - CUSTOM_CALENDAR
-          - CUSTOM_FIELD
-          - CUSTOM_FIELD_READONLY
-          - CUSTOM_FORM
-          - CUSTOM_PROFILE_TAB
-          - CUSTOM_ROLE
-          - FORM_ANONYMOUS
-          - FORM_RELEASE
-          - FORM_SIGNATURE
-          - GOAL
-          - MULTI_PAYROLL
-          - PERFORMANCE_REVIEW
-          - REPORT
-          - REPORT_READONLY
-          - SCENARIO
-          - SIGNATURE
-          - SIGNATURE_QES
-          - SIMPLE_WORKFLOWS
-          - SURVEY
-          - TABLE
-          - TEMPLATE
-          - WORKDAY_ADAPTIVE
-          - PAYROLL_OUTBOUND
-          - APPROVAL_WORKFLOWS
-          - CONTENT
-          - IDENTITY_OUTBOUND
-          - ONBOARDING_OFFBOARDING
-          - TIMEOFF
-      featureOptions:
-        type: object
-        description: map of options for the feature
-        additionalProperties:
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/definitions/FeatureAccessOption'
-      status:
-        type: string
-        description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
-        enum:
-        - ACTIVE
-        - LEGACY
-        - INACTIVE
-  ResultsProduct:
-    type: object
-    required:
-    - data
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/Product'
-      next:
-        type: string
-      access:
-        type: array
-        items:
-          $ref: '#/definitions/ResultsAccess'
-  FeatureAccessOption:
-    type: object
-    required:
-    - name
-    - type
-    properties:
-      name:
-        type: string
-        description: The name of the feature option tied to the feature access
-        example: smart_fields
-        enum:
-        - CONFIGURED_ROLES
-        - SMART_FIELDS
-        - APP_FIELD_MAPPERS
-        - MULTI_PAYROLL_INSTALLS
-      description:
-        type: string
-        description: The description of the feature option
-      type:
-        type: string
-        description: The feature option type
-        enum:
-        - LIMIT
-        - FULL_ACCESS
-      limit:
-        type: integer
-        format: int32
-        description: The feature option limit
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'

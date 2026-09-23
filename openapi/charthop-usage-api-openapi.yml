@@ -1,73 +1,65 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop access usage API
+  title: ChartHop Usage API
   contact:
     name: ChartHop
     url: https://www.charthop.com
     email: support@charthop.com
-host: localhost
-schemes:
-- https
-- http
-consumes:
-- application/json
-produces:
-- application/json
+servers:
+- url: https://localhost
+- url: http://localhost
 tags:
-- name: usage
+- name: Usage
 paths:
   /v1/org/{orgId}/usage/upgrade:
     post:
       tags:
-      - usage
+      - Usage
       summary: Signal interest in upgrading to a paid plan
       operationId: recordUpgradeInterest
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: orgId
         in: path
         description: Org identifier (either id or slug)
         required: true
-        type: string
+        schema:
+          type: string
       - name: module
         in: query
         description: Module name
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '401':
           description: unauthorized
   /v1/org/{orgId}/usage/{type}:
     post:
       tags:
-      - usage
+      - Usage
       summary: Record usage of a product feature
       operationId: recordUsage
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: orgId
         in: path
         description: Org identifier (either id or slug)
         required: true
-        type: string
+        schema:
+          type: string
       - name: type
         in: path
         description: Type of usage
         required: true
-        type: string
+        schema:
+          type: string
       - name: entityId
         in: query
         description: Entity id, if applicable
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '401':
           description: unauthorized

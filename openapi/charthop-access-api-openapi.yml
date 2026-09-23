@@ -1,75 +1,75 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop access API
+  title: ChartHop Access API
   contact:
     name: ChartHop
     url: https://www.charthop.com
     email: support@charthop.com
-host: localhost
-schemes:
-- https
-- http
-consumes:
-- application/json
-produces:
-- application/json
+servers:
+- url: https://localhost
+- url: http://localhost
 tags:
-- name: access
+- name: Access
 paths:
   /v1/org/{orgId}/access/entity/{type}:
     get:
       tags:
-      - access
-      summary: Return the appropriate actions that can be performed on an entity or set of entities
+      - Access
+      summary: Return the appropriate actions that can be performed on an entity or set of…
       operationId: getEntityAccess
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: orgId
         in: path
         description: Org identifier (either id or slug)
         required: true
-        type: string
+        schema:
+          type: string
       - name: type
         in: path
         description: Entity type
         required: true
-        type: string
+        schema:
+          type: string
       - name: id
         in: query
         description: Entity ids
         required: false
-        type: string
+        schema:
+          type: string
       - name: action
         in: query
         description: Actions, defaults to update,delete
         required: false
-        type: string
+        schema:
+          type: string
       - name: fields
         in: query
         description: Fields to check, defaults to all fields
         required: false
-        type: string
+        schema:
+          type: string
       - name: date
         in: query
         description: Date, defaults to today
         required: false
-        type: string
-        format: date
+        schema:
+          type: string
+          format: date
       - name: scenarioId
         in: query
         description: Scenario id, defaults to primary
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/AccessResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessResponse'
         '401':
           description: unauthorized
         '404':
@@ -77,69 +77,69 @@ paths:
   /v1/org/{orgId}/access/ui:
     get:
       tags:
-      - access
-      summary: Return the appropriate actions that can be performed on the ui.
+      - Access
+      summary: Return the appropriate actions that can be performed on the ui
       operationId: getUiAccess
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: orgId
         in: path
         description: Org identifier (either id or slug)
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: successful operation
-          schema:
-            type: array
-            uniqueItems: true
-            items:
-              type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  type: string
         '401':
           description: unauthorized
         '404':
           description: not found
-definitions:
-  AccessAction:
-    type: object
-    required:
-    - action
-    properties:
-      action:
-        type: string
-      fields:
-        type: array
-        uniqueItems: true
-        items:
+components:
+  schemas:
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
           type: string
-      types:
-        type: array
-        uniqueItems: true
-        items:
-          type: string
-  ResultsAccess:
-    type: object
-    required:
-    - allowed
-    properties:
-      ids:
-        type: array
-        uniqueItems: true
-        items:
-          type: string
-          example: 588f7ee98f138b19220041a7
-      allowed:
-        type: array
-        uniqueItems: true
-        items:
-          $ref: '#/definitions/AccessAction'
-  AccessResponse:
-    type: object
-    properties:
-      access:
-        type: array
-        items:
-          $ref: '#/definitions/ResultsAccess'
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    AccessResponse:
+      type: object
+      properties:
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'

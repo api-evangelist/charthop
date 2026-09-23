@@ -1,66 +1,57 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop access email-template API
+  title: ChartHop Email Template API
   contact:
     name: ChartHop
     url: https://www.charthop.com
     email: support@charthop.com
-host: localhost
-schemes:
-- https
-- http
-consumes:
-- application/json
-produces:
-- application/json
+servers:
+- url: https://localhost
+- url: http://localhost
 tags:
-- name: email-template
+- name: Email Template
 paths:
   /v1/email-template:
     post:
       tags:
-      - email-template
+      - Email Template
       summary: Create a new email template
       operationId: createEmailTemplate
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: body
-        in: body
-        description: Email template to create
-        required: true
-        schema:
-          $ref: '#/definitions/CreateEmailTemplate'
       responses:
         '201':
           description: email template created
-          schema:
-            $ref: '#/definitions/EmailTemplate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplate'
         '400':
           description: invalid data
         '401':
           description: not authorized
         '403':
           description: permission denied
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEmailTemplate'
+        description: Email template to create
+        required: true
   /v1/email-template/essential:
     get:
       tags:
-      - email-template
+      - Email Template
       summary: Return all essential email templates
       operationId: getEssentialEmailTemplates
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/ResultsEmailTemplate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsEmailTemplate'
         '400':
           description: bad request
         '404':
@@ -68,24 +59,23 @@ paths:
   /v1/email-template/name/{name}:
     get:
       tags:
-      - email-template
+      - Email Template
       summary: Return the email template by name
       operationId: getEmailTemplateByName
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: name
         in: path
         description: Email template name
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/EmailTemplate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplate'
         '400':
           description: bad request
         '404':
@@ -93,18 +83,16 @@ paths:
   /v1/email-template/non-essential:
     get:
       tags:
-      - email-template
+      - Email Template
       summary: Return all non-essential email templates
       operationId: getNonEssentialEmailTemplates
-      consumes:
-      - application/json
-      produces:
-      - application/json
       responses:
         '200':
           description: successful operation
-          schema:
-            $ref: '#/definitions/ResultsEmailTemplate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsEmailTemplate'
         '400':
           description: bad request
         '404':
@@ -112,25 +100,16 @@ paths:
   /v1/email-template/{emailTemplateId}:
     patch:
       tags:
-      - email-template
+      - Email Template
       summary: Update an existing email template
       operationId: updateEmailTemplate
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: emailTemplateId
         in: path
         description: Email template id
         required: true
-        type: string
-      - name: body
-        in: body
-        description: Email template data to update
-        required: true
         schema:
-          $ref: '#/definitions/UpdateEmailTemplate'
+          type: string
       responses:
         '204':
           description: email template updated
@@ -142,111 +121,119 @@ paths:
           description: permission denied
         '404':
           description: not found
-definitions:
-  AccessAction:
-    type: object
-    required:
-    - action
-    properties:
-      action:
-        type: string
-      fields:
-        type: array
-        uniqueItems: true
-        items:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailTemplate'
+        description: Email template data to update
+        required: true
+components:
+  schemas:
+    EmailTemplate:
+      type: object
+      required:
+      - id
+      - name
+      - category
+      properties:
+        id:
           type: string
-      types:
-        type: array
-        uniqueItems: true
-        items:
-          type: string
-  ResultsAccess:
-    type: object
-    required:
-    - allowed
-    properties:
-      ids:
-        type: array
-        uniqueItems: true
-        items:
-          type: string
+          description: globally unique id
           example: 588f7ee98f138b19220041a7
-      allowed:
-        type: array
-        uniqueItems: true
-        items:
-          $ref: '#/definitions/AccessAction'
-  EmailTemplate:
-    type: object
-    required:
-    - id
-    - name
-    - category
-    properties:
-      id:
-        type: string
-        description: globally unique id
-        example: 588f7ee98f138b19220041a7
-      name:
-        type: string
-        description: name of the email template
-        example: self_serve_welcome
-      category:
-        type: string
-        description: email category
-        enum:
-        - ADMINISTRATIVE
-        - BILLING
-        - DATA_IMPORT_AND_SYNC_STATUS
-        - TRIAL_REMINDERS
-        - APPROVAL_NOTIFICATIONS
-  UpdateEmailTemplate:
-    type: object
-    properties:
-      name:
-        type: string
-        description: name of the email template
-        example: self_serve_welcome
-      category:
-        type: string
-        description: email category
-        enum:
-        - ADMINISTRATIVE
-        - BILLING
-        - DATA_IMPORT_AND_SYNC_STATUS
-        - TRIAL_REMINDERS
-        - APPROVAL_NOTIFICATIONS
-  ResultsEmailTemplate:
-    type: object
-    required:
-    - data
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/EmailTemplate'
-      next:
-        type: string
-      access:
-        type: array
-        items:
-          $ref: '#/definitions/ResultsAccess'
-  CreateEmailTemplate:
-    type: object
-    required:
-    - name
-    - category
-    properties:
-      name:
-        type: string
-        description: name of the email template
-        example: self_serve_welcome
-      category:
-        type: string
-        description: email category
-        enum:
-        - ADMINISTRATIVE
-        - BILLING
-        - DATA_IMPORT_AND_SYNC_STATUS
-        - TRIAL_REMINDERS
-        - APPROVAL_NOTIFICATIONS
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
+    ResultsEmailTemplate:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailTemplate'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    UpdateEmailTemplate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
+    CreateEmailTemplate:
+      type: object
+      required:
+      - name
+      - category
+      properties:
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'

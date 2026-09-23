@@ -1,44 +1,31 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop access metric API
+  title: ChartHop Metric API
   contact:
     name: ChartHop
     url: https://www.charthop.com
     email: support@charthop.com
-host: localhost
-schemes:
-- https
-- http
-consumes:
-- application/json
-produces:
-- application/json
+servers:
+- url: https://localhost
+- url: http://localhost
 tags:
-- name: metric
+- name: Metric
 paths:
   /v1/org/{orgId}/metric:
     post:
       tags:
-      - metric
+      - Metric
       summary: Record a daily metric
       operationId: recordMetric
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: orgId
         in: path
         description: Org identifier (either id or slug)
         required: true
-        type: string
-      - name: body
-        in: body
-        required: true
         schema:
-          $ref: '#/definitions/RecordMetricRequest'
+          type: string
       responses:
         '400':
           description: bad request
@@ -46,20 +33,27 @@ paths:
           description: not authorized
         '404':
           description: not found
-definitions:
-  RecordMetricRequest:
-    type: object
-    required:
-    - metric
-    - value
-    properties:
-      metric:
-        type: string
-        description: the name of the metric, for example kpi.revenue.arr
-      value:
-        type: number
-        description: the numeric value of the metric
-      date:
-        type: string
-        format: date
-        description: the date that the metric applies to (if blank, will default to today)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordMetricRequest'
+        required: true
+components:
+  schemas:
+    RecordMetricRequest:
+      type: object
+      required:
+      - metric
+      - value
+      properties:
+        metric:
+          type: string
+          description: the name of the metric, for example kpi.revenue.arr
+        value:
+          type: number
+          description: the numeric value of the metric
+        date:
+          type: string
+          format: date
+          description: the date that the metric applies to (if blank, will default to today)
