@@ -213,6 +213,64 @@ paths:
           description: not found
 components:
   schemas:
+    CreateAiCreditLimit:
+      type: object
+      required:
+      - customerId
+      - month
+      - creditSoftLimit
+      - overageRate
+      properties:
+        customerId:
+          type: string
+          description: customer id this limit applies to
+          example: 588f7ee98f138b19220041a7
+        month:
+          type: string
+          description: month this limit applies to
+        creditSoftLimit:
+          type: integer
+          format: int64
+          description: maximum number of credits included for the month
+        overageRate:
+          type: number
+          description: overage rate in cents per credit beyond the soft limit
+        creditHardLimit:
+          type: integer
+          format: int64
+          description: hard cap on credit usage for the month; usage above this is rejected
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsAiCreditLimit:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiCreditLimit'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     LogData:
       type: object
       required:
@@ -236,106 +294,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    AiCreditLimit:
-      type: object
-      required:
-      - id
-      - customerId
-      - month
-      - creditSoftLimit
-      - overageRate
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        customerId:
-          type: string
-          description: customer id this limit applies to
-          example: 588f7ee98f138b19220041a7
-        month:
-          type: string
-          description: month this limit applies to
-        creditSoftLimit:
-          type: integer
-          format: int64
-          description: maximum number of credits included for the month
-        overageRate:
-          type: number
-          description: overage rate in cents per credit beyond the soft limit
-        creditHardLimit:
-          type: integer
-          format: int64
-          description: hard cap on credit usage for the month; usage above this is rejected
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
     Process:
       type: object
       required:
@@ -458,62 +416,46 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    AccessAction:
+    Attribution:
       type: object
-      required:
-      - action
       properties:
-        action:
+        principalUserId:
           type: string
-        fields:
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAiCreditLimit:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiCreditLimit'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    CreateAiCreditLimit:
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    AiCreditLimit:
       type: object
       required:
+      - id
       - customerId
       - month
       - creditSoftLimit
       - overageRate
       properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
         customerId:
           type: string
           description: customer id this limit applies to
@@ -532,6 +474,64 @@ components:
           type: integer
           format: int64
           description: hard cap on credit usage for the month; usage above this is rejected
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     UpdateAiCreditLimit:
       type: object
       properties:

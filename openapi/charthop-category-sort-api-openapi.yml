@@ -175,31 +175,6 @@ paths:
         required: true
 components:
   schemas:
-    CreateCategorySort:
-      type: object
-      required:
-      - orgId
-      - categoryIds
-      properties:
-        orgId:
-          type: string
-          description: parent organization id (empty if built-in)
-          example: 588f7ee98f138b19220041a7
-        categoryIds:
-          type: array
-          description: ordered list of category ids of an org
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    UpdateCategorySort:
-      type: object
-      properties:
-        categoryIds:
-          type: array
-          description: ordered list of category ids of an org
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
     CategorySort:
       type: object
       required:
@@ -261,6 +236,31 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    UpdateCategorySort:
+      type: object
+      properties:
+        categoryIds:
+          type: array
+          description: ordered list of category ids of an org
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    CreateCategorySort:
+      type: object
+      required:
+      - orgId
+      - categoryIds
+      properties:
+        orgId:
+          type: string
+          description: parent organization id (empty if built-in)
+          example: 588f7ee98f138b19220041a7
+        categoryIds:
+          type: array
+          description: ordered list of category ids of an org
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
     Attribution:
       type: object
       properties:

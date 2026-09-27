@@ -254,152 +254,257 @@ paths:
           description: not found
 components:
   schemas:
-    BundleInstallEntity:
+    OrgAccess:
       type: object
       required:
-      - entityType
-      - entityId
-      - originalId
+      - orgId
+      - access
       properties:
-        entityType:
-          type: string
-          enum:
-          - ACTION
-          - CALENDAR
-          - CALENDAR_ENTRY
-          - CATEGORY
-          - FIELD
-          - FORM
-          - GROUP
-          - PROFILE_TAB
-          - QUESTION
-          - REPORT
-          - REPORT_CHART
-          - TASK_CONFIG
-          - TEMPLATE
-          - TIME_OFF_POLICY
-          - CONTENT
-        entityId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        originalId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    Policy:
-      type: object
-      required:
-      - id
-      - label
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
         orgId:
           type: string
-          description: parent organization id (empty if global)
-          example: 588f7ee98f138b19220041a7
-        label:
+          description: org id
+          example: 5887a7718f138b6a2a0041a7
+        personId:
           type: string
-          description: human-readable full name of policy
-          example: View Compensation
-          minItems: 3
-          maxItems: 80
-        description:
+          description: person id, if this user directly corresponds with a person
+          example: 5887a7718f138b6a2a0041a7
+        access:
           type: string
-          description: description of policy
-          example: This policy allows compensation to be viewed.
-          minItems: 0
-          maxItems: 1000
-        rules:
+          description: legacy access permission level
+          enum:
+          - NONE
+          - PREBOARDING
+          - VIEW
+          - LIMITED
+          - MEMBER_LIMITED_COMP
+          - MEMBER
+          - CUSTOM
+          - TECH_OWNER
+          - TIMEOFF
+          - CONTACT
+          - COMP_CASH
+          - COMP_EQUITY
+          - COMP_ALL
+          - RECRUIT_SENSITIVE
+          - RECRUIT_PRIMARY
+          - SENSITIVE_LIMITED_COMP
+          - SENSITIVE
+          - PRIMARY
+          - PEOPLE_OPS_ADMIN
+          - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+          - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+          - OWNER
+        groupIds:
           type: array
-          description: the rules that define the policy
+          description: group ids that the above access applies to
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        expr:
+          type: string
+          description: expression that the above access applies to
+        expireAt:
+          type: string
+          description: timestamp that this org access will expire
+        roleId:
+          type: string
+          description: the role id that defines the users access
+          example: 5887a7718f138b6a2a0041a7
+        status:
+          type: string
+          description: Onboarding status of the user in this org
+          enum:
+          - INACTIVE
+          - PREBOARDING
+          - ACTIVATION
+          - ACTIVE
+          - OFFBOARDED
+        homeEmail:
+          type: string
+          description: Personal email address of user, while they are preboarding
+          example: bob@example.com
+          minItems: 0
+          maxItems: 120
+        workEmail:
+          type: string
+          description: Work email address of user, once they have started
+          example: robert.doe@example.com
+          minItems: 0
+          maxItems: 120
+        workRoleId:
+          type: string
+          description: Active role ID that defines the user's access once they have started
+          example: 67c851da3dd1668c2fdd7e44
+    PolicyRuleTarget:
+      type: object
+      properties:
+        userId:
+          type: string
+        personId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        channel:
+          type: string
+        email:
+          type: string
+    AiAgentConfig:
+      type: object
+      properties:
+        personality:
+          type: string
+        instructions:
+          type: string
+        guardrails:
+          type: string
+        enableMemory:
+          type: boolean
+        enableMcpServer:
+          type: boolean
+          description: whether this agent exposes an MCP server endpoint for per-user OAuth access
+        enableMcpWrite:
+          type: boolean
+          description: 'whether this agent''s MCP server may invoke write/mutating tools (e.g. a non-read-only AskAgent delegation). Read-only by default: when unset or false, a tool that mutates on the call is rejected at the MCP edge regardless of the agent''s role/policy. This is defense in depth layered on top of the role, never a grant beyond it.'
+        isExternal:
+          type: boolean
+          description: 'whether this agent is an external (non-ChartHop) client, e.g. Claude Code or ChatGPT. External agents have no ChartHop-side prompt/behavior config: only permissions, MCP, and activity are configurable.'
+        approvedPolicyRules:
+          type: array
           items:
             $ref: '#/components/schemas/PolicyRule'
-        roles:
+        approvalGuidelines:
+          type: string
+        managerJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        messagingConfig:
+          $ref: '#/components/schemas/MessagingConfig'
+        contentIds:
           type: array
-          description: the roles the policy is attached to
-          uniqueItems: true
+          description: pinned content document IDs; when merging user and app configs, both lists are unioned (not replaced); validate with validateContentIds before persisting
           items:
-            $ref: '#/components/schemas/Role'
-        users:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        modelTier:
+          type: string
+          description: requested model tier for the agent; defaults to MEDIUM when not set
+          enum:
+          - HIGH
+          - MEDIUM
+          - LOW
+        targetedInstructions:
           type: array
-          description: the users the policy is attached to
-          uniqueItems: true
+          description: audience-scoped instruction snippets injected into the chat prompt when the filter matches the current viewer's person record; size and filter syntax are checked by AgentValidationService before persisting
           items:
-            $ref: '#/components/schemas/User'
-        userCount:
-          type: integer
-          format: int32
-          description: number of users the policy is attached to; populated when expand=true on the list endpoint
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    WebRegisteredCredential:
+            $ref: '#/components/schemas/TargetedInstruction'
+    BundleInstall:
       type: object
       required:
-      - credentialId
-      - publicKeyBase64
-      - userHandleBase64
-      - signatureCount
-      - createdAt
+      - entities
       properties:
-        credentialId:
-          type: string
-          description: Credential id
-        publicKeyBase64:
-          type: string
-          description: The public key we're saving
-        userHandleBase64:
-          type: string
-          description: The user handle - a random 64 bits of data
-        signatureCount:
-          type: integer
-          format: int64
-          description: This is used to protect against duplicated key attacks
-        createdAt:
-          type: string
-          description: When was this created
-    MessagingConfig:
-      type: object
-      properties:
-        slackAppId:
-          type: string
-        slackClientId:
-          type: string
-        slackBotUserId:
-          type: string
-    Role:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundleInstallEntity'
+    UserEmailSetting:
       type: object
       required:
-      - id
+      - category
+      - subscribed
+      properties:
+        category:
+          type: string
+          description: Category of emails
+          example: ADMINISTRATIVE
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
+        subscribed:
+          type: boolean
+          description: Is user subscribed to the category of emails
+    PolicyRule:
+      type: object
+      properties:
+        allow:
+          type: array
+          description: allow rules
+          example: '[''job:read'', ''person.read'']'
+          items:
+            type: string
+        deny:
+          type: array
+          description: deny rules
+          example: '[''job:read'', ''person.read'']'
+          items:
+            type: string
+        categories:
+          type: array
+          description: categories the rule is limited to
+          example: '[''Compensation'', ''Stock Grants'']'
+          items:
+            type: string
+        fields:
+          type: array
+          description: fields the rule is limited to
+          example: '[''base'']'
+          items:
+            type: string
+        departmentIds:
+          type: array
+          description: departments the rule is limited to
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        filter:
+          type: string
+          description: custom filter the rule is limited to
+          example: department:engineering and under:me
+        directions:
+          type: array
+          description: directions that the rule applies to -- either self or under
+          items:
+            type: string
+        types:
+          type: array
+          description: types that the rule applies to
+          items:
+            type: string
+        targets:
+          type: array
+          description: targets allowed for messaging (email addresses, chat channels, user ids)
+          items:
+            $ref: '#/components/schemas/PolicyRuleTarget'
+        visibleSensitive:
+          type: array
+          description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
+          items:
+            type: string
+        fieldsSensitive:
+          type: array
+          description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
+          items:
+            type: string
+    TargetedInstruction:
+      type: object
+      required:
+      - filter
+      - instructions
+      properties:
+        filter:
+          type: string
+          description: filter expression matched against the current viewer's person record
+        instructions:
+          type: string
+          description: instructions injected into the chat prompt when filter matches
+    CreateRole:
+      type: object
+      required:
       - label
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
         orgId:
           type: string
           description: parent organization id (empty if global)
@@ -423,46 +528,6 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        policies:
-          type: array
-          description: the policies attached to the role
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/Policy'
-        users:
-          type: array
-          description: the users the role is attached to
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/User'
-        userCount:
-          type: integer
-          format: int32
-          description: number of users the role is attached to; populated when expand=true on the list endpoint
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
     Process:
       type: object
       required:
@@ -585,221 +650,6 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    AiAgentConfig:
-      type: object
-      properties:
-        personality:
-          type: string
-        instructions:
-          type: string
-        guardrails:
-          type: string
-        enableMemory:
-          type: boolean
-        enableMcpServer:
-          type: boolean
-          description: whether this agent exposes an MCP server endpoint for per-user OAuth access
-        enableMcpWrite:
-          type: boolean
-          description: 'whether this agent''s MCP server may invoke write/mutating tools (e.g. a non-read-only AskAgent delegation). Read-only by default: when unset or false, a tool that mutates on the call is rejected at the MCP edge regardless of the agent''s role/policy. This is defense in depth layered on top of the role, never a grant beyond it.'
-        isExternal:
-          type: boolean
-          description: 'whether this agent is an external (non-ChartHop) client, e.g. Claude Code or ChatGPT. External agents have no ChartHop-side prompt/behavior config: only permissions, MCP, and activity are configurable.'
-        approvedPolicyRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/PolicyRule'
-        approvalGuidelines:
-          type: string
-        managerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        messagingConfig:
-          $ref: '#/components/schemas/MessagingConfig'
-        contentIds:
-          type: array
-          description: pinned content document IDs; when merging user and app configs, both lists are unioned (not replaced); validate with validateContentIds before persisting
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        modelTier:
-          type: string
-          description: requested model tier for the agent; defaults to MEDIUM when not set
-          enum:
-          - HIGH
-          - MEDIUM
-          - LOW
-        targetedInstructions:
-          type: array
-          description: audience-scoped instruction snippets injected into the chat prompt when the filter matches the current viewer's person record; size and filter syntax are checked by AgentValidationService before persisting
-          items:
-            $ref: '#/components/schemas/TargetedInstruction'
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    OrgAccess:
-      type: object
-      required:
-      - orgId
-      - access
-      properties:
-        orgId:
-          type: string
-          description: org id
-          example: 5887a7718f138b6a2a0041a7
-        personId:
-          type: string
-          description: person id, if this user directly corresponds with a person
-          example: 5887a7718f138b6a2a0041a7
-        access:
-          type: string
-          description: legacy access permission level
-          enum:
-          - NONE
-          - PREBOARDING
-          - VIEW
-          - LIMITED
-          - MEMBER_LIMITED_COMP
-          - MEMBER
-          - CUSTOM
-          - TECH_OWNER
-          - TIMEOFF
-          - CONTACT
-          - COMP_CASH
-          - COMP_EQUITY
-          - COMP_ALL
-          - RECRUIT_SENSITIVE
-          - RECRUIT_PRIMARY
-          - SENSITIVE_LIMITED_COMP
-          - SENSITIVE
-          - PRIMARY
-          - PEOPLE_OPS_ADMIN
-          - PEOPLE_OPS_ADMIN_NO_COMP_DATA
-          - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
-          - OWNER
-        groupIds:
-          type: array
-          description: group ids that the above access applies to
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        expr:
-          type: string
-          description: expression that the above access applies to
-        expireAt:
-          type: string
-          description: timestamp that this org access will expire
-        roleId:
-          type: string
-          description: the role id that defines the users access
-          example: 5887a7718f138b6a2a0041a7
-        status:
-          type: string
-          description: Onboarding status of the user in this org
-          enum:
-          - INACTIVE
-          - PREBOARDING
-          - ACTIVATION
-          - ACTIVE
-          - OFFBOARDED
-        homeEmail:
-          type: string
-          description: Personal email address of user, while they are preboarding
-          example: bob@example.com
-          minItems: 0
-          maxItems: 120
-        workEmail:
-          type: string
-          description: Work email address of user, once they have started
-          example: robert.doe@example.com
-          minItems: 0
-          maxItems: 120
-        workRoleId:
-          type: string
-          description: Active role ID that defines the user's access once they have started
-          example: 67c851da3dd1668c2fdd7e44
-    CreateRole:
-      type: object
-      required:
-      - label
-      properties:
-        orgId:
-          type: string
-          description: parent organization id (empty if global)
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable full name of role
-          example: Engineering People Manager
-          minItems: 3
-          maxItems: 80
-        description:
-          type: string
-          description: description of role
-          example: This role is able to create and update new job data for the engineering department.
-          minItems: 0
-          maxItems: 1000
-        policyIds:
-          type: array
-          description: the policies that define the role
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
-        access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
     Name:
       type: object
       required:
@@ -835,81 +685,109 @@ components:
           example: Smith
           minItems: 0
           maxItems: 80
-    PolicyRule:
+    Policy:
       type: object
+      required:
+      - id
+      - label
       properties:
-        allow:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id (empty if global)
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable full name of policy
+          example: View Compensation
+          minItems: 3
+          maxItems: 80
+        description:
+          type: string
+          description: description of policy
+          example: This policy allows compensation to be viewed.
+          minItems: 0
+          maxItems: 1000
+        rules:
           type: array
-          description: allow rules
-          example: '[''job:read'', ''person.read'']'
+          description: the rules that define the policy
           items:
-            type: string
-        deny:
+            $ref: '#/components/schemas/PolicyRule'
+        roles:
           type: array
-          description: deny rules
-          example: '[''job:read'', ''person.read'']'
-          items:
-            type: string
-        categories:
-          type: array
-          description: categories the rule is limited to
-          example: '[''Compensation'', ''Stock Grants'']'
-          items:
-            type: string
-        fields:
-          type: array
-          description: fields the rule is limited to
-          example: '[''base'']'
-          items:
-            type: string
-        departmentIds:
-          type: array
-          description: departments the rule is limited to
+          description: the roles the policy is attached to
           uniqueItems: true
           items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        filter:
+            $ref: '#/components/schemas/Role'
+        users:
+          type: array
+          description: the users the policy is attached to
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/User'
+        userCount:
+          type: integer
+          format: int32
+          description: number of users the policy is attached to; populated when expand=true on the list endpoint
+        createId:
           type: string
-          description: custom filter the rule is limited to
-          example: department:engineering and under:me
-        directions:
-          type: array
-          description: directions that the rule applies to -- either self or under
-          items:
-            type: string
-        types:
-          type: array
-          description: types that the rule applies to
-          items:
-            type: string
-        targets:
-          type: array
-          description: targets allowed for messaging (email addresses, chat channels, user ids)
-          items:
-            $ref: '#/components/schemas/PolicyRuleTarget'
-        visibleSensitive:
-          type: array
-          description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
-          items:
-            type: string
-        fieldsSensitive:
-          type: array
-          description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
-          items:
-            type: string
-    PolicyRuleTarget:
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+    MessagingConfig:
       type: object
       properties:
-        userId:
+        slackAppId:
           type: string
-        personId:
+        slackClientId:
           type: string
-          example: 588f7ee98f138b19220041a7
-        channel:
+        slackBotUserId:
           type: string
-        email:
+    LogData:
+      type: object
+      required:
+      - level
+      - at
+      - data
+      properties:
+        level:
           type: string
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
     ResultsRole:
       type: object
       required:
@@ -921,27 +799,117 @@ components:
             $ref: '#/components/schemas/Role'
         next:
           type: string
-    BundleInstall:
+    ShareAccess:
       type: object
       required:
-      - entities
+      - access
       properties:
-        entities:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
+    UpdateRole:
+      type: object
+      properties:
+        label:
+          type: string
+          description: human-readable full name of role
+          example: Engineering People Manager
+          minItems: 3
+          maxItems: 80
+        description:
+          type: string
+          description: description of role
+          example: This role is able to create and update new job data for the engineering department.
+          minItems: 0
+          maxItems: 1000
+        policyIds:
           type: array
+          description: the policies that define the role
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/BundleInstallEntity'
-    TargetedInstruction:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    WebRegisteredCredential:
       type: object
       required:
-      - filter
-      - instructions
+      - credentialId
+      - publicKeyBase64
+      - userHandleBase64
+      - signatureCount
+      - createdAt
       properties:
-        filter:
+        credentialId:
           type: string
-          description: filter expression matched against the current viewer's person record
-        instructions:
+          description: Credential id
+        publicKeyBase64:
           type: string
-          description: instructions injected into the chat prompt when filter matches
+          description: The public key we're saving
+        userHandleBase64:
+          type: string
+          description: The user handle - a random 64 bits of data
+        signatureCount:
+          type: integer
+          format: int64
+          description: This is used to protect against duplicated key attacks
+        createdAt:
+          type: string
+          description: When was this created
+    BundleInstallEntity:
+      type: object
+      required:
+      - entityType
+      - entityId
+      - originalId
+      properties:
+        entityType:
+          type: string
+          enum:
+          - ACTION
+          - CALENDAR
+          - CALENDAR_ENTRY
+          - CATEGORY
+          - FIELD
+          - FORM
+          - GROUP
+          - PROFILE_TAB
+          - QUESTION
+          - REPORT
+          - REPORT_CHART
+          - TASK_CONFIG
+          - TEMPLATE
+          - TIME_OFF_POLICY
+          - CONTENT
+        entityId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        originalId:
+          type: string
+          example: 588f7ee98f138b19220041a7
     Attribution:
       type: object
       properties:
@@ -969,9 +937,20 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    UpdateRole:
+    Role:
       type: object
+      required:
+      - id
+      - label
       properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id (empty if global)
+          example: 588f7ee98f138b19220041a7
         label:
           type: string
           description: human-readable full name of role
@@ -991,25 +970,46 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    UserEmailSetting:
-      type: object
-      required:
-      - category
-      - subscribed
-      properties:
-        category:
+        policies:
+          type: array
+          description: the policies attached to the role
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Policy'
+        users:
+          type: array
+          description: the users the role is attached to
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/User'
+        userCount:
+          type: integer
+          format: int32
+          description: number of users the role is attached to; populated when expand=true on the list endpoint
+        createId:
           type: string
-          description: Category of emails
-          example: ADMINISTRATIVE
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
-        subscribed:
-          type: boolean
-          description: Is user subscribed to the category of emails
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
     User:
       type: object
       required:

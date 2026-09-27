@@ -139,76 +139,48 @@ paths:
         required: true
 components:
   schemas:
-    FieldMapper:
+    UpdateAppConfig:
       type: object
-      required:
-      - charthopFields
-      - remoteFields
-      - type
       properties:
-        id:
-          type: string
-          description: unique id
-          example: 588f7ee98f138b19220041a7
-        key:
-          type: string
-          description: stable semantic key used by per-install AppConfig overrides/disables. Defaults to the single charthop field; an explicit key is required for multi-output mappers.
-        readOnly:
-          type: boolean
-          description: when true, this mapper only DEFINES how to read the value from the source system (for the outbound diff to compare against); it is not synced into ChartHop, so its charthopFields key is just a correlation handle and need not be a real ChartHop field.
-        charthopFields:
+        fieldMappers:
           type: array
-          description: list of ChartHop fields
+          description: list of default field mappers
+          items:
+            $ref: '#/components/schemas/FieldMapper'
+        customFieldMappers:
+          type: array
+          description: list of custom field mappers by a user
+          items:
+            $ref: '#/components/schemas/FieldMapper'
+        customOutboundFieldMappers:
+          type: array
+          description: list of custom outbound field mappers
+          items:
+            $ref: '#/components/schemas/AdpOutboundFieldMapper'
+        disabledFieldMappers:
+          type: array
+          description: list of disabled inbound field mappers by id
+          uniqueItems: true
           items:
             type: string
-        remoteFields:
+            example: 588f7ee98f138b19220041a7
+        enabledOutboundFieldMappers:
           type: array
-          description: list of remote fields
+          description: list of enabled outbound field mappers by id
+          uniqueItems: true
           items:
             type: string
-        type:
-          type: string
-          description: type of field mapper to apply for mapping remote fields to ChartHop fields
-        defaultCharthopValue:
-          type: string
-          description: default charthop value
-        defaultRemoteValue:
-          type: string
-          description: default remote value
-        defaultAmount:
-          type: number
-          description: default amount
-        defaultCurrency:
-          type: string
-          description: default currency
-        transformFunction:
-          type: string
-          description: transform function
-        charthopToRemoteTransformFunction:
-          type: string
-          description: charthop to remote transform function
-        map:
+            example: 588f7ee98f138b19220041a7
+        templateMatchers:
+          type: array
+          description: template field matchers defined by a user
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        options:
           type: object
-          description: map
-          additionalProperties:
-            type: string
-        charthopToRemoteMap:
-          type: object
-          description: charthop to remote map
-          additionalProperties:
-            type: string
-        idField:
-          type: string
-          description: id field
-        nameField:
-          type: string
-          description: name field
-        remoteToCharthopMultiplier:
-          type: number
-          description: remote to Charthop Multiplier
-        separator:
-          type: string
-          description: separator for join field mapper
+          description: app specific options
     OutboundValueMapper:
       type: object
       required:
@@ -345,71 +317,6 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    AdpOutboundFieldMapper:
-      type: object
-      required:
-      - id
-      - description
-      - namespace
-      - valueMappers
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        description:
-          type: string
-        namespace:
-          type: string
-        valueMappers:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutboundValueMapper'
-        options:
-          type: object
-        gate:
-          type: string
-    UpdateAppConfig:
-      type: object
-      properties:
-        fieldMappers:
-          type: array
-          description: list of default field mappers
-          items:
-            $ref: '#/components/schemas/FieldMapper'
-        customFieldMappers:
-          type: array
-          description: list of custom field mappers by a user
-          items:
-            $ref: '#/components/schemas/FieldMapper'
-        customOutboundFieldMappers:
-          type: array
-          description: list of custom outbound field mappers
-          items:
-            $ref: '#/components/schemas/AdpOutboundFieldMapper'
-        disabledFieldMappers:
-          type: array
-          description: list of disabled inbound field mappers by id
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        enabledOutboundFieldMappers:
-          type: array
-          description: list of enabled outbound field mappers by id
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        templateMatchers:
-          type: array
-          description: template field matchers defined by a user
-          items:
-            type: object
-            additionalProperties:
-              type: string
-        options:
-          type: object
-          description: app specific options
     CreateAppConfig:
       type: object
       required:
@@ -466,3 +373,96 @@ components:
         options:
           type: object
           description: app specific options
+    AdpOutboundFieldMapper:
+      type: object
+      required:
+      - id
+      - description
+      - namespace
+      - valueMappers
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        description:
+          type: string
+        namespace:
+          type: string
+        valueMappers:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutboundValueMapper'
+        options:
+          type: object
+        gate:
+          type: string
+    FieldMapper:
+      type: object
+      required:
+      - charthopFields
+      - remoteFields
+      - type
+      properties:
+        id:
+          type: string
+          description: unique id
+          example: 588f7ee98f138b19220041a7
+        key:
+          type: string
+          description: stable semantic key used by per-install AppConfig overrides/disables. Defaults to the single charthop field; an explicit key is required for multi-output mappers.
+        readOnly:
+          type: boolean
+          description: when true, this mapper only DEFINES how to read the value from the source system (for the outbound diff to compare against); it is not synced into ChartHop, so its charthopFields key is just a correlation handle and need not be a real ChartHop field.
+        charthopFields:
+          type: array
+          description: list of ChartHop fields
+          items:
+            type: string
+        remoteFields:
+          type: array
+          description: list of remote fields
+          items:
+            type: string
+        type:
+          type: string
+          description: type of field mapper to apply for mapping remote fields to ChartHop fields
+        defaultCharthopValue:
+          type: string
+          description: default charthop value
+        defaultRemoteValue:
+          type: string
+          description: default remote value
+        defaultAmount:
+          type: number
+          description: default amount
+        defaultCurrency:
+          type: string
+          description: default currency
+        transformFunction:
+          type: string
+          description: transform function
+        charthopToRemoteTransformFunction:
+          type: string
+          description: charthop to remote transform function
+        map:
+          type: object
+          description: map
+          additionalProperties:
+            type: string
+        charthopToRemoteMap:
+          type: object
+          description: charthop to remote map
+          additionalProperties:
+            type: string
+        idField:
+          type: string
+          description: id field
+        nameField:
+          type: string
+          description: name field
+        remoteToCharthopMultiplier:
+          type: number
+          description: remote to Charthop Multiplier
+        separator:
+          type: string
+          description: separator for join field mapper

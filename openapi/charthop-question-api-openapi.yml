@@ -189,6 +189,23 @@ paths:
           description: not found
 components:
   schemas:
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     Question:
       type: object
       required:
@@ -332,44 +349,58 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    FieldOptions:
+    ResultsQuestion:
       type: object
+      required:
+      - data
       properties:
-        min:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        next:
           type: string
-          description: minimum value, for numeric and date fields
-        max:
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
           type: string
-          description: maximum value, for numeric and date fields
-        minItems:
-          type: integer
-          format: int32
-        maxItems:
-          type: integer
-          format: int32
-        stackRank:
-          type: boolean
-        step:
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
           type: number
-        enableEditDialog:
-          type: boolean
-        requiredJobField:
-          type: boolean
-        excludeTargetPersonId:
-          type: boolean
-        maxLength:
+          description: numeric value, for ENUM_SCALE type
+        sort:
           type: integer
           format: int32
-        readOnly:
-          type: boolean
-        includeFormer:
-          type: boolean
-        effectiveDated:
-          type: boolean
-        unique:
-          type: boolean
-        required:
-          type: boolean
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'
     UpdateQuestion:
       type: object
       properties:
@@ -459,6 +490,15 @@ components:
         options:
           description: validation options
           $ref: '#/components/schemas/FieldOptions'
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
     Attribution:
       type: object
       properties:
@@ -486,6 +526,60 @@ components:
           - SLACK
           - TEAMS
           - MCP
+    FieldOptions:
+      type: object
+      properties:
+        min:
+          type: string
+          description: minimum value, for numeric and date fields
+        max:
+          type: string
+          description: maximum value, for numeric and date fields
+        minItems:
+          type: integer
+          format: int32
+        maxItems:
+          type: integer
+          format: int32
+        stackRank:
+          type: boolean
+        step:
+          type: number
+        enableEditDialog:
+          type: boolean
+        requiredJobField:
+          type: boolean
+        excludeTargetPersonId:
+          type: boolean
+        maxLength:
+          type: integer
+          format: int32
+        readOnly:
+          type: boolean
+        includeFormer:
+          type: boolean
+        effectiveDated:
+          type: boolean
+        unique:
+          type: boolean
+        required:
+          type: boolean
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     CreateQuestion:
       type: object
       required:
@@ -581,97 +675,3 @@ components:
         options:
           description: validation options
           $ref: '#/components/schemas/FieldOptions'
-    ResultsQuestion:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string

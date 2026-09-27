@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   description: REST API for ChartHop
   version: V1.0.0
-  title: ChartHop OAUTH API
+  title: ChartHop OAuth API
   contact:
     name: ChartHop
     url: https://www.charthop.com
@@ -608,54 +608,6 @@ components:
         redirectUri:
           type: string
           description: redirect_uri for OAuth2.0 PKCE
-    IdpAccessTokenResponse:
-      type: object
-      required:
-      - id_token
-      properties:
-        id_token:
-          type: string
-          description: id token value (likely a JWT)
-          example: header.payload.signature
-    EmailRequest:
-      type: object
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          description: email address
-          example: example@example.com
-    AppOauthUserConnection:
-      type: object
-      required:
-      - tokenId
-      - userId
-      - issuedAt
-      properties:
-        tokenId:
-          type: string
-          description: the oauth token id, used to revoke the connection
-        userId:
-          type: string
-          description: the id of the user who authorized
-        issuedAt:
-          type: string
-          description: when the connection was authorized
-          example: '2017-01-24T13:57:52Z'
-        activeAt:
-          type: string
-          description: when the connection was last used for an API call
-          example: '2017-01-24T13:57:52Z'
-    ConnectUriResponse:
-      type: object
-      required:
-      - uri
-      properties:
-        uri:
-          type: string
-          description: uri to use for oath
-          example: https://api.tryfinch.com/connect/sessions
     McpApproveRequest:
       type: object
       required:
@@ -679,56 +631,6 @@ components:
           type: string
         orgId:
           type: string
-    ViewAsRequest:
-      type: object
-      required:
-      - orgId
-      - scope
-      properties:
-        orgId:
-          type: string
-          description: org id
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          description: person id
-          example: 588f7ee98f138b19220041a7
-        userId:
-          type: string
-          description: user id
-          example: 588f7ee98f138b19220041a7
-        roleId:
-          type: string
-          description: role id
-          example: 588f7ee98f138b19220041a7
-        scope:
-          type: string
-          description: scope being requested
-    RevokeAppOauthTokensRequest:
-      type: object
-      required:
-      - tokenIds
-      properties:
-        tokenIds:
-          type: array
-          description: ids of the oauth tokens to revoke
-          items:
-            type: string
-    AppOauthConnectionStatus:
-      type: object
-      required:
-      - connected
-      properties:
-        connected:
-          type: boolean
-          description: whether an org-level OAuth token is currently connected
-        connectedAt:
-          type: string
-          description: when the org-level token was issued, if connected
-          example: '2017-01-24T13:57:52Z'
-        connectedById:
-          type: string
-          description: id of the user who set up the org-level connection, if connected
     AccessTokenResponse:
       type: object
       required:
@@ -766,3 +668,101 @@ components:
           description: redirect uri of the access token
           readOnly: true
           example: com.charthop.mobile://oauth
+    EmailRequest:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: email address
+          example: example@example.com
+    AppOauthConnectionStatus:
+      type: object
+      required:
+      - connected
+      properties:
+        connected:
+          type: boolean
+          description: whether an org-level OAuth token is currently connected
+        connectedAt:
+          type: string
+          description: when the org-level token was issued, if connected
+          example: '2017-01-24T13:57:52Z'
+        connectedById:
+          type: string
+          description: id of the user who set up the org-level connection, if connected
+    ViewAsRequest:
+      type: object
+      required:
+      - orgId
+      - scope
+      properties:
+        orgId:
+          type: string
+          description: org id
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          description: person id
+          example: 588f7ee98f138b19220041a7
+        userId:
+          type: string
+          description: user id
+          example: 588f7ee98f138b19220041a7
+        roleId:
+          type: string
+          description: role id
+          example: 588f7ee98f138b19220041a7
+        scope:
+          type: string
+          description: scope being requested
+    RevokeAppOauthTokensRequest:
+      type: object
+      required:
+      - tokenIds
+      properties:
+        tokenIds:
+          type: array
+          description: ids of the oauth tokens to revoke
+          items:
+            type: string
+    AppOauthUserConnection:
+      type: object
+      required:
+      - tokenId
+      - userId
+      - issuedAt
+      properties:
+        tokenId:
+          type: string
+          description: the oauth token id, used to revoke the connection
+        userId:
+          type: string
+          description: the id of the user who authorized
+        issuedAt:
+          type: string
+          description: when the connection was authorized
+          example: '2017-01-24T13:57:52Z'
+        activeAt:
+          type: string
+          description: when the connection was last used for an API call
+          example: '2017-01-24T13:57:52Z'
+    ConnectUriResponse:
+      type: object
+      required:
+      - uri
+      properties:
+        uri:
+          type: string
+          description: uri to use for oath
+          example: https://api.tryfinch.com/connect/sessions
+    IdpAccessTokenResponse:
+      type: object
+      required:
+      - id_token
+      properties:
+        id_token:
+          type: string
+          description: id token value (likely a JWT)
+          example: header.payload.signature

@@ -90,18 +90,26 @@ paths:
           description: not found
 components:
   schemas:
-    PlanTier:
+    SetupIntent:
       type: object
       required:
-      - unitAmount
+      - clientSecret
       properties:
-        upTo:
-          type: integer
-          format: int64
-          description: headcount up to this level is charged at the below rate
-        unitAmount:
-          type: number
-          description: PEPM rate
+        clientSecret:
+          type: string
+          description: Secret of setup_intent object created
+          example: st_ersasdfasdf
+    ResultsStripeProduct:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StripeProduct'
+        next:
+          type: string
     ResultsPlan:
       type: object
       required:
@@ -113,6 +121,18 @@ components:
             $ref: '#/components/schemas/Plan'
         next:
           type: string
+    StripeProduct:
+      type: object
+      required:
+      - stripeId
+      - label
+      properties:
+        stripeId:
+          type: string
+          description: unique Stripe identifier for this product
+        label:
+          type: string
+          description: human-readable nickname for this product
     Plan:
       type: object
       required:
@@ -149,35 +169,15 @@ components:
         stripeProductId:
           type: string
           description: stripe product id that this plan belongs to
-    StripeProduct:
+    PlanTier:
       type: object
       required:
-      - stripeId
-      - label
+      - unitAmount
       properties:
-        stripeId:
-          type: string
-          description: unique Stripe identifier for this product
-        label:
-          type: string
-          description: human-readable nickname for this product
-    ResultsStripeProduct:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StripeProduct'
-        next:
-          type: string
-    SetupIntent:
-      type: object
-      required:
-      - clientSecret
-      properties:
-        clientSecret:
-          type: string
-          description: Secret of setup_intent object created
-          example: st_ersasdfasdf
+        upTo:
+          type: integer
+          format: int64
+          description: headcount up to this level is charged at the below rate
+        unitAmount:
+          type: number
+          description: PEPM rate

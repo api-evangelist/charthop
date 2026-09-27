@@ -284,19 +284,23 @@ paths:
           description: not found
 components:
   schemas:
-    Money:
+    AccessAction:
       type: object
       required:
-      - amount
-      - currency
+      - action
       properties:
-        amount:
-          type: number
-        currency:
+        action:
           type: string
-        places:
-          type: integer
-          format: int32
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     UpdateBudget:
       type: object
       properties:
@@ -359,66 +363,6 @@ components:
         amount:
           description: budget amount for the current date (time tracked field)
           $ref: '#/components/schemas/Money'
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
-        access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
     ResultsBudget:
       type: object
       required:
@@ -434,6 +378,72 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    CreateBudget:
+      type: object
+      required:
+      - startDate
+      - endDate
+      - sensitive
+      properties:
+        slug:
+          type: string
+          description: url-safe slug for the budget, auto-generated from label if not provided
+        label:
+          type: string
+          description: human-readable label for the budget
+        ownerPersonIds:
+          type: array
+          description: list of persons who own this budget
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        groupIds:
+          type: array
+          description: list of group IDs (e.g. department) for this budget
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        color:
+          type: string
+          description: color of budget
+          pattern: ^#[a-f0-9]{6}$
+        startDate:
+          type: string
+          format: date
+          description: start date of the budget
+        endDate:
+          type: string
+          format: date
+          description: end date of the budget
+        sensitive:
+          type: string
+          description: sensitivity level of budget
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        shareAccess:
+          type: array
+          description: users who are specifically granted permission to view or edit this budget
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        costExpr:
+          type: string
+          description: calculation to compute cost
+        status:
+          type: string
+          description: status of the budget
+          enum:
+          - DRAFT
+          - ACTIVE
+          - ARCHIVED
+        amount:
+          description: budget amount for the current date (time tracked field)
+          $ref: '#/components/schemas/Money'
     Budget:
       type: object
       required:
@@ -553,23 +563,66 @@ components:
           type: string
           description: last updated timestamp
           example: '2017-01-24T13:57:52Z'
-    AccessAction:
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ShareAccess:
       type: object
       required:
-      - action
+      - access
       properties:
-        action:
+        access:
           type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
         fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+          type: string
+          description: fields
+          example: name,image,title
     ResultsAccess:
       type: object
       required:
@@ -586,69 +639,16 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    CreateBudget:
+    Money:
       type: object
       required:
-      - startDate
-      - endDate
-      - sensitive
+      - amount
+      - currency
       properties:
-        slug:
-          type: string
-          description: url-safe slug for the budget, auto-generated from label if not provided
-        label:
-          type: string
-          description: human-readable label for the budget
-        ownerPersonIds:
-          type: array
-          description: list of persons who own this budget
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        groupIds:
-          type: array
-          description: list of group IDs (e.g. department) for this budget
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        color:
-          type: string
-          description: color of budget
-          pattern: ^#[a-f0-9]{6}$
-        startDate:
-          type: string
-          format: date
-          description: start date of the budget
-        endDate:
-          type: string
-          format: date
-          description: end date of the budget
-        sensitive:
-          type: string
-          description: sensitivity level of budget
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to view or edit this budget
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        costExpr:
-          type: string
-          description: calculation to compute cost
-        status:
-          type: string
-          description: status of the budget
-          enum:
-          - DRAFT
-          - ACTIVE
-          - ARCHIVED
         amount:
-          description: budget amount for the current date (time tracked field)
-          $ref: '#/components/schemas/Money'
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32

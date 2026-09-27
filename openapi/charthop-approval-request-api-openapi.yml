@@ -166,6 +166,63 @@ paths:
           description: not found
 components:
   schemas:
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ApprovalGroupApprover:
+      type: object
+      required:
+      - jobId
+      - status
+      properties:
+        jobId:
+          type: string
+          description: A job ID that is part of the group
+          example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          description: The status of the approver
+          enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - SKIPPED
+        commentId:
+          type: string
+          description: Last comment of the approver
+          example: 588f7ee98f138b19220041a7
+        reassignCommentId:
+          type: string
+          description: Last comment associated with a reassignment
+          example: 588f7ee98f138b19220041a7
+        isFallback:
+          type: boolean
+          description: Whether approver is a fallback
+        fallbackFor:
+          type: string
+          description: What jobId approver is a fallback for
+          example: 588f7ee98f138b19220041a7
+        actedByJobId:
+          type: string
+          description: Job of the delegate who acted on this slot on the approver's behalf
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: The date the status was updated last
     ResultsApprovalRequestScenarioResponse:
       type: object
       required:
@@ -181,35 +238,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    ApprovalGroup:
-      type: object
-      required:
-      - type
-      - approvers
-      properties:
-        groupId:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: What type of group this is
-          enum:
-          - REVIEWER
-          - COLLABORATOR
-          - FINAL_APPROVER
-        approvers:
-          type: array
-          description: approvers that make up the group
-          items:
-            $ref: '#/components/schemas/ApprovalGroupApprover'
-        expandExpression:
-          type: string
-          description: optional custom expression to determine approval request tree
-        minApproversNeeded:
-          type: integer
-          format: int32
-          description: minimum number of approvers required in this group for approval (null means all approvers required)
     ApprovalRequestTimeoffResponse:
       type: object
       required:
@@ -259,6 +287,35 @@ components:
           example: 588f7ee98f138b19220041a7
         deleteAt:
           type: string
+    ApprovalGroup:
+      type: object
+      required:
+      - type
+      - approvers
+      properties:
+        groupId:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: What type of group this is
+          enum:
+          - REVIEWER
+          - COLLABORATOR
+          - FINAL_APPROVER
+        approvers:
+          type: array
+          description: approvers that make up the group
+          items:
+            $ref: '#/components/schemas/ApprovalGroupApprover'
+        expandExpression:
+          type: string
+          description: optional custom expression to determine approval request tree
+        minApproversNeeded:
+          type: integer
+          format: int32
+          description: minimum number of approvers required in this group for approval (null means all approvers required)
     ApprovalRequestScenarioResponse:
       type: object
       required:
@@ -361,63 +418,6 @@ components:
           type: integer
           format: int32
           description: order of the stage
-    ApprovalGroupApprover:
-      type: object
-      required:
-      - jobId
-      - status
-      properties:
-        jobId:
-          type: string
-          description: A job ID that is part of the group
-          example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: The status of the approver
-          enum:
-          - PENDING
-          - APPROVED
-          - REJECTED
-          - SKIPPED
-        commentId:
-          type: string
-          description: Last comment of the approver
-          example: 588f7ee98f138b19220041a7
-        reassignCommentId:
-          type: string
-          description: Last comment associated with a reassignment
-          example: 588f7ee98f138b19220041a7
-        isFallback:
-          type: boolean
-          description: Whether approver is a fallback
-        fallbackFor:
-          type: string
-          description: What jobId approver is a fallback for
-          example: 588f7ee98f138b19220041a7
-        actedByJobId:
-          type: string
-          description: Job of the delegate who acted on this slot on the approver's behalf
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: The date the status was updated last
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsAccess:
       type: object
       required:

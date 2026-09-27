@@ -214,6 +214,81 @@ paths:
           description: not found
 components:
   schemas:
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    CreateJobLevel:
+      type: object
+      required:
+      - label
+      properties:
+        label:
+          type: string
+          description: human-readable name of job level
+          example: Associate
+        code:
+          type: string
+          description: job level code
+          example: BF01
+        benchmarkType:
+          description: whether to use radford or option impact as a benchmark
+          example: Radford
+          $ref: '#/components/schemas/EnumValue'
+        benchmarkLevel:
+          description: radford or option impact level as a reference
+          example: P1 - Professional - Entry
+          $ref: '#/components/schemas/EnumValue'
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'
     ResultsJobLevel:
       type: object
       required:
@@ -229,6 +304,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
     Attribution:
       type: object
       properties:
@@ -256,6 +340,22 @@ components:
           - SLACK
           - TEAMS
           - MCP
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     JobLevel:
       type: object
       required:
@@ -329,106 +429,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    CreateJobLevel:
-      type: object
-      required:
-      - label
-      properties:
-        label:
-          type: string
-          description: human-readable name of job level
-          example: Associate
-        code:
-          type: string
-          description: job level code
-          example: BF01
-        benchmarkType:
-          description: whether to use radford or option impact as a benchmark
-          example: Radford
-          $ref: '#/components/schemas/EnumValue'
-        benchmarkLevel:
-          description: radford or option impact level as a reference
-          example: P1 - Professional - Entry
-          $ref: '#/components/schemas/EnumValue'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
     UpdateJobLevel:
       type: object
       properties:

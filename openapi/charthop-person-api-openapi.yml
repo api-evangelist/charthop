@@ -710,19 +710,44 @@ paths:
           description: not found
 components:
   schemas:
-    FieldSubcount:
+    AccessAction:
       type: object
       required:
-      - count
-      - isOther
+      - action
       properties:
-        key:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+        totalRow:
           type: object
-        count:
-          type: integer
-          format: int64
-        isOther:
-          type: boolean
+          additionalProperties:
+            type: object
     OrgCount:
       type: object
       required:
@@ -746,34 +771,6 @@ components:
         groupCount:
           type: integer
           format: int64
-    SubcountsResponse:
-      type: object
-      required:
-      - counts
-      properties:
-        counts:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/FieldSubcount'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsAccess:
       type: object
       required:
@@ -790,24 +787,27 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ResultsData:
+    SubcountsResponse:
       type: object
       required:
-      - data
+      - counts
       properties:
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        totalRow:
+        counts:
           type: object
           additionalProperties:
-            type: object
+            type: array
+            items:
+              $ref: '#/components/schemas/FieldSubcount'
+    FieldSubcount:
+      type: object
+      required:
+      - count
+      - isOther
+      properties:
+        key:
+          type: object
+        count:
+          type: integer
+          format: int64
+        isOther:
+          type: boolean

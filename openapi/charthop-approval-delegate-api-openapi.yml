@@ -208,121 +208,6 @@ components:
         endDate:
           type: string
           format: date
-    RepresentedApprover:
-      type: object
-      required:
-      - approverUserId
-      - type
-      properties:
-        approverUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        approverName:
-          $ref: '#/components/schemas/Name'
-        type:
-          type: string
-          enum:
-          - SCENARIO
-          - TIME_OFF
-          - FORM
-    Name:
-      type: object
-      required:
-      - last
-      properties:
-        first:
-          type: string
-          description: first name
-          example: Jane
-          minItems: 0
-          maxItems: 80
-        middle:
-          type: string
-          description: middle name
-          example: Quidditch
-          minItems: 0
-          maxItems: 80
-        last:
-          type: string
-          description: last name
-          example: Public
-          minItems: 0
-          maxItems: 80
-        pref:
-          type: string
-          description: preferred first name
-          example: JQ
-          minItems: 0
-          maxItems: 80
-        prefLast:
-          type: string
-          description: preferred last name
-          example: Smith
-          minItems: 0
-          maxItems: 80
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    DelegateChange:
-      type: object
-      required:
-      - userId
-      - type
-      properties:
-        userId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          enum:
-          - SCENARIO
-          - TIME_OFF
-          - FORM
-        delegateJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-    BulkSetDelegatesRequest:
-      type: object
-      required:
-      - changes
-      - notify
-      properties:
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/DelegateChange'
-        notify:
-          type: boolean
     ApprovalDelegate:
       type: object
       required:
@@ -391,3 +276,118 @@ components:
           type: string
           description: last updated timestamp
           example: '2017-01-24T13:57:52Z'
+    Name:
+      type: object
+      required:
+      - last
+      properties:
+        first:
+          type: string
+          description: first name
+          example: Jane
+          minItems: 0
+          maxItems: 80
+        middle:
+          type: string
+          description: middle name
+          example: Quidditch
+          minItems: 0
+          maxItems: 80
+        last:
+          type: string
+          description: last name
+          example: Public
+          minItems: 0
+          maxItems: 80
+        pref:
+          type: string
+          description: preferred first name
+          example: JQ
+          minItems: 0
+          maxItems: 80
+        prefLast:
+          type: string
+          description: preferred last name
+          example: Smith
+          minItems: 0
+          maxItems: 80
+    RepresentedApprover:
+      type: object
+      required:
+      - approverUserId
+      - type
+      properties:
+        approverUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        approverName:
+          $ref: '#/components/schemas/Name'
+        type:
+          type: string
+          enum:
+          - SCENARIO
+          - TIME_OFF
+          - FORM
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    DelegateChange:
+      type: object
+      required:
+      - userId
+      - type
+      properties:
+        userId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          enum:
+          - SCENARIO
+          - TIME_OFF
+          - FORM
+        delegateJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+    BulkSetDelegatesRequest:
+      type: object
+      required:
+      - changes
+      - notify
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DelegateChange'
+        notify:
+          type: boolean

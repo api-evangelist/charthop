@@ -889,19 +889,62 @@ paths:
           description: not found
 components:
   schemas:
-    FieldSubcount:
+    AccessAction:
       type: object
       required:
-      - count
-      - isOther
+      - action
       properties:
-        key:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    UpdateOperation:
+      type: object
+      required:
+      - update
+      properties:
+        jobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        date:
+          type: string
+          format: date
+        update:
           type: object
-        count:
-          type: integer
-          format: int64
-        isOther:
-          type: boolean
+          additionalProperties:
+            type: object
+    ResultsData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+        totalRow:
+          type: object
+          additionalProperties:
+            type: object
     LogData:
       type: object
       required:
@@ -925,55 +968,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    BulkJobPersonUpdateRequest:
-      type: object
-      required:
-      - updates
-      - date
-      properties:
-        updates:
-          type: array
-          description: list of update operations to perform
-          items:
-            $ref: '#/components/schemas/UpdateOperation'
-        date:
-          type: string
-          format: date
-          description: date of update
-        scenarioId:
-          type: string
-          description: scenario id
-          example: 588f7ee98f138b19220041a7
-        note:
-          type: string
-          description: note for update
     OrgCount:
       type: object
       required:
@@ -1119,52 +1113,55 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    UpdateOperation:
+    BulkJobPersonUpdateRequest:
       type: object
       required:
-      - update
+      - updates
+      - date
       properties:
-        jobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          example: 588f7ee98f138b19220041a7
+        updates:
+          type: array
+          description: list of update operations to perform
+          items:
+            $ref: '#/components/schemas/UpdateOperation'
         date:
           type: string
           format: date
-        update:
-          type: object
-          additionalProperties:
-            type: object
-    SubcountsResponse:
-      type: object
-      required:
-      - counts
-      properties:
-        counts:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/FieldSubcount'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
+          description: date of update
+        scenarioId:
           type: string
-        fields:
+          description: scenario id
+          example: 588f7ee98f138b19220041a7
+        note:
+          type: string
+          description: note for update
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          uniqueItems: true
           items:
             type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     ResultsAccess:
       type: object
       required:
@@ -1181,24 +1178,27 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ResultsData:
+    SubcountsResponse:
       type: object
       required:
-      - data
+      - counts
       properties:
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        totalRow:
+        counts:
           type: object
           additionalProperties:
-            type: object
+            type: array
+            items:
+              $ref: '#/components/schemas/FieldSubcount'
+    FieldSubcount:
+      type: object
+      required:
+      - count
+      - isOther
+      properties:
+        key:
+          type: object
+        count:
+          type: integer
+          format: int64
+        isOther:
+          type: boolean

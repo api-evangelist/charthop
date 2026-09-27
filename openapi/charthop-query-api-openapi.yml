@@ -198,21 +198,23 @@ paths:
           description: not found
 components:
   schemas:
-    ResultsQueryToken:
+    AccessAction:
       type: object
       required:
-      - data
+      - action
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/QueryToken'
-        next:
+        action:
           type: string
-        access:
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ResultsAccess'
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     QueryToken:
       type: object
       required:
@@ -268,37 +270,21 @@ components:
           type: string
           description: last active timestamp
           example: '2016-11-16T13:40:47Z'
-    CreateQueryToken:
+    ResultsQueryToken:
       type: object
       required:
-      - type
-      - params
+      - data
       properties:
-        type:
-          type: string
-          description: query type
-        params:
-          type: object
-          description: query params
-          additionalProperties:
-            type: object
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
+        data:
           type: array
-          uniqueItems: true
           items:
-            type: string
-        types:
+            $ref: '#/components/schemas/QueryToken'
+        next:
+          type: string
+        access:
           type: array
-          uniqueItems: true
           items:
-            type: string
+            $ref: '#/components/schemas/ResultsAccess'
     ResultsAccess:
       type: object
       required:
@@ -315,3 +301,17 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    CreateQueryToken:
+      type: object
+      required:
+      - type
+      - params
+      properties:
+        type:
+          type: string
+          description: query type
+        params:
+          type: object
+          description: query params
+          additionalProperties:
+            type: object

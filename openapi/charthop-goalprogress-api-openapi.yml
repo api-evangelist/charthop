@@ -201,97 +201,23 @@ paths:
           description: not found
 components:
   schemas:
-    CreateGoalProgress:
+    AccessAction:
       type: object
       required:
-      - goalId
+      - action
       properties:
-        goalId:
+        action:
           type: string
-          description: goal id that this progress update belongs to
-          example: 588f7ee98f138b19220041a7
-        actuals:
+        fields:
           type: array
-          description: manually entered values for the current actual progress towards the goal target(s)
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/GoalTargetActual'
-        forecasts:
+            type: string
+        types:
           type: array
-          description: forecasts for where the goal target(s) will be as-of the end date
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/GoalProgressForecast'
-        confidence:
-          type: integer
-          format: int32
-          description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
-        done:
-          type: integer
-          format: int32
-          description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
-        comment:
-          type: string
-          description: comment on the progress update
-        date:
-          type: string
-          format: date
-          description: effective date of this progress update
-    UpdateGoalProgress:
-      type: object
-      properties:
-        goalId:
-          type: string
-          description: goal id that this progress update belongs to
-          example: 588f7ee98f138b19220041a7
-        actuals:
-          type: array
-          description: manually entered values for the current actual progress towards the goal target(s)
-          items:
-            $ref: '#/components/schemas/GoalTargetActual'
-        forecasts:
-          type: array
-          description: forecasts for where the goal target(s) will be as-of the end date
-          items:
-            $ref: '#/components/schemas/GoalProgressForecast'
-        confidence:
-          type: integer
-          format: int32
-          description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
-        done:
-          type: integer
-          format: int32
-          description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
-        comment:
-          type: string
-          description: comment on the progress update
-        date:
-          type: string
-          format: date
-          description: effective date of this progress update
-    GoalProgressForecast:
-      type: object
-      required:
-      - goalTargetId
-      - type
-      - value
-      properties:
-        goalTargetId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          enum:
-          - WORST
-          - COMMIT
-          - CALL
-          - LIKELY
-          - BEST
-        label:
-          type: string
-        value:
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
+            type: string
     GoalProgress:
       type: object
       required:
@@ -380,19 +306,40 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    GoalTargetActual:
+    CreateGoalProgress:
       type: object
       required:
-      - goalTargetId
+      - goalId
       properties:
-        goalTargetId:
+        goalId:
           type: string
+          description: goal id that this progress update belongs to
           example: 588f7ee98f138b19220041a7
-        value:
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
+        actuals:
+          type: array
+          description: manually entered values for the current actual progress towards the goal target(s)
+          items:
+            $ref: '#/components/schemas/GoalTargetActual'
+        forecasts:
+          type: array
+          description: forecasts for where the goal target(s) will be as-of the end date
+          items:
+            $ref: '#/components/schemas/GoalProgressForecast'
+        confidence:
+          type: integer
+          format: int32
+          description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
+        done:
+          type: integer
+          format: int32
+          description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
+        comment:
+          type: string
+          description: comment on the progress update
+        date:
+          type: string
+          format: date
+          description: effective date of this progress update
     Attribution:
       type: object
       properties:
@@ -420,23 +367,78 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    AccessAction:
+    ResultsGoalProgress:
       type: object
       required:
-      - action
+      - data
       properties:
-        action:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoalProgress'
+        next:
           type: string
-        fields:
+        access:
           type: array
-          uniqueItems: true
           items:
-            type: string
-        types:
+            $ref: '#/components/schemas/ResultsAccess'
+    UpdateGoalProgress:
+      type: object
+      properties:
+        goalId:
+          type: string
+          description: goal id that this progress update belongs to
+          example: 588f7ee98f138b19220041a7
+        actuals:
           type: array
-          uniqueItems: true
+          description: manually entered values for the current actual progress towards the goal target(s)
           items:
-            type: string
+            $ref: '#/components/schemas/GoalTargetActual'
+        forecasts:
+          type: array
+          description: forecasts for where the goal target(s) will be as-of the end date
+          items:
+            $ref: '#/components/schemas/GoalProgressForecast'
+        confidence:
+          type: integer
+          format: int32
+          description: confidence level of the progress update on how overall on-track we are for the goal as whole, on a scale of 0 to 100
+        done:
+          type: integer
+          format: int32
+          description: if marking the goal done, how accomplished the goal was, on a scale of 0 to 100
+        comment:
+          type: string
+          description: comment on the progress update
+        date:
+          type: string
+          format: date
+          description: effective date of this progress update
+    GoalProgressForecast:
+      type: object
+      required:
+      - goalTargetId
+      - type
+      - value
+      properties:
+        goalTargetId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          enum:
+          - WORST
+          - COMMIT
+          - CALL
+          - LIKELY
+          - BEST
+        label:
+          type: string
+        value:
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean
     ResultsAccess:
       type: object
       required:
@@ -453,18 +455,16 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ResultsGoalProgress:
+    GoalTargetActual:
       type: object
       required:
-      - data
+      - goalTargetId
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GoalProgress'
-        next:
+        goalTargetId:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
+          example: 588f7ee98f138b19220041a7
+        value:
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean

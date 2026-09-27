@@ -101,6 +101,128 @@ paths:
         required: true
 components:
   schemas:
+    MessageChannelConfig:
+      type: object
+      required:
+      - channels
+      - alwaysEmail
+      properties:
+        channels:
+          type: array
+          items:
+            type: string
+            enum:
+            - EMAIL
+            - CHAT
+            - CHAT_SLACK
+            - CHAT_TEAMS
+        alwaysEmail:
+          type: boolean
+    Address:
+      type: object
+      required:
+      - country
+      properties:
+        street1:
+          type: string
+          description: street address, line 1
+          example: 123 Anywhere Street
+          minItems: 0
+          maxItems: 200
+        street2:
+          type: string
+          description: street address, line 2
+          example: Apt 6L
+          minItems: 0
+          maxItems: 200
+        street3:
+          type: string
+          description: street address, line 3
+          example: Sixth Floor
+          minItems: 0
+          maxItems: 200
+        city:
+          type: string
+          description: city
+          example: New York
+          minItems: 0
+          maxItems: 80
+        state:
+          type: string
+          description: state
+          example: NY
+          minItems: 0
+          maxItems: 80
+        country:
+          type: string
+          description: country (two-digit ISO code)
+          example: NY
+          pattern: ^[A-Z]{2}$
+        postal:
+          type: string
+          description: postal code
+          example: '10001'
+          minItems: 0
+          maxItems: 10
+        geo:
+          description: geopoint location
+          $ref: '#/components/schemas/Geopoint'
+        approxGeo:
+          description: approximate geopoint location (suitable for a map placement, but not exact location)
+          $ref: '#/components/schemas/Geopoint'
+    Plan:
+      type: object
+      required:
+      - id
+      - name
+      - interval
+      - intervalCount
+      - tiers
+      - stripeProductId
+      properties:
+        id:
+          type: string
+          description: unique Stripe identifier for this plan
+        name:
+          type: string
+          description: human-readable nickname for this plan
+        interval:
+          type: string
+          description: interval for billing on this plan
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+        intervalCount:
+          type: integer
+          format: int32
+          description: number of intervals, for example 3 for quarterly billing
+        tiers:
+          type: array
+          description: pricing tiers, per employee per interval
+          items:
+            $ref: '#/components/schemas/PlanTier'
+        stripeProductId:
+          type: string
+          description: stripe product id that this plan belongs to
+    Geopoint:
+      type: object
+      required:
+      - type
+      - coordinates
+      properties:
+        type:
+          type: string
+          description: Type of point
+          readOnly: true
+        coordinates:
+          type: array
+          description: The longitude and latitude of the point
+          readOnly: true
+          items:
+            type: number
+            format: double
     FeatureAccessOption:
       type: object
       required:
@@ -129,160 +251,6 @@ components:
           type: integer
           format: int32
           description: The feature option limit
-    ProductItem:
-      type: object
-      required:
-      - productId
-      - stripePriceId
-      properties:
-        productId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        stripePriceId:
-          type: string
-    LayoutColumn:
-      type: object
-      required:
-      - blocks
-      properties:
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Block'
-    Block:
-      type: object
-      properties:
-        type:
-          type: string
-          description: the type of this block, or null if legacy
-          enum:
-          - CONTENT
-          - TASK
-          - CALENDAR
-        label:
-          type: string
-          description: human readable label for this block
-        height:
-          type: object
-          description: fixed height in px, or expand if “stretch”, or fit to contents if null
-        targetFilter:
-          type: string
-          description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
-        readFilter:
-          type: string
-          description: filter condition expression applied to this block, relative to the viewer
-        formIds:
-          type: array
-          description: form ids to surface responses in this block
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        fields:
-          type: array
-          description: fields retrieved in this block
-          items:
-            type: string
-        title:
-          type: string
-          description: title to show in block header
-        content:
-          type: string
-          description: template content returned in this block
-        contentTr:
-          description: template content returned in this block, translated
-          $ref: '#/components/schemas/Translations'
-        primaryButton:
-          description: primary CTA button
-          $ref: '#/components/schemas/LayoutButton'
-        secondaryButton:
-          description: secondary CTA button
-          $ref: '#/components/schemas/LayoutButton'
-    InternalOrgOptions:
-      type: object
-      properties:
-        adpOrganizationOID:
-          type: string
-        assessmentCount:
-          type: integer
-          format: int32
-        dashboardGettingStartedHidden:
-          type: boolean
-        dashboardNeedHelpHidden:
-          type: boolean
-        enableUniversalSso:
-          type: boolean
-        sequoiaOrgId:
-          type: string
-        tosAgreement:
-          type: boolean
-        fileUploadLimit:
-          type: integer
-          format: int64
-        maxFileUploadSize:
-          type: integer
-          format: int64
-        lowPriorityReports:
-          type: boolean
-        isInitialDataSynced:
-          type: boolean
-        maxReportDatapoints:
-          type: integer
-          format: int64
-        disableImportEvents:
-          type: boolean
-          description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
-        useAlphaSlackApp:
-          type: boolean
-          description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
-        extraFields:
-          type: object
-          additionalProperties:
-            type: object
-    Checkout:
-      type: object
-      properties:
-        nextPaymentDate:
-          type: string
-          format: date
-        tax:
-          type: integer
-          format: int64
-        total:
-          type: integer
-          format: int64
-    CancelSubscriptionSurveyAnswers:
-      type: object
-      required:
-      - otherComments
-      - reason
-      properties:
-        otherComments:
-          type: string
-          description: Any additional comments about ChartHop when cancelling their subscription
-        reason:
-          type: string
-          description: Concatenated string of reasons why the customer unsubscribed from ChartHop
-    PaymentInfo:
-      type: object
-      required:
-      - paymentType
-      properties:
-        paymentType:
-          type: string
-          description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
-          example: CREDIT_CARD
-          enum:
-          - CREDIT_CARD
-          - INVOICE
-        creditCardEndDigits:
-          type: string
-          description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
-          example: '4242'
-        brand:
-          type: string
-          description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
-          example: Visa
     Customer:
       type: object
       required:
@@ -469,100 +437,18 @@ components:
           example: 588f7ee98f138b19220041a7
         updateAttribution:
           $ref: '#/components/schemas/Attribution'
-    MessageChannelConfig:
+    Checkout:
       type: object
-      required:
-      - channels
-      - alwaysEmail
       properties:
-        channels:
-          type: array
-          items:
-            type: string
-            enum:
-            - EMAIL
-            - CHAT
-            - CHAT_SLACK
-            - CHAT_TEAMS
-        alwaysEmail:
-          type: boolean
-    PlanTier:
-      type: object
-      required:
-      - unitAmount
-      properties:
-        upTo:
+        nextPaymentDate:
+          type: string
+          format: date
+        tax:
           type: integer
           format: int64
-          description: headcount up to this level is charged at the below rate
-        unitAmount:
-          type: number
-          description: PEPM rate
-    Plan:
-      type: object
-      required:
-      - id
-      - name
-      - interval
-      - intervalCount
-      - tiers
-      - stripeProductId
-      properties:
-        id:
-          type: string
-          description: unique Stripe identifier for this plan
-        name:
-          type: string
-          description: human-readable nickname for this plan
-        interval:
-          type: string
-          description: interval for billing on this plan
-          enum:
-          - DAY
-          - WEEK
-          - MONTH
-          - YEAR
-        intervalCount:
+        total:
           type: integer
-          format: int32
-          description: number of intervals, for example 3 for quarterly billing
-        tiers:
-          type: array
-          description: pricing tiers, per employee per interval
-          items:
-            $ref: '#/components/schemas/PlanTier'
-        stripeProductId:
-          type: string
-          description: stripe product id that this plan belongs to
-    LayoutButton:
-      type: object
-      required:
-      - url
-      - label
-      properties:
-        url:
-          type: string
-        label:
-          type: string
-    TrialProduct:
-      type: object
-      required:
-      - productId
-      - startDate
-      - endDate
-      properties:
-        productId:
-          type: string
-          description: id of the product the customer is trialing
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-          description: first date the trial grants access (inclusive)
-        endDate:
-          type: string
-          format: date
-          description: last date the trial grants access (inclusive)
+          format: int64
     LayoutRow:
       type: object
       required:
@@ -575,23 +461,14 @@ components:
             $ref: '#/components/schemas/LayoutColumn'
         format:
           type: string
-    Geopoint:
+    UpdateSubscription:
       type: object
       required:
-      - type
-      - coordinates
+      - paymentMethod
       properties:
-        type:
+        paymentMethod:
           type: string
-          description: Type of point
-          readOnly: true
-        coordinates:
-          type: array
-          description: The longitude and latitude of the point
-          readOnly: true
-          items:
-            type: number
-            format: double
+          description: Payment method to create; 'INVOICE' to make subscription paid by invoice, or the ID of the payment method if to make the subscription automatically charge a card
     Org:
       type: object
       required:
@@ -799,28 +676,6 @@ components:
           type: string
           description: date at which this org was destroyed, can not be modified
           readOnly: true
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    OrgDomain:
-      type: object
-      required:
-      - domain
-      - aliases
-      properties:
-        domain:
-          type: string
-        aliases:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     Invoice:
       type: object
       required:
@@ -1579,66 +1434,6 @@ components:
           type: integer
           format: int32
           description: 'Maximum number of job codes allowed for AI job-code matching (default: 1000)'
-    Address:
-      type: object
-      required:
-      - country
-      properties:
-        street1:
-          type: string
-          description: street address, line 1
-          example: 123 Anywhere Street
-          minItems: 0
-          maxItems: 200
-        street2:
-          type: string
-          description: street address, line 2
-          example: Apt 6L
-          minItems: 0
-          maxItems: 200
-        street3:
-          type: string
-          description: street address, line 3
-          example: Sixth Floor
-          minItems: 0
-          maxItems: 200
-        city:
-          type: string
-          description: city
-          example: New York
-          minItems: 0
-          maxItems: 80
-        state:
-          type: string
-          description: state
-          example: NY
-          minItems: 0
-          maxItems: 80
-        country:
-          type: string
-          description: country (two-digit ISO code)
-          example: NY
-          pattern: ^[A-Z]{2}$
-        postal:
-          type: string
-          description: postal code
-          example: '10001'
-          minItems: 0
-          maxItems: 10
-        geo:
-          description: geopoint location
-          $ref: '#/components/schemas/Geopoint'
-        approxGeo:
-          description: approximate geopoint location (suitable for a map placement, but not exact location)
-          $ref: '#/components/schemas/Geopoint'
-    UpdateSubscription:
-      type: object
-      required:
-      - paymentMethod
-      properties:
-        paymentMethod:
-          type: string
-          description: Payment method to create; 'INVOICE' to make subscription paid by invoice, or the ID of the payment method if to make the subscription automatically charge a card
     Layout:
       type: object
       required:
@@ -1648,6 +1443,137 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LayoutRow'
+    CancelSubscriptionSurveyAnswers:
+      type: object
+      required:
+      - otherComments
+      - reason
+      properties:
+        otherComments:
+          type: string
+          description: Any additional comments about ChartHop when cancelling their subscription
+        reason:
+          type: string
+          description: Concatenated string of reasons why the customer unsubscribed from ChartHop
+    Block:
+      type: object
+      properties:
+        type:
+          type: string
+          description: the type of this block, or null if legacy
+          enum:
+          - CONTENT
+          - TASK
+          - CALENDAR
+        label:
+          type: string
+          description: human readable label for this block
+        height:
+          type: object
+          description: fixed height in px, or expand if “stretch”, or fit to contents if null
+        targetFilter:
+          type: string
+          description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
+        readFilter:
+          type: string
+          description: filter condition expression applied to this block, relative to the viewer
+        formIds:
+          type: array
+          description: form ids to surface responses in this block
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        fields:
+          type: array
+          description: fields retrieved in this block
+          items:
+            type: string
+        title:
+          type: string
+          description: title to show in block header
+        content:
+          type: string
+          description: template content returned in this block
+        contentTr:
+          description: template content returned in this block, translated
+          $ref: '#/components/schemas/Translations'
+        primaryButton:
+          description: primary CTA button
+          $ref: '#/components/schemas/LayoutButton'
+        secondaryButton:
+          description: secondary CTA button
+          $ref: '#/components/schemas/LayoutButton'
+    PaymentInfo:
+      type: object
+      required:
+      - paymentType
+      properties:
+        paymentType:
+          type: string
+          description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
+          example: CREDIT_CARD
+          enum:
+          - CREDIT_CARD
+          - INVOICE
+        creditCardEndDigits:
+          type: string
+          description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
+          example: '4242'
+        brand:
+          type: string
+          description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
+          example: Visa
+    LayoutColumn:
+      type: object
+      required:
+      - blocks
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+    TrialProduct:
+      type: object
+      required:
+      - productId
+      - startDate
+      - endDate
+      properties:
+        productId:
+          type: string
+          description: id of the product the customer is trialing
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+          description: first date the trial grants access (inclusive)
+        endDate:
+          type: string
+          format: date
+          description: last date the trial grants access (inclusive)
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    OrgDomain:
+      type: object
+      required:
+      - domain
+      - aliases
+      properties:
+        domain:
+          type: string
+        aliases:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     Attribution:
       type: object
       properties:
@@ -1675,3 +1601,77 @@ components:
           - SLACK
           - TEAMS
           - MCP
+    ProductItem:
+      type: object
+      required:
+      - productId
+      - stripePriceId
+      properties:
+        productId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        stripePriceId:
+          type: string
+    InternalOrgOptions:
+      type: object
+      properties:
+        adpOrganizationOID:
+          type: string
+        assessmentCount:
+          type: integer
+          format: int32
+        dashboardGettingStartedHidden:
+          type: boolean
+        dashboardNeedHelpHidden:
+          type: boolean
+        enableUniversalSso:
+          type: boolean
+        sequoiaOrgId:
+          type: string
+        tosAgreement:
+          type: boolean
+        fileUploadLimit:
+          type: integer
+          format: int64
+        maxFileUploadSize:
+          type: integer
+          format: int64
+        lowPriorityReports:
+          type: boolean
+        isInitialDataSynced:
+          type: boolean
+        maxReportDatapoints:
+          type: integer
+          format: int64
+        disableImportEvents:
+          type: boolean
+          description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
+        useAlphaSlackApp:
+          type: boolean
+          description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
+        extraFields:
+          type: object
+          additionalProperties:
+            type: object
+    LayoutButton:
+      type: object
+      required:
+      - url
+      - label
+      properties:
+        url:
+          type: string
+        label:
+          type: string
+    PlanTier:
+      type: object
+      required:
+      - unitAmount
+      properties:
+        upTo:
+          type: integer
+          format: int64
+          description: headcount up to this level is charged at the below rate
+        unitAmount:
+          type: number
+          description: PEPM rate

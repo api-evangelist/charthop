@@ -264,21 +264,30 @@ paths:
           description: not found
 components:
   schemas:
-    GoalTargetActual:
+    AccessAction:
       type: object
       required:
-      - goalTargetId
+      - action
       properties:
-        goalTargetId:
+        action:
           type: string
-          example: 588f7ee98f138b19220041a7
-        value:
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
-    UpdateGoalTarget:
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    CreateGoalTarget:
       type: object
+      required:
+      - goalId
+      - type
+      - startDate
+      - endDate
       properties:
         goalId:
           type: string
@@ -357,13 +366,8 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    CreateGoalTarget:
+    UpdateGoalTarget:
       type: object
-      required:
-      - goalId
-      - type
-      - startDate
-      - endDate
       properties:
         goalId:
           type: string
@@ -430,6 +434,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     GoalTarget:
       type: object
       required:
@@ -540,39 +560,19 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    AccessAction:
+    GoalTargetActual:
       type: object
       required:
-      - action
+      - goalTargetId
       properties:
-        action:
+        goalTargetId:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
+          example: 588f7ee98f138b19220041a7
+        value:
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean
     GoalTargetValue:
       type: object
       required:

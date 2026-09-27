@@ -174,94 +174,23 @@ paths:
           description: not found
 components:
   schemas:
-    UpdateAiHint:
-      type: object
-      properties:
-        name:
-          type: string
-          description: unique name for this hint
-        toolName:
-          type: string
-          description: tool name this hint applies to, e.g. Create, Update, Delete, DataExplorer
-        entityType:
-          type: string
-          description: entity type this hint applies to, e.g. ACTION, FORM, REPORT
-        keywords:
-          type: array
-          description: keywords that trigger this hint when matched in user messages
-          items:
-            type: string
-        schema:
-          type: string
-          description: optional schema override; if null, auto-generated from the entity adapter's create class
-        addHintIds:
-          type: array
-          description: additional hint ids to include when this hint is surfaced
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        content:
-          type: string
-          description: the hint content to provide to the AI
-    CreateAiHint:
+    AccessAction:
       type: object
       required:
-      - name
-      - content
+      - action
       properties:
-        name:
+        action:
           type: string
-          description: unique name for this hint
-        toolName:
-          type: string
-          description: tool name this hint applies to, e.g. Create, Update, Delete, DataExplorer
-        entityType:
-          type: string
-          description: entity type this hint applies to, e.g. ACTION, FORM, REPORT
-        keywords:
+        fields:
           type: array
-          description: keywords that trigger this hint when matched in user messages
+          uniqueItems: true
           items:
             type: string
-        schema:
-          type: string
-          description: optional schema override; if null, auto-generated from the entity adapter's create class
-        addHintIds:
+        types:
           type: array
-          description: additional hint ids to include when this hint is surfaced
+          uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        content:
-          type: string
-          description: the hint content to provide to the AI
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
     ResultsAiHint:
       type: object
       required:
@@ -355,23 +284,65 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    AccessAction:
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    CreateAiHint:
       type: object
       required:
-      - action
+      - name
+      - content
       properties:
-        action:
+        name:
           type: string
-        fields:
+          description: unique name for this hint
+        toolName:
+          type: string
+          description: tool name this hint applies to, e.g. Create, Update, Delete, DataExplorer
+        entityType:
+          type: string
+          description: entity type this hint applies to, e.g. ACTION, FORM, REPORT
+        keywords:
           type: array
-          uniqueItems: true
+          description: keywords that trigger this hint when matched in user messages
           items:
             type: string
-        types:
+        schema:
+          type: string
+          description: optional schema override; if null, auto-generated from the entity adapter's create class
+        addHintIds:
           type: array
-          uniqueItems: true
+          description: additional hint ids to include when this hint is surfaced
           items:
             type: string
+            example: 588f7ee98f138b19220041a7
+        content:
+          type: string
+          description: the hint content to provide to the AI
     ResultsAccess:
       type: object
       required:
@@ -388,3 +359,32 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    UpdateAiHint:
+      type: object
+      properties:
+        name:
+          type: string
+          description: unique name for this hint
+        toolName:
+          type: string
+          description: tool name this hint applies to, e.g. Create, Update, Delete, DataExplorer
+        entityType:
+          type: string
+          description: entity type this hint applies to, e.g. ACTION, FORM, REPORT
+        keywords:
+          type: array
+          description: keywords that trigger this hint when matched in user messages
+          items:
+            type: string
+        schema:
+          type: string
+          description: optional schema override; if null, auto-generated from the entity adapter's create class
+        addHintIds:
+          type: array
+          description: additional hint ids to include when this hint is surfaced
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        content:
+          type: string
+          description: the hint content to provide to the AI

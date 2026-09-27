@@ -326,6 +326,325 @@ paths:
           description: not found
 components:
   schemas:
+    GroupByConfig:
+      type: object
+      properties:
+        overrides:
+          type: array
+          description: Overrides by label of label, color, or sort order
+          items:
+            $ref: '#/components/schemas/LabelOverride'
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to display
+        includeOther:
+          type: boolean
+          description: When combined with limit, whether to include an 'Other' group
+        includeNone:
+          type: boolean
+          description: Whether to include a 'None' group (null values aggregated)
+        includeAllValues:
+          type: boolean
+          description: When combined with fieldId or questionId, will include all values from that fieldId or questionId, even if none of them were used
+        fieldId:
+          type: string
+          description: The field to use to retrieve values, when includeAllValues is in use
+          example: 588f7ee98f138b19220041a7
+        questionId:
+          type: string
+          description: The question to use to retrieve values, when includeAllValues is in use
+          example: 588f7ee98f138b19220041a7
+        sortBy:
+          type: string
+          description: Whether to sort the results -- by default, will sort by label if there is no limit, will sort by value descending if there is a limit
+          enum:
+          - LABEL
+          - KEY
+          - VALUE
+          - COUNT
+        sortDirection:
+          type: string
+          description: The direction to sort the results
+          enum:
+          - ASC
+          - DESC
+    CreateReportChart:
+      type: object
+      required:
+      - label
+      - type
+      - query
+      - sort
+      properties:
+        label:
+          type: string
+          description: chart label
+          example: Headcount Report
+          minItems: 1
+          maxItems: 255
+        type:
+          type: string
+          description: chart type
+          enum:
+          - LINE
+          - AREA
+          - STACKED
+          - BAR
+          - VERTICAL_BAR
+          - HORIZONTAL_BAR
+          - PIE
+          - TABLE
+          - TABLE_CROSSTAB
+          - SINGLE_METRIC
+          - BUBBLE
+          - HEADER
+          - TEXT
+          - GAUGE
+          - WATERFALL
+          - WATERFALL_TIMESERIES
+          - HEATMAP
+          - GEO
+          - GEO_HEATMAP
+          - GEO_SCATTER
+          - RADAR
+          - N_GRID
+          - NETWORK
+          - COMBO
+          - COMBO_TIMESERIES
+          - DONUT
+          - FUNNEL
+          - FUNNEL_TIMESERIES
+          - SANKEY
+          - SANKEY_TIMESERIES
+          - WORDCLOUD
+          - EMOJI_CLOUD
+          - CALENDAR_HEATMAP
+          - GANTT
+        filter:
+          type: string
+          description: filter that applies to this chart
+          example: department='Engineering'
+        filterOverride:
+          type: boolean
+          description: whether the chart filter overrides the global filter
+        query:
+          description: query for all series in the chart
+          $ref: '#/components/schemas/ReportQuery'
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        isAdvancedQueryMode:
+          type: boolean
+          description: whether the chart configuration is using advanced mode
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsReportChart:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportChart'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    UpdateReportChart:
+      type: object
+      properties:
+        label:
+          type: string
+          description: chart label
+          example: Headcount Report
+          minItems: 1
+          maxItems: 255
+        type:
+          type: string
+          description: chart type
+          enum:
+          - LINE
+          - AREA
+          - STACKED
+          - BAR
+          - VERTICAL_BAR
+          - HORIZONTAL_BAR
+          - PIE
+          - TABLE
+          - TABLE_CROSSTAB
+          - SINGLE_METRIC
+          - BUBBLE
+          - HEADER
+          - TEXT
+          - GAUGE
+          - WATERFALL
+          - WATERFALL_TIMESERIES
+          - HEATMAP
+          - GEO
+          - GEO_HEATMAP
+          - GEO_SCATTER
+          - RADAR
+          - N_GRID
+          - NETWORK
+          - COMBO
+          - COMBO_TIMESERIES
+          - DONUT
+          - FUNNEL
+          - FUNNEL_TIMESERIES
+          - SANKEY
+          - SANKEY_TIMESERIES
+          - WORDCLOUD
+          - EMOJI_CLOUD
+          - CALENDAR_HEATMAP
+          - GANTT
+        filter:
+          type: string
+          description: filter that applies to this chart
+          example: department='Engineering'
+        filterOverride:
+          type: boolean
+          description: whether the chart filter overrides the global filter
+        query:
+          description: query for all series in the chart
+          $ref: '#/components/schemas/ReportQuery'
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        isAdvancedQueryMode:
+          type: boolean
+          description: whether the chart configuration is using advanced mode
+    ReportSeriesQuery:
+      type: object
+      required:
+      - label
+      - color
+      - y
+      properties:
+        label:
+          type: string
+          description: label to use
+        color:
+          type: string
+          description: color to use
+        y:
+          type: string
+          description: y-value to calculate
+          example: sum{headcount, gender:f} / sum{headcount}
+        groupByConfigs:
+          type: array
+          description: Configuration for aggregations performed by the groupBy operator
+          items:
+            $ref: '#/components/schemas/GroupByConfig'
+    ReportQuery:
+      type: object
+      required:
+      - options
+      properties:
+        series:
+          type: array
+          description: series to evaluate
+          items:
+            $ref: '#/components/schemas/ReportSeriesQuery'
+        filters:
+          type: array
+          description: filters to crosstab all results by (deprecated in reports V2, should use groupBy instead)
+          items:
+            $ref: '#/components/schemas/ReportFilter'
+        content:
+          type: string
+          description: content block to evaluate as a Carrot Template, as an alternative to using series
+        startDate:
+          type: string
+          description: start date, in either relative (-7d) or exact (YYYY-MM-DD) format
+        endDate:
+          type: string
+          description: end date, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
+        interval:
+          type: string
+          description: interval, if the query is a timeseries; if no interval, query is crosstabbed
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - QUARTER
+          - FISCAL_QUARTER
+          - YEAR
+          - FISCAL_YEAR
+        intervalDates:
+          type: array
+          description: interval dates, if a specific set of irregular dates are being queried in a timeseries
+          items:
+            type: string
+            format: date
+        options:
+          type: object
+          description: options, including format, filter, scenarioId, projectHires, and numerous display options
+    LabelOverride:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: The unique identifier to use to locate the key to override. For entities and enum values, this will be an id. For numbers, this will be the normalized numeric representation. For others, this will be the string
+        label:
+          type: string
+          description: If set, overrides this label
+        color:
+          type: string
+          description: If set, overrides the default color
+        sort:
+          type: integer
+          format: int32
+          description: If set, overrides the sorting order
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     ReportChart:
       type: object
       required:
@@ -450,337 +769,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    CreateReportChart:
-      type: object
-      required:
-      - label
-      - type
-      - query
-      - sort
-      properties:
-        label:
-          type: string
-          description: chart label
-          example: Headcount Report
-          minItems: 1
-          maxItems: 255
-        type:
-          type: string
-          description: chart type
-          enum:
-          - LINE
-          - AREA
-          - STACKED
-          - BAR
-          - VERTICAL_BAR
-          - HORIZONTAL_BAR
-          - PIE
-          - TABLE
-          - TABLE_CROSSTAB
-          - SINGLE_METRIC
-          - BUBBLE
-          - HEADER
-          - TEXT
-          - GAUGE
-          - WATERFALL
-          - WATERFALL_TIMESERIES
-          - HEATMAP
-          - GEO
-          - GEO_HEATMAP
-          - GEO_SCATTER
-          - RADAR
-          - N_GRID
-          - NETWORK
-          - COMBO
-          - COMBO_TIMESERIES
-          - DONUT
-          - FUNNEL
-          - FUNNEL_TIMESERIES
-          - SANKEY
-          - SANKEY_TIMESERIES
-          - WORDCLOUD
-          - EMOJI_CLOUD
-          - CALENDAR_HEATMAP
-          - GANTT
-        filter:
-          type: string
-          description: filter that applies to this chart
-          example: department='Engineering'
-        filterOverride:
-          type: boolean
-          description: whether the chart filter overrides the global filter
-        query:
-          description: query for all series in the chart
-          $ref: '#/components/schemas/ReportQuery'
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        isAdvancedQueryMode:
-          type: boolean
-          description: whether the chart configuration is using advanced mode
-    LabelOverride:
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          description: The unique identifier to use to locate the key to override. For entities and enum values, this will be an id. For numbers, this will be the normalized numeric representation. For others, this will be the string
-        label:
-          type: string
-          description: If set, overrides this label
-        color:
-          type: string
-          description: If set, overrides the default color
-        sort:
-          type: integer
-          format: int32
-          description: If set, overrides the sorting order
-    ResultsReportChart:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportChart'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    GroupByConfig:
-      type: object
-      properties:
-        overrides:
-          type: array
-          description: Overrides by label of label, color, or sort order
-          items:
-            $ref: '#/components/schemas/LabelOverride'
-        limit:
-          type: integer
-          format: int32
-          description: Maximum number of results to display
-        includeOther:
-          type: boolean
-          description: When combined with limit, whether to include an 'Other' group
-        includeNone:
-          type: boolean
-          description: Whether to include a 'None' group (null values aggregated)
-        includeAllValues:
-          type: boolean
-          description: When combined with fieldId or questionId, will include all values from that fieldId or questionId, even if none of them were used
-        fieldId:
-          type: string
-          description: The field to use to retrieve values, when includeAllValues is in use
-          example: 588f7ee98f138b19220041a7
-        questionId:
-          type: string
-          description: The question to use to retrieve values, when includeAllValues is in use
-          example: 588f7ee98f138b19220041a7
-        sortBy:
-          type: string
-          description: Whether to sort the results -- by default, will sort by label if there is no limit, will sort by value descending if there is a limit
-          enum:
-          - LABEL
-          - KEY
-          - VALUE
-          - COUNT
-        sortDirection:
-          type: string
-          description: The direction to sort the results
-          enum:
-          - ASC
-          - DESC
-    ReportFilter:
-      type: object
-      required:
-      - label
-      - filter
-      properties:
-        label:
-          type: string
-          description: human-readable label for the filter
-        filter:
-          type: string
-          description: filter expression
-    ReportQuery:
-      type: object
-      required:
-      - options
-      properties:
-        series:
-          type: array
-          description: series to evaluate
-          items:
-            $ref: '#/components/schemas/ReportSeriesQuery'
-        filters:
-          type: array
-          description: filters to crosstab all results by (deprecated in reports V2, should use groupBy instead)
-          items:
-            $ref: '#/components/schemas/ReportFilter'
-        content:
-          type: string
-          description: content block to evaluate as a Carrot Template, as an alternative to using series
-        startDate:
-          type: string
-          description: start date, in either relative (-7d) or exact (YYYY-MM-DD) format
-        endDate:
-          type: string
-          description: end date, in either relative (-7d) or exact (YYYY-MM-DD) format; if not present, defaults to today
-        interval:
-          type: string
-          description: interval, if the query is a timeseries; if no interval, query is crosstabbed
-          enum:
-          - DAY
-          - WEEK
-          - MONTH
-          - QUARTER
-          - FISCAL_QUARTER
-          - YEAR
-          - FISCAL_YEAR
-        intervalDates:
-          type: array
-          description: interval dates, if a specific set of irregular dates are being queried in a timeseries
-          items:
-            type: string
-            format: date
-        options:
-          type: object
-          description: options, including format, filter, scenarioId, projectHires, and numerous display options
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ReportSeriesQuery:
-      type: object
-      required:
-      - label
-      - color
-      - y
-      properties:
-        label:
-          type: string
-          description: label to use
-        color:
-          type: string
-          description: color to use
-        y:
-          type: string
-          description: y-value to calculate
-          example: sum{headcount, gender:f} / sum{headcount}
-        groupByConfigs:
-          type: array
-          description: Configuration for aggregations performed by the groupBy operator
-          items:
-            $ref: '#/components/schemas/GroupByConfig'
-    UpdateReportChart:
-      type: object
-      properties:
-        label:
-          type: string
-          description: chart label
-          example: Headcount Report
-          minItems: 1
-          maxItems: 255
-        type:
-          type: string
-          description: chart type
-          enum:
-          - LINE
-          - AREA
-          - STACKED
-          - BAR
-          - VERTICAL_BAR
-          - HORIZONTAL_BAR
-          - PIE
-          - TABLE
-          - TABLE_CROSSTAB
-          - SINGLE_METRIC
-          - BUBBLE
-          - HEADER
-          - TEXT
-          - GAUGE
-          - WATERFALL
-          - WATERFALL_TIMESERIES
-          - HEATMAP
-          - GEO
-          - GEO_HEATMAP
-          - GEO_SCATTER
-          - RADAR
-          - N_GRID
-          - NETWORK
-          - COMBO
-          - COMBO_TIMESERIES
-          - DONUT
-          - FUNNEL
-          - FUNNEL_TIMESERIES
-          - SANKEY
-          - SANKEY_TIMESERIES
-          - WORDCLOUD
-          - EMOJI_CLOUD
-          - CALENDAR_HEATMAP
-          - GANTT
-        filter:
-          type: string
-          description: filter that applies to this chart
-          example: department='Engineering'
-        filterOverride:
-          type: boolean
-          description: whether the chart filter overrides the global filter
-        query:
-          description: query for all series in the chart
-          $ref: '#/components/schemas/ReportQuery'
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        isAdvancedQueryMode:
-          type: boolean
-          description: whether the chart configuration is using advanced mode
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsAccess:
       type: object
       required:
@@ -797,3 +785,15 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    ReportFilter:
+      type: object
+      required:
+      - label
+      - filter
+      properties:
+        label:
+          type: string
+          description: human-readable label for the filter
+        filter:
+          type: string
+          description: filter expression

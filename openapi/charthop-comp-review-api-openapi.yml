@@ -1182,30 +1182,70 @@ paths:
         required: true
 components:
   schemas:
-    PartialAppEntities:
+    TableRef:
+      type: object
+      properties:
+        tableId:
+          type: string
+          description: the table id this field references
+          example: 588f7ee98f138b19220041a7
+        tableName:
+          type: string
+          description: the table name this field references
+    AccessAction:
       type: object
       required:
-      - jobs
-      - persons
-      - personToJobMap
-      - fields
+      - action
       properties:
-        jobs:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Job'
-        persons:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Person'
-        personToJobMap:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Job'
+        action:
+          type: string
         fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/Field'
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'
     CompReviewNotifications:
       type: object
       required:
@@ -1215,304 +1255,308 @@ components:
           type: string
           format: date
           description: Announcement date
-    CompReviewCollaborators:
+    Deviation:
       type: object
-      required:
-      - collaborationType
-      - collaboratorAccess
-      - jobToCollaboratorsMap
       properties:
-        collaborationType:
+        min:
+          type: object
+        max:
+          type: object
+    PartialJob:
+      type: object
+      properties:
+        jobId:
           type: string
-          description: What type of HRBP collaboration the comp review uses
-          enum:
-          - NONE
-          - STATIC
-          - DYNAMIC
-        collaboratorAccess:
+          description: globally unique job id
+          example: 588f7ee98f138b19220041a7
+        orgId:
           type: string
-          description: What level of access collaborators should have
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        snapshotId:
+          type: string
+          description: snapshot that this job belongs to
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: job title
+          example: Senior Engineer
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: compensation
+          $ref: '#/components/schemas/Comp'
+        sensitive:
+          type: string
+          description: view sensitive of the job while open
           enum:
-          - READ
-          - EDIT
-          - SUBMIT
-        collaboratorJobIds:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        relationships:
           type: array
-          description: A list of collaborators for all reviewers, used when collaborationType is STATIC
+          description: relationship to other jobs
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        groupIds:
+          type: array
+          description: groups that this job is a member of
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        collaboratorMatrix:
-          description: A matrix of collaborators assigned by condition, used when collaborationType is DYNAMIC
-          $ref: '#/components/schemas/CollaboratorMatrix'
-        jobToCollaboratorsMap:
+        groupIdsByType:
           type: object
-          description: A map of reviewer job ID to a set of collaborator job IDs indicating which collaborators are collaborating with a given reviewer
+          description: groups that this job is a member of, mapped by group type id
           additionalProperties:
             type: array
             uniqueItems: true
             items:
               type: string
               example: 588f7ee98f138b19220041a7
-    CompReviewVisualizations:
-      type: object
-      required:
-      - jobToBaseSpendMap
-      properties:
-        jobToBaseSpendMap:
+        placement:
+          type: string
+          description: guidance on placement
+          enum:
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        state:
+          type: string
+          description: current state - whether the job is open, filled, or has someone departed or hired
+          enum:
+          - OPEN
+          - FILLED
+          - DEPART
+          - START
+        fields:
           type: object
+          description: fields containing custom data
           additionalProperties:
-            $ref: '#/components/schemas/Money'
-        budgetPoolCalculation:
-          $ref: '#/components/schemas/BudgetCalculation'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
+            type: object
+        fieldDates:
+          type: object
+          description: dates of the field data
+          additionalProperties:
             type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    Contact:
-      type: object
-      required:
-      - type
-      - format
-      properties:
-        type:
+            format: date
+        fieldsProposed:
+          type: object
+          description: proposed values for fields
+          additionalProperties:
+            type: object
+        createDate:
           type: string
-          description: type identifier for the contact
-          example: HOME_PHONE
-          enum:
-          - ADP
-          - BAMBOO
-          - EMPLOYEE
-          - GREENHOUSE
-          - GOOGLE
-          - GUSTO
-          - HUMAANS
-          - JOBVITE
-          - JUSTWORKS
-          - JUSTWORKS_MEMBER_ID
-          - LEVER
-          - NAMELY
-          - OKTA
-          - PAYLOCITY
-          - SAPLING
-          - PRISM
-          - SUCCESSFACTORS
-          - RIPPLING
-          - TRINET
-          - ULTIPRO
-          - WORKDAY
-          - ZENEFITS
-          - LINKEDIN
-          - TWITTER
-          - GITHUB
-          - GITLAB
-          - SLACK
-          - TIMETASTIC
-          - FINCH
-          - ALPHASTAFF
-          - DEEL
-          - ADP_ASSOCIATE_ID
-          - ADP_WORKER_ID
-          - HIBOB
-          - GUSTO_UUID
-          - MSTEAMS
-          - HOME_EMAIL
-          - MOBILE_PHONE
-          - WORK_EMAIL
-          - HOME_PHONE
-          - WORK_PHONE
-          - WORK_FAX
-        value:
+          format: date
+          description: job creation date
+        startDate:
           type: string
-          description: value for the contact
-          example: linkedin:name
-        format:
+          format: date
+          description: for empty jobs, expected start date - for filled jobs, confirmed start date
+        startDatePlanned:
           type: string
-          description: format for the value
-          example: EMAIL
-          enum:
-          - PHONE
-          - EMAIL
-          - ID
-    DuplicateCompReviewOptions:
-      type: object
-      required:
-      - label
-      - orgDataReferenceDate
-      - resetReviewerTree
-      properties:
-        label:
+          format: date
+          description: expected start date whether job is open or has been filled - doesn't change when job is filled
+        personStartDate:
           type: string
-        orgDataReferenceDate:
+          format: date
+          description: if personId is present, the first day of that person in the org after the latest departure (if any)
+        personEndDate:
           type: string
-        resetReviewerTree:
-          type: boolean
-    CompReviewDryRunResponse:
-      type: object
-      required:
-      - additions
-      - removals
-      - moves
-      - ownershipChanges
-      - hasChanges
-      properties:
-        additions:
-          type: array
-          description: People being added to reviewer pods
-          items:
-            $ref: '#/components/schemas/RevieweeChange'
-        removals:
-          type: array
-          description: People being removed from reviewer pods
-          items:
-            $ref: '#/components/schemas/RevieweeChange'
-        moves:
-          type: array
-          description: People being moved from one reviewer to another
-          items:
-            $ref: '#/components/schemas/RevieweeMove'
-        ownershipChanges:
-          type: array
-          description: Reviewers whose ownership is changing
-          items:
-            $ref: '#/components/schemas/OwnershipChange'
-        hasChanges:
-          type: boolean
-          description: Whether there are any changes at all
-      description: Preview of changes that will occur when resuming a paused comp review
-    Geopoint:
-      type: object
-      required:
-      - type
-      - coordinates
-      properties:
-        type:
+          format: date
+          description: if personId is present and the person is departing, the last day of that person in the org
+        personJobStartDate:
           type: string
-          description: Type of point
-          readOnly: true
-        coordinates:
-          type: array
-          description: The longitude and latitude of the point
-          readOnly: true
-          items:
-            type: number
-            format: double
-    OrgAccess:
-      type: object
-      required:
-      - orgId
-      - access
-      properties:
-        orgId:
+          format: date
+          description: if personId is present, the first day of that person in the job
+        personIdDate:
           type: string
-          description: org id
-          example: 5887a7718f138b6a2a0041a7
+          format: date
+          description: if personId is present, the first day that the personId actually filled the job
+        personJobEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing or moving out, the last day of that person in the job
         personId:
           type: string
-          description: person id, if this user directly corresponds with a person
-          example: 5887a7718f138b6a2a0041a7
-        access:
+          description: the person holding this job -- either currently in the job, or upcoming announced hire
+          example: 588f7ee98f138b19220041a7
+        backfillPersonId:
           type: string
-          description: legacy access permission level
-          enum:
-          - NONE
-          - PREBOARDING
-          - VIEW
-          - LIMITED
-          - MEMBER_LIMITED_COMP
-          - MEMBER
-          - CUSTOM
-          - TECH_OWNER
-          - TIMEOFF
-          - CONTACT
-          - COMP_CASH
-          - COMP_EQUITY
-          - COMP_ALL
-          - RECRUIT_SENSITIVE
-          - RECRUIT_PRIMARY
-          - SENSITIVE_LIMITED_COMP
-          - SENSITIVE
-          - PRIMARY
-          - PEOPLE_OPS_ADMIN
-          - PEOPLE_OPS_ADMIN_NO_COMP_DATA
-          - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
-          - OWNER
-        groupIds:
+          description: the person who most recently held the job, who this represents a backfill for
+          example: 588f7ee98f138b19220041a7
+        jobCodeId:
+          type: string
+          description: the ID of the job code for this job
+          example: 588f7ee98f138b19220041a7
+        backfillByJobId:
+          type: string
+          description: another job which is planned to be a backfill for this job
+          example: 588f7ee98f138b19220041a7
+        upcoming:
           type: array
-          description: group ids that the above access applies to
-          uniqueItems: true
+          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
           items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        expr:
+            $ref: '#/components/schemas/UpcomingChange'
+        scenarioId:
           type: string
-          description: expression that the above access applies to
-        expireAt:
+          description: scenario that the job was created in (null if job is on primary timeline)
+          example: 588f7ee98f138b19220041a7
+        scenarioChangedId:
           type: string
-          description: timestamp that this org access will expire
-        roleId:
+          description: scenario that the job was changed in (null if job is on primary timeline)
+          example: 588f7ee98f138b19220041a7
+        fetchState:
           type: string
-          description: the role id that defines the users access
-          example: 5887a7718f138b6a2a0041a7
-        status:
-          type: string
-          description: Onboarding status of the user in this org
+          description: scenario that the job was changed in (null if job is on primary timeline)
           enum:
-          - INACTIVE
-          - PREBOARDING
-          - ACTIVATION
-          - ACTIVE
-          - OFFBOARDED
-        homeEmail:
-          type: string
-          description: Personal email address of user, while they are preboarding
-          example: bob@example.com
-          minItems: 0
-          maxItems: 120
-        workEmail:
-          type: string
-          description: Work email address of user, once they have started
-          example: robert.doe@example.com
-          minItems: 0
-          maxItems: 120
-        workRoleId:
-          type: string
-          description: Active role ID that defines the user's access once they have started
-          example: 67c851da3dd1668c2fdd7e44
-    ResultsData:
+          - PERSON
+          - STRUCTURE
+          - ALL
+    CompReviewConfig:
       type: object
       required:
-      - data
+      - keyDates
+      - eligibleEmployees
+      - reviewersAndApprovers
+      - collaborators
+      - reviewerWorkbook
       properties:
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        totalRow:
+        keyDates:
+          description: Key dates config
+          $ref: '#/components/schemas/CompReviewKeyDates'
+        eligibleEmployees:
+          description: Eligible employees config
+          $ref: '#/components/schemas/CompReviewEligibleEmployees'
+        reviewersAndApprovers:
+          description: Reviewers & approvers config
+          $ref: '#/components/schemas/CompReviewReviewersApprovers'
+        collaborators:
+          description: HRBP (Collaborator) config
+          $ref: '#/components/schemas/CompReviewCollaborators'
+        reviewerWorkbook:
+          description: Eligible employees config
+          $ref: '#/components/schemas/CompReviewReviewerWorkbook'
+        budgets:
+          description: Budget settings config
+          $ref: '#/components/schemas/CompReviewBudgets'
+        notifications:
+          description: Eligible employees config
+          $ref: '#/components/schemas/CompReviewNotifications'
+        reassignments:
           type: object
+          description: Employees that have been reassigned for this cycle (manager to employee set)
           additionalProperties:
-            type: object
+            type: array
+            uniqueItems: true
+            items:
+              type: string
+              example: 588f7ee98f138b19220041a7
+    CompReview:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - config
+      - shareAccess
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label of goal
+          example: Comp review H2 2022
+          minItems: 1
+          maxItems: 80
+        config:
+          description: Configuration for this comp review
+          $ref: '#/components/schemas/CompReviewConfig'
+        status:
+          type: string
+          description: Whether the compensation review has been approved by the final approvers
+          enum:
+          - PENDING
+          - PAUSED
+          - ACTIVE
+          - REJECTED
+          - COMPLETE
+          - COMPLETE_APPROVED
+        shareAccess:
+          type: array
+          description: users who have been granted access to this comp review
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        reviewerCount:
+          type: integer
+          format: int32
+          description: count of reviewers in the comp review
+        submittedCount:
+          type: integer
+          format: int32
+          description: count of reviews that have been submitted and approved
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
     ApprovalRequestCompReviewResponse:
       type: object
       required:
@@ -1576,222 +1620,125 @@ components:
           example: 588f7ee98f138b19220041a7
         updateAt:
           type: string
-    ResultsCompReview:
+    CompReviewDryRunResponse:
       type: object
       required:
+      - additions
+      - removals
+      - moves
+      - ownershipChanges
+      - hasChanges
+      properties:
+        additions:
+          type: array
+          description: People being added to reviewer pods
+          items:
+            $ref: '#/components/schemas/RevieweeChange'
+        removals:
+          type: array
+          description: People being removed from reviewer pods
+          items:
+            $ref: '#/components/schemas/RevieweeChange'
+        moves:
+          type: array
+          description: People being moved from one reviewer to another
+          items:
+            $ref: '#/components/schemas/RevieweeMove'
+        ownershipChanges:
+          type: array
+          description: Reviewers whose ownership is changing
+          items:
+            $ref: '#/components/schemas/OwnershipChange'
+        hasChanges:
+          type: boolean
+          description: Whether there are any changes at all
+      description: Preview of changes that will occur when resuming a paused comp review
+    CompReviewBudgets:
+      type: object
+      required:
+      - allocationType
+      - visualizationType
+      - showTotalBudget
+      - totalBudgetVisibilityType
+      properties:
+        allocationType:
+          type: string
+          description: How budgets are allocated
+          enum:
+          - PROPORTIONAL
+          - SEQUENTIAL
+        visualizationType:
+          type: string
+          description: Whether all budget visualizations are visible or only those that apply to eligible employees in the reviewer's pod
+          enum:
+          - ALL
+          - ONLY_APPLICABLE
+        showTotalBudget:
+          type: boolean
+          description: Whether to display the total budget in the cycle
+        totalBudgetVisibilityType:
+          type: string
+          description: Controls who can view the total budget
+          enum:
+          - DEFAULT
+          - ROLE_SELECTION
+          - SPECIFIC_PEOPLE
+          - CUSTOM_CQL
+        totalBudgetVisibilityExpr:
+          type: string
+          description: CQL expression for total budget visibility (used with totalBudgetVisibilityType=CUSTOM_CQL)
+        totalBudgetVisibilityPersonIds:
+          type: array
+          description: Person IDs who can view total budget (used with totalBudgetVisibilityType=SPECIFIC_PEOPLE)
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        totalBudgetVisibilityRoles:
+          description: Roles that can view total budget (used with totalBudgetVisibilityType=ROLE_SELECTION)
+          $ref: '#/components/schemas/InCycleViewFeatures'
+    LogData:
+      type: object
+      required:
+      - level
+      - at
       - data
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompReview'
-        next:
+        level:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    CompReviewConfig:
-      type: object
-      required:
-      - keyDates
-      - eligibleEmployees
-      - reviewersAndApprovers
-      - collaborators
-      - reviewerWorkbook
-      properties:
-        keyDates:
-          description: Key dates config
-          $ref: '#/components/schemas/CompReviewKeyDates'
-        eligibleEmployees:
-          description: Eligible employees config
-          $ref: '#/components/schemas/CompReviewEligibleEmployees'
-        reviewersAndApprovers:
-          description: Reviewers & approvers config
-          $ref: '#/components/schemas/CompReviewReviewersApprovers'
-        collaborators:
-          description: HRBP (Collaborator) config
-          $ref: '#/components/schemas/CompReviewCollaborators'
-        reviewerWorkbook:
-          description: Eligible employees config
-          $ref: '#/components/schemas/CompReviewReviewerWorkbook'
-        budgets:
-          description: Budget settings config
-          $ref: '#/components/schemas/CompReviewBudgets'
-        notifications:
-          description: Eligible employees config
-          $ref: '#/components/schemas/CompReviewNotifications'
-        reassignments:
-          type: object
-          description: Employees that have been reassigned for this cycle (manager to employee set)
-          additionalProperties:
-            type: array
-            uniqueItems: true
-            items:
-              type: string
-              example: 588f7ee98f138b19220041a7
-    InCycleViewResponse:
-      type: object
-      properties:
-        reviews:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRequestCompReviewResponse'
-        proposal:
-          $ref: '#/components/schemas/ApprovalRequestCompReviewResponse'
-        scenarioMap:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Scenario'
-        parentReviewsMap:
-          type: object
-          additionalProperties:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        collaboratingWithJobIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        visibleColumns:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompReviewWorkbookColumn'
-        error:
-          type: object
-          additionalProperties:
-            type: string
-        features:
-          $ref: '#/components/schemas/InCycleViewFeatures'
-    Person:
-      type: object
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        name:
-          description: full name of person
-          $ref: '#/components/schemas/Name'
-        contacts:
-          type: array
-          description: contacts (emails, phones, external ids)
-          items:
-            $ref: '#/components/schemas/Contact'
-        address:
-          description: home address
-          $ref: '#/components/schemas/Address'
-        remoteWorkAddress:
-          description: current work address, if working remotely somewhere other than home address or work location
-          $ref: '#/components/schemas/Address'
-        birthDate:
-          type: string
-          format: date
-          description: birthdate
-          example: '1980-05-12'
-        startDate:
-          type: string
-          format: date
-          description: start date of most recent hire
-          example: '1980-05-12'
-        endDate:
-          type: string
-          format: date
-          description: end date of most recent hire
-          example: '1980-05-12'
-        imagePath:
-          type: string
-          description: path to full-sized profile image in storage
-          pattern: ^[a-zA-Z0-9._/-]+$
-        nameAudioPath:
-          type: string
-          description: path to pronunciation of the person's name
-          pattern: ^[a-zA-Z0-9._/-]+$
-        gender:
-          type: string
-          description: self-reported gender
           enum:
-          - MALE
-          - FEMALE
-          - NONBINARY
-          - PREFER_NOT
-        ethnicity:
-          type: string
-          description: self-reported ethnicity
-          enum:
-          - HISPANIC
-          - WHITE
-          - BLACK
-          - PACIFIC
-          - ASIAN
-          - NATIVE
-          - TWO
-          - PREFER_NOT
-        fields:
-          type: object
-          description: fields containing custom data
-          additionalProperties:
-            type: object
-        sensitiveFields:
-          type: object
-          description: personal sensitivity preferences around specific fields
-          additionalProperties:
-            type: string
-            enum:
-            - GLOBAL
-            - ORG
-            - SENSITIVE
-            - PERSONAL
-            - MANAGER
-            - HIGH
-            - PRIVATE
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
+          - INFO
+          - WARN
+          - ERROR
+        at:
           type: string
           description: created timestamp
           example: '2017-01-24T13:57:52Z'
-        updateId:
+        message:
           type: string
-          description: last updated by user id
+        data:
+          type: object
+          additionalProperties:
+            type: object
+    TierRepresentationResponse:
+      type: object
+      required:
+      - reviewer
+      - reviewees
+      - eligible
+      properties:
+        reviewer:
+          $ref: '#/components/schemas/Job'
+        reviewees:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        parentReviewerJobId:
+          type: string
           example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        inviteOptions:
-          description: saved settings used when inviting user from person
-          example: 'keys: email, role'
-          $ref: '#/components/schemas/OrgAccess'
-        state:
-          type: string
-          description: current status within the organization
-          enum:
-          - PRIMARY
-          - SCENARIO
-          - PENDING
-          - INACTIVE
+        eligible:
+          type: boolean
     PayInterval:
       type: object
       required:
@@ -1830,6 +1777,855 @@ components:
           format: int32
           description: days per year if interval=day
           example: '250'
+    ApprovalGroup:
+      type: object
+      required:
+      - type
+      - approvers
+      properties:
+        groupId:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: What type of group this is
+          enum:
+          - REVIEWER
+          - COLLABORATOR
+          - FINAL_APPROVER
+        approvers:
+          type: array
+          description: approvers that make up the group
+          items:
+            $ref: '#/components/schemas/ApprovalGroupApprover'
+        expandExpression:
+          type: string
+          description: optional custom expression to determine approval request tree
+        minApproversNeeded:
+          type: integer
+          format: int32
+          description: minimum number of approvers required in this group for approval (null means all approvers required)
+    RevieweeChange:
+      type: object
+      required:
+      - revieweeJobId
+      - reviewerJobId
+      properties:
+        revieweeJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        revieweePersonId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        reviewerJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        reviewerPersonId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+    ResultsEvent:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    InCycleViewFeatures:
+      type: object
+      required:
+      - isFinalApprover
+      - isProposer
+      - isApprover
+      - isOwner
+      - isCollaborator
+      properties:
+        isFinalApprover:
+          type: boolean
+        isProposer:
+          type: boolean
+        isApprover:
+          type: boolean
+        isOwner:
+          type: boolean
+        isCollaborator:
+          type: boolean
+        isRoot:
+          type: boolean
+    ApprovalRequestPatchBody:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - CANCELED
+          - REJECTED
+          - PENDING
+          - ACTIVE
+          - REVIEWED
+          - APPROVED
+          - SKIPPED
+          - SUBMITTED
+        message:
+          type: string
+    JobUpdate:
+      type: object
+      properties:
+        addRelationships:
+          type: array
+          description: relationships to add
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        removeRelationships:
+          type: array
+          description: relationships to remove
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        addGroupIds:
+          type: array
+          description: groups to add
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        removeGroupIds:
+          type: array
+          description: groups to remove
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        setGroupIds:
+          type: object
+          description: groups to set
+          additionalProperties:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        grant:
+          description: stock grant to add
+          $ref: '#/components/schemas/StockGrant'
+        timeOff:
+          description: time off to add
+          $ref: '#/components/schemas/TimeOff'
+        title:
+          type: string
+          description: new title
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: new compensation level
+          $ref: '#/components/schemas/Comp'
+        placement:
+          type: string
+          description: new placement
+          enum:
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: new employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        sensitive:
+          type: string
+          description: new view sensitivity
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        startDatePlanned:
+          type: string
+          format: date
+          description: planned start date
+        startDatePlannedRemove:
+          type: boolean
+          description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
+        startDate:
+          type: string
+          format: date
+          description: new expected start date - will update to person start date in future
+        backfillPersonId:
+          type: string
+          description: set who this job is backfilling
+          example: 588f7ee98f138b19220041a7
+        jobCodeId:
+          type: string
+          description: set (or unset) the job code for this job
+          example: 588f7ee98f138b19220041a7
+        hasUnsetFields:
+          type: boolean
+          description: set who this job is backfilling
+        fields:
+          type: object
+          description: custom fields values to set
+          additionalProperties:
+            type: object
+    CompReviewReviewersApprovers:
+      type: object
+      required:
+      - reviewers
+      properties:
+        reviewers:
+          type: string
+          description: Which individuals are included as reviewers
+          enum:
+          - ALL_MANAGERS
+          - ONLY_SPECIFIC_LEVEL
+          - ONLY_SPECIFIC_TITLES
+          - CUSTOM
+        reviewerLevels:
+          type: array
+          description: Levels to be included if reviewers is only specific levels
+          items:
+            type: integer
+            format: int32
+        reviewerTitles:
+          type: array
+          description: Titles to be included if reviewers is only specific titles
+          items:
+            type: string
+        reviewerFilter:
+          type: string
+          description: Filter to be applied if reviewers is custom
+        excludedReviewerIds:
+          type: array
+          description: Job ids of individuals to exclude from the review
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        approverIds:
+          type: array
+          description: Person ids of employees who will final approve
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    JobRelationship:
+      type: object
+      required:
+      - jobId
+      - type
+      properties:
+        jobId:
+          type: string
+          description: destination job id
+          example: 5887a7718f138b6a2a0041a7
+        type:
+          type: string
+          description: type of relationship
+          enum:
+          - MANAGER
+          - DIRECT
+          - INDIRECT_MANAGER
+          - INDIRECT
+          - NONE
+    ResultsData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+        totalRow:
+          type: object
+          additionalProperties:
+            type: object
+    CompReviewMetadata:
+      type: object
+      required:
+      - compReviewId
+      - orgId
+      - eligibleEmployees
+      - eligibleEmployeesFilter
+      - ineligibleEmployees
+      - ineligibleEmployeesFilter
+      - approvers
+      - reviewers
+      - collaborators
+      properties:
+        compReviewId:
+          type: string
+          description: comp review id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id (empty if built-in)
+          example: 588f7ee98f138b19220041a7
+        eligibleEmployees:
+          type: integer
+          format: int32
+          description: count of employees eligible for the comp review
+        eligibleEmployeesFilter:
+          type: string
+          description: filter to view eligible employees on the datasheet
+        ineligibleEmployees:
+          type: integer
+          format: int32
+          description: count of employees ineligible for the comp review
+        ineligibleEmployeesFilter:
+          type: string
+          description: filter to view ineligible employees on the datasheet
+        approvers:
+          type: integer
+          format: int32
+          description: count of final approvers
+        reviewers:
+          type: integer
+          format: int32
+          description: count of reviewers in the comp review
+        collaborators:
+          type: integer
+          format: int32
+          description: count of collaborators in the comp review
+    Event:
+      type: object
+      required:
+      - id
+      - userId
+      - type
+      - entityType
+      - entityId
+      - at
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        userId:
+          type: string
+          description: user id who caused the event
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: type of event
+          enum:
+          - APP
+          - APPROVE
+          - CANCEL
+          - COMBINE
+          - CREATE
+          - DELETE
+          - DONE
+          - ERROR
+          - EXPORT
+          - EXPORT_CSV
+          - EXPORT_ORG_CHART
+          - GENERATE
+          - GEOIP
+          - INCOMING
+          - INSTALL
+          - INVITE
+          - INBOUND
+          - LOGIN
+          - MERGE
+          - MESSAGE
+          - OUTBOUND
+          - PREVIEW_AS
+          - READ
+          - READ_EXTERNAL
+          - READ_SENSITIVE
+          - READ_ATS
+          - READ_ATS_WEBHOOK
+          - READ_FULL_NAME
+          - READ_FUTURE_DATE
+          - READ_METADATA
+          - READ_COMP
+          - READ_BILLING
+          - READ_PENDING
+          - READ_PAYROLL
+          - READ_SENSITIVE_FILTERS
+          - WRITE_EXTERNAL
+          - REASSIGN
+          - REJECT
+          - RELEASE
+          - REMIND
+          - REMOVE_PASSWORD
+          - REQUEST
+          - RESTORE
+          - RESUME
+          - REVOKE
+          - RUN
+          - RUN_ATS
+          - SECURITY
+          - SHARE
+          - SHOW_DASHBOARD_DAYS_AHEAD
+          - SHOW_OPEN_JOBS
+          - STEP
+          - SUBMIT
+          - SYNC
+          - TEST
+          - TOKEN
+          - UNINSTALL
+          - UPDATE
+          - UPDATE_PASSWORD
+          - UPLOAD_CSV
+          - WRITE
+          - VIEW_AS
+        entityType:
+          type: string
+          description: type of target entity
+          enum:
+          - ACTION
+          - AGREEMENT
+          - AI_AGENT
+          - AI_AGENT_MEMORY
+          - AI_CHAT
+          - AI_CONFIG
+          - AI_CREDIT_LIMIT
+          - AI_CREDIT_USAGE
+          - AI_HINT
+          - AI_PROMPT
+          - APP
+          - APP_CONFIG
+          - APPROVAL_CHAIN
+          - APPROVAL_CHAIN_STAGE
+          - APPROVAL_DELEGATE
+          - APPROVAL_REQUEST
+          - ASSESSMENT
+          - BUDGET
+          - BUDGET_POOL
+          - BUNDLE
+          - CALENDAR
+          - CALENDAR_ENTRY
+          - CATEGORY
+          - CATEGORY_SORT
+          - CHANGE
+          - COMMENT
+          - COMP_BAND
+          - COMP_REVIEW
+          - CONTENT
+          - CUSTOMER
+          - DATA_VIEW
+          - EXCHANGE_RATE
+          - EMAIL_TEMPLATE
+          - EVENT
+          - FIELD
+          - FILE
+          - FORM
+          - FORM_DRAFT
+          - FORM_RESPONSE
+          - GEOCODE
+          - GROUP
+          - GROUP_TYPE
+          - GOAL
+          - GOAL_PROGRESS
+          - GOAL_TARGET
+          - GOAL_TYPE
+          - GUIDELINE
+          - JOB
+          - JOB_CODE
+          - JOB_LEVEL
+          - MEDIA
+          - MESSAGE
+          - MULTIPLIER
+          - ORG
+          - ORG_CONFIG
+          - PERSON
+          - PROFILE_TAB
+          - POLICY
+          - PROCESS
+          - PRODUCT
+          - QUERY_TOKEN
+          - QUESTION
+          - REPORT
+          - REPORT_CHART
+          - ROLE
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_REQUEST
+          - STOCK_GRANT
+          - STOCK_PRICE
+          - TABLE
+          - TABLE_ROW
+          - TASK_CONFIG
+          - TEMPLATE
+          - TASK
+          - TOKEN
+          - TIMEOFF
+          - TIMEOFF_BALANCE_ADJUSTMENT
+          - TIMEOFF_LEDGER_ENTRY
+          - TIMEOFF_POLICY
+          - TRANSCRIPT
+          - USER
+        entityId:
+          type: string
+          description: id of target entity
+          example: 588f7ee98f138b19220041a7
+        behalfUserId:
+          type: string
+          description: id of the original user this app user is acting on behalf of
+          example: 588f7ee98f138b19220041a7
+        agentUserId:
+          type: string
+          description: id of the agent (app user) if this event was performed by an agent on behalf of a user
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          description: id of the AI chat that this event derives from
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+          description: AI chat tool use identifier that ties this event to a specific tool invocation
+        jobId:
+          type: string
+          description: jobId of the entity, if the entity is a job or closely connected to a single job
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          description: personId of the entity, if the entity is a person or closely connected to a single person
+          example: 588f7ee98f138b19220041a7
+        tableId:
+          type: string
+          description: id of table, if entity is a table row
+          example: 588f7ee98f138b19220041a7
+        subtype:
+          type: string
+          description: subtype of entity
+        payload:
+          type: object
+          description: event-specific payload containing information about the change that took place
+          additionalProperties:
+            type: object
+        at:
+          type: string
+          description: timestamp of event
+        processId:
+          type: string
+          description: id of process
+          example: 588f7ee98f138b19220041a7
+        date:
+          type: string
+          format: date
+          description: effective date, if in use
+        scenarioId:
+          type: string
+          description: id of scenario
+          example: 588f7ee98f138b19220041a7
+        parentEntityId:
+          type: string
+          description: id of associated entity, such as comp cycle
+          example: 588f7ee98f138b19220041a7
+        fields:
+          type: array
+          description: set of fields that were updated by the event
+          uniqueItems: true
+          items:
+            type: string
+        code:
+          type: string
+          description: event code, for example job.update
+    CompReviewKeyDates:
+      type: object
+      required:
+      - cycleBeginDate
+      - levelsSubmitByDate
+      - finalApprovalDate
+      properties:
+        cycleBeginDate:
+          type: string
+          format: date
+          description: Date on which the comp review cycle begins
+        levelsSubmitByDate:
+          type: string
+          format: date
+          description: Date by which all levels should be submitted for approval
+        finalApprovalDate:
+          type: string
+          format: date
+          description: Date by which final approval/sign-off will be completed, this is the baseline primary effective date for the comp review
+        payrollEffectiveDate:
+          type: string
+          format: date
+          description: Date on which payroll updates become effective
+        customEffectiveDate:
+          type: string
+          format: date
+          description: A custom date to use for the primary data structure
+        isSkipAfterSubmitOverdue:
+          type: boolean
+          description: Whether to skip approval stages forward after the submit date
+        skippedAt:
+          type: string
+          description: Whether to skip approval stages forward after the submit date
+        isEdited:
+          type: boolean
+          description: whether the default config has been modified
+    PoolCalculation:
+      type: object
+      required:
+      - budgetPoolId
+      - label
+      - allocated
+      - scenarios
+      properties:
+        budgetPoolId:
+          type: string
+          description: budget pool id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: budget pool label
+          example: Merit
+        allocated:
+          type: object
+          description: budget pool total amount
+          example: '500'
+        used:
+          type: object
+          description: the amount of the budget pool that has been used
+          example: '500'
+        scenarios:
+          type: array
+          description: a list of reviewer/scenario specific calculations that create the total
+          items:
+            $ref: '#/components/schemas/ScenarioCalculation'
+    AutoIncFieldConfig:
+      type: object
+      required:
+      - upperCase
+      - padDigits
+      - separator
+      - prefixParts
+      properties:
+        upperCase:
+          type: boolean
+          description: convert any lower-case characters in the value to upper case
+        padDigits:
+          type: integer
+          format: int32
+          description: length of the numeric part of the value (left-padded with zeroes)
+        separator:
+          type: string
+          description: separator character to use between parts of the value
+          enum:
+          - HYPHEN
+          - UNDERSCORE
+          - SPACE
+          - NONE
+        prefixParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoIncFieldPart'
+    AutoIncFieldPart:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - LITERAL_STRING
+          - GROUP_CODE
+        value:
+          type: object
+        defaultValue:
+          type: string
+    BudgetCalculation:
+      type: object
+      required:
+      - pools
+      properties:
+        allocated:
+          type: object
+          description: the total budget amount (null if user doesn't have permission to view)
+          example: '500'
+        used:
+          type: object
+          description: the amount of the budget that has been used (null if user doesn't have permission to view)
+          example: '500'
+        pools:
+          type: array
+          description: a list of budget pools that make up the total amount
+          items:
+            $ref: '#/components/schemas/PoolCalculation'
+        jobBudgetMap:
+          type: object
+          description: the amount allotted and allocated for the comp review broken down by job
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/BudgetAllocation'
+    InCycleChange:
+      type: object
+      required:
+      - change
+      - guidelines
+      properties:
+        change:
+          $ref: '#/components/schemas/ChangeData'
+        guidelines:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuidelineCalculation'
+    ScenarioSharedViewConfig:
+      type: object
+      properties:
+        customColumnNames:
+          type: array
+          description: list of column names to display
+          items:
+            type: string
+        columnWidths:
+          type: object
+          description: map of column names to widths
+          additionalProperties:
+            type: integer
+            format: int32
+        type:
+          type: string
+          description: type of view
+          enum:
+          - ALL_CHANGES_GROUPED
+          - CREATE
+          - HIRE
+          - DELETE
+          - DEPART
+          - COMP
+          - UPDATE
+          - MOVE
+        updateId:
+          type: string
+          description: update id
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: update at
+    CompReviewVisualizations:
+      type: object
+      required:
+      - jobToBaseSpendMap
+      properties:
+        jobToBaseSpendMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Money'
+        budgetPoolCalculation:
+          $ref: '#/components/schemas/BudgetCalculation'
+    VariableComp:
+      type: object
+      required:
+      - type
+      - interval
+      properties:
+        type:
+          type: string
+          description: compensation type
+          enum:
+          - BONUS
+          - COMMISSION
+        interval:
+          type: string
+          description: compensation interval
+          enum:
+          - YEARLY
+      description: 'variable compensation
+
+        Implementations: VariableCompPercent, VariableCompPercent'
+      discriminator:
+        propertyName: compType
+    TimeOff:
+      type: object
+      required:
+      - id
+      - startDate
+      - endDate
+      properties:
+        id:
+          type: string
+          description: unique id of a time off request
+        startDate:
+          type: string
+          format: date
+          description: start date of time off, inclusive
+        endDate:
+          type: string
+          format: date
+          description: end date of time off, inclusive
+        days:
+          type: number
+          description: number of days used
+        hours:
+          type: number
+          description: number of hours used
+        type:
+          type: string
+          description: type of time off
+        note:
+          type: string
+          description: notes on the time off
+        approval:
+          type: string
+          description: approval status of the time off
+          enum:
+          - APPROVED
+          - PENDING
+          - CANCELLED
+          - REJECTED
+          - SUPERSEDED
     Field:
       type: object
       required:
@@ -2352,137 +3148,860 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    CompReviewBudgets:
+    StockGrant:
       type: object
       required:
-      - allocationType
-      - visualizationType
-      - showTotalBudget
-      - totalBudgetVisibilityType
+      - id
+      - stock
+      - date
+      - shares
+      - price
+      - type
+      - vestSchedule
       properties:
-        allocationType:
+        id:
           type: string
-          description: How budgets are allocated
+          description: unique identifier of grant
+        stock:
+          type: string
+          description: ticker symbol of this stock
+          example: GOOG
+        date:
+          type: string
+          format: date
+          description: date of grant
+        vestStartDate:
+          type: string
+          format: date
+          description: vesting start date of grant
+        expireDate:
+          type: string
+          format: date
+          description: expiration date of grant
+        shares:
+          type: number
+          description: number of shares granted
+        price:
+          type: number
+          description: per share strike price
+        type:
+          type: string
+          description: type of grant
           enum:
-          - PROPORTIONAL
-          - SEQUENTIAL
-        visualizationType:
+          - ISO
+          - NSO
+          - RSU
+          - SAR
+          - PERFORMANCE_SHARES
+          - PHANTOM_STOCK
+          - RSA
+        vestSchedule:
           type: string
-          description: Whether all budget visualizations are visible or only those that apply to eligible employees in the reviewer's pod
-          enum:
-          - ALL
-          - ONLY_APPLICABLE
-        showTotalBudget:
-          type: boolean
-          description: Whether to display the total budget in the cycle
-        totalBudgetVisibilityType:
+          description: vesting schedule
+        originalPrice:
+          type: number
+          description: original per share value of stock (grant price at time of issue)
+        currentPrice:
+          type: number
+          description: current per share value of stock
+        vestedShares:
+          type: number
+          description: current number of shares vested
+        vestedSharesNextYear:
+          type: number
+          description: number of shares vested one year from today
+        vestedSharesByDate:
+          type: object
+          description: number of shares vested, by future date
+          additionalProperties:
+            type: number
+        vestEndDate:
           type: string
-          description: Controls who can view the total budget
-          enum:
-          - DEFAULT
-          - ROLE_SELECTION
-          - SPECIFIC_PEOPLE
-          - CUSTOM_CQL
-        totalBudgetVisibilityExpr:
+          format: date
+          description: vesting end date
+        cancelDate:
           type: string
-          description: CQL expression for total budget visibility (used with totalBudgetVisibilityType=CUSTOM_CQL)
-        totalBudgetVisibilityPersonIds:
+          format: date
+          description: cancellation date
+        terminationDate:
+          type: string
+          format: date
+          description: termination date — vesting freezes on this date when the holder separates
+        lastExercisableDate:
+          type: string
+          format: date
+          description: last date on which vested shares can be exercised; after this the grant is forfeited
+        details:
+          type: string
+          description: details of the grant (arbitrary text)
+        description:
+          type: string
+          description: human-readable description of vesting schedule
+    PartialAppEntities:
+      type: object
+      required:
+      - jobs
+      - persons
+      - personToJobMap
+      - fields
+      properties:
+        jobs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Job'
+        persons:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Person'
+        personToJobMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Job'
+        fields:
           type: array
-          description: Person IDs who can view total budget (used with totalBudgetVisibilityType=SPECIFIC_PEOPLE)
+          items:
+            $ref: '#/components/schemas/Field'
+    ApprovalGroupApprover:
+      type: object
+      required:
+      - jobId
+      - status
+      properties:
+        jobId:
+          type: string
+          description: A job ID that is part of the group
+          example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          description: The status of the approver
+          enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - SKIPPED
+        commentId:
+          type: string
+          description: Last comment of the approver
+          example: 588f7ee98f138b19220041a7
+        reassignCommentId:
+          type: string
+          description: Last comment associated with a reassignment
+          example: 588f7ee98f138b19220041a7
+        isFallback:
+          type: boolean
+          description: Whether approver is a fallback
+        fallbackFor:
+          type: string
+          description: What jobId approver is a fallback for
+          example: 588f7ee98f138b19220041a7
+        actedByJobId:
+          type: string
+          description: Job of the delegate who acted on this slot on the approver's behalf
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: The date the status was updated last
+    CollaboratorMatrixCondition:
+      type: object
+      required:
+      - expression
+      - collaboratorJobIds
+      properties:
+        expression:
+          type: string
+        collaboratorJobIds:
+          type: array
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        totalBudgetVisibilityRoles:
-          description: Roles that can view total budget (used with totalBudgetVisibilityType=ROLE_SELECTION)
-          $ref: '#/components/schemas/InCycleViewFeatures'
-    JobRelationship:
+    CreateCompReview:
       type: object
       required:
-      - jobId
-      - type
+      - label
       properties:
-        jobId:
+        label:
           type: string
-          description: destination job id
-          example: 5887a7718f138b6a2a0041a7
+          description: human-readable label of goal
+          example: Comp review H2 2022
+          minItems: 1
+          maxItems: 80
+        config:
+          description: Configuration for this comp review
+          $ref: '#/components/schemas/CompReviewConfig'
+        status:
+          type: string
+          description: Whether the compensation review has been approved by the final approvers
+          enum:
+          - PENDING
+          - PAUSED
+          - ACTIVE
+          - REJECTED
+          - COMPLETE
+          - COMPLETE_APPROVED
+        shareAccess:
+          type: array
+          description: users who have been granted access to this comp review
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+    SendReminderEmailOptions:
+      type: object
+      required:
+      - approvalRequestId
+      properties:
+        approvalRequestId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+    ChangeData:
+      type: object
+      required:
+      - change
+      - data
+      - cost
+      properties:
+        change:
+          description: the change that was applied
+          $ref: '#/components/schemas/Change'
+        data:
+          type: object
+          description: the returned data fields requested
+          additionalProperties:
+            type: object
+        cost:
+          type: number
+          description: the annualized impact of this change, denoted in organization's currency
+        lockedFields:
+          type: array
+          description: set of locked fields for this change
+          uniqueItems: true
+          items:
+            type: string
+    Address:
+      type: object
+      required:
+      - country
+      properties:
+        street1:
+          type: string
+          description: street address, line 1
+          example: 123 Anywhere Street
+          minItems: 0
+          maxItems: 200
+        street2:
+          type: string
+          description: street address, line 2
+          example: Apt 6L
+          minItems: 0
+          maxItems: 200
+        street3:
+          type: string
+          description: street address, line 3
+          example: Sixth Floor
+          minItems: 0
+          maxItems: 200
+        city:
+          type: string
+          description: city
+          example: New York
+          minItems: 0
+          maxItems: 80
+        state:
+          type: string
+          description: state
+          example: NY
+          minItems: 0
+          maxItems: 80
+        country:
+          type: string
+          description: country (two-digit ISO code)
+          example: NY
+          pattern: ^[A-Z]{2}$
+        postal:
+          type: string
+          description: postal code
+          example: '10001'
+          minItems: 0
+          maxItems: 10
+        geo:
+          description: geopoint location
+          $ref: '#/components/schemas/Geopoint'
+        approxGeo:
+          description: approximate geopoint location (suitable for a map placement, but not exact location)
+          $ref: '#/components/schemas/Geopoint'
+    DuplicateCompReviewOptions:
+      type: object
+      required:
+      - label
+      - orgDataReferenceDate
+      - resetReviewerTree
+      properties:
+        label:
+          type: string
+        orgDataReferenceDate:
+          type: string
+        resetReviewerTree:
+          type: boolean
+    DtValue:
+      type: object
+      properties:
+        value:
+          type: object
+    Geopoint:
+      type: object
+      required:
+      - type
+      - coordinates
+      properties:
         type:
           type: string
-          description: type of relationship
+          description: Type of point
+          readOnly: true
+        coordinates:
+          type: array
+          description: The longitude and latitude of the point
+          readOnly: true
+          items:
+            type: number
+            format: double
+    CompReviewCollaborators:
+      type: object
+      required:
+      - collaborationType
+      - collaboratorAccess
+      - jobToCollaboratorsMap
+      properties:
+        collaborationType:
+          type: string
+          description: What type of HRBP collaboration the comp review uses
           enum:
-          - MANAGER
-          - DIRECT
-          - INDIRECT_MANAGER
-          - INDIRECT
           - NONE
-    TimeOff:
+          - STATIC
+          - DYNAMIC
+        collaboratorAccess:
+          type: string
+          description: What level of access collaborators should have
+          enum:
+          - READ
+          - EDIT
+          - SUBMIT
+        collaboratorJobIds:
+          type: array
+          description: A list of collaborators for all reviewers, used when collaborationType is STATIC
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        collaboratorMatrix:
+          description: A matrix of collaborators assigned by condition, used when collaborationType is DYNAMIC
+          $ref: '#/components/schemas/CollaboratorMatrix'
+        jobToCollaboratorsMap:
+          type: object
+          description: A map of reviewer job ID to a set of collaborator job IDs indicating which collaborators are collaborating with a given reviewer
+          additionalProperties:
+            type: array
+            uniqueItems: true
+            items:
+              type: string
+              example: 588f7ee98f138b19220041a7
+    InCycleViewResponse:
+      type: object
+      properties:
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRequestCompReviewResponse'
+        proposal:
+          $ref: '#/components/schemas/ApprovalRequestCompReviewResponse'
+        scenarioMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Scenario'
+        parentReviewsMap:
+          type: object
+          additionalProperties:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        collaboratingWithJobIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        visibleColumns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompReviewWorkbookColumn'
+        error:
+          type: object
+          additionalProperties:
+            type: string
+        features:
+          $ref: '#/components/schemas/InCycleViewFeatures'
+    ApprovalChainStageOverride:
+      type: object
+      required:
+      - stageOverrideId
+      - approvalChainStageId
+      - status
+      - order
+      properties:
+        stageOverrideId:
+          type: string
+          description: unique id for stage
+          example: 588f7ee98f138b19220041a7
+        approvalChainStageId:
+          type: string
+          description: parent approval chain stage id
+          example: 588f7ee98f138b19220041a7
+        groups:
+          type: array
+          description: approval group override
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+        status:
+          type: string
+          description: status of the stage
+          enum:
+          - CANCELED
+          - REJECTED
+          - PENDING
+          - ACTIVE
+          - REVIEWED
+          - APPROVED
+          - SKIPPED
+          - SUBMITTED
+        order:
+          type: integer
+          format: int32
+          description: order of the stage
+    ShareAccess:
+      type: object
+      required:
+      - access
+      properties:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
+    CompReviewReviewerWorkbook:
+      type: object
+      required:
+      - columns
+      properties:
+        columns:
+          type: array
+          description: ordering and settings of columns in workbook
+          items:
+            $ref: '#/components/schemas/CompReviewWorkbookColumn'
+        numFrozenColumns:
+          type: integer
+          format: int32
+          description: number of frozen columns at start of workbook
+        moreInfoUrl:
+          type: string
+          description: optional link to see additional customer documentation
+        moreInfoLabel:
+          type: string
+          description: optional label for additional customer documentation
+        isEdited:
+          type: boolean
+          description: whether the default config has been modified
+        allowReviewerApproverAuditLog:
+          type: boolean
+          description: allows all reviewers and approvers to view the audit log
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    GuidelineCalculation:
+      type: object
+      required:
+      - guidelineId
+      - jobId
+      - compReviewId
+      - guidelineLabel
+      - appliedField
+      - flagMode
+      - isDeviated
+      - deviation
+      - fields
+      properties:
+        guidelineId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        jobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        compReviewId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        budgetPoolId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        guidelineLabel:
+          type: string
+        min:
+          type: object
+        max:
+          type: object
+        target:
+          type: object
+        appliedField:
+          type: string
+        flagMode:
+          type: string
+          enum:
+          - DEVIATION_THRESHOLD
+          - NONE
+        flagDeviationThreshold:
+          type: number
+        isDeviated:
+          type: boolean
+        deviation:
+          $ref: '#/components/schemas/Deviation'
+        fields:
+          type: object
+          additionalProperties:
+            type: object
+    CostImpact:
+      type: object
+      required:
+      - annual
+      - firstMonth
+      - months
+      properties:
+        annual:
+          type: number
+          description: total annual run-rate impact
+        firstMonth:
+          type: string
+          description: first month to be affected
+        months:
+          type: array
+          description: impact to each month, starting at firstMonth
+          items:
+            type: number
+    Person:
       type: object
       required:
       - id
-      - startDate
-      - endDate
+      - name
       properties:
         id:
           type: string
-          description: unique id of a time off request
+          description: unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        name:
+          description: full name of person
+          $ref: '#/components/schemas/Name'
+        contacts:
+          type: array
+          description: contacts (emails, phones, external ids)
+          items:
+            $ref: '#/components/schemas/Contact'
+        address:
+          description: home address
+          $ref: '#/components/schemas/Address'
+        remoteWorkAddress:
+          description: current work address, if working remotely somewhere other than home address or work location
+          $ref: '#/components/schemas/Address'
+        birthDate:
+          type: string
+          format: date
+          description: birthdate
+          example: '1980-05-12'
         startDate:
           type: string
           format: date
-          description: start date of time off, inclusive
+          description: start date of most recent hire
+          example: '1980-05-12'
         endDate:
           type: string
           format: date
-          description: end date of time off, inclusive
-        days:
-          type: number
-          description: number of days used
-        hours:
-          type: number
-          description: number of hours used
-        type:
+          description: end date of most recent hire
+          example: '1980-05-12'
+        imagePath:
           type: string
-          description: type of time off
-        note:
+          description: path to full-sized profile image in storage
+          pattern: ^[a-zA-Z0-9._/-]+$
+        nameAudioPath:
           type: string
-          description: notes on the time off
-        approval:
+          description: path to pronunciation of the person's name
+          pattern: ^[a-zA-Z0-9._/-]+$
+        gender:
           type: string
-          description: approval status of the time off
+          description: self-reported gender
           enum:
-          - APPROVED
+          - MALE
+          - FEMALE
+          - NONBINARY
+          - PREFER_NOT
+        ethnicity:
+          type: string
+          description: self-reported ethnicity
+          enum:
+          - HISPANIC
+          - WHITE
+          - BLACK
+          - PACIFIC
+          - ASIAN
+          - NATIVE
+          - TWO
+          - PREFER_NOT
+        fields:
+          type: object
+          description: fields containing custom data
+          additionalProperties:
+            type: object
+        sensitiveFields:
+          type: object
+          description: personal sensitivity preferences around specific fields
+          additionalProperties:
+            type: string
+            enum:
+            - GLOBAL
+            - ORG
+            - SENSITIVE
+            - PERSONAL
+            - MANAGER
+            - HIGH
+            - PRIVATE
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        inviteOptions:
+          description: saved settings used when inviting user from person
+          example: 'keys: email, role'
+          $ref: '#/components/schemas/OrgAccess'
+        state:
+          type: string
+          description: current status within the organization
+          enum:
+          - PRIMARY
+          - SCENARIO
           - PENDING
-          - CANCELLED
-          - REJECTED
-          - SUPERSEDED
-    ApprovalGroup:
+          - INACTIVE
+    ScenarioCalculation:
       type: object
       required:
-      - type
-      - approvers
+      - scenarioId
+      - allocated
       properties:
-        groupId:
+        scenarioId:
           type: string
-          description: globally unique id
+          description: scenario id
           example: 588f7ee98f138b19220041a7
-        type:
+        allocated:
+          type: object
+          description: budget pool total allocation for scenario
+          example: '500'
+        used:
+          type: object
+          description: budget pool total use for scenario
+          example: '500'
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    CompReviewWorkbookColumn:
+      type: object
+      required:
+      - name
+      - label
+      - editableFor
+      - visibleTo
+      - visibleToGroups
+      - visibleToType
+      properties:
+        name:
           type: string
-          description: What type of group this is
-          enum:
-          - REVIEWER
-          - COLLABORATOR
-          - FINAL_APPROVER
-        approvers:
+          description: field name
+        label:
+          type: string
+          description: display name in workbook
+        color:
+          type: string
+          description: color used in the column header
+        editableFor:
+          type: string
+          description: cql evaluated on the reviewee job specifying whether field is editable
+        visibleTo:
+          type: string
+          description: cql specifying who can view
+        visibleToGroups:
           type: array
-          description: approvers that make up the group
+          description: list of groupIds with viewing permissions
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ApprovalGroupApprover'
-        expandExpression:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        visibleToType:
           type: string
-          description: optional custom expression to determine approval request tree
-        minApproversNeeded:
+          description: type of cql filter used in the visible to
+          enum:
+          - EVERYONE
+          - DEPARTMENT
+          - TEAM
+          - LOCATION
+          - CUSTOM
+        visibleToRoles:
+          description: comp cycle roles this column is visible to, in addition to other filters
+          $ref: '#/components/schemas/InCycleViewFeatures'
+        editableForRoles:
+          description: comp cycle roles that can edit this column, in addition to editableFor filter
+          $ref: '#/components/schemas/InCycleViewFeatures'
+    BudgetAllocation:
+      type: object
+      properties:
+        allocated:
+          type: object
+        used:
+          type: object
+    FieldOptions:
+      type: object
+      properties:
+        min:
+          type: string
+          description: minimum value, for numeric and date fields
+        max:
+          type: string
+          description: maximum value, for numeric and date fields
+        minItems:
           type: integer
           format: int32
-          description: minimum number of approvers required in this group for approval (null means all approvers required)
+        maxItems:
+          type: integer
+          format: int32
+        stackRank:
+          type: boolean
+        step:
+          type: number
+        enableEditDialog:
+          type: boolean
+        requiredJobField:
+          type: boolean
+        excludeTargetPersonId:
+          type: boolean
+        maxLength:
+          type: integer
+          format: int32
+        readOnly:
+          type: boolean
+        includeFormer:
+          type: boolean
+        effectiveDated:
+          type: boolean
+        unique:
+          type: boolean
+        required:
+          type: boolean
+    RevieweeMove:
+      type: object
+      required:
+      - revieweeJobId
+      - oldReviewerJobId
+      - newReviewerJobId
+      properties:
+        revieweeJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        revieweePersonId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        oldReviewerJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        oldReviewerPersonId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        newReviewerJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        newReviewerPersonId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     TiersResponse:
       type: object
       required:
@@ -2499,119 +4018,257 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    ScenarioSharedViewConfig:
+    InCycleViewChanges:
       type: object
+      required:
+      - changeMap
       properties:
-        customColumnNames:
+        changeMap:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ChangeData'
+        guidelinesMap:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/GuidelineCalculation'
+        access:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ResultsAccess'
+    OrgAccess:
+      type: object
+      required:
+      - orgId
+      - access
+      properties:
+        orgId:
+          type: string
+          description: org id
+          example: 5887a7718f138b6a2a0041a7
+        personId:
+          type: string
+          description: person id, if this user directly corresponds with a person
+          example: 5887a7718f138b6a2a0041a7
+        access:
+          type: string
+          description: legacy access permission level
+          enum:
+          - NONE
+          - PREBOARDING
+          - VIEW
+          - LIMITED
+          - MEMBER_LIMITED_COMP
+          - MEMBER
+          - CUSTOM
+          - TECH_OWNER
+          - TIMEOFF
+          - CONTACT
+          - COMP_CASH
+          - COMP_EQUITY
+          - COMP_ALL
+          - RECRUIT_SENSITIVE
+          - RECRUIT_PRIMARY
+          - SENSITIVE_LIMITED_COMP
+          - SENSITIVE
+          - PRIMARY
+          - PEOPLE_OPS_ADMIN
+          - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+          - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+          - OWNER
+        groupIds:
           type: array
-          description: list of column names to display
+          description: group ids that the above access applies to
+          uniqueItems: true
           items:
             type: string
-        columnWidths:
-          type: object
-          description: map of column names to widths
-          additionalProperties:
-            type: integer
-            format: int32
-        type:
-          type: string
-          description: type of view
-          enum:
-          - ALL_CHANGES_GROUPED
-          - CREATE
-          - HIRE
-          - DELETE
-          - DEPART
-          - COMP
-          - UPDATE
-          - MOVE
-        updateId:
-          type: string
-          description: update id
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: update at
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
+            example: 588f7ee98f138b19220041a7
         expr:
           type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
+          description: expression that the above access applies to
+        expireAt:
           type: string
-          description: unique identifier for enum
+          description: timestamp that this org access will expire
+        roleId:
+          type: string
+          description: the role id that defines the users access
+          example: 5887a7718f138b6a2a0041a7
+        status:
+          type: string
+          description: Onboarding status of the user in this org
+          enum:
+          - INACTIVE
+          - PREBOARDING
+          - ACTIVATION
+          - ACTIVE
+          - OFFBOARDED
+        homeEmail:
+          type: string
+          description: Personal email address of user, while they are preboarding
+          example: bob@example.com
+          minItems: 0
+          maxItems: 120
+        workEmail:
+          type: string
+          description: Work email address of user, once they have started
+          example: robert.doe@example.com
+          minItems: 0
+          maxItems: 120
+        workRoleId:
+          type: string
+          description: Active role ID that defines the user's access once they have started
+          example: 67c851da3dd1668c2fdd7e44
+    Job:
+      type: object
+      required:
+      - jobId
+      - orgId
+      - title
+      - groupIds
+      - fields
+      properties:
+        jobId:
+          type: string
+          description: globally unique job id
           example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    GenerateCompReviewOptions:
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: job title
+          example: Senior Engineer
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: compensation
+          $ref: '#/components/schemas/Comp'
+        sensitive:
+          type: string
+          description: view sensitive of the job while open
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        relationships:
+          type: array
+          description: relationship to other jobs
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        managerIds:
+          type: array
+          description: list of managers, from immediate manager upwards
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        groupIds:
+          type: array
+          description: groups that this job is a member of
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        placement:
+          type: string
+          description: guidance on placement
+          enum:
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        fields:
+          type: object
+          description: fields containing custom data
+          additionalProperties:
+            type: object
+        startDate:
+          type: string
+          format: date
+          description: for empty jobs, expected start date - for filled jobs, confirmed start date
+        startDatePlanned:
+          type: string
+          format: date
+          description: expected start date whether job is open or has been filled - doesn't change when job is filled
+        personStartDate:
+          type: string
+          format: date
+          description: if personId is present, the first day of that person in the org after the latest departure (if any)
+        personEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing, the last day of that person in the org
+        personJobStartDate:
+          type: string
+          format: date
+          description: if personId is present, the first day of that person in the job
+        personJobEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing or moving out, the last day of that person in the job
+        personId:
+          type: string
+          description: the person holding this job -- either currently in the job, or upcoming announced hire
+          example: 588f7ee98f138b19220041a7
+        upcoming:
+          type: array
+          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+          items:
+            $ref: '#/components/schemas/UpcomingChange'
+        scenarioId:
+          type: string
+          description: scenario that the job was created in (null if job is on primary timeline)
+          example: 588f7ee98f138b19220041a7
+        backfillPersonId:
+          type: string
+          description: the person who most recently held the job, who this represents a backfill for
+          example: 588f7ee98f138b19220041a7
+    GetVisualizationsOptions:
       type: object
       required:
-      - isPreview
+      - isCollabicientView
       properties:
-        isPreview:
+        changeIds:
+          type: array
+          description: A set of Change ObjectIds used to filter the results of budget and raise calculations
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        viewInCurrency:
+          type: string
+          description: Currency to view budget visualizations
+        includeCollaborators:
           type: boolean
-    CompReviewKeyDates:
-      type: object
-      required:
-      - cycleBeginDate
-      - levelsSubmitByDate
-      - finalApprovalDate
-      properties:
-        cycleBeginDate:
-          type: string
-          format: date
-          description: Date on which the comp review cycle begins
-        levelsSubmitByDate:
-          type: string
-          format: date
-          description: Date by which all levels should be submitted for approval
-        finalApprovalDate:
-          type: string
-          format: date
-          description: Date by which final approval/sign-off will be completed, this is the baseline primary effective date for the comp review
-        payrollEffectiveDate:
-          type: string
-          format: date
-          description: Date on which payroll updates become effective
-        customEffectiveDate:
-          type: string
-          format: date
-          description: A custom date to use for the primary data structure
-        isSkipAfterSubmitOverdue:
+          description: Whether or not to include approval requests on which a user is collaborating when calculating budget amounts for that user
+        isCollabicientView:
           type: boolean
-          description: Whether to skip approval stages forward after the submit date
-        skippedAt:
-          type: string
-          description: Whether to skip approval stages forward after the submit date
-        isEdited:
-          type: boolean
-          description: whether the default config has been modified
+          description: Are the visualizations for a collaborating participant
+        scenarioIds:
+          type: array
+          description: A set of Scenario ObjectIds used to filter budget calculations to a specific reviewer's scenarios
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
     Process:
       type: object
       required:
@@ -2734,160 +4391,152 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    AutoIncFieldConfig:
+    Name:
       type: object
       required:
-      - upperCase
-      - padDigits
-      - separator
-      - prefixParts
+      - last
       properties:
-        upperCase:
-          type: boolean
-          description: convert any lower-case characters in the value to upper case
-        padDigits:
+        first:
+          type: string
+          description: first name
+          example: Jane
+          minItems: 0
+          maxItems: 80
+        middle:
+          type: string
+          description: middle name
+          example: Quidditch
+          minItems: 0
+          maxItems: 80
+        last:
+          type: string
+          description: last name
+          example: Public
+          minItems: 0
+          maxItems: 80
+        pref:
+          type: string
+          description: preferred first name
+          example: JQ
+          minItems: 0
+          maxItems: 80
+        prefLast:
+          type: string
+          description: preferred last name
+          example: Smith
+          minItems: 0
+          maxItems: 80
+    Contact:
+      type: object
+      required:
+      - type
+      - format
+      properties:
+        type:
+          type: string
+          description: type identifier for the contact
+          example: HOME_PHONE
+          enum:
+          - ADP
+          - BAMBOO
+          - EMPLOYEE
+          - GREENHOUSE
+          - GOOGLE
+          - GUSTO
+          - HUMAANS
+          - JOBVITE
+          - JUSTWORKS
+          - JUSTWORKS_MEMBER_ID
+          - LEVER
+          - NAMELY
+          - OKTA
+          - PAYLOCITY
+          - SAPLING
+          - PRISM
+          - SUCCESSFACTORS
+          - RIPPLING
+          - TRINET
+          - ULTIPRO
+          - WORKDAY
+          - ZENEFITS
+          - LINKEDIN
+          - TWITTER
+          - GITHUB
+          - GITLAB
+          - SLACK
+          - TIMETASTIC
+          - FINCH
+          - ALPHASTAFF
+          - DEEL
+          - ADP_ASSOCIATE_ID
+          - ADP_WORKER_ID
+          - HIBOB
+          - GUSTO_UUID
+          - MSTEAMS
+          - HOME_EMAIL
+          - MOBILE_PHONE
+          - WORK_EMAIL
+          - HOME_PHONE
+          - WORK_PHONE
+          - WORK_FAX
+        value:
+          type: string
+          description: value for the contact
+          example: linkedin:name
+        format:
+          type: string
+          description: format for the value
+          example: EMAIL
+          enum:
+          - PHONE
+          - EMAIL
+          - ID
+    Comp:
+      type: object
+      properties:
+        baseComp:
+          description: base pay (money) with interval (annual or hourly)
+          $ref: '#/components/schemas/PayInterval'
+        variableTargets:
+          type: array
+          description: variable compensation (money or percent)
+          items:
+            $ref: '#/components/schemas/VariableComp'
+        grantShares:
           type: integer
           format: int32
-          description: length of the numeric part of the value (left-padded with zeroes)
-        separator:
+          description: planned stock grant, in shares
+          example: '5000'
+        grantValue:
+          type: integer
+          format: int32
+          description: planned stock grant, in value (based on the stock's currency, not the comp)
+          example: '5000'
+        grantType:
           type: string
-          description: separator character to use between parts of the value
+          description: planned stock grant type
           enum:
-          - HYPHEN
-          - UNDERSCORE
-          - SPACE
-          - NONE
-        prefixParts:
+          - ISO
+          - NSO
+          - RSU
+          - SAR
+          - PERFORMANCE_SHARES
+          - PHANTOM_STOCK
+          - RSA
+    CollaboratorMatrix:
+      type: object
+      required:
+      - includedFields
+      - conditions
+      properties:
+        includedFields:
           type: array
           items:
-            $ref: '#/components/schemas/AutoIncFieldPart'
-    CompReviewMetadata:
-      type: object
-      required:
-      - compReviewId
-      - orgId
-      - eligibleEmployees
-      - eligibleEmployeesFilter
-      - ineligibleEmployees
-      - ineligibleEmployeesFilter
-      - approvers
-      - reviewers
-      - collaborators
-      properties:
-        compReviewId:
-          type: string
-          description: comp review id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id (empty if built-in)
-          example: 588f7ee98f138b19220041a7
-        eligibleEmployees:
-          type: integer
-          format: int32
-          description: count of employees eligible for the comp review
-        eligibleEmployeesFilter:
-          type: string
-          description: filter to view eligible employees on the datasheet
-        ineligibleEmployees:
-          type: integer
-          format: int32
-          description: count of employees ineligible for the comp review
-        ineligibleEmployeesFilter:
-          type: string
-          description: filter to view ineligible employees on the datasheet
-        approvers:
-          type: integer
-          format: int32
-          description: count of final approvers
-        reviewers:
-          type: integer
-          format: int32
-          description: count of reviewers in the comp review
-        collaborators:
-          type: integer
-          format: int32
-          description: count of collaborators in the comp review
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
             type: string
-    OwnershipChange:
-      type: object
-      required:
-      - scenarioId
-      - oldOwnerJobId
-      - newOwnerJobId
-      properties:
-        scenarioId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        oldOwnerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        oldOwnerPersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        newOwnerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        newOwnerPersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    CompReviewReviewerWorkbook:
-      type: object
-      required:
-      - columns
-      properties:
-        columns:
+        conditions:
           type: array
-          description: ordering and settings of columns in workbook
           items:
-            $ref: '#/components/schemas/CompReviewWorkbookColumn'
-        numFrozenColumns:
-          type: integer
-          format: int32
-          description: number of frozen columns at start of workbook
-        moreInfoUrl:
-          type: string
-          description: optional link to see additional customer documentation
-        moreInfoLabel:
-          type: string
-          description: optional label for additional customer documentation
-        isEdited:
-          type: boolean
-          description: whether the default config has been modified
-        allowReviewerApproverAuditLog:
-          type: boolean
-          description: allows all reviewers and approvers to view the audit log
+            $ref: '#/components/schemas/CollaboratorMatrixCondition'
     CompReviewEligibleEmployees:
       type: object
       required:
@@ -2947,819 +4596,6 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    InCycleViewFeatures:
-      type: object
-      required:
-      - isFinalApprover
-      - isProposer
-      - isApprover
-      - isOwner
-      - isCollaborator
-      properties:
-        isFinalApprover:
-          type: boolean
-        isProposer:
-          type: boolean
-        isApprover:
-          type: boolean
-        isOwner:
-          type: boolean
-        isCollaborator:
-          type: boolean
-        isRoot:
-          type: boolean
-    AutoIncFieldPart:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - LITERAL_STRING
-          - GROUP_CODE
-        value:
-          type: object
-        defaultValue:
-          type: string
-    RevieweeMove:
-      type: object
-      required:
-      - revieweeJobId
-      - oldReviewerJobId
-      - newReviewerJobId
-      properties:
-        revieweeJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        revieweePersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        oldReviewerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        oldReviewerPersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        newReviewerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        newReviewerPersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    CostImpact:
-      type: object
-      required:
-      - annual
-      - firstMonth
-      - months
-      properties:
-        annual:
-          type: number
-          description: total annual run-rate impact
-        firstMonth:
-          type: string
-          description: first month to be affected
-        months:
-          type: array
-          description: impact to each month, starting at firstMonth
-          items:
-            type: number
-    PartialJob:
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: globally unique job id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        snapshotId:
-          type: string
-          description: snapshot that this job belongs to
-          example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: job title
-          example: Senior Engineer
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: compensation
-          $ref: '#/components/schemas/Comp'
-        sensitive:
-          type: string
-          description: view sensitive of the job while open
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        relationships:
-          type: array
-          description: relationship to other jobs
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        groupIds:
-          type: array
-          description: groups that this job is a member of
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        groupIdsByType:
-          type: object
-          description: groups that this job is a member of, mapped by group type id
-          additionalProperties:
-            type: array
-            uniqueItems: true
-            items:
-              type: string
-              example: 588f7ee98f138b19220041a7
-        placement:
-          type: string
-          description: guidance on placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        state:
-          type: string
-          description: current state - whether the job is open, filled, or has someone departed or hired
-          enum:
-          - OPEN
-          - FILLED
-          - DEPART
-          - START
-        fields:
-          type: object
-          description: fields containing custom data
-          additionalProperties:
-            type: object
-        fieldDates:
-          type: object
-          description: dates of the field data
-          additionalProperties:
-            type: string
-            format: date
-        fieldsProposed:
-          type: object
-          description: proposed values for fields
-          additionalProperties:
-            type: object
-        createDate:
-          type: string
-          format: date
-          description: job creation date
-        startDate:
-          type: string
-          format: date
-          description: for empty jobs, expected start date - for filled jobs, confirmed start date
-        startDatePlanned:
-          type: string
-          format: date
-          description: expected start date whether job is open or has been filled - doesn't change when job is filled
-        personStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the org after the latest departure (if any)
-        personEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing, the last day of that person in the org
-        personJobStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the job
-        personIdDate:
-          type: string
-          format: date
-          description: if personId is present, the first day that the personId actually filled the job
-        personJobEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing or moving out, the last day of that person in the job
-        personId:
-          type: string
-          description: the person holding this job -- either currently in the job, or upcoming announced hire
-          example: 588f7ee98f138b19220041a7
-        backfillPersonId:
-          type: string
-          description: the person who most recently held the job, who this represents a backfill for
-          example: 588f7ee98f138b19220041a7
-        jobCodeId:
-          type: string
-          description: the ID of the job code for this job
-          example: 588f7ee98f138b19220041a7
-        backfillByJobId:
-          type: string
-          description: another job which is planned to be a backfill for this job
-          example: 588f7ee98f138b19220041a7
-        upcoming:
-          type: array
-          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
-          items:
-            $ref: '#/components/schemas/UpcomingChange'
-        scenarioId:
-          type: string
-          description: scenario that the job was created in (null if job is on primary timeline)
-          example: 588f7ee98f138b19220041a7
-        scenarioChangedId:
-          type: string
-          description: scenario that the job was changed in (null if job is on primary timeline)
-          example: 588f7ee98f138b19220041a7
-        fetchState:
-          type: string
-          description: scenario that the job was changed in (null if job is on primary timeline)
-          enum:
-          - PERSON
-          - STRUCTURE
-          - ALL
-    SendReminderEmailOptions:
-      type: object
-      required:
-      - approvalRequestId
-      properties:
-        approvalRequestId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    Money:
-      type: object
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          type: number
-        currency:
-          type: string
-        places:
-          type: integer
-          format: int32
-    ApprovalRequestPatchBody:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          enum:
-          - CANCELED
-          - REJECTED
-          - PENDING
-          - ACTIVE
-          - REVIEWED
-          - APPROVED
-          - SKIPPED
-          - SUBMITTED
-        message:
-          type: string
-    FieldOptions:
-      type: object
-      properties:
-        min:
-          type: string
-          description: minimum value, for numeric and date fields
-        max:
-          type: string
-          description: maximum value, for numeric and date fields
-        minItems:
-          type: integer
-          format: int32
-        maxItems:
-          type: integer
-          format: int32
-        stackRank:
-          type: boolean
-        step:
-          type: number
-        enableEditDialog:
-          type: boolean
-        requiredJobField:
-          type: boolean
-        excludeTargetPersonId:
-          type: boolean
-        maxLength:
-          type: integer
-          format: int32
-        readOnly:
-          type: boolean
-        includeFormer:
-          type: boolean
-        effectiveDated:
-          type: boolean
-        unique:
-          type: boolean
-        required:
-          type: boolean
-    BudgetAllocation:
-      type: object
-      properties:
-        allocated:
-          type: object
-        used:
-          type: object
-    CollaboratorMatrix:
-      type: object
-      required:
-      - includedFields
-      - conditions
-      properties:
-        includedFields:
-          type: array
-          items:
-            type: string
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/CollaboratorMatrixCondition'
-    Scenario:
-      type: object
-      required:
-      - id
-      - orgId
-      - name
-      - startDate
-      - status
-      - shareAccess
-      - createId
-      - createAt
-      - updateId
-      - updateAt
-      - startDateFixed
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        name:
-          type: string
-          description: scenario name
-          example: Q4 Conservative Plan
-          minItems: 1
-          maxItems: 80
-        description:
-          type: string
-          description: scenario description
-          example: Q4 Conservative Plan
-          minItems: 0
-          maxItems: 2000
-        startDate:
-          type: string
-          format: date
-          description: date that this scenario diverges from primary
-          example: '2017-01-15'
-        status:
-          type: string
-          description: status of scenario
-          enum:
-          - OPEN
-          - INACTIVE
-          - MERGED
-          - DRAFT
-          - ARCHIVED
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to this scenario
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        cost:
-          description: full summary of cost impact on scenario
-          $ref: '#/components/schemas/CostImpact'
-        changeCount:
-          type: integer
-          format: int32
-          description: number of changes contained in scenario
-        changeCounts:
-          type: object
-          description: number of changes of each type contained in scenario
-          additionalProperties:
-            type: integer
-            format: int32
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-        mergeId:
-          type: string
-          description: merged by user id
-          example: 588f7ee98f138b19220041a7
-        mergeAt:
-          type: string
-          description: merged timestamp
-          example: '2017-01-24T13:57:52Z'
-        calcStartAt:
-          type: string
-          description: most recent summary calculation started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        calcEndAt:
-          type: string
-          description: most recent summary calculation ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        changeAt:
-          type: string
-          description: timestamp of most recent changes made to scenario
-          example: '2017-01-24T13:57:52Z'
-        changeId:
-          type: string
-          description: user who made the most recent change to scenario
-          example: '2017-01-24T13:57:52Z'
-        type:
-          type: string
-          description: Type of scenario to be created
-          enum:
-          - GENERAL
-          - COMP
-          - PROMOTION
-          - TERMINATE
-          - CREATE_JOB
-          - UPDATE_JOB
-          - BUDGET
-          - BACKFILL
-        startDateFixed:
-          type: string
-          description: whether or not the start date should stay fixed in time, or update to today's date as time passes
-          enum:
-          - FIXED
-          - TODAY
-        query:
-          type: string
-          description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
-        validJobIdSet:
-          type: array
-          description: This scenario changes are restricted to the following jobIds
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        approvalRequestId:
-          type: string
-          description: Approval request id, if the scenario has been submitted for approval
-          example: 588f7ee98f138b19220041a7
-        entityId:
-          type: string
-          description: The entity this scenario is associated with
-          example: 588f7ee98f138b19220041a7
-        entityType:
-          type: string
-          description: The type of entity associated with this scenario
-          enum:
-          - COMP_REVIEW
-        sharedViewConfig:
-          type: array
-          description: View configurations associated with this scenario
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/ScenarioSharedViewConfig'
-        budget:
-          description: Total budget associated with the scenario
-          $ref: '#/components/schemas/Money'
-    Event:
-      type: object
-      required:
-      - id
-      - userId
-      - type
-      - entityType
-      - entityId
-      - at
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        userId:
-          type: string
-          description: user id who caused the event
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: type of event
-          enum:
-          - APP
-          - APPROVE
-          - CANCEL
-          - COMBINE
-          - CREATE
-          - DELETE
-          - DONE
-          - ERROR
-          - EXPORT
-          - EXPORT_CSV
-          - EXPORT_ORG_CHART
-          - GENERATE
-          - GEOIP
-          - INCOMING
-          - INSTALL
-          - INVITE
-          - INBOUND
-          - LOGIN
-          - MERGE
-          - MESSAGE
-          - OUTBOUND
-          - PREVIEW_AS
-          - READ
-          - READ_EXTERNAL
-          - READ_SENSITIVE
-          - READ_ATS
-          - READ_ATS_WEBHOOK
-          - READ_FULL_NAME
-          - READ_FUTURE_DATE
-          - READ_METADATA
-          - READ_COMP
-          - READ_BILLING
-          - READ_PENDING
-          - READ_PAYROLL
-          - READ_SENSITIVE_FILTERS
-          - WRITE_EXTERNAL
-          - REASSIGN
-          - REJECT
-          - RELEASE
-          - REMIND
-          - REMOVE_PASSWORD
-          - REQUEST
-          - RESTORE
-          - RESUME
-          - REVOKE
-          - RUN
-          - RUN_ATS
-          - SECURITY
-          - SHARE
-          - SHOW_DASHBOARD_DAYS_AHEAD
-          - SHOW_OPEN_JOBS
-          - STEP
-          - SUBMIT
-          - SYNC
-          - TEST
-          - TOKEN
-          - UNINSTALL
-          - UPDATE
-          - UPDATE_PASSWORD
-          - UPLOAD_CSV
-          - WRITE
-          - VIEW_AS
-        entityType:
-          type: string
-          description: type of target entity
-          enum:
-          - ACTION
-          - AGREEMENT
-          - AI_AGENT
-          - AI_AGENT_MEMORY
-          - AI_CHAT
-          - AI_CONFIG
-          - AI_CREDIT_LIMIT
-          - AI_CREDIT_USAGE
-          - AI_HINT
-          - AI_PROMPT
-          - APP
-          - APP_CONFIG
-          - APPROVAL_CHAIN
-          - APPROVAL_CHAIN_STAGE
-          - APPROVAL_DELEGATE
-          - APPROVAL_REQUEST
-          - ASSESSMENT
-          - BUDGET
-          - BUDGET_POOL
-          - BUNDLE
-          - CALENDAR
-          - CALENDAR_ENTRY
-          - CATEGORY
-          - CATEGORY_SORT
-          - CHANGE
-          - COMMENT
-          - COMP_BAND
-          - COMP_REVIEW
-          - CONTENT
-          - CUSTOMER
-          - DATA_VIEW
-          - EXCHANGE_RATE
-          - EMAIL_TEMPLATE
-          - EVENT
-          - FIELD
-          - FILE
-          - FORM
-          - FORM_DRAFT
-          - FORM_RESPONSE
-          - GEOCODE
-          - GROUP
-          - GROUP_TYPE
-          - GOAL
-          - GOAL_PROGRESS
-          - GOAL_TARGET
-          - GOAL_TYPE
-          - GUIDELINE
-          - JOB
-          - JOB_CODE
-          - JOB_LEVEL
-          - MEDIA
-          - MESSAGE
-          - MULTIPLIER
-          - ORG
-          - ORG_CONFIG
-          - PERSON
-          - PROFILE_TAB
-          - POLICY
-          - PROCESS
-          - PRODUCT
-          - QUERY_TOKEN
-          - QUESTION
-          - REPORT
-          - REPORT_CHART
-          - ROLE
-          - SCENARIO
-          - SIGNATURE
-          - SIGNATURE_REQUEST
-          - STOCK_GRANT
-          - STOCK_PRICE
-          - TABLE
-          - TABLE_ROW
-          - TASK_CONFIG
-          - TEMPLATE
-          - TASK
-          - TOKEN
-          - TIMEOFF
-          - TIMEOFF_BALANCE_ADJUSTMENT
-          - TIMEOFF_LEDGER_ENTRY
-          - TIMEOFF_POLICY
-          - TRANSCRIPT
-          - USER
-        entityId:
-          type: string
-          description: id of target entity
-          example: 588f7ee98f138b19220041a7
-        behalfUserId:
-          type: string
-          description: id of the original user this app user is acting on behalf of
-          example: 588f7ee98f138b19220041a7
-        agentUserId:
-          type: string
-          description: id of the agent (app user) if this event was performed by an agent on behalf of a user
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          description: id of the AI chat that this event derives from
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-          description: AI chat tool use identifier that ties this event to a specific tool invocation
-        jobId:
-          type: string
-          description: jobId of the entity, if the entity is a job or closely connected to a single job
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          description: personId of the entity, if the entity is a person or closely connected to a single person
-          example: 588f7ee98f138b19220041a7
-        tableId:
-          type: string
-          description: id of table, if entity is a table row
-          example: 588f7ee98f138b19220041a7
-        subtype:
-          type: string
-          description: subtype of entity
-        payload:
-          type: object
-          description: event-specific payload containing information about the change that took place
-          additionalProperties:
-            type: object
-        at:
-          type: string
-          description: timestamp of event
-        processId:
-          type: string
-          description: id of process
-          example: 588f7ee98f138b19220041a7
-        date:
-          type: string
-          format: date
-          description: effective date, if in use
-        scenarioId:
-          type: string
-          description: id of scenario
-          example: 588f7ee98f138b19220041a7
-        parentEntityId:
-          type: string
-          description: id of associated entity, such as comp cycle
-          example: 588f7ee98f138b19220041a7
-        fields:
-          type: array
-          description: set of fields that were updated by the event
-          uniqueItems: true
-          items:
-            type: string
-        code:
-          type: string
-          description: event code, for example job.update
-    CompReviewWorkbookColumn:
-      type: object
-      required:
-      - name
-      - label
-      - editableFor
-      - visibleTo
-      - visibleToGroups
-      - visibleToType
-      properties:
-        name:
-          type: string
-          description: field name
-        label:
-          type: string
-          description: display name in workbook
-        color:
-          type: string
-          description: color used in the column header
-        editableFor:
-          type: string
-          description: cql evaluated on the reviewee job specifying whether field is editable
-        visibleTo:
-          type: string
-          description: cql specifying who can view
-        visibleToGroups:
-          type: array
-          description: list of groupIds with viewing permissions
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        visibleToType:
-          type: string
-          description: type of cql filter used in the visible to
-          enum:
-          - EVERYONE
-          - DEPARTMENT
-          - TEAM
-          - LOCATION
-          - CUSTOM
-        visibleToRoles:
-          description: comp cycle roles this column is visible to, in addition to other filters
-          $ref: '#/components/schemas/InCycleViewFeatures'
-        editableForRoles:
-          description: comp cycle roles that can edit this column, in addition to editableFor filter
-          $ref: '#/components/schemas/InCycleViewFeatures'
     Change:
       type: object
       required:
@@ -3979,35 +4815,13 @@ components:
         canEdit:
           type: boolean
           description: flag indicating whether authorized user can modify this change (will vary depending on user)
-    CreateCompReview:
+    GenerateCompReviewOptions:
       type: object
       required:
-      - label
+      - isPreview
       properties:
-        label:
-          type: string
-          description: human-readable label of goal
-          example: Comp review H2 2022
-          minItems: 1
-          maxItems: 80
-        config:
-          description: Configuration for this comp review
-          $ref: '#/components/schemas/CompReviewConfig'
-        status:
-          type: string
-          description: Whether the compensation review has been approved by the final approvers
-          enum:
-          - PENDING
-          - PAUSED
-          - ACTIVE
-          - REJECTED
-          - COMPLETE
-          - COMPLETE_APPROVED
-        shareAccess:
-          type: array
-          description: users who have been granted access to this comp review
-          items:
-            $ref: '#/components/schemas/ShareAccess'
+        isPreview:
+          type: boolean
     UpdateCompReview:
       type: object
       properties:
@@ -4043,430 +4857,20 @@ components:
           type: integer
           format: int32
           description: count of reviews that have been submitted and approved
-    VariableComp:
+    Scenario:
       type: object
       required:
-      - type
-      - interval
-      properties:
-        type:
-          type: string
-          description: compensation type
-          enum:
-          - BONUS
-          - COMMISSION
-        interval:
-          type: string
-          description: compensation interval
-          enum:
-          - YEARLY
-      description: 'variable compensation
-
-        Implementations: VariableCompPercent, VariableCompPercent'
-      discriminator:
-        propertyName: compType
-    GuidelineCalculation:
-      type: object
-      required:
-      - guidelineId
-      - jobId
-      - compReviewId
-      - guidelineLabel
-      - appliedField
-      - flagMode
-      - isDeviated
-      - deviation
-      - fields
-      properties:
-        guidelineId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        jobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        compReviewId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        budgetPoolId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        guidelineLabel:
-          type: string
-        min:
-          type: object
-        max:
-          type: object
-        target:
-          type: object
-        appliedField:
-          type: string
-        flagMode:
-          type: string
-          enum:
-          - DEVIATION_THRESHOLD
-          - NONE
-        flagDeviationThreshold:
-          type: number
-        isDeviated:
-          type: boolean
-        deviation:
-          $ref: '#/components/schemas/Deviation'
-        fields:
-          type: object
-          additionalProperties:
-            type: object
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
-        access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
-    ApprovalGroupApprover:
-      type: object
-      required:
-      - jobId
+      - id
+      - orgId
+      - name
+      - startDate
       - status
-      properties:
-        jobId:
-          type: string
-          description: A job ID that is part of the group
-          example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: The status of the approver
-          enum:
-          - PENDING
-          - APPROVED
-          - REJECTED
-          - SKIPPED
-        commentId:
-          type: string
-          description: Last comment of the approver
-          example: 588f7ee98f138b19220041a7
-        reassignCommentId:
-          type: string
-          description: Last comment associated with a reassignment
-          example: 588f7ee98f138b19220041a7
-        isFallback:
-          type: boolean
-          description: Whether approver is a fallback
-        fallbackFor:
-          type: string
-          description: What jobId approver is a fallback for
-          example: 588f7ee98f138b19220041a7
-        actedByJobId:
-          type: string
-          description: Job of the delegate who acted on this slot on the approver's behalf
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: The date the status was updated last
-    StockGrant:
-      type: object
-      required:
-      - id
-      - stock
-      - date
-      - shares
-      - price
-      - type
-      - vestSchedule
-      properties:
-        id:
-          type: string
-          description: unique identifier of grant
-        stock:
-          type: string
-          description: ticker symbol of this stock
-          example: GOOG
-        date:
-          type: string
-          format: date
-          description: date of grant
-        vestStartDate:
-          type: string
-          format: date
-          description: vesting start date of grant
-        expireDate:
-          type: string
-          format: date
-          description: expiration date of grant
-        shares:
-          type: number
-          description: number of shares granted
-        price:
-          type: number
-          description: per share strike price
-        type:
-          type: string
-          description: type of grant
-          enum:
-          - ISO
-          - NSO
-          - RSU
-          - SAR
-          - PERFORMANCE_SHARES
-          - PHANTOM_STOCK
-          - RSA
-        vestSchedule:
-          type: string
-          description: vesting schedule
-        originalPrice:
-          type: number
-          description: original per share value of stock (grant price at time of issue)
-        currentPrice:
-          type: number
-          description: current per share value of stock
-        vestedShares:
-          type: number
-          description: current number of shares vested
-        vestedSharesNextYear:
-          type: number
-          description: number of shares vested one year from today
-        vestedSharesByDate:
-          type: object
-          description: number of shares vested, by future date
-          additionalProperties:
-            type: number
-        vestEndDate:
-          type: string
-          format: date
-          description: vesting end date
-        cancelDate:
-          type: string
-          format: date
-          description: cancellation date
-        terminationDate:
-          type: string
-          format: date
-          description: termination date — vesting freezes on this date when the holder separates
-        lastExercisableDate:
-          type: string
-          format: date
-          description: last date on which vested shares can be exercised; after this the grant is forfeited
-        details:
-          type: string
-          description: details of the grant (arbitrary text)
-        description:
-          type: string
-          description: human-readable description of vesting schedule
-    DtValue:
-      type: object
-      properties:
-        value:
-          type: object
-    ScenarioCalculation:
-      type: object
-      required:
-      - scenarioId
-      - allocated
-      properties:
-        scenarioId:
-          type: string
-          description: scenario id
-          example: 588f7ee98f138b19220041a7
-        allocated:
-          type: object
-          description: budget pool total allocation for scenario
-          example: '500'
-        used:
-          type: object
-          description: budget pool total use for scenario
-          example: '500'
-    PoolCalculation:
-      type: object
-      required:
-      - budgetPoolId
-      - label
-      - allocated
-      - scenarios
-      properties:
-        budgetPoolId:
-          type: string
-          description: budget pool id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: budget pool label
-          example: Merit
-        allocated:
-          type: object
-          description: budget pool total amount
-          example: '500'
-        used:
-          type: object
-          description: the amount of the budget pool that has been used
-          example: '500'
-        scenarios:
-          type: array
-          description: a list of reviewer/scenario specific calculations that create the total
-          items:
-            $ref: '#/components/schemas/ScenarioCalculation'
-    Job:
-      type: object
-      required:
-      - jobId
-      - orgId
-      - title
-      - groupIds
-      - fields
-      properties:
-        jobId:
-          type: string
-          description: globally unique job id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: job title
-          example: Senior Engineer
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: compensation
-          $ref: '#/components/schemas/Comp'
-        sensitive:
-          type: string
-          description: view sensitive of the job while open
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        relationships:
-          type: array
-          description: relationship to other jobs
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        managerIds:
-          type: array
-          description: list of managers, from immediate manager upwards
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        groupIds:
-          type: array
-          description: groups that this job is a member of
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        placement:
-          type: string
-          description: guidance on placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        fields:
-          type: object
-          description: fields containing custom data
-          additionalProperties:
-            type: object
-        startDate:
-          type: string
-          format: date
-          description: for empty jobs, expected start date - for filled jobs, confirmed start date
-        startDatePlanned:
-          type: string
-          format: date
-          description: expected start date whether job is open or has been filled - doesn't change when job is filled
-        personStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the org after the latest departure (if any)
-        personEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing, the last day of that person in the org
-        personJobStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the job
-        personJobEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing or moving out, the last day of that person in the job
-        personId:
-          type: string
-          description: the person holding this job -- either currently in the job, or upcoming announced hire
-          example: 588f7ee98f138b19220041a7
-        upcoming:
-          type: array
-          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
-          items:
-            $ref: '#/components/schemas/UpcomingChange'
-        scenarioId:
-          type: string
-          description: scenario that the job was created in (null if job is on primary timeline)
-          example: 588f7ee98f138b19220041a7
-        backfillPersonId:
-          type: string
-          description: the person who most recently held the job, who this represents a backfill for
-          example: 588f7ee98f138b19220041a7
-    InCycleChange:
-      type: object
-      required:
-      - change
-      - guidelines
-      properties:
-        change:
-          $ref: '#/components/schemas/ChangeData'
-        guidelines:
-          type: array
-          items:
-            $ref: '#/components/schemas/GuidelineCalculation'
-    CompReview:
-      type: object
-      required:
-      - id
-      - orgId
-      - label
-      - config
       - shareAccess
+      - createId
+      - createAt
+      - updateId
+      - updateAt
+      - startDateFixed
       properties:
         id:
           type: string
@@ -4476,38 +4880,50 @@ components:
           type: string
           description: parent organization id
           example: 588f7ee98f138b19220041a7
-        label:
+        name:
           type: string
-          description: human-readable label of goal
-          example: Comp review H2 2022
+          description: scenario name
+          example: Q4 Conservative Plan
           minItems: 1
           maxItems: 80
-        config:
-          description: Configuration for this comp review
-          $ref: '#/components/schemas/CompReviewConfig'
+        description:
+          type: string
+          description: scenario description
+          example: Q4 Conservative Plan
+          minItems: 0
+          maxItems: 2000
+        startDate:
+          type: string
+          format: date
+          description: date that this scenario diverges from primary
+          example: '2017-01-15'
         status:
           type: string
-          description: Whether the compensation review has been approved by the final approvers
+          description: status of scenario
           enum:
-          - PENDING
-          - PAUSED
-          - ACTIVE
-          - REJECTED
-          - COMPLETE
-          - COMPLETE_APPROVED
+          - OPEN
+          - INACTIVE
+          - MERGED
+          - DRAFT
+          - ARCHIVED
         shareAccess:
           type: array
-          description: users who have been granted access to this comp review
+          description: users who are specifically granted permission to this scenario
           items:
             $ref: '#/components/schemas/ShareAccess'
-        reviewerCount:
+        cost:
+          description: full summary of cost impact on scenario
+          $ref: '#/components/schemas/CostImpact'
+        changeCount:
           type: integer
           format: int32
-          description: count of reviewers in the comp review
-        submittedCount:
-          type: integer
-          format: int32
-          description: count of reviews that have been submitted and approved
+          description: number of changes contained in scenario
+        changeCounts:
+          type: object
+          description: number of changes of each type contained in scenario
+          additionalProperties:
+            type: integer
+            format: int32
         createId:
           type: string
           description: created by user id
@@ -4550,533 +4966,102 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    TierRepresentationResponse:
-      type: object
-      required:
-      - reviewer
-      - reviewees
-      - eligible
-      properties:
-        reviewer:
-          $ref: '#/components/schemas/Job'
-        reviewees:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        parentReviewerJobId:
+        mergeId:
           type: string
+          description: merged by user id
           example: 588f7ee98f138b19220041a7
-        eligible:
-          type: boolean
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
+        mergeAt:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    CollaboratorMatrixCondition:
-      type: object
-      required:
-      - expression
-      - collaboratorJobIds
-      properties:
-        expression:
+          description: merged timestamp
+          example: '2017-01-24T13:57:52Z'
+        calcStartAt:
           type: string
-        collaboratorJobIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    Deviation:
-      type: object
-      properties:
-        min:
-          type: object
-        max:
-          type: object
-    CompReviewReviewersApprovers:
-      type: object
-      required:
-      - reviewers
-      properties:
-        reviewers:
+          description: most recent summary calculation started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        calcEndAt:
           type: string
-          description: Which individuals are included as reviewers
+          description: most recent summary calculation ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        changeAt:
+          type: string
+          description: timestamp of most recent changes made to scenario
+          example: '2017-01-24T13:57:52Z'
+        changeId:
+          type: string
+          description: user who made the most recent change to scenario
+          example: '2017-01-24T13:57:52Z'
+        type:
+          type: string
+          description: Type of scenario to be created
           enum:
-          - ALL_MANAGERS
-          - ONLY_SPECIFIC_LEVEL
-          - ONLY_SPECIFIC_TITLES
-          - CUSTOM
-        reviewerLevels:
-          type: array
-          description: Levels to be included if reviewers is only specific levels
-          items:
-            type: integer
-            format: int32
-        reviewerTitles:
-          type: array
-          description: Titles to be included if reviewers is only specific titles
-          items:
-            type: string
-        reviewerFilter:
+          - GENERAL
+          - COMP
+          - PROMOTION
+          - TERMINATE
+          - CREATE_JOB
+          - UPDATE_JOB
+          - BUDGET
+          - BACKFILL
+        startDateFixed:
           type: string
-          description: Filter to be applied if reviewers is custom
-        excludedReviewerIds:
-          type: array
-          description: Job ids of individuals to exclude from the review
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        approverIds:
-          type: array
-          description: Person ids of employees who will final approve
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    Comp:
-      type: object
-      properties:
-        baseComp:
-          description: base pay (money) with interval (annual or hourly)
-          $ref: '#/components/schemas/PayInterval'
-        variableTargets:
-          type: array
-          description: variable compensation (money or percent)
-          items:
-            $ref: '#/components/schemas/VariableComp'
-        grantShares:
-          type: integer
-          format: int32
-          description: planned stock grant, in shares
-          example: '5000'
-        grantValue:
-          type: integer
-          format: int32
-          description: planned stock grant, in value (based on the stock's currency, not the comp)
-          example: '5000'
-        grantType:
-          type: string
-          description: planned stock grant type
+          description: whether or not the start date should stay fixed in time, or update to today's date as time passes
           enum:
-          - ISO
-          - NSO
-          - RSU
-          - SAR
-          - PERFORMANCE_SHARES
-          - PHANTOM_STOCK
-          - RSA
-    ChangeData:
-      type: object
-      required:
-      - change
-      - data
-      - cost
-      properties:
-        change:
-          description: the change that was applied
-          $ref: '#/components/schemas/Change'
-        data:
-          type: object
-          description: the returned data fields requested
-          additionalProperties:
-            type: object
-        cost:
-          type: number
-          description: the annualized impact of this change, denoted in organization's currency
-        lockedFields:
+          - FIXED
+          - TODAY
+        query:
+          type: string
+          description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
+        validJobIdSet:
           type: array
-          description: set of locked fields for this change
+          description: This scenario changes are restricted to the following jobIds
           uniqueItems: true
           items:
             type: string
-    ApprovalChainStageOverride:
-      type: object
-      required:
-      - stageOverrideId
-      - approvalChainStageId
-      - status
-      - order
-      properties:
-        stageOverrideId:
+            example: 588f7ee98f138b19220041a7
+        approvalRequestId:
           type: string
-          description: unique id for stage
+          description: Approval request id, if the scenario has been submitted for approval
           example: 588f7ee98f138b19220041a7
-        approvalChainStageId:
+        entityId:
           type: string
-          description: parent approval chain stage id
+          description: The entity this scenario is associated with
           example: 588f7ee98f138b19220041a7
-        groups:
-          type: array
-          description: approval group override
-          items:
-            $ref: '#/components/schemas/ApprovalGroup'
-        status:
+        entityType:
           type: string
-          description: status of the stage
+          description: The type of entity associated with this scenario
           enum:
-          - CANCELED
-          - REJECTED
-          - PENDING
-          - ACTIVE
-          - REVIEWED
-          - APPROVED
-          - SKIPPED
-          - SUBMITTED
-        order:
-          type: integer
-          format: int32
-          description: order of the stage
-    ResultsEvent:
-      type: object
-      required:
-      - data
-      properties:
-        data:
+          - COMP_REVIEW
+        sharedViewConfig:
           type: array
-          items:
-            $ref: '#/components/schemas/Event'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    Name:
-      type: object
-      required:
-      - last
-      properties:
-        first:
-          type: string
-          description: first name
-          example: Jane
-          minItems: 0
-          maxItems: 80
-        middle:
-          type: string
-          description: middle name
-          example: Quidditch
-          minItems: 0
-          maxItems: 80
-        last:
-          type: string
-          description: last name
-          example: Public
-          minItems: 0
-          maxItems: 80
-        pref:
-          type: string
-          description: preferred first name
-          example: JQ
-          minItems: 0
-          maxItems: 80
-        prefLast:
-          type: string
-          description: preferred last name
-          example: Smith
-          minItems: 0
-          maxItems: 80
-    RevieweeChange:
-      type: object
-      required:
-      - revieweeJobId
-      - reviewerJobId
-      properties:
-        revieweeJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        revieweePersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        reviewerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        reviewerPersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    JobUpdate:
-      type: object
-      properties:
-        addRelationships:
-          type: array
-          description: relationships to add
+          description: View configurations associated with this scenario
           uniqueItems: true
           items:
-            $ref: '#/components/schemas/JobRelationship'
-        removeRelationships:
-          type: array
-          description: relationships to remove
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        addGroupIds:
-          type: array
-          description: groups to add
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        removeGroupIds:
-          type: array
-          description: groups to remove
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        setGroupIds:
-          type: object
-          description: groups to set
-          additionalProperties:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        grant:
-          description: stock grant to add
-          $ref: '#/components/schemas/StockGrant'
-        timeOff:
-          description: time off to add
-          $ref: '#/components/schemas/TimeOff'
-        title:
-          type: string
-          description: new title
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: new compensation level
-          $ref: '#/components/schemas/Comp'
-        placement:
-          type: string
-          description: new placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: new employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        sensitive:
-          type: string
-          description: new view sensitivity
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        startDatePlanned:
-          type: string
-          format: date
-          description: planned start date
-        startDatePlannedRemove:
-          type: boolean
-          description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
-        startDate:
-          type: string
-          format: date
-          description: new expected start date - will update to person start date in future
-        backfillPersonId:
-          type: string
-          description: set who this job is backfilling
-          example: 588f7ee98f138b19220041a7
-        jobCodeId:
-          type: string
-          description: set (or unset) the job code for this job
-          example: 588f7ee98f138b19220041a7
-        hasUnsetFields:
-          type: boolean
-          description: set who this job is backfilling
-        fields:
-          type: object
-          description: custom fields values to set
-          additionalProperties:
-            type: object
-    BudgetCalculation:
+            $ref: '#/components/schemas/ScenarioSharedViewConfig'
+        budget:
+          description: Total budget associated with the scenario
+          $ref: '#/components/schemas/Money'
+    OwnershipChange:
       type: object
       required:
-      - pools
+      - scenarioId
+      - oldOwnerJobId
+      - newOwnerJobId
       properties:
-        allocated:
-          type: object
-          description: the total budget amount (null if user doesn't have permission to view)
-          example: '500'
-        used:
-          type: object
-          description: the amount of the budget that has been used (null if user doesn't have permission to view)
-          example: '500'
-        pools:
-          type: array
-          description: a list of budget pools that make up the total amount
-          items:
-            $ref: '#/components/schemas/PoolCalculation'
-        jobBudgetMap:
-          type: object
-          description: the amount allotted and allocated for the comp review broken down by job
-          additionalProperties:
-            type: object
-            additionalProperties:
-              $ref: '#/components/schemas/BudgetAllocation'
-    Address:
-      type: object
-      required:
-      - country
-      properties:
-        street1:
-          type: string
-          description: street address, line 1
-          example: 123 Anywhere Street
-          minItems: 0
-          maxItems: 200
-        street2:
-          type: string
-          description: street address, line 2
-          example: Apt 6L
-          minItems: 0
-          maxItems: 200
-        street3:
-          type: string
-          description: street address, line 3
-          example: Sixth Floor
-          minItems: 0
-          maxItems: 200
-        city:
-          type: string
-          description: city
-          example: New York
-          minItems: 0
-          maxItems: 80
-        state:
-          type: string
-          description: state
-          example: NY
-          minItems: 0
-          maxItems: 80
-        country:
-          type: string
-          description: country (two-digit ISO code)
-          example: NY
-          pattern: ^[A-Z]{2}$
-        postal:
-          type: string
-          description: postal code
-          example: '10001'
-          minItems: 0
-          maxItems: 10
-        geo:
-          description: geopoint location
-          $ref: '#/components/schemas/Geopoint'
-        approxGeo:
-          description: approximate geopoint location (suitable for a map placement, but not exact location)
-          $ref: '#/components/schemas/Geopoint'
-    GetVisualizationsOptions:
-      type: object
-      required:
-      - isCollabicientView
-      properties:
-        changeIds:
-          type: array
-          description: A set of Change ObjectIds used to filter the results of budget and raise calculations
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        viewInCurrency:
-          type: string
-          description: Currency to view budget visualizations
-        includeCollaborators:
-          type: boolean
-          description: Whether or not to include approval requests on which a user is collaborating when calculating budget amounts for that user
-        isCollabicientView:
-          type: boolean
-          description: Are the visualizations for a collaborating participant
-        scenarioIds:
-          type: array
-          description: A set of Scenario ObjectIds used to filter budget calculations to a specific reviewer's scenarios
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
+        scenarioId:
           type: string
           example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
+        oldOwnerJobId:
           type: string
           example: 588f7ee98f138b19220041a7
-        aiChatId:
+        oldOwnerPersonId:
           type: string
           example: 588f7ee98f138b19220041a7
-        aiToolUseId:
+        newOwnerJobId:
           type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    InCycleViewChanges:
-      type: object
-      required:
-      - changeMap
-      properties:
-        changeMap:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/ChangeData'
-        guidelinesMap:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/GuidelineCalculation'
-        access:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/ResultsAccess'
-    TableRef:
-      type: object
-      properties:
-        tableId:
-          type: string
-          description: the table id this field references
           example: 588f7ee98f138b19220041a7
-        tableName:
+        newOwnerPersonId:
           type: string
-          description: the table name this field references
+          example: 588f7ee98f138b19220041a7
     UpcomingChange:
       type: object
       required:
@@ -5110,3 +5095,18 @@ components:
         otherPersonId:
           type: string
           example: 588f7ee98f138b19220041a7
+    ResultsCompReview:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompReview'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'

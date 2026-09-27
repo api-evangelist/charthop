@@ -365,151 +365,23 @@ paths:
           description: not found
 components:
   schemas:
-    Address:
+    AccessAction:
       type: object
       required:
-      - country
+      - action
       properties:
-        street1:
+        action:
           type: string
-          description: street address, line 1
-          example: 123 Anywhere Street
-          minItems: 0
-          maxItems: 200
-        street2:
-          type: string
-          description: street address, line 2
-          example: Apt 6L
-          minItems: 0
-          maxItems: 200
-        street3:
-          type: string
-          description: street address, line 3
-          example: Sixth Floor
-          minItems: 0
-          maxItems: 200
-        city:
-          type: string
-          description: city
-          example: New York
-          minItems: 0
-          maxItems: 80
-        state:
-          type: string
-          description: state
-          example: NY
-          minItems: 0
-          maxItems: 80
-        country:
-          type: string
-          description: country (two-digit ISO code)
-          example: NY
-          pattern: ^[A-Z]{2}$
-        postal:
-          type: string
-          description: postal code
-          example: '10001'
-          minItems: 0
-          maxItems: 10
-        geo:
-          description: geopoint location
-          $ref: '#/components/schemas/Geopoint'
-        approxGeo:
-          description: approximate geopoint location (suitable for a map placement, but not exact location)
-          $ref: '#/components/schemas/Geopoint'
-    ResultsSignature:
-      type: object
-      required:
-      - data
-      properties:
-        data:
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/Signature'
-        next:
-          type: string
-        access:
+            type: string
+        types:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ResultsAccess'
-    SignatureRequestUsageResponse:
-      type: object
-      required:
-      - signatureRequestCount
-      - qesSignatureRequestCount
-      - qesSignatureRequestsLimit
-      - nextPeriodStartDate
-      properties:
-        signatureRequestCount:
-          type: integer
-          format: int32
-        qesSignatureRequestCount:
-          type: integer
-          format: int32
-        qesSignatureRequestsLimit:
-          type: integer
-          format: int32
-        nextPeriodStartDate:
-          type: string
-          format: date
-    ResultsSignatureRequest:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SignatureRequest'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    SignatureBlock:
-      type: object
-      required:
-      - signature
-      - key
-      - algorithm
-      - timestamp
-      - fileHash
-      - version
-      properties:
-        signature:
-          type: string
-        key:
-          type: string
-        algorithm:
-          type: string
-        timestamp:
-          type: string
-        fileHash:
-          type: string
-        version:
-          type: integer
-          format: int32
-    SignatureSigner:
-      type: object
-      required:
-      - userId
-      - status
-      - order
-      properties:
-        userId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          enum:
-          - PENDING
-          - SIGNED
-          - DECLINED
-          - CANCELED
-        order:
-          type: integer
-          format: int32
+            type: string
     CreateSignatureRequestRequest:
       type: object
       required:
@@ -526,130 +398,6 @@ components:
           $ref: '#/components/schemas/MessageChannelConfig'
         isSequential:
           type: boolean
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    Signature:
-      type: object
-      required:
-      - id
-      - orgId
-      - signatureRequestId
-      - fileId
-      - status
-      - userId
-      properties:
-        id:
-          type: string
-          description: globally unique id of signature
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        signatureRequestId:
-          type: string
-          description: signature request that this signature belongs to
-          example: 588f7ee98f138b19220041a7
-        fileId:
-          type: string
-          description: the file entity that contains this signature
-          example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: the status of this signature (either SIGNED or DECLINED)
-          enum:
-          - SIGNED
-          - DECLINED
-        comment:
-          type: string
-          description: comment given by the user for signing or not signing
-        name:
-          type: string
-          description: full name of the signature
-        title:
-          type: string
-          description: job title used in the signature
-        userId:
-          type: string
-          description: the user who signed or declined
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          description: the personId of the user who signed or declined
-          example: 588f7ee98f138b19220041a7
-        email:
-          type: string
-          description: the email address that was used by the user who signed or declined
-        at:
-          type: string
-          description: timestamp that the signature occurred
-        userAgent:
-          type: string
-          description: browser user-agent used by the signing user
-        remoteIp:
-          type: string
-          description: IP address used by the signing user
-        remoteIpAddress:
-          description: Geolocation of the signing user
-          $ref: '#/components/schemas/Address'
-        loginAt:
-          type: string
-          description: timestamp that the user logged in on their particular token session
-        authMechanism:
-          type: string
-          description: mechanism that was used to authenticate the user
-          enum:
-          - INTERNAL
-          - GENERATED
-          - TOKEN
-          - ESCALATION
-          - PASSWORD
-          - GOOGLE
-          - MICROSOFT
-          - ADP
-          - SAML
-          - UNIVERSAL_SSO
-          - OAUTH_PKCE
-          - LOGIN_TOKEN
-        signatureBlock:
-          description: details on the signing to validate the signature
-          $ref: '#/components/schemas/SignatureBlock'
-    SignRequest:
-      type: object
-      required:
-      - fileHash
-      properties:
-        signatureName:
-          type: string
-        fileHash:
-          type: string
-        comment:
-          type: string
     SignatureRequest:
       type: object
       required:
@@ -772,64 +520,223 @@ components:
           type: string
           description: last updated timestamp
           example: '2017-01-24T13:57:52Z'
-    Geopoint:
+    SignRequest:
       type: object
       required:
-      - type
-      - coordinates
+      - fileHash
       properties:
-        type:
+        signatureName:
           type: string
-          description: Type of point
-          readOnly: true
-        coordinates:
-          type: array
-          description: The longitude and latitude of the point
-          readOnly: true
-          items:
-            type: number
-            format: double
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
+        fileHash:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAccess:
+        comment:
+          type: string
+    SignatureRequestUsageResponse:
       type: object
       required:
-      - allowed
+      - signatureRequestCount
+      - qesSignatureRequestCount
+      - qesSignatureRequestsLimit
+      - nextPeriodStartDate
       properties:
-        ids:
+        signatureRequestCount:
+          type: integer
+          format: int32
+        qesSignatureRequestCount:
+          type: integer
+          format: int32
+        qesSignatureRequestsLimit:
+          type: integer
+          format: int32
+        nextPeriodStartDate:
+          type: string
+          format: date
+    ResultsSignatureRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
           type: array
-          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/SignatureRequest'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    SignatureBlock:
+      type: object
+      required:
+      - signature
+      - key
+      - algorithm
+      - timestamp
+      - fileHash
+      - version
+      properties:
+        signature:
+          type: string
+        key:
+          type: string
+        algorithm:
+          type: string
+        timestamp:
+          type: string
+        fileHash:
+          type: string
+        version:
+          type: integer
+          format: int32
+    Signature:
+      type: object
+      required:
+      - id
+      - orgId
+      - signatureRequestId
+      - fileId
+      - status
+      - userId
+      properties:
+        id:
+          type: string
+          description: globally unique id of signature
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        signatureRequestId:
+          type: string
+          description: signature request that this signature belongs to
+          example: 588f7ee98f138b19220041a7
+        fileId:
+          type: string
+          description: the file entity that contains this signature
+          example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          description: the status of this signature (either SIGNED or DECLINED)
+          enum:
+          - SIGNED
+          - DECLINED
+        comment:
+          type: string
+          description: comment given by the user for signing or not signing
+        name:
+          type: string
+          description: full name of the signature
+        title:
+          type: string
+          description: job title used in the signature
+        userId:
+          type: string
+          description: the user who signed or declined
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          description: the personId of the user who signed or declined
+          example: 588f7ee98f138b19220041a7
+        email:
+          type: string
+          description: the email address that was used by the user who signed or declined
+        at:
+          type: string
+          description: timestamp that the signature occurred
+        userAgent:
+          type: string
+          description: browser user-agent used by the signing user
+        remoteIp:
+          type: string
+          description: IP address used by the signing user
+        remoteIpAddress:
+          description: Geolocation of the signing user
+          $ref: '#/components/schemas/Address'
+        loginAt:
+          type: string
+          description: timestamp that the user logged in on their particular token session
+        authMechanism:
+          type: string
+          description: mechanism that was used to authenticate the user
+          enum:
+          - INTERNAL
+          - GENERATED
+          - TOKEN
+          - ESCALATION
+          - PASSWORD
+          - GOOGLE
+          - MICROSOFT
+          - ADP
+          - SAML
+          - UNIVERSAL_SSO
+          - OAUTH_PKCE
+          - LOGIN_TOKEN
+        signatureBlock:
+          description: details on the signing to validate the signature
+          $ref: '#/components/schemas/SignatureBlock'
+    ResultsSignature:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Signature'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    ExternalSignUrlResponse:
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    SignatureSigner:
       type: object
       required:
-      - url
+      - userId
+      - status
+      - order
       properties:
-        url:
+        userId:
           type: string
-          format: uri
+          example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          enum:
+          - PENDING
+          - SIGNED
+          - DECLINED
+          - CANCELED
+        order:
+          type: integer
+          format: int32
     MessageChannelConfig:
       type: object
       required:
@@ -847,3 +754,96 @@ components:
             - CHAT_TEAMS
         alwaysEmail:
           type: boolean
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Address:
+      type: object
+      required:
+      - country
+      properties:
+        street1:
+          type: string
+          description: street address, line 1
+          example: 123 Anywhere Street
+          minItems: 0
+          maxItems: 200
+        street2:
+          type: string
+          description: street address, line 2
+          example: Apt 6L
+          minItems: 0
+          maxItems: 200
+        street3:
+          type: string
+          description: street address, line 3
+          example: Sixth Floor
+          minItems: 0
+          maxItems: 200
+        city:
+          type: string
+          description: city
+          example: New York
+          minItems: 0
+          maxItems: 80
+        state:
+          type: string
+          description: state
+          example: NY
+          minItems: 0
+          maxItems: 80
+        country:
+          type: string
+          description: country (two-digit ISO code)
+          example: NY
+          pattern: ^[A-Z]{2}$
+        postal:
+          type: string
+          description: postal code
+          example: '10001'
+          minItems: 0
+          maxItems: 10
+        geo:
+          description: geopoint location
+          $ref: '#/components/schemas/Geopoint'
+        approxGeo:
+          description: approximate geopoint location (suitable for a map placement, but not exact location)
+          $ref: '#/components/schemas/Geopoint'
+    Geopoint:
+      type: object
+      required:
+      - type
+      - coordinates
+      properties:
+        type:
+          type: string
+          description: Type of point
+          readOnly: true
+        coordinates:
+          type: array
+          description: The longitude and latitude of the point
+          readOnly: true
+          items:
+            type: number
+            format: double
+    ExternalSignUrlResponse:
+      type: object
+      required:
+      - url
+      properties:
+        url:
+          type: string
+          format: uri

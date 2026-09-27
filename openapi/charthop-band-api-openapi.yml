@@ -423,55 +423,21 @@ paths:
           description: not found
 components:
   schemas:
-    Money:
+    AccessAction:
       type: object
       required:
-      - amount
-      - currency
+      - action
       properties:
-        amount:
-          type: number
-        currency:
+        action:
           type: string
-        places:
-          type: integer
-          format: int32
-    CompBandUpdateOperation:
-      type: object
-      required:
-      - compBandId
-      - update
-      properties:
-        compBandId:
-          type: string
-          description: Comp band ID to update
-          example: 588f7ee98f138b19220041a7
-        update:
-          description: Update data
-          $ref: '#/components/schemas/UpdateCompBand'
-    CompBandSchema:
-      type: object
-      required:
-      - jobLevelValues
-      - fields
-      properties:
-        jobLevelValues:
-          type: array
-          description: Job level values
-          items:
-            type: string
-        jobTierOneField:
-          description: First job tier field configuration
-          $ref: '#/components/schemas/JobTierFieldSchema'
-        jobTierTwoField:
-          description: Second job tier field configuration
-          $ref: '#/components/schemas/JobTierFieldSchema'
-        jobTierThreeField:
-          description: Third job tier field configuration
-          $ref: '#/components/schemas/JobTierFieldSchema'
         fields:
           type: array
-          description: List of available compensation fields that have non-null values across comp bands
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
           items:
             type: string
     EnumValue:
@@ -511,56 +477,141 @@ components:
         labelTr:
           description: translations for the label
           $ref: '#/components/schemas/Translations'
-    TableRowRef:
+    CompBandUpdateOperation:
       type: object
       required:
-      - tableId
-      - tableName
-      - id
+      - compBandId
+      - update
       properties:
-        tableId:
+        compBandId:
           type: string
+          description: Comp band ID to update
           example: 588f7ee98f138b19220041a7
-        tableName:
-          type: string
+        update:
+          description: Update data
+          $ref: '#/components/schemas/UpdateCompBand'
+    Process:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
+      properties:
         id:
           type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
           example: 588f7ee98f138b19220041a7
         label:
-          type: object
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
           type: string
-        fields:
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
           type: array
-          uniqueItems: true
+          description: list of log data that occurred during running of this process
           items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
     CreateCompBand:
       type: object
       required:
@@ -714,15 +765,6 @@ components:
           type: string
           description: job level associated with the comp band
           example: 588f7ee98f138b19220041a7
-    JobTierField:
-      type: object
-      required:
-      - value
-      properties:
-        code:
-          type: string
-        value:
-          type: string
     CompBand:
       type: object
       required:
@@ -858,128 +900,31 @@ components:
           type: string
           format: date
           description: when this entity stops existing in org history
-    Process:
+    CompBandSchema:
       type: object
       required:
-      - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
-      - createId
-      - createAt
-      - options
+      - jobLevelValues
+      - fields
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id (user who requested the process run)
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
-          type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
+        jobLevelValues:
           type: array
-          description: list of log data that occurred during running of this process
+          description: Job level values
           items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-        uuid:
-          type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
+            type: string
+        jobTierOneField:
+          description: First job tier field configuration
+          $ref: '#/components/schemas/JobTierFieldSchema'
+        jobTierTwoField:
+          description: Second job tier field configuration
+          $ref: '#/components/schemas/JobTierFieldSchema'
+        jobTierThreeField:
+          description: Third job tier field configuration
+          $ref: '#/components/schemas/JobTierFieldSchema'
+        fields:
+          type: array
+          description: List of available compensation fields that have non-null values across comp bands
+          items:
+            type: string
     LogData:
       type: object
       required:
@@ -1003,23 +948,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    CompBandCount:
-      type: object
-      required:
-      - bandCount
-      properties:
-        bandCount:
-          type: integer
-          format: int64
     BulkCompBandUpdateRequest:
       type: object
       required:
@@ -1034,6 +962,58 @@ components:
           type: string
           format: date
           description: Effective date for all updates
+    CompBandCount:
+      type: object
+      required:
+      - bandCount
+      properties:
+        bandCount:
+          type: integer
+          format: int64
+    JobTierField:
+      type: object
+      required:
+      - value
+      properties:
+        code:
+          type: string
+        value:
+          type: string
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    JobTierFieldSchema:
+      type: object
+      required:
+      - values
+      properties:
+        code:
+          type: string
+          description: Field code (e.g., department)
+        values:
+          type: array
+          description: All possible values for this field across comp bands
+          items:
+            type: string
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
     Attribution:
       type: object
       properties:
@@ -1061,19 +1041,6 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    JobTierFieldSchema:
-      type: object
-      required:
-      - values
-      properties:
-        code:
-          type: string
-          description: Field code (e.g., department)
-        values:
-          type: array
-          description: All possible values for this field across comp bands
-          items:
-            type: string
     ResultsCompBand:
       type: object
       required:
@@ -1089,3 +1056,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    TableRowRef:
+      type: object
+      required:
+      - tableId
+      - tableName
+      - id
+      properties:
+        tableId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        tableName:
+          type: string
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: object
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'

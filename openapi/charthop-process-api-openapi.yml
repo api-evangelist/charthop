@@ -671,50 +671,32 @@ paths:
         description: state
 components:
   schemas:
-    ProcessEvent:
+    AccessAction:
       type: object
       required:
-      - type
-      - updates
-      - at
+      - action
       properties:
-        id:
+        action:
           type: string
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          enum:
-          - DEPART
-          - HIRE
-          - UPDATE
-          - CREATE_PERSON
-          - ERROR
-          - INBOUND
-          - CHANGE
-          - OUTBOUND_CREATE
-          - OUTBOUND_UPDATE
-          - OUTBOUND_DELETE
-          - INITIATING_CREATE
-          - INITIATING_DELETE
-        entityData:
-          type: object
-          additionalProperties:
-            type: object
-        updates:
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ProcessEventUpdate'
-        at:
-          type: string
-    AppendLogRequest:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    AppProcessStatus:
       type: object
-      required:
-      - log
       properties:
-        log:
-          type: array
-          items:
-            $ref: '#/components/schemas/LogData'
+        appLastSync:
+          description: last application sync
+          $ref: '#/components/schemas/Process'
+        appLastSuccessSync:
+          description: last successful sync
+          $ref: '#/components/schemas/Process'
     CreateProcess:
       type: object
       required:
@@ -791,53 +773,6 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    UpdateProcess:
-      type: object
-      properties:
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
     LogData:
       type: object
       required:
@@ -861,51 +796,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    AppProcessStatus:
-      type: object
-      properties:
-        appLastSync:
-          description: last application sync
-          $ref: '#/components/schemas/Process'
-        appLastSuccessSync:
-          description: last successful sync
-          $ref: '#/components/schemas/Process'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ProcessEventResponse:
-      type: object
-      required:
-      - events
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProcessEvent'
     Process:
       type: object
       required:
@@ -1028,21 +918,41 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ProcessEventUpdate:
+    ProcessEvent:
       type: object
       required:
       - type
-      - payload
+      - updates
+      - at
       properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
         type:
           type: string
           enum:
-          - FIELD
-          - CONTACT
-          - COMP
+          - DEPART
+          - HIRE
+          - UPDATE
+          - CREATE_PERSON
           - ERROR
-        payload:
-          $ref: '#/components/schemas/ProcessEventUpdatePayload'
+          - INBOUND
+          - CHANGE
+          - OUTBOUND_CREATE
+          - OUTBOUND_UPDATE
+          - OUTBOUND_DELETE
+          - INITIATING_CREATE
+          - INITIATING_DELETE
+        entityData:
+          type: object
+          additionalProperties:
+            type: object
+        updates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessEventUpdate'
+        at:
+          type: string
     ResultsProcess:
       type: object
       required:
@@ -1058,6 +968,120 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    AppendLogRequest:
+      type: object
+      required:
+      - log
+      properties:
+        log:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogData'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    UpdateProcess:
+      type: object
+      properties:
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+    ProcessEventUpdate:
+      type: object
+      required:
+      - type
+      - payload
+      properties:
+        type:
+          type: string
+          enum:
+          - FIELD
+          - CONTACT
+          - COMP
+          - ERROR
+        payload:
+          $ref: '#/components/schemas/ProcessEventUpdatePayload'
     ProcessEventUpdatePayload:
       type: object
       properties:
@@ -1075,36 +1099,12 @@ components:
           - ID
         errorMessage:
           type: string
-    AccessAction:
+    ProcessEventResponse:
       type: object
       required:
-      - action
+      - events
       properties:
-        action:
-          type: string
-        fields:
+        events:
           type: array
-          uniqueItems: true
           items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
+            $ref: '#/components/schemas/ProcessEvent'

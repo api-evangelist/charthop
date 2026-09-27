@@ -275,6 +275,18 @@ paths:
           description: not found
 components:
   schemas:
+    UpdateExchangeRate:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: date
+        rates:
+          type: object
+          description: exchange rates, per currency - the multiplier to convert the base currency into the foreign currency
+          additionalProperties:
+            type: number
     ExchangeRate:
       type: object
       required:
@@ -307,15 +319,3 @@ components:
           type: string
           description: updated timestamp
           example: '2017-01-24T13:57:52Z'
-    UpdateExchangeRate:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          description: date
-        rates:
-          type: object
-          description: exchange rates, per currency - the multiplier to convert the base currency into the foreign currency
-          additionalProperties:
-            type: number

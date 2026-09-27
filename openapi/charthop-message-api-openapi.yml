@@ -223,48 +223,23 @@ paths:
           description: unauthorized
 components:
   schemas:
-    ResultsMessage:
+    AccessAction:
       type: object
       required:
-      - data
+      - action
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        next:
+        action:
           type: string
-        access:
+        fields:
           type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
+          uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     PartialMessage:
       type: object
       properties:
@@ -335,23 +310,64 @@ components:
         createAt:
           type: string
           description: created timestamp
-    AccessAction:
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsMessage:
       type: object
       required:
-      - action
+      - data
       properties:
-        action:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        next:
           type: string
-        fields:
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
           type: array
           uniqueItems: true
           items:
             type: string
-        types:
+            example: 588f7ee98f138b19220041a7
+        allowed:
           type: array
           uniqueItems: true
           items:
-            type: string
+            $ref: '#/components/schemas/AccessAction'
     Message:
       type: object
       required:
@@ -429,19 +445,3 @@ components:
         createAt:
           type: string
           description: created timestamp
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

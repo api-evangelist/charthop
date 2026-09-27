@@ -222,19 +222,23 @@ paths:
           description: not found
 components:
   schemas:
-    Money:
+    AccessAction:
       type: object
       required:
-      - amount
-      - currency
+      - action
       properties:
-        amount:
-          type: number
-        currency:
+        action:
           type: string
-        places:
-          type: integer
-          format: int32
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     MoneyRange:
       type: object
       properties:
@@ -330,23 +334,17 @@ components:
           type: integer
           format: int32
           description: sort order for sequential budget allocation priority
-    AccessAction:
+    BasisCondition:
       type: object
       required:
-      - action
+      - conditionExpr
       properties:
-        action:
+        conditionExpr:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+        amountRange:
+          $ref: '#/components/schemas/MoneyRange'
+        valueRange:
+          $ref: '#/components/schemas/ValueRange'
     BudgetPool:
       type: object
       required:
@@ -481,37 +479,169 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    ResultsAccess:
+    JobRelationship:
       type: object
       required:
-      - allowed
+      - jobId
+      - type
       properties:
-        ids:
+        jobId:
+          type: string
+          description: destination job id
+          example: 5887a7718f138b6a2a0041a7
+        type:
+          type: string
+          description: type of relationship
+          enum:
+          - MANAGER
+          - DIRECT
+          - INDIRECT_MANAGER
+          - INDIRECT
+          - NONE
+    BasisFieldMatrix:
+      type: object
+      required:
+      - includedFields
+      - conditions
+      properties:
+        includedFields:
           type: array
+          items:
+            type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasisCondition'
+    ValueRange:
+      type: object
+      properties:
+        max:
+          type: number
+          description: the maximum value in the range (type = BigDecimal)
+        min:
+          type: number
+          description: the minimum value in the range (type = BigDecimal)
+        target:
+          type: number
+          description: the target value for the range (type = BigDecimal)
+    Job:
+      type: object
+      required:
+      - jobId
+      - orgId
+      - title
+      - groupIds
+      - fields
+      properties:
+        jobId:
+          type: string
+          description: globally unique job id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: job title
+          example: Senior Engineer
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: compensation
+          $ref: '#/components/schemas/Comp'
+        sensitive:
+          type: string
+          description: view sensitive of the job while open
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        relationships:
+          type: array
+          description: relationship to other jobs
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        managerIds:
+          type: array
+          description: list of managers, from immediate manager upwards
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        groupIds:
+          type: array
+          description: groups that this job is a member of
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    ResultsGuideline:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Guideline'
-        next:
+        placement:
           type: string
-        access:
+          description: guidance on placement
+          enum:
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        fields:
+          type: object
+          description: fields containing custom data
+          additionalProperties:
+            type: object
+        startDate:
+          type: string
+          format: date
+          description: for empty jobs, expected start date - for filled jobs, confirmed start date
+        startDatePlanned:
+          type: string
+          format: date
+          description: expected start date whether job is open or has been filled - doesn't change when job is filled
+        personStartDate:
+          type: string
+          format: date
+          description: if personId is present, the first day of that person in the org after the latest departure (if any)
+        personEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing, the last day of that person in the org
+        personJobStartDate:
+          type: string
+          format: date
+          description: if personId is present, the first day of that person in the job
+        personJobEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing or moving out, the last day of that person in the job
+        personId:
+          type: string
+          description: the person holding this job -- either currently in the job, or upcoming announced hire
+          example: 588f7ee98f138b19220041a7
+        upcoming:
           type: array
+          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
           items:
-            $ref: '#/components/schemas/ResultsAccess'
+            $ref: '#/components/schemas/UpcomingChange'
+        scenarioId:
+          type: string
+          description: scenario that the job was created in (null if job is on primary timeline)
+          example: 588f7ee98f138b19220041a7
+        backfillPersonId:
+          type: string
+          description: the person who most recently held the job, who this represents a backfill for
+          example: 588f7ee98f138b19220041a7
     BudgetTiersResponse:
       type: object
       required:
@@ -528,28 +658,6 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    VariableComp:
-      type: object
-      required:
-      - type
-      - interval
-      properties:
-        type:
-          type: string
-          description: compensation type
-          enum:
-          - BONUS
-          - COMMISSION
-        interval:
-          type: string
-          description: compensation interval
-          enum:
-          - YEARLY
-      description: 'variable compensation
-
-        Implementations: VariableCompPercent, VariableCompPercent'
-      discriminator:
-        propertyName: compType
     Comp:
       type: object
       properties:
@@ -582,19 +690,7 @@ components:
           - PERFORMANCE_SHARES
           - PHANTOM_STOCK
           - RSA
-    ValueRange:
-      type: object
-      properties:
-        max:
-          type: number
-          description: the maximum value in the range (type = BigDecimal)
-        min:
-          type: number
-          description: the minimum value in the range (type = BigDecimal)
-        target:
-          type: number
-          description: the target value for the range (type = BigDecimal)
-    ResultsBudgetPool:
+    ResultsGuideline:
       type: object
       required:
       - data
@@ -602,169 +698,13 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/BudgetPool'
+            $ref: '#/components/schemas/Guideline'
         next:
           type: string
         access:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    UpdateBudgetPool:
-      type: object
-      properties:
-        label:
-          type: string
-          description: unique label
-          example: Merit
-        participantsExpr:
-          type: string
-          description: expression that determines if a particular job is included in this budget pool
-        appliedField:
-          type: string
-          description: the field this budget pool applies to
-          example: base
-        sourceField:
-          type: string
-          description: the field this budget pool is calculated from
-          example: base
-        basisType:
-          type: string
-          description: the method for calculating the amount in the budget
-          enum:
-          - CUSTOM
-          - FIXED
-          - CUSTOM_FIXED
-          - PERCENTAGE
-          - CUSTOM_PERCENTAGE
-        fixedAmount:
-          description: a fixed monetary amount for the budget (used with basisType=FIXED)
-          $ref: '#/components/schemas/Money'
-        fixedValue:
-          type: number
-          description: a fixed amount for the budget (used with basisType=FIXED || basisType=PERCENTAGE)
-        basisFieldMatrix:
-          description: a matrix of conditions to determine the amount each job contributes to the budget (used with basisType=FIXED or PERCENTAGE
-          $ref: '#/components/schemas/BasisFieldMatrix'
-        fixedBudgetMap:
-          type: object
-          description: a map of reviewer job IDs to fixed budget money amounts
-          additionalProperties:
-            $ref: '#/components/schemas/Money'
-        basisExpr:
-          type: string
-          description: expression that calculates how much each job contributes to the budget (used with basisType=CUSTOM)
-        defaultCurrency:
-          type: string
-          description: Default currency used when calculating budget pool, falls back to org primary currency if not set
-        visibilityType:
-          type: string
-          description: Controls who can view this budget
-          enum:
-          - DEFAULT
-          - ROLE_SELECTION
-          - SPECIFIC_PEOPLE
-          - CUSTOM_CQL
-        visibilityExpr:
-          type: string
-          description: CQL expression evaluated on the user to determine visibility (used with visibilityType=CUSTOM_CQL)
-        visibilityPersonIds:
-          type: array
-          description: Set of person IDs who can view this budget (used with visibilityType=SPECIFIC_PEOPLE)
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        visibilityRoles:
-          description: Comp cycle roles this budget is visible to (used with visibilityType=ROLE_SELECTION)
-          $ref: '#/components/schemas/InCycleViewFeatures'
-        sort:
-          type: integer
-          format: int32
-          description: sort order for sequential budget allocation priority
-    BasisCondition:
-      type: object
-      required:
-      - conditionExpr
-      properties:
-        conditionExpr:
-          type: string
-        amountRange:
-          $ref: '#/components/schemas/MoneyRange'
-        valueRange:
-          $ref: '#/components/schemas/ValueRange'
-    BasisFieldMatrix:
-      type: object
-      required:
-      - includedFields
-      - conditions
-      properties:
-        includedFields:
-          type: array
-          items:
-            type: string
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasisCondition'
-    PayInterval:
-      type: object
-      required:
-      - interval
-      - pay
-      properties:
-        interval:
-          type: string
-          description: Interval (annual or hourly)
-          enum:
-          - YEARLY
-          - MONTHLY
-          - WEEKLY
-          - DAILY
-          - HOURLY
-        pay:
-          description: Pay over the given interval
-          $ref: '#/components/schemas/Money'
-        hoursPerWeek:
-          type: integer
-          format: int32
-          description: working hours per week if interval=hourly
-          example: '40'
-        weeksPerYear:
-          type: integer
-          format: int32
-          description: working weeks per year if interval=hourly
-          example: '52'
-        monthsPerYear:
-          type: integer
-          format: int32
-          description: months per year if interval=month
-          example: '52'
-        daysPerYear:
-          type: integer
-          format: int32
-          description: days per year if interval=day
-          example: '250'
-    InCycleViewFeatures:
-      type: object
-      required:
-      - isFinalApprover
-      - isProposer
-      - isApprover
-      - isOwner
-      - isCollaborator
-      properties:
-        isFinalApprover:
-          type: boolean
-        isProposer:
-          type: boolean
-        isApprover:
-          type: boolean
-        isOwner:
-          type: boolean
-        isCollaborator:
-          type: boolean
-        isRoot:
-          type: boolean
     Guideline:
       type: object
       required:
@@ -900,6 +840,165 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    UpdateBudgetPool:
+      type: object
+      properties:
+        label:
+          type: string
+          description: unique label
+          example: Merit
+        participantsExpr:
+          type: string
+          description: expression that determines if a particular job is included in this budget pool
+        appliedField:
+          type: string
+          description: the field this budget pool applies to
+          example: base
+        sourceField:
+          type: string
+          description: the field this budget pool is calculated from
+          example: base
+        basisType:
+          type: string
+          description: the method for calculating the amount in the budget
+          enum:
+          - CUSTOM
+          - FIXED
+          - CUSTOM_FIXED
+          - PERCENTAGE
+          - CUSTOM_PERCENTAGE
+        fixedAmount:
+          description: a fixed monetary amount for the budget (used with basisType=FIXED)
+          $ref: '#/components/schemas/Money'
+        fixedValue:
+          type: number
+          description: a fixed amount for the budget (used with basisType=FIXED || basisType=PERCENTAGE)
+        basisFieldMatrix:
+          description: a matrix of conditions to determine the amount each job contributes to the budget (used with basisType=FIXED or PERCENTAGE
+          $ref: '#/components/schemas/BasisFieldMatrix'
+        fixedBudgetMap:
+          type: object
+          description: a map of reviewer job IDs to fixed budget money amounts
+          additionalProperties:
+            $ref: '#/components/schemas/Money'
+        basisExpr:
+          type: string
+          description: expression that calculates how much each job contributes to the budget (used with basisType=CUSTOM)
+        defaultCurrency:
+          type: string
+          description: Default currency used when calculating budget pool, falls back to org primary currency if not set
+        visibilityType:
+          type: string
+          description: Controls who can view this budget
+          enum:
+          - DEFAULT
+          - ROLE_SELECTION
+          - SPECIFIC_PEOPLE
+          - CUSTOM_CQL
+        visibilityExpr:
+          type: string
+          description: CQL expression evaluated on the user to determine visibility (used with visibilityType=CUSTOM_CQL)
+        visibilityPersonIds:
+          type: array
+          description: Set of person IDs who can view this budget (used with visibilityType=SPECIFIC_PEOPLE)
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        visibilityRoles:
+          description: Comp cycle roles this budget is visible to (used with visibilityType=ROLE_SELECTION)
+          $ref: '#/components/schemas/InCycleViewFeatures'
+        sort:
+          type: integer
+          format: int32
+          description: sort order for sequential budget allocation priority
+    PayInterval:
+      type: object
+      required:
+      - interval
+      - pay
+      properties:
+        interval:
+          type: string
+          description: Interval (annual or hourly)
+          enum:
+          - YEARLY
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          - HOURLY
+        pay:
+          description: Pay over the given interval
+          $ref: '#/components/schemas/Money'
+        hoursPerWeek:
+          type: integer
+          format: int32
+          description: working hours per week if interval=hourly
+          example: '40'
+        weeksPerYear:
+          type: integer
+          format: int32
+          description: working weeks per year if interval=hourly
+          example: '52'
+        monthsPerYear:
+          type: integer
+          format: int32
+          description: months per year if interval=month
+          example: '52'
+        daysPerYear:
+          type: integer
+          format: int32
+          description: days per year if interval=day
+          example: '250'
+    BudgetTierRepresentationResponse:
+      type: object
+      required:
+      - reviewer
+      - reviewees
+      - eligible
+      properties:
+        reviewer:
+          $ref: '#/components/schemas/Job'
+        reviewees:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        parentReviewerJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        eligible:
+          type: boolean
+        budget:
+          type: object
+    ResultsBudgetPool:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BudgetPool'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     Attribution:
       type: object
       properties:
@@ -927,164 +1026,49 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    Job:
+    VariableComp:
       type: object
       required:
-      - jobId
-      - orgId
-      - title
-      - groupIds
-      - fields
-      properties:
-        jobId:
-          type: string
-          description: globally unique job id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: job title
-          example: Senior Engineer
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: compensation
-          $ref: '#/components/schemas/Comp'
-        sensitive:
-          type: string
-          description: view sensitive of the job while open
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        relationships:
-          type: array
-          description: relationship to other jobs
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        managerIds:
-          type: array
-          description: list of managers, from immediate manager upwards
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        groupIds:
-          type: array
-          description: groups that this job is a member of
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        placement:
-          type: string
-          description: guidance on placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        fields:
-          type: object
-          description: fields containing custom data
-          additionalProperties:
-            type: object
-        startDate:
-          type: string
-          format: date
-          description: for empty jobs, expected start date - for filled jobs, confirmed start date
-        startDatePlanned:
-          type: string
-          format: date
-          description: expected start date whether job is open or has been filled - doesn't change when job is filled
-        personStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the org after the latest departure (if any)
-        personEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing, the last day of that person in the org
-        personJobStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the job
-        personJobEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing or moving out, the last day of that person in the job
-        personId:
-          type: string
-          description: the person holding this job -- either currently in the job, or upcoming announced hire
-          example: 588f7ee98f138b19220041a7
-        upcoming:
-          type: array
-          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
-          items:
-            $ref: '#/components/schemas/UpcomingChange'
-        scenarioId:
-          type: string
-          description: scenario that the job was created in (null if job is on primary timeline)
-          example: 588f7ee98f138b19220041a7
-        backfillPersonId:
-          type: string
-          description: the person who most recently held the job, who this represents a backfill for
-          example: 588f7ee98f138b19220041a7
-    JobRelationship:
-      type: object
-      required:
-      - jobId
       - type
+      - interval
       properties:
-        jobId:
-          type: string
-          description: destination job id
-          example: 5887a7718f138b6a2a0041a7
         type:
           type: string
-          description: type of relationship
+          description: compensation type
           enum:
-          - MANAGER
-          - DIRECT
-          - INDIRECT_MANAGER
-          - INDIRECT
-          - NONE
-    BudgetTierRepresentationResponse:
+          - BONUS
+          - COMMISSION
+        interval:
+          type: string
+          description: compensation interval
+          enum:
+          - YEARLY
+      description: 'variable compensation
+
+        Implementations: VariableCompPercent, VariableCompPercent'
+      discriminator:
+        propertyName: compType
+    InCycleViewFeatures:
       type: object
       required:
-      - reviewer
-      - reviewees
-      - eligible
+      - isFinalApprover
+      - isProposer
+      - isApprover
+      - isOwner
+      - isCollaborator
       properties:
-        reviewer:
-          $ref: '#/components/schemas/Job'
-        reviewees:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        parentReviewerJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        eligible:
+        isFinalApprover:
           type: boolean
-        budget:
-          type: object
+        isProposer:
+          type: boolean
+        isApprover:
+          type: boolean
+        isOwner:
+          type: boolean
+        isCollaborator:
+          type: boolean
+        isRoot:
+          type: boolean
     UpcomingChange:
       type: object
       required:
@@ -1118,3 +1102,19 @@ components:
         otherPersonId:
           type: string
           example: 588f7ee98f138b19220041a7
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'

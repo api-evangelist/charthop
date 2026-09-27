@@ -130,6 +130,58 @@ paths:
         required: true
 components:
   schemas:
+    CreateEmailTemplate:
+      type: object
+      required:
+      - name
+      - category
+      properties:
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    UpdateEmailTemplate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
     EmailTemplate:
       type: object
       required:
@@ -169,58 +221,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    UpdateEmailTemplate:
-      type: object
-      properties:
-        name:
-          type: string
-          description: name of the email template
-          example: self_serve_welcome
-        category:
-          type: string
-          description: email category
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
-    CreateEmailTemplate:
-      type: object
-      required:
-      - name
-      - category
-      properties:
-        name:
-          type: string
-          description: name of the email template
-          example: self_serve_welcome
-        category:
-          type: string
-          description: email category
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsAccess:
       type: object
       required:
