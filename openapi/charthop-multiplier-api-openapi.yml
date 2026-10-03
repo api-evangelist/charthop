@@ -214,6 +214,29 @@ paths:
           description: not found
 components:
   schemas:
+    UpdateMultiplier:
+      type: object
+      properties:
+        label:
+          type: string
+          description: human-readable name of multiplier
+          example: Non-technical
+        code:
+          type: string
+        value:
+          type: number
+          description: amount to multiply the initial value by
+          example: '0.75'
+        expr:
+          type: string
+          description: calculated expression to match against the job
+          example: department!="Engineering"
+          minItems: 0
+          maxItems: 1000
+        category:
+          type: string
+          description: tag to group multipliers together by
+          example: Location
     AccessAction:
       type: object
       required:
@@ -231,6 +254,48 @@ components:
           uniqueItems: true
           items:
             type: string
+    ResultsMultiplier:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Multiplier'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     CreateMultiplier:
       type: object
       required:
@@ -337,56 +402,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    UpdateMultiplier:
-      type: object
-      properties:
-        label:
-          type: string
-          description: human-readable name of multiplier
-          example: Non-technical
-        code:
-          type: string
-        value:
-          type: number
-          description: amount to multiply the initial value by
-          example: '0.75'
-        expr:
-          type: string
-          description: calculated expression to match against the job
-          example: department!="Engineering"
-          minItems: 0
-          maxItems: 1000
-        category:
-          type: string
-          description: tag to group multipliers together by
-          example: Location
     ResultsAccess:
       type: object
       required:
@@ -403,18 +418,3 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ResultsMultiplier:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Multiplier'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'

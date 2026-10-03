@@ -223,151 +223,6 @@ paths:
           description: unauthorized
 components:
   schemas:
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    PartialMessage:
-      type: object
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: type of message
-          enum:
-          - CHAT
-          - EMAIL
-          - WEB
-        notificationType:
-          type: string
-          description: type of notification (SUCCESS, ERR, ANNOUNCEMENT etc.)
-          enum:
-          - SUCCESS
-          - WARN
-          - ERROR
-          - COMMENT
-          - TASK_COMPLETED
-          - TASK_ASSIGNED
-          - REMINDER
-          - ANNOUNCEMENT
-          - PROCESS_ERROR
-          - PROCESS_DONE
-          - SHARE
-        userId:
-          type: string
-          description: user who receives the message
-          example: 588f7ee98f138b19220041a7
-        content:
-          type: object
-          description: message content
-        title:
-          type: string
-          description: message title
-        messageUrl:
-          type: string
-          description: link to message content (if applicable)
-        key:
-          type: string
-          description: key of message if applicable (e.g. product-tour, import-complete-{id})
-        readAt:
-          type: string
-          description: read timestamp
-          example: '2017-01-24T13:57:52Z'
-        seenAt:
-          type: string
-          description: seen timestamp
-          example: '2017-01-24T13:57:52Z'
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ResultsMessage:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
     Message:
       type: object
       required:
@@ -445,3 +300,148 @@ components:
         createAt:
           type: string
           description: created timestamp
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ResultsMessage:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    PartialMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: type of message
+          enum:
+          - CHAT
+          - EMAIL
+          - WEB
+        notificationType:
+          type: string
+          description: type of notification (SUCCESS, ERR, ANNOUNCEMENT etc.)
+          enum:
+          - SUCCESS
+          - WARN
+          - ERROR
+          - COMMENT
+          - TASK_COMPLETED
+          - TASK_ASSIGNED
+          - REMINDER
+          - ANNOUNCEMENT
+          - PROCESS_ERROR
+          - PROCESS_DONE
+          - SHARE
+        userId:
+          type: string
+          description: user who receives the message
+          example: 588f7ee98f138b19220041a7
+        content:
+          type: object
+          description: message content
+        title:
+          type: string
+          description: message title
+        messageUrl:
+          type: string
+          description: link to message content (if applicable)
+        key:
+          type: string
+          description: key of message if applicable (e.g. product-tour, import-complete-{id})
+        readAt:
+          type: string
+          description: read timestamp
+          example: '2017-01-24T13:57:52Z'
+        seenAt:
+          type: string
+          description: seen timestamp
+          example: '2017-01-24T13:57:52Z'
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'

@@ -194,11 +194,21 @@ paths:
           description: feature not enabled or no delegate set
 components:
   schemas:
-    SetDelegateRequest:
+    DelegateChange:
       type: object
       required:
-      - delegateJobId
+      - userId
+      - type
       properties:
+        userId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          enum:
+          - SCENARIO
+          - TIME_OFF
+          - FORM
         delegateJobId:
           type: string
           example: 588f7ee98f138b19220041a7
@@ -208,6 +218,23 @@ components:
         endDate:
           type: string
           format: date
+    RepresentedApprover:
+      type: object
+      required:
+      - approverUserId
+      - type
+      properties:
+        approverUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        approverName:
+          $ref: '#/components/schemas/Name'
+        type:
+          type: string
+          enum:
+          - SCENARIO
+          - TIME_OFF
+          - FORM
     ApprovalDelegate:
       type: object
       required:
@@ -276,6 +303,59 @@ components:
           type: string
           description: last updated timestamp
           example: '2017-01-24T13:57:52Z'
+    SetDelegateRequest:
+      type: object
+      required:
+      - delegateJobId
+      properties:
+        delegateJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    BulkSetDelegatesRequest:
+      type: object
+      required:
+      - changes
+      - notify
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DelegateChange'
+        notify:
+          type: boolean
     Name:
       type: object
       required:
@@ -311,83 +391,3 @@ components:
           example: Smith
           minItems: 0
           maxItems: 80
-    RepresentedApprover:
-      type: object
-      required:
-      - approverUserId
-      - type
-      properties:
-        approverUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        approverName:
-          $ref: '#/components/schemas/Name'
-        type:
-          type: string
-          enum:
-          - SCENARIO
-          - TIME_OFF
-          - FORM
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    DelegateChange:
-      type: object
-      required:
-      - userId
-      - type
-      properties:
-        userId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          enum:
-          - SCENARIO
-          - TIME_OFF
-          - FORM
-        delegateJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-    BulkSetDelegatesRequest:
-      type: object
-      required:
-      - changes
-      - notify
-      properties:
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/DelegateChange'
-        notify:
-          type: boolean

@@ -173,23 +173,6 @@ paths:
         required: true
 components:
   schemas:
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     StockPrice:
       type: object
       required:
@@ -244,21 +227,23 @@ components:
           example: 588f7ee98f138b19220041a7
         updateAttribution:
           $ref: '#/components/schemas/Attribution'
-    ResultsStockPrice:
+    AccessAction:
       type: object
       required:
-      - data
+      - action
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StockPrice'
-        next:
+        action:
           type: string
-        access:
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ResultsAccess'
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     UpdateStockPrice:
       type: object
       properties:
@@ -300,6 +285,21 @@ components:
           - SLACK
           - TEAMS
           - MCP
+    ResultsStockPrice:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockPrice'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     ResultsAccess:
       type: object
       required:

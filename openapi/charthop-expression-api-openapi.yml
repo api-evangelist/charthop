@@ -77,15 +77,6 @@ paths:
         required: true
 components:
   schemas:
-    ValidateExpressionRequest:
-      type: object
-      required:
-      - expressions
-      properties:
-        expressions:
-          type: array
-          items:
-            type: string
     EvaluateExpressionRequest:
       type: object
       required:
@@ -183,25 +174,15 @@ components:
         entityId:
           type: string
           example: 588f7ee98f138b19220041a7
-    ValidateExpressionResponse:
+    ValidateExpressionRequest:
       type: object
       required:
-      - isValid
-      - results
+      - expressions
       properties:
-        isValid:
-          type: boolean
-        results:
+        expressions:
           type: array
           items:
-            $ref: '#/components/schemas/ValidateExpressionResult'
-    EvaluateExpressionResponse:
-      type: object
-      properties:
-        result:
-          type: object
-        error:
-          type: string
+            type: string
     ValidateExpressionResult:
       type: object
       required:
@@ -215,3 +196,22 @@ components:
           type: boolean
         message:
           type: string
+    EvaluateExpressionResponse:
+      type: object
+      properties:
+        result:
+          type: object
+        error:
+          type: string
+    ValidateExpressionResponse:
+      type: object
+      required:
+      - isValid
+      - results
+      properties:
+        isValid:
+          type: boolean
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidateExpressionResult'

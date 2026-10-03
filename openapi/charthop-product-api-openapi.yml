@@ -170,66 +170,6 @@ paths:
         required: true
 components:
   schemas:
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    FeatureAccessOption:
-      type: object
-      required:
-      - name
-      - type
-      properties:
-        name:
-          type: string
-          description: The name of the feature option tied to the feature access
-          example: smart_fields
-          enum:
-          - CONFIGURED_ROLES
-          - SMART_FIELDS
-          - APP_FIELD_MAPPERS
-          - MULTI_PAYROLL_INSTALLS
-        description:
-          type: string
-          description: The description of the feature option
-        type:
-          type: string
-          description: The feature option type
-          enum:
-          - LIMIT
-          - FULL_ACCESS
-        limit:
-          type: integer
-          format: int32
-          description: The feature option limit
-    ResultsProduct:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     UpdateProduct:
       type: object
       properties:
@@ -387,22 +327,23 @@ components:
           - ACTIVE
           - LEGACY
           - INACTIVE
-    ResultsAccess:
+    AccessAction:
       type: object
       required:
-      - allowed
+      - action
       properties:
-        ids:
+        action:
+          type: string
+        fields:
           type: array
           uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
+        types:
           type: array
           uniqueItems: true
           items:
-            $ref: '#/components/schemas/AccessAction'
+            type: string
     Product:
       type: object
       required:
@@ -489,3 +430,62 @@ components:
           - ACTIVE
           - LEGACY
           - INACTIVE
+    ResultsProduct:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    FeatureAccessOption:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        name:
+          type: string
+          description: The name of the feature option tied to the feature access
+          example: smart_fields
+          enum:
+          - CONFIGURED_ROLES
+          - SMART_FIELDS
+          - APP_FIELD_MAPPERS
+          - MULTI_PAYROLL_INSTALLS
+        description:
+          type: string
+          description: The description of the feature option
+        type:
+          type: string
+          description: The feature option type
+          enum:
+          - LIMIT
+          - FULL_ACCESS
+        limit:
+          type: integer
+          format: int32
+          description: The feature option limit

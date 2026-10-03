@@ -215,6 +215,51 @@ components:
           uniqueItems: true
           items:
             type: string
+    ResultsQueryToken:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryToken'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    CreateQueryToken:
+      type: object
+      required:
+      - type
+      - params
+      properties:
+        type:
+          type: string
+          description: query type
+        params:
+          type: object
+          description: query params
+          additionalProperties:
+            type: object
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     QueryToken:
       type: object
       required:
@@ -270,48 +315,3 @@ components:
           type: string
           description: last active timestamp
           example: '2016-11-16T13:40:47Z'
-    ResultsQueryToken:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/QueryToken'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    CreateQueryToken:
-      type: object
-      required:
-      - type
-      - params
-      properties:
-        type:
-          type: string
-          description: query type
-        params:
-          type: object
-          description: query params
-          additionalProperties:
-            type: object

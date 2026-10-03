@@ -195,50 +195,6 @@ paths:
           description: not found
 components:
   schemas:
-    UpdateGoalType:
-      type: object
-      properties:
-        label:
-          type: string
-          description: name of goal type
-        comments:
-          type: string
-          description: whether or not comments are enabled or required
-          enum:
-          - REQUIRED
-          - OPTIONAL
-          - DISABLED
-        doneLevels:
-          type: array
-          description: definition of done for DONE goal
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        confidenceLevels:
-          type: array
-          description: if confidence updates are enabled, what types of confidence levels are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        completionLevels:
-          type: array
-          description: if milestones are enabled, what types of completion statuses are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        forecastTypes:
-          type: array
-          description: if forecasting is enabled, what types of forecasts are supported
-          items:
-            $ref: '#/components/schemas/GoalForecastType'
-        targetValues:
-          type: array
-          description: stretch target types
-          items:
-            $ref: '#/components/schemas/GoalTargetValueType'
-        progressUpdateConfig:
-          description: configuration for automated progress update reminders
-          $ref: '#/components/schemas/GoalProgressUpdateConfig'
-        isPersonal:
-          type: boolean
-          description: whether this goal type is for personal goals (as opposed to organizational goals)
     AccessAction:
       type: object
       required:
@@ -256,73 +212,6 @@ components:
           uniqueItems: true
           items:
             type: string
-    CreateGoalType:
-      type: object
-      required:
-      - label
-      properties:
-        label:
-          type: string
-          description: name of goal type
-        comments:
-          type: string
-          description: whether or not comments are enabled or required
-          enum:
-          - REQUIRED
-          - OPTIONAL
-          - DISABLED
-        doneLevels:
-          type: array
-          description: definition of done for DONE goal
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        confidenceLevels:
-          type: array
-          description: if confidence updates are enabled, what types of confidence levels are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        completionLevels:
-          type: array
-          description: if milestones are enabled, what types of completion statuses are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        forecastTypes:
-          type: array
-          description: if forecasting is enabled, what types of forecasts are supported
-          items:
-            $ref: '#/components/schemas/GoalForecastType'
-        targetValues:
-          type: array
-          description: stretch target types
-          items:
-            $ref: '#/components/schemas/GoalTargetValueType'
-        progressUpdateConfig:
-          description: configuration for automated progress update reminders
-          $ref: '#/components/schemas/GoalProgressUpdateConfig'
-        isPersonal:
-          type: boolean
-          description: whether this goal type is for personal goals (as opposed to organizational goals)
-    GoalForecastType:
-      type: object
-      required:
-      - type
-      - label
-      - color
-      properties:
-        type:
-          type: string
-          enum:
-          - WORST
-          - COMMIT
-          - CALL
-          - LIKELY
-          - BEST
-        label:
-          type: string
-        labelTr:
-          $ref: '#/components/schemas/Translations'
-        color:
-          type: string
     ResultsGoalType:
       type: object
       required:
@@ -338,67 +227,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    GoalProgressUpdateConfig:
-      type: object
-      required:
-      - schedule
-      properties:
-        schedule:
-          type: string
-          description: schedule to send progress reminders, in crontab format
-          example: 5 4 * * *
-        messageChannel:
-          description: the channel to send progress reminders to
-          $ref: '#/components/schemas/MessageChannelConfig'
-        message:
-          type: string
-          description: custom message, if any, to include with progress reminders
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
     GoalType:
       type: object
       required:
@@ -496,6 +324,95 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    GoalForecastType:
+      type: object
+      required:
+      - type
+      - label
+      - color
+      properties:
+        type:
+          type: string
+          enum:
+          - WORST
+          - COMMIT
+          - CALL
+          - LIKELY
+          - BEST
+        label:
+          type: string
+        labelTr:
+          $ref: '#/components/schemas/Translations'
+        color:
+          type: string
+    UpdateGoalType:
+      type: object
+      properties:
+        label:
+          type: string
+          description: name of goal type
+        comments:
+          type: string
+          description: whether or not comments are enabled or required
+          enum:
+          - REQUIRED
+          - OPTIONAL
+          - DISABLED
+        doneLevels:
+          type: array
+          description: definition of done for DONE goal
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        confidenceLevels:
+          type: array
+          description: if confidence updates are enabled, what types of confidence levels are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        completionLevels:
+          type: array
+          description: if milestones are enabled, what types of completion statuses are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        forecastTypes:
+          type: array
+          description: if forecasting is enabled, what types of forecasts are supported
+          items:
+            $ref: '#/components/schemas/GoalForecastType'
+        targetValues:
+          type: array
+          description: stretch target types
+          items:
+            $ref: '#/components/schemas/GoalTargetValueType'
+        progressUpdateConfig:
+          description: configuration for automated progress update reminders
+          $ref: '#/components/schemas/GoalProgressUpdateConfig'
+        isPersonal:
+          type: boolean
+          description: whether this goal type is for personal goals (as opposed to organizational goals)
+    GoalTargetValueType:
+      type: object
+      required:
+      - label
+      - color
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+        labelTr:
+          $ref: '#/components/schemas/Translations'
+        color:
+          type: string
     Attribution:
       type: object
       properties:
@@ -523,21 +440,21 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    GoalTargetValueType:
+    GoalProgressUpdateConfig:
       type: object
       required:
-      - label
-      - color
+      - schedule
       properties:
-        id:
+        schedule:
           type: string
-          example: 588f7ee98f138b19220041a7
-        label:
+          description: schedule to send progress reminders, in crontab format
+          example: 5 4 * * *
+        messageChannel:
+          description: the channel to send progress reminders to
+          $ref: '#/components/schemas/MessageChannelConfig'
+        message:
           type: string
-        labelTr:
-          $ref: '#/components/schemas/Translations'
-        color:
-          type: string
+          description: custom message, if any, to include with progress reminders
     MessageChannelConfig:
       type: object
       required:
@@ -555,6 +472,89 @@ components:
             - CHAT_TEAMS
         alwaysEmail:
           type: boolean
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'
+    CreateGoalType:
+      type: object
+      required:
+      - label
+      properties:
+        label:
+          type: string
+          description: name of goal type
+        comments:
+          type: string
+          description: whether or not comments are enabled or required
+          enum:
+          - REQUIRED
+          - OPTIONAL
+          - DISABLED
+        doneLevels:
+          type: array
+          description: definition of done for DONE goal
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        confidenceLevels:
+          type: array
+          description: if confidence updates are enabled, what types of confidence levels are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        completionLevels:
+          type: array
+          description: if milestones are enabled, what types of completion statuses are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        forecastTypes:
+          type: array
+          description: if forecasting is enabled, what types of forecasts are supported
+          items:
+            $ref: '#/components/schemas/GoalForecastType'
+        targetValues:
+          type: array
+          description: stretch target types
+          items:
+            $ref: '#/components/schemas/GoalTargetValueType'
+        progressUpdateConfig:
+          description: configuration for automated progress update reminders
+          $ref: '#/components/schemas/GoalProgressUpdateConfig'
+        isPersonal:
+          type: boolean
+          description: whether this goal type is for personal goals (as opposed to organizational goals)
     ResultsAccess:
       type: object
       required:

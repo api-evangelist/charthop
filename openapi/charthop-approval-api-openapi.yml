@@ -866,83 +866,20 @@ paths:
           description: not found
 components:
   schemas:
-    AccessAction:
+    ApprovalRequestDeleteBody:
       type: object
-      required:
-      - action
       properties:
-        action:
+        message:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ApprovalGroupApprover:
-      type: object
-      required:
-      - jobId
-      - status
-      properties:
-        jobId:
-          type: string
-          description: A job ID that is part of the group
-          example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: The status of the approver
-          enum:
-          - PENDING
-          - APPROVED
-          - REJECTED
-          - SKIPPED
-        commentId:
-          type: string
-          description: Last comment of the approver
-          example: 588f7ee98f138b19220041a7
-        reassignCommentId:
-          type: string
-          description: Last comment associated with a reassignment
-          example: 588f7ee98f138b19220041a7
-        isFallback:
-          type: boolean
-          description: Whether approver is a fallback
-        fallbackFor:
-          type: string
-          description: What jobId approver is a fallback for
-          example: 588f7ee98f138b19220041a7
-        actedByJobId:
-          type: string
-          description: Job of the delegate who acted on this slot on the approver's behalf
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: The date the status was updated last
-    ApprovalRequestCreateBody:
-      type: object
-      required:
-      - entityId
-      properties:
-        entityId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    ApprovalChainStage:
+    ApprovalRequest:
       type: object
       required:
       - id
       - orgId
+      - entityId
+      - entityType
       - approvalChainId
-      - rejectBehavior
-      - status
-      - approvalCommentRequired
-      - rejectionCommentRequired
-      - order
-      - groups
+      - stageOverrides
       properties:
         id:
           type: string
@@ -952,61 +889,28 @@ components:
           type: string
           description: parent organization id
           example: 588f7ee98f138b19220041a7
+        entityId:
+          type: string
+          description: entity id
+          example: 588f7ee98f138b19220041a7
+        entityType:
+          type: string
+          description: entity type
+          enum:
+          - COMP_REVIEW
+          - SCENARIO
+          - TIMEOFF
+        compReviewId:
+          type: string
+          description: comp review id
+          example: 588f7ee98f138b19220041a7
         approvalChainId:
           type: string
           description: parent approval chain id
           example: 588f7ee98f138b19220041a7
-        inclusionExpression:
-          type: string
-          description: optional custom expression to determine stage inclusion behavior
-        inclusionBehavior:
-          type: string
-          description: determines whether stage is conditional based on an expression
-          enum:
-          - ONLY_INCLUDE_IF
-          - EXCLUDE_IF
-        rejectBehavior:
-          type: string
-          description: determines which stage becomes active when a rejection event happens
-          enum:
-          - BACK_TO_BEGINNING
-          - PREVIOUS_PHASE
-        dynamicStagesExpression:
-          type: string
-          description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
-        status:
-          type: string
-          description: status of the stage
-          enum:
-          - CANCELED
-          - REJECTED
-          - PENDING
-          - ACTIVE
-          - REVIEWED
-          - APPROVED
-          - SKIPPED
-          - SUBMITTED
-        approvalCommentRequired:
-          type: boolean
-          description: requires a comment on an approval event
-        rejectionCommentRequired:
-          type: boolean
-          description: requires a comment on an rejection event
-        order:
-          type: integer
-          format: int32
-          description: order of stage in approval chain
-        groups:
-          type: array
-          description: list of groups that are involved in this approval stage
-          items:
-            $ref: '#/components/schemas/ApprovalGroup'
-        autoApproveIfApproverIsSubmitter:
-          type: boolean
-          description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
         createId:
           type: string
-          description: created by user id
+          description: the user who requested the approval
           example: 588f7ee98f138b19220041a7
         createBehalfId:
           type: string
@@ -1014,6 +918,11 @@ components:
           example: 588f7ee98f138b19220041a7
         createAttribution:
           $ref: '#/components/schemas/Attribution'
+        stageOverrides:
+          type: array
+          description: list of configuration fields
+          items:
+            $ref: '#/components/schemas/ApprovalChainStageOverride'
         createAt:
           type: string
           description: created timestamp
@@ -1046,45 +955,13 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    ResultsApprovalRequest:
+    ApprovalRequestPatchBody:
       type: object
       required:
-      - data
+      - status
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRequest'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    UpdateApprovalChainStage:
-      type: object
-      properties:
-        inclusionExpression:
-          type: string
-          description: optional custom expression to determine stage inclusion behavior
-        inclusionBehavior:
-          type: string
-          description: determines whether stage is conditional based on an expression
-          enum:
-          - ONLY_INCLUDE_IF
-          - EXCLUDE_IF
-        rejectBehavior:
-          type: string
-          description: determines which stage becomes active when a rejection event happens
-          enum:
-          - BACK_TO_BEGINNING
-          - PREVIOUS_PHASE
-        dynamicStagesExpression:
-          type: string
-          description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
         status:
           type: string
-          description: status of the stage
           enum:
           - CANCELED
           - REJECTED
@@ -1094,56 +971,6 @@ components:
           - APPROVED
           - SKIPPED
           - SUBMITTED
-        approvalCommentRequired:
-          type: boolean
-          description: requires a comment on an approval event
-        rejectionCommentRequired:
-          type: boolean
-          description: requires a comment on an rejection event
-        order:
-          type: integer
-          format: int32
-          description: order of stage in approval chain
-        groups:
-          type: array
-          description: list of groups that are involved in this approval stage
-          items:
-            $ref: '#/components/schemas/ApprovalGroup'
-        autoApproveIfApproverIsSubmitter:
-          type: boolean
-          description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
-    ResultsApprovalChain:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalChain'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ReassignApproverPatchBody:
-      type: object
-      required:
-      - stageOrder
-      - initialJobId
-      - reassignJobId
-      - message
-      properties:
-        stageOrder:
-          type: integer
-          format: int32
-        initialJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        reassignJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
         message:
           type: string
     ResultsApprovalRequestScenarioResponse:
@@ -1161,151 +988,96 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    SendReminderBody:
+    UpdateApprovalChain:
       type: object
-      required:
-      - jobId
       properties:
-        jobId:
+        name:
           type: string
+          description: human-readable name of approval chain
+          example: Comp Review 06/15/2022
+          minItems: 1
+          maxItems: 80
+        isPreview:
+          type: boolean
+          description: isPreview specifies that this is a preview for implementations that use it (e.g. Compensation Reviews)
+          example: 'true'
+        fallbackApproverJobId:
+          type: string
+          description: the jobId of the fallback approver
           example: 588f7ee98f138b19220041a7
-    Process:
+        fallbackApproverJobError:
+          type: string
+          description: most recent error for fallback approver
+        approvalNotifierGroups:
+          type: array
+          description: notifier groups with optional conditions for post-approval notification
+          items:
+            $ref: '#/components/schemas/ApprovalNotifierGroup'
+    ApprovalRequestScenarioResponse:
       type: object
       required:
       - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
+      - isComplete
+      - stageOverrides
+      - isApprovalCommentRequiredForActiveStage
+      - isRejectionCommentRequiredForActiveStage
+      - approvalChainId
+      - scenarioId
       - createId
       - createAt
-      - options
+      - updateId
+      - updateAt
       properties:
         id:
           type: string
-          description: globally unique id
           example: 588f7ee98f138b19220041a7
-        orgId:
+        activeStage:
+          $ref: '#/components/schemas/ApprovalChainStageOverride'
+        proposerStage:
+          $ref: '#/components/schemas/ApprovalChainStageOverride'
+        nextReviewerStage:
+          $ref: '#/components/schemas/ApprovalChainStageOverride'
+        isComplete:
+          type: boolean
+        rejectedStage:
+          $ref: '#/components/schemas/ApprovalChainStageOverride'
+        stageOverrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalChainStageOverride'
+        isApprovalCommentRequiredForActiveStage:
+          type: boolean
+        isRejectionCommentRequiredForActiveStage:
+          type: boolean
+        approvalChainId:
           type: string
-          description: parent org id
           example: 588f7ee98f138b19220041a7
-        label:
+        scenarioId:
           type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
           example: 588f7ee98f138b19220041a7
         createId:
           type: string
-          description: created by user id (user who requested the process run)
           example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
         createAt:
           type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
         updateId:
           type: string
-          description: last updated by user id
           example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
         updateAt:
           type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
+        deleteId:
           type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
           example: 588f7ee98f138b19220041a7
-        uuid:
+        deleteAt:
           type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ResultsApprovalChainStage:
-      type: object
-      required:
-      - data
-      properties:
-        data:
+        delegatedApproverJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        delegatedApproverJobIds:
           type: array
           items:
-            $ref: '#/components/schemas/ApprovalChainStage'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
+            type: string
+            example: 588f7ee98f138b19220041a7
     ApprovalRequestCompReviewResponse:
       type: object
       required:
@@ -1369,57 +1141,69 @@ components:
           example: 588f7ee98f138b19220041a7
         updateAt:
           type: string
-    UpdateApprovalChain:
-      type: object
-      properties:
-        name:
-          type: string
-          description: human-readable name of approval chain
-          example: Comp Review 06/15/2022
-          minItems: 1
-          maxItems: 80
-        isPreview:
-          type: boolean
-          description: isPreview specifies that this is a preview for implementations that use it (e.g. Compensation Reviews)
-          example: 'true'
-        fallbackApproverJobId:
-          type: string
-          description: the jobId of the fallback approver
-          example: 588f7ee98f138b19220041a7
-        fallbackApproverJobError:
-          type: string
-          description: most recent error for fallback approver
-        approvalNotifierGroups:
-          type: array
-          description: notifier groups with optional conditions for post-approval notification
-          items:
-            $ref: '#/components/schemas/ApprovalNotifierGroup'
-    ApprovalNotifierGroup:
+    ResultsApprovalChain:
       type: object
       required:
-      - groupId
-      - userIds
+      - data
       properties:
-        groupId:
-          type: string
-          description: globally unique id for this notifier group
-          example: 588f7ee98f138b19220041a7
-        userIds:
+        data:
           type: array
-          description: user ids to notify in this group
-          uniqueItems: true
           items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        inclusionBehavior:
+            $ref: '#/components/schemas/ApprovalChain'
+        next:
           type: string
-          description: condition behavior for this notifier group; null means always notify
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ApprovalGroupApprover:
+      type: object
+      required:
+      - jobId
+      - status
+      properties:
+        jobId:
+          type: string
+          description: A job ID that is part of the group
+          example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          description: The status of the approver
           enum:
-          - ONLY_INCLUDE_IF
-          - EXCLUDE_IF
-        inclusionExpression:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - SKIPPED
+        commentId:
           type: string
-          description: expression to evaluate for conditional notification
+          description: Last comment of the approver
+          example: 588f7ee98f138b19220041a7
+        reassignCommentId:
+          type: string
+          description: Last comment associated with a reassignment
+          example: 588f7ee98f138b19220041a7
+        isFallback:
+          type: boolean
+          description: Whether approver is a fallback
+        fallbackFor:
+          type: string
+          description: What jobId approver is a fallback for
+          example: 588f7ee98f138b19220041a7
+        actedByJobId:
+          type: string
+          description: Job of the delegate who acted on this slot on the approver's behalf
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: The date the status was updated last
+    ApprovalRequestCreateBody:
+      type: object
+      required:
+      - entityId
+      properties:
+        entityId:
+          type: string
+          example: 588f7ee98f138b19220041a7
     ApprovalChain:
       type: object
       required:
@@ -1548,6 +1332,33 @@ components:
           type: integer
           format: int32
           description: order of the stage
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     ResultsApprovalRequestCompReviewResponse:
       type: object
       required:
@@ -1563,6 +1374,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    ApprovalNotifierGroup:
+      type: object
+      required:
+      - groupId
+      - userIds
+      properties:
+        groupId:
+          type: string
+          description: globally unique id for this notifier group
+          example: 588f7ee98f138b19220041a7
+        userIds:
+          type: array
+          description: user ids to notify in this group
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        inclusionBehavior:
+          type: string
+          description: condition behavior for this notifier group; null means always notify
+          enum:
+          - ONLY_INCLUDE_IF
+          - EXCLUDE_IF
+        inclusionExpression:
+          type: string
+          description: expression to evaluate for conditional notification
     LogData:
       type: object
       required:
@@ -1627,6 +1464,258 @@ components:
           description: notifier groups with optional conditions for post-approval notification
           items:
             $ref: '#/components/schemas/ApprovalNotifierGroup'
+    ResultsApprovalChainStage:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalChainStage'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ApprovalChainStage:
+      type: object
+      required:
+      - id
+      - orgId
+      - approvalChainId
+      - rejectBehavior
+      - status
+      - approvalCommentRequired
+      - rejectionCommentRequired
+      - order
+      - groups
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        approvalChainId:
+          type: string
+          description: parent approval chain id
+          example: 588f7ee98f138b19220041a7
+        inclusionExpression:
+          type: string
+          description: optional custom expression to determine stage inclusion behavior
+        inclusionBehavior:
+          type: string
+          description: determines whether stage is conditional based on an expression
+          enum:
+          - ONLY_INCLUDE_IF
+          - EXCLUDE_IF
+        rejectBehavior:
+          type: string
+          description: determines which stage becomes active when a rejection event happens
+          enum:
+          - BACK_TO_BEGINNING
+          - PREVIOUS_PHASE
+        dynamicStagesExpression:
+          type: string
+          description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
+        status:
+          type: string
+          description: status of the stage
+          enum:
+          - CANCELED
+          - REJECTED
+          - PENDING
+          - ACTIVE
+          - REVIEWED
+          - APPROVED
+          - SKIPPED
+          - SUBMITTED
+        approvalCommentRequired:
+          type: boolean
+          description: requires a comment on an approval event
+        rejectionCommentRequired:
+          type: boolean
+          description: requires a comment on an rejection event
+        order:
+          type: integer
+          format: int32
+          description: order of stage in approval chain
+        groups:
+          type: array
+          description: list of groups that are involved in this approval stage
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+        autoApproveIfApproverIsSubmitter:
+          type: boolean
+          description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+    Process:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
     CreateApprovalChainStage:
       type: object
       required:
@@ -1685,95 +1774,23 @@ components:
         autoApproveIfApproverIsSubmitter:
           type: boolean
           description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
-    ApprovalRequest:
+    AccessAction:
       type: object
       required:
-      - id
-      - orgId
-      - entityId
-      - entityType
-      - approvalChainId
-      - stageOverrides
+      - action
       properties:
-        id:
+        action:
           type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        entityId:
-          type: string
-          description: entity id
-          example: 588f7ee98f138b19220041a7
-        entityType:
-          type: string
-          description: entity type
-          enum:
-          - COMP_REVIEW
-          - SCENARIO
-          - TIMEOFF
-        compReviewId:
-          type: string
-          description: comp review id
-          example: 588f7ee98f138b19220041a7
-        approvalChainId:
-          type: string
-          description: parent approval chain id
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: the user who requested the approval
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        stageOverrides:
+        fields:
           type: array
-          description: list of configuration fields
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ApprovalChainStageOverride'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    ApprovalRequestDeleteBody:
-      type: object
-      properties:
-        message:
-          type: string
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     ApprovalGroup:
       type: object
       required:
@@ -1803,98 +1820,84 @@ components:
           type: integer
           format: int32
           description: minimum number of approvers required in this group for approval (null means all approvers required)
-    ApprovalRequestScenarioResponse:
+    ReassignApproverPatchBody:
       type: object
       required:
-      - id
-      - isComplete
-      - stageOverrides
-      - isApprovalCommentRequiredForActiveStage
-      - isRejectionCommentRequiredForActiveStage
-      - approvalChainId
-      - scenarioId
-      - createId
-      - createAt
-      - updateId
-      - updateAt
+      - stageOrder
+      - initialJobId
+      - reassignJobId
+      - message
       properties:
-        id:
+        stageOrder:
+          type: integer
+          format: int32
+        initialJobId:
           type: string
           example: 588f7ee98f138b19220041a7
-        activeStage:
-          $ref: '#/components/schemas/ApprovalChainStageOverride'
-        proposerStage:
-          $ref: '#/components/schemas/ApprovalChainStageOverride'
-        nextReviewerStage:
-          $ref: '#/components/schemas/ApprovalChainStageOverride'
-        isComplete:
-          type: boolean
-        rejectedStage:
-          $ref: '#/components/schemas/ApprovalChainStageOverride'
-        stageOverrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalChainStageOverride'
-        isApprovalCommentRequiredForActiveStage:
-          type: boolean
-        isRejectionCommentRequiredForActiveStage:
-          type: boolean
-        approvalChainId:
+        reassignJobId:
           type: string
           example: 588f7ee98f138b19220041a7
-        scenarioId:
+        message:
+          type: string
+    SendReminderBody:
+      type: object
+      required:
+      - jobId
+      properties:
+        jobId:
           type: string
           example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        createAt:
-          type: string
-        updateId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-        deleteId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        deleteAt:
-          type: string
-        delegatedApproverJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        delegatedApproverJobIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    Attribution:
+    UpdateApprovalChainStage:
       type: object
       properties:
-        principalUserId:
+        inclusionExpression:
           type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
+          description: optional custom expression to determine stage inclusion behavior
+        inclusionBehavior:
           type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
+          description: determines whether stage is conditional based on an expression
           enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+          - ONLY_INCLUDE_IF
+          - EXCLUDE_IF
+        rejectBehavior:
+          type: string
+          description: determines which stage becomes active when a rejection event happens
+          enum:
+          - BACK_TO_BEGINNING
+          - PREVIOUS_PHASE
+        dynamicStagesExpression:
+          type: string
+          description: if set to an expression that returns jobs or persons, the result of this expression will be expanded into multiple approval stages. For example, if set to `managerPersons`, then one stage will be created for each manager of the requester
+        status:
+          type: string
+          description: status of the stage
+          enum:
+          - CANCELED
+          - REJECTED
+          - PENDING
+          - ACTIVE
+          - REVIEWED
+          - APPROVED
+          - SKIPPED
+          - SUBMITTED
+        approvalCommentRequired:
+          type: boolean
+          description: requires a comment on an approval event
+        rejectionCommentRequired:
+          type: boolean
+          description: requires a comment on an rejection event
+        order:
+          type: integer
+          format: int32
+          description: order of stage in approval chain
+        groups:
+          type: array
+          description: list of groups that are involved in this approval stage
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+        autoApproveIfApproverIsSubmitter:
+          type: boolean
+          description: if true, when an approver in this stage equals the scenario submitter, that approver is auto-approved at request creation time. If every approver matches the submitter, the entire stage is auto-approved.
     ResultsAccess:
       type: object
       required:
@@ -1911,21 +1914,18 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ApprovalRequestPatchBody:
+    ResultsApprovalRequest:
       type: object
       required:
-      - status
+      - data
       properties:
-        status:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRequest'
+        next:
           type: string
-          enum:
-          - CANCELED
-          - REJECTED
-          - PENDING
-          - ACTIVE
-          - REVIEWED
-          - APPROVED
-          - SKIPPED
-          - SUBMITTED
-        message:
-          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'

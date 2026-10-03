@@ -101,75 +101,6 @@ paths:
         required: true
 components:
   schemas:
-    MessageChannelConfig:
-      type: object
-      required:
-      - channels
-      - alwaysEmail
-      properties:
-        channels:
-          type: array
-          items:
-            type: string
-            enum:
-            - EMAIL
-            - CHAT
-            - CHAT_SLACK
-            - CHAT_TEAMS
-        alwaysEmail:
-          type: boolean
-    Address:
-      type: object
-      required:
-      - country
-      properties:
-        street1:
-          type: string
-          description: street address, line 1
-          example: 123 Anywhere Street
-          minItems: 0
-          maxItems: 200
-        street2:
-          type: string
-          description: street address, line 2
-          example: Apt 6L
-          minItems: 0
-          maxItems: 200
-        street3:
-          type: string
-          description: street address, line 3
-          example: Sixth Floor
-          minItems: 0
-          maxItems: 200
-        city:
-          type: string
-          description: city
-          example: New York
-          minItems: 0
-          maxItems: 80
-        state:
-          type: string
-          description: state
-          example: NY
-          minItems: 0
-          maxItems: 80
-        country:
-          type: string
-          description: country (two-digit ISO code)
-          example: NY
-          pattern: ^[A-Z]{2}$
-        postal:
-          type: string
-          description: postal code
-          example: '10001'
-          minItems: 0
-          maxItems: 10
-        geo:
-          description: geopoint location
-          $ref: '#/components/schemas/Geopoint'
-        approxGeo:
-          description: approximate geopoint location (suitable for a map placement, but not exact location)
-          $ref: '#/components/schemas/Geopoint'
     Plan:
       type: object
       required:
@@ -206,261 +137,26 @@ components:
         stripeProductId:
           type: string
           description: stripe product id that this plan belongs to
-    Geopoint:
+    PaymentInfo:
       type: object
       required:
-      - type
-      - coordinates
+      - paymentType
       properties:
-        type:
+        paymentType:
           type: string
-          description: Type of point
-          readOnly: true
-        coordinates:
-          type: array
-          description: The longitude and latitude of the point
-          readOnly: true
-          items:
-            type: number
-            format: double
-    FeatureAccessOption:
-      type: object
-      required:
-      - name
-      - type
-      properties:
-        name:
-          type: string
-          description: The name of the feature option tied to the feature access
-          example: smart_fields
+          description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
+          example: CREDIT_CARD
           enum:
-          - CONFIGURED_ROLES
-          - SMART_FIELDS
-          - APP_FIELD_MAPPERS
-          - MULTI_PAYROLL_INSTALLS
-        description:
+          - CREDIT_CARD
+          - INVOICE
+        creditCardEndDigits:
           type: string
-          description: The description of the feature option
-        type:
+          description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
+          example: '4242'
+        brand:
           type: string
-          description: The feature option type
-          enum:
-          - LIMIT
-          - FULL_ACCESS
-        limit:
-          type: integer
-          format: int32
-          description: The feature option limit
-    Customer:
-      type: object
-      required:
-      - id
-      - name
-      - status
-      properties:
-        id:
-          type: string
-          description: unique id of customer
-          example: 588f7ee98f138b19220041a7
-        name:
-          type: string
-          description: name of customer
-        email:
-          type: string
-          description: email address for billing purposes
-        billAddress:
-          description: mailing address for billing purposes
-          $ref: '#/components/schemas/Address'
-        industry:
-          type: string
-          description: industry that customer is in
-        source:
-          type: string
-          description: source of customer signup
-          enum:
-          - ADP_MARKETPLACE
-          - SELF_SERVE
-          - SELF_SERVE_TEST
-          - SEQUOIA_ONE
-          - CONNECT
-        status:
-          type: string
-          description: current status
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - TRIAL
-          - CHURN
-          - PAYMENT_ERROR
-        stripeCustomerId:
-          type: string
-          description: stripe customer id
-        salesforceAccountId:
-          type: string
-          description: salesforce account id
-          pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
-        products:
-          type: array
-          description: products that this customer has purchased
-          items:
-            $ref: '#/components/schemas/ProductItem'
-        trialProducts:
-          type: array
-          description: products this customer has temporary trial access to, each bounded by a date range
-          items:
-            $ref: '#/components/schemas/TrialProduct'
-        restrictedFeatures:
-          type: array
-          description: features that are restricted for the customer
-          items:
-            type: string
-            enum:
-            - AI_ACTION
-            - AI_AGENT
-            - AI_API_WRITE
-            - AI_SLACK_TEAM_CHAT
-            - ATS_SYNC
-            - BUDGET
-            - COMPENSATION_REVIEW
-            - CUSTOM_CALENDAR
-            - CUSTOM_FIELD
-            - CUSTOM_FIELD_READONLY
-            - CUSTOM_FORM
-            - CUSTOM_PROFILE_TAB
-            - CUSTOM_ROLE
-            - FORM_ANONYMOUS
-            - FORM_RELEASE
-            - FORM_SIGNATURE
-            - GOAL
-            - MULTI_PAYROLL
-            - PERFORMANCE_REVIEW
-            - REPORT
-            - REPORT_READONLY
-            - SCENARIO
-            - SIGNATURE
-            - SIGNATURE_QES
-            - SIMPLE_WORKFLOWS
-            - SURVEY
-            - TABLE
-            - TEMPLATE
-            - WORKDAY_ADAPTIVE
-            - PAYROLL_OUTBOUND
-            - APPROVAL_WORKFLOWS
-            - CONTENT
-            - IDENTITY_OUTBOUND
-            - ONBOARDING_OFFBOARDING
-            - TIMEOFF
-        featureOptionOverrides:
-          type: array
-          description: override feature options for the customer
-          items:
-            $ref: '#/components/schemas/FeatureAccessOption'
-        startDate:
-          type: string
-          format: date
-          description: initial date of billing
-        endDate:
-          type: string
-          format: date
-          description: end of service date for churning customers -- on or after this date, service should be disabled
-        nextInvoiceDate:
-          type: string
-          format: date
-          description: date of next invoice
-        orgCount:
-          type: integer
-          format: int32
-          description: number of orgs covered by this customer
-        primaryHeadCount:
-          type: integer
-          format: int32
-          description: number of total headcount across all orgs
-        secondaryHeadCount:
-          type: integer
-          format: int32
-          description: number of total headcount across all orgs
-        tertiaryHeadCount:
-          type: integer
-          format: int32
-          description: number of total headcount across all orgs
-        primaryHeadCountFilter:
-          type: string
-          description: primary headcount filter - used for billing purposes
-        secondaryHeadCountFilter:
-          type: string
-          description: secondary headcount filter - used for billing purposes
-        tertiaryHeadCountFilter:
-          type: string
-          description: tertiary headcount filter - used for billing purposes
-        arr:
-          type: number
-          description: current ARR of the customer based on most recent invoice
-        trialStartDate:
-          type: string
-          format: date
-          description: date this customer begins their trial period
-        trialEndDate:
-          type: string
-          format: date
-          description: date this customer ends their trial period
-        stripeSubscriptionSync:
-          type: string
-          description: Stripe subscription settings
-          enum:
-          - SYNC
-          - DELETE
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        createId:
-          type: string
-          description: created by
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: updated by
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-    Checkout:
-      type: object
-      properties:
-        nextPaymentDate:
-          type: string
-          format: date
-        tax:
-          type: integer
-          format: int64
-        total:
-          type: integer
-          format: int64
-    LayoutRow:
-      type: object
-      required:
-      - columns
-      - format
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/LayoutColumn'
-        format:
-          type: string
+          description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
+          example: Visa
     UpdateSubscription:
       type: object
       required:
@@ -676,6 +372,112 @@ components:
           type: string
           description: date at which this org was destroyed, can not be modified
           readOnly: true
+    InternalOrgOptions:
+      type: object
+      properties:
+        adpOrganizationOID:
+          type: string
+        assessmentCount:
+          type: integer
+          format: int32
+        dashboardGettingStartedHidden:
+          type: boolean
+        dashboardNeedHelpHidden:
+          type: boolean
+        enableUniversalSso:
+          type: boolean
+        sequoiaOrgId:
+          type: string
+        tosAgreement:
+          type: boolean
+        fileUploadLimit:
+          type: integer
+          format: int64
+        maxFileUploadSize:
+          type: integer
+          format: int64
+        lowPriorityReports:
+          type: boolean
+        isInitialDataSynced:
+          type: boolean
+        maxReportDatapoints:
+          type: integer
+          format: int64
+        disableImportEvents:
+          type: boolean
+          description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
+        useAlphaSlackApp:
+          type: boolean
+          description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
+        extraFields:
+          type: object
+          additionalProperties:
+            type: object
+    Checkout:
+      type: object
+      properties:
+        nextPaymentDate:
+          type: string
+          format: date
+        tax:
+          type: integer
+          format: int64
+        total:
+          type: integer
+          format: int64
+    ProductItem:
+      type: object
+      required:
+      - productId
+      - stripePriceId
+      properties:
+        productId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        stripePriceId:
+          type: string
+    CancelSubscriptionSurveyAnswers:
+      type: object
+      required:
+      - otherComments
+      - reason
+      properties:
+        otherComments:
+          type: string
+          description: Any additional comments about ChartHop when cancelling their subscription
+        reason:
+          type: string
+          description: Concatenated string of reasons why the customer unsubscribed from ChartHop
+    Billing:
+      type: object
+      required:
+      - customer
+      - invoices
+      - org
+      properties:
+        checkout:
+          $ref: '#/components/schemas/Checkout'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+        paymentInfo:
+          $ref: '#/components/schemas/PaymentInfo'
+        plan:
+          $ref: '#/components/schemas/Plan'
+        org:
+          $ref: '#/components/schemas/Org'
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
     Invoice:
       type: object
       required:
@@ -712,27 +514,232 @@ components:
           type: string
           description: created timestamp
           example: '2019-07-27T20:56:10Z'
-    Billing:
+    Customer:
       type: object
       required:
-      - customer
-      - invoices
-      - org
+      - id
+      - name
+      - status
       properties:
-        checkout:
-          $ref: '#/components/schemas/Checkout'
-        customer:
-          $ref: '#/components/schemas/Customer'
-        invoices:
+        id:
+          type: string
+          description: unique id of customer
+          example: 588f7ee98f138b19220041a7
+        name:
+          type: string
+          description: name of customer
+        email:
+          type: string
+          description: email address for billing purposes
+        billAddress:
+          description: mailing address for billing purposes
+          $ref: '#/components/schemas/Address'
+        industry:
+          type: string
+          description: industry that customer is in
+        source:
+          type: string
+          description: source of customer signup
+          enum:
+          - ADP_MARKETPLACE
+          - SELF_SERVE
+          - SELF_SERVE_TEST
+          - SEQUOIA_ONE
+          - CONNECT
+        status:
+          type: string
+          description: current status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - TRIAL
+          - CHURN
+          - PAYMENT_ERROR
+        stripeCustomerId:
+          type: string
+          description: stripe customer id
+        salesforceAccountId:
+          type: string
+          description: salesforce account id
+          pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+        products:
+          type: array
+          description: products that this customer has purchased
+          items:
+            $ref: '#/components/schemas/ProductItem'
+        trialProducts:
+          type: array
+          description: products this customer has temporary trial access to, each bounded by a date range
+          items:
+            $ref: '#/components/schemas/TrialProduct'
+        restrictedFeatures:
+          type: array
+          description: features that are restricted for the customer
+          items:
+            type: string
+            enum:
+            - AI_ACTION
+            - AI_AGENT
+            - AI_API_WRITE
+            - AI_SLACK_TEAM_CHAT
+            - ATS_SYNC
+            - BUDGET
+            - COMPENSATION_REVIEW
+            - CUSTOM_CALENDAR
+            - CUSTOM_FIELD
+            - CUSTOM_FIELD_READONLY
+            - CUSTOM_FORM
+            - CUSTOM_PROFILE_TAB
+            - CUSTOM_ROLE
+            - FORM_ANONYMOUS
+            - FORM_RELEASE
+            - FORM_SIGNATURE
+            - GOAL
+            - MULTI_PAYROLL
+            - PERFORMANCE_REVIEW
+            - REPORT
+            - REPORT_READONLY
+            - SCENARIO
+            - SIGNATURE
+            - SIGNATURE_QES
+            - SIMPLE_WORKFLOWS
+            - SURVEY
+            - TABLE
+            - TEMPLATE
+            - WORKDAY_ADAPTIVE
+            - PAYROLL_OUTBOUND
+            - APPROVAL_WORKFLOWS
+            - CONTENT
+            - IDENTITY_OUTBOUND
+            - ONBOARDING_OFFBOARDING
+            - TIMEOFF
+        featureOptionOverrides:
+          type: array
+          description: override feature options for the customer
+          items:
+            $ref: '#/components/schemas/FeatureAccessOption'
+        startDate:
+          type: string
+          format: date
+          description: initial date of billing
+        endDate:
+          type: string
+          format: date
+          description: end of service date for churning customers -- on or after this date, service should be disabled
+        nextInvoiceDate:
+          type: string
+          format: date
+          description: date of next invoice
+        orgCount:
+          type: integer
+          format: int32
+          description: number of orgs covered by this customer
+        primaryHeadCount:
+          type: integer
+          format: int32
+          description: number of total headcount across all orgs
+        secondaryHeadCount:
+          type: integer
+          format: int32
+          description: number of total headcount across all orgs
+        tertiaryHeadCount:
+          type: integer
+          format: int32
+          description: number of total headcount across all orgs
+        primaryHeadCountFilter:
+          type: string
+          description: primary headcount filter - used for billing purposes
+        secondaryHeadCountFilter:
+          type: string
+          description: secondary headcount filter - used for billing purposes
+        tertiaryHeadCountFilter:
+          type: string
+          description: tertiary headcount filter - used for billing purposes
+        arr:
+          type: number
+          description: current ARR of the customer based on most recent invoice
+        trialStartDate:
+          type: string
+          format: date
+          description: date this customer begins their trial period
+        trialEndDate:
+          type: string
+          format: date
+          description: date this customer ends their trial period
+        stripeSubscriptionSync:
+          type: string
+          description: Stripe subscription settings
+          enum:
+          - SYNC
+          - DELETE
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        createId:
+          type: string
+          description: created by
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: updated by
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
           items:
-            $ref: '#/components/schemas/Invoice'
-        paymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
-        plan:
-          $ref: '#/components/schemas/Plan'
-        org:
-          $ref: '#/components/schemas/Org'
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    OrgDomain:
+      type: object
+      required:
+      - domain
+      - aliases
+      properties:
+        domain:
+          type: string
+        aliases:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     OrgOptions:
       type: object
       properties:
@@ -1434,27 +1441,52 @@ components:
           type: integer
           format: int32
           description: 'Maximum number of job codes allowed for AI job-code matching (default: 1000)'
-    Layout:
+    TrialProduct:
       type: object
       required:
-      - rows
+      - productId
+      - startDate
+      - endDate
       properties:
-        rows:
+        productId:
+          type: string
+          description: id of the product the customer is trialing
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+          description: first date the trial grants access (inclusive)
+        endDate:
+          type: string
+          format: date
+          description: last date the trial grants access (inclusive)
+    LayoutButton:
+      type: object
+      required:
+      - url
+      - label
+      properties:
+        url:
+          type: string
+        label:
+          type: string
+    MessageChannelConfig:
+      type: object
+      required:
+      - channels
+      - alwaysEmail
+      properties:
+        channels:
           type: array
           items:
-            $ref: '#/components/schemas/LayoutRow'
-    CancelSubscriptionSurveyAnswers:
-      type: object
-      required:
-      - otherComments
-      - reason
-      properties:
-        otherComments:
-          type: string
-          description: Any additional comments about ChartHop when cancelling their subscription
-        reason:
-          type: string
-          description: Concatenated string of reasons why the customer unsubscribed from ChartHop
+            type: string
+            enum:
+            - EMAIL
+            - CHAT
+            - CHAT_SLACK
+            - CHAT_TEAMS
+        alwaysEmail:
+          type: boolean
     Block:
       type: object
       properties:
@@ -1504,165 +1536,6 @@ components:
         secondaryButton:
           description: secondary CTA button
           $ref: '#/components/schemas/LayoutButton'
-    PaymentInfo:
-      type: object
-      required:
-      - paymentType
-      properties:
-        paymentType:
-          type: string
-          description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
-          example: CREDIT_CARD
-          enum:
-          - CREDIT_CARD
-          - INVOICE
-        creditCardEndDigits:
-          type: string
-          description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
-          example: '4242'
-        brand:
-          type: string
-          description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
-          example: Visa
-    LayoutColumn:
-      type: object
-      required:
-      - blocks
-      properties:
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Block'
-    TrialProduct:
-      type: object
-      required:
-      - productId
-      - startDate
-      - endDate
-      properties:
-        productId:
-          type: string
-          description: id of the product the customer is trialing
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-          description: first date the trial grants access (inclusive)
-        endDate:
-          type: string
-          format: date
-          description: last date the trial grants access (inclusive)
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    OrgDomain:
-      type: object
-      required:
-      - domain
-      - aliases
-      properties:
-        domain:
-          type: string
-        aliases:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ProductItem:
-      type: object
-      required:
-      - productId
-      - stripePriceId
-      properties:
-        productId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        stripePriceId:
-          type: string
-    InternalOrgOptions:
-      type: object
-      properties:
-        adpOrganizationOID:
-          type: string
-        assessmentCount:
-          type: integer
-          format: int32
-        dashboardGettingStartedHidden:
-          type: boolean
-        dashboardNeedHelpHidden:
-          type: boolean
-        enableUniversalSso:
-          type: boolean
-        sequoiaOrgId:
-          type: string
-        tosAgreement:
-          type: boolean
-        fileUploadLimit:
-          type: integer
-          format: int64
-        maxFileUploadSize:
-          type: integer
-          format: int64
-        lowPriorityReports:
-          type: boolean
-        isInitialDataSynced:
-          type: boolean
-        maxReportDatapoints:
-          type: integer
-          format: int64
-        disableImportEvents:
-          type: boolean
-          description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
-        useAlphaSlackApp:
-          type: boolean
-          description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
-        extraFields:
-          type: object
-          additionalProperties:
-            type: object
-    LayoutButton:
-      type: object
-      required:
-      - url
-      - label
-      properties:
-        url:
-          type: string
-        label:
-          type: string
     PlanTier:
       type: object
       required:
@@ -1675,3 +1548,130 @@ components:
         unitAmount:
           type: number
           description: PEPM rate
+    LayoutRow:
+      type: object
+      required:
+      - columns
+      - format
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayoutColumn'
+        format:
+          type: string
+    Geopoint:
+      type: object
+      required:
+      - type
+      - coordinates
+      properties:
+        type:
+          type: string
+          description: Type of point
+          readOnly: true
+        coordinates:
+          type: array
+          description: The longitude and latitude of the point
+          readOnly: true
+          items:
+            type: number
+            format: double
+    Address:
+      type: object
+      required:
+      - country
+      properties:
+        street1:
+          type: string
+          description: street address, line 1
+          example: 123 Anywhere Street
+          minItems: 0
+          maxItems: 200
+        street2:
+          type: string
+          description: street address, line 2
+          example: Apt 6L
+          minItems: 0
+          maxItems: 200
+        street3:
+          type: string
+          description: street address, line 3
+          example: Sixth Floor
+          minItems: 0
+          maxItems: 200
+        city:
+          type: string
+          description: city
+          example: New York
+          minItems: 0
+          maxItems: 80
+        state:
+          type: string
+          description: state
+          example: NY
+          minItems: 0
+          maxItems: 80
+        country:
+          type: string
+          description: country (two-digit ISO code)
+          example: NY
+          pattern: ^[A-Z]{2}$
+        postal:
+          type: string
+          description: postal code
+          example: '10001'
+          minItems: 0
+          maxItems: 10
+        geo:
+          description: geopoint location
+          $ref: '#/components/schemas/Geopoint'
+        approxGeo:
+          description: approximate geopoint location (suitable for a map placement, but not exact location)
+          $ref: '#/components/schemas/Geopoint'
+    LayoutColumn:
+      type: object
+      required:
+      - blocks
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+    Layout:
+      type: object
+      required:
+      - rows
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayoutRow'
+    FeatureAccessOption:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        name:
+          type: string
+          description: The name of the feature option tied to the feature access
+          example: smart_fields
+          enum:
+          - CONFIGURED_ROLES
+          - SMART_FIELDS
+          - APP_FIELD_MAPPERS
+          - MULTI_PAYROLL_INSTALLS
+        description:
+          type: string
+          description: The description of the feature option
+        type:
+          type: string
+          description: The feature option type
+          enum:
+          - LIMIT
+          - FULL_ACCESS
+        limit:
+          type: integer
+          format: int32
+          description: The feature option limit

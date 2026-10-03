@@ -618,6 +618,39 @@ paths:
         description: Approval details
 components:
   schemas:
+    ShareAccess:
+      type: object
+      required:
+      - access
+      properties:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
     AccessAction:
       type: object
       required:
@@ -634,6 +667,35 @@ components:
           type: array
           uniqueItems: true
           items:
+            type: string
+    UpdateFormResponse:
+      type: object
+      properties:
+        shareAccess:
+          type: array
+          description: list of share access, if the form response has been shared with anyone
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+    FormResponseCount:
+      type: object
+      required:
+      - totalCount
+      - filteredCount
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        filteredCount:
+          type: integer
+          format: int32
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
             type: string
     LogData:
       type: object
@@ -658,6 +720,83 @@ components:
           type: object
           additionalProperties:
             type: object
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    FormVersionInfo:
+      type: object
+      required:
+      - id
+      - label
+      - displayName
+      - questions
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+        displayName:
+          type: string
+        displayNameTr:
+          $ref: '#/components/schemas/Translations'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormQuestionInfo'
+    FormQuestionInfo:
+      type: object
+      required:
+      - id
+      - question
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        question:
+          type: string
+        questionTr:
+          $ref: '#/components/schemas/Translations'
     Process:
       type: object
       required:
@@ -780,113 +919,6 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    FormResponseApproval:
-      type: object
-      properties:
-        message:
-          type: string
-    FormQuestionInfo:
-      type: object
-      required:
-      - id
-      - question
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        question:
-          type: string
-        questionTr:
-          $ref: '#/components/schemas/Translations'
-    ResultsWithFormVersions:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormResponse'
-        next:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        formVersions:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormVersionInfo'
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
-        access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
     FormResponse:
       type: object
       required:
@@ -1060,26 +1092,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    UpdateFormResponse:
-      type: object
-      properties:
-        shareAccess:
-          type: array
-          description: list of share access, if the form response has been shared with anyone
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-    FormResponseCount:
-      type: object
-      required:
-      - totalCount
-      - filteredCount
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-        filteredCount:
-          type: integer
-          format: int32
     FormResponsesExportOptions:
       type: object
       properties:
@@ -1109,27 +1121,6 @@ components:
           type: string
         splitColumns:
           type: boolean
-    FormVersionInfo:
-      type: object
-      required:
-      - id
-      - label
-      - displayName
-      - questions
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-        displayName:
-          type: string
-        displayNameTr:
-          $ref: '#/components/schemas/Translations'
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormQuestionInfo'
     FormResponseAnswer:
       type: object
       required:
@@ -1205,19 +1196,28 @@ components:
           - SINGLE
           - LIST
           - SET
-    ResultsAccess:
+    ResultsWithFormVersions:
       type: object
       required:
-      - allowed
+      - data
       properties:
-        ids:
+        data:
           type: array
-          uniqueItems: true
           items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
+            $ref: '#/components/schemas/FormResponse'
+        next:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        access:
           type: array
-          uniqueItems: true
           items:
-            $ref: '#/components/schemas/AccessAction'
+            $ref: '#/components/schemas/ResultsAccess'
+        formVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormVersionInfo'
+    FormResponseApproval:
+      type: object
+      properties:
+        message:
+          type: string

@@ -440,69 +440,6 @@ paths:
           description: File not found
 components:
   schemas:
-    FileExportCsvParams:
-      type: object
-      properties:
-        fields:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        filter:
-          type: string
-        format:
-          type: string
-        personFields:
-          type: string
-        splitColumns:
-          type: boolean
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        totalRow:
-          type: object
-          additionalProperties:
-            type: object
     FileEntity:
       type: object
       required:
@@ -737,6 +674,66 @@ components:
           description: Optional metadata about the file
           additionalProperties:
             type: object
+    ResultsFileEntity:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileEntity'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    UpdateFileEntity:
+      type: object
+      properties:
+        fieldId:
+          type: string
+          description: field that the file uses, if the file is tied to a field
+          example: offerLetter
+        sensitive:
+          type: string
+          description: level of sensitivity of the file, if the file is not tied to a field
+          example: PERSONAL
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        filename:
+          type: string
+          description: customer facing filename of file
+          example: Offer Letter - Bob Smith.pdf
+        metadata:
+          type: object
+          description: Optional metadata about the file
+          additionalProperties:
+            type: object
     LogData:
       type: object
       required:
@@ -760,6 +757,52 @@ components:
           type: object
           additionalProperties:
             type: object
+    FileExportParams:
+      type: object
+      properties:
+        fields:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        filter:
+          type: string
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     Process:
       type: object
       required:
@@ -882,49 +925,7 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ResultsFileEntity:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileEntity'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    FileExportParams:
+    FileExportCsvParams:
       type: object
       properties:
         fields:
@@ -943,6 +944,33 @@ components:
           format: date
         filter:
           type: string
+        format:
+          type: string
+        personFields:
+          type: string
+        splitColumns:
+          type: boolean
+    ResultsData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+        totalRow:
+          type: object
+          additionalProperties:
+            type: object
     ResultsAccess:
       type: object
       required:
@@ -959,31 +987,3 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    UpdateFileEntity:
-      type: object
-      properties:
-        fieldId:
-          type: string
-          description: field that the file uses, if the file is tied to a field
-          example: offerLetter
-        sensitive:
-          type: string
-          description: level of sensitivity of the file, if the file is not tied to a field
-          example: PERSONAL
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        filename:
-          type: string
-          description: customer facing filename of file
-          example: Offer Letter - Bob Smith.pdf
-        metadata:
-          type: object
-          description: Optional metadata about the file
-          additionalProperties:
-            type: object

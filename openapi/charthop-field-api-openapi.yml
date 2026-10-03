@@ -473,6 +473,28 @@ paths:
         required: true
 components:
   schemas:
+    ResultsPartialField:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartialField'
+        next:
+          type: string
+    ResultsField:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        next:
+          type: string
     UpdateField:
       type: object
       properties:
@@ -948,16 +970,42 @@ components:
         shouldAutoAddValue:
           type: boolean
           description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
-    TableRef:
+    Translations:
       type: object
+      required:
+      - values
       properties:
-        tableId:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    FieldRemoveCategoryRequest:
+      type: object
+      required:
+      - fieldIds
+      properties:
+        fieldIds:
+          type: array
+          description: Field ids
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    AutoIncFieldPart:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
           type: string
-          description: the table id this field references
-          example: 588f7ee98f138b19220041a7
-        tableName:
+          enum:
+          - LITERAL_STRING
+          - GROUP_CODE
+        value:
+          type: object
+        defaultValue:
           type: string
-          description: the table name this field references
     FieldRemoveOverrideRequest:
       type: object
       required:
@@ -970,44 +1018,6 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    ResultsField:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-        next:
-          type: string
-    AutoIncFieldConfig:
-      type: object
-      required:
-      - upperCase
-      - padDigits
-      - separator
-      - prefixParts
-      properties:
-        upperCase:
-          type: boolean
-          description: convert any lower-case characters in the value to upper case
-        padDigits:
-          type: integer
-          format: int32
-          description: length of the numeric part of the value (left-padded with zeroes)
-        separator:
-          type: string
-          description: separator character to use between parts of the value
-          enum:
-          - HYPHEN
-          - UNDERSCORE
-          - SPACE
-          - NONE
-        prefixParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AutoIncFieldPart'
     CreateField:
       type: object
       required:
@@ -1503,167 +1513,6 @@ components:
         shouldAutoAddValue:
           type: boolean
           description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    FieldStatusUpdateRequest:
-      type: object
-      required:
-      - updateStatus
-      - fieldIds
-      - reservedFieldNames
-      properties:
-        updateStatus:
-          type: string
-          description: New status to update
-          enum:
-          - ACTIVE
-          - HIDDEN
-        fieldIds:
-          type: array
-          description: Field ids to apply status to
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        reservedFieldNames:
-          type: array
-          description: Reserved field names to apply status to
-          items:
-            type: string
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ResultsPartialField:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartialField'
-        next:
-          type: string
-    AutoIncFieldPart:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - LITERAL_STRING
-          - GROUP_CODE
-        value:
-          type: object
-        defaultValue:
-          type: string
-    FieldOptions:
-      type: object
-      properties:
-        min:
-          type: string
-          description: minimum value, for numeric and date fields
-        max:
-          type: string
-          description: maximum value, for numeric and date fields
-        minItems:
-          type: integer
-          format: int32
-        maxItems:
-          type: integer
-          format: int32
-        stackRank:
-          type: boolean
-        step:
-          type: number
-        enableEditDialog:
-          type: boolean
-        requiredJobField:
-          type: boolean
-        excludeTargetPersonId:
-          type: boolean
-        maxLength:
-          type: integer
-          format: int32
-        readOnly:
-          type: boolean
-        includeFormer:
-          type: boolean
-        effectiveDated:
-          type: boolean
-        unique:
-          type: boolean
-        required:
-          type: boolean
     Field:
       type: object
       required:
@@ -2186,6 +2035,72 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    FieldStatusUpdateRequest:
+      type: object
+      required:
+      - updateStatus
+      - fieldIds
+      - reservedFieldNames
+      properties:
+        updateStatus:
+          type: string
+          description: New status to update
+          enum:
+          - ACTIVE
+          - HIDDEN
+        fieldIds:
+          type: array
+          description: Field ids to apply status to
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        reservedFieldNames:
+          type: array
+          description: Reserved field names to apply status to
+          items:
+            type: string
+    TableRef:
+      type: object
+      properties:
+        tableId:
+          type: string
+          description: the table id this field references
+          example: 588f7ee98f138b19220041a7
+        tableName:
+          type: string
+          description: the table name this field references
+    DtValue:
+      type: object
+      properties:
+        value:
+          type: object
+    AutoIncFieldConfig:
+      type: object
+      required:
+      - upperCase
+      - padDigits
+      - separator
+      - prefixParts
+      properties:
+        upperCase:
+          type: boolean
+          description: convert any lower-case characters in the value to upper case
+        padDigits:
+          type: integer
+          format: int32
+          description: length of the numeric part of the value (left-padded with zeroes)
+        separator:
+          type: string
+          description: separator character to use between parts of the value
+          enum:
+          - HYPHEN
+          - UNDERSCORE
+          - SPACE
+          - NONE
+        prefixParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoIncFieldPart'
     PartialField:
       type: object
       properties:
@@ -2719,20 +2634,105 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    FieldRemoveCategoryRequest:
+    Attribution:
       type: object
-      required:
-      - fieldIds
       properties:
-        fieldIds:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          description: Field ids
-          uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    DtValue:
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    FieldOptions:
       type: object
       properties:
-        value:
-          type: object
+        min:
+          type: string
+          description: minimum value, for numeric and date fields
+        max:
+          type: string
+          description: maximum value, for numeric and date fields
+        minItems:
+          type: integer
+          format: int32
+        maxItems:
+          type: integer
+          format: int32
+        stackRank:
+          type: boolean
+        step:
+          type: number
+        enableEditDialog:
+          type: boolean
+        requiredJobField:
+          type: boolean
+        excludeTargetPersonId:
+          type: boolean
+        maxLength:
+          type: integer
+          format: int32
+        readOnly:
+          type: boolean
+        includeFormer:
+          type: boolean
+        effectiveDated:
+          type: boolean
+        unique:
+          type: boolean
+        required:
+          type: boolean
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'

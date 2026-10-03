@@ -264,6 +264,22 @@ paths:
           description: not found
 components:
   schemas:
+    GoalTargetValue:
+      type: object
+      required:
+      - value
+      properties:
+        targetValueTypeId:
+          type: string
+          description: the type of the target value (for example, 'Stretch' vs 'Minimum'), extracted from the goal type's targetValues
+          example: 588f7ee98f138b19220041a7
+        value:
+          description: target value to achieve (should be a numeric value, either number, money, or percentage)
+          example: '100000'
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean
     AccessAction:
       type: object
       required:
@@ -281,13 +297,8 @@ components:
           uniqueItems: true
           items:
             type: string
-    CreateGoalTarget:
+    UpdateGoalTarget:
       type: object
-      required:
-      - goalId
-      - type
-      - startDate
-      - endDate
       properties:
         goalId:
           type: string
@@ -339,35 +350,13 @@ components:
           type: string
           format: date
           description: end date for this goal target
-    Attribution:
+    CreateGoalTarget:
       type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    UpdateGoalTarget:
-      type: object
+      required:
+      - goalId
+      - type
+      - startDate
+      - endDate
       properties:
         goalId:
           type: string
@@ -434,22 +423,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    ResultsAccess:
+    Attribution:
       type: object
-      required:
-      - allowed
       properties:
-        ids:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     GoalTarget:
       type: object
       required:
@@ -573,19 +573,19 @@ components:
           - type: string
           - type: number
           - type: boolean
-    GoalTargetValue:
+    ResultsAccess:
       type: object
       required:
-      - value
+      - allowed
       properties:
-        targetValueTypeId:
-          type: string
-          description: the type of the target value (for example, 'Stretch' vs 'Minimum'), extracted from the goal type's targetValues
-          example: 588f7ee98f138b19220041a7
-        value:
-          description: target value to achieve (should be a numeric value, either number, money, or percentage)
-          example: '100000'
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'

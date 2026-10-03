@@ -216,84 +216,6 @@ paths:
         required: true
 components:
   schemas:
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    InvoiceResponse:
-      type: object
-      required:
-      - invoices
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/Invoice'
-    Address:
-      type: object
-      required:
-      - country
-      properties:
-        street1:
-          type: string
-          description: street address, line 1
-          example: 123 Anywhere Street
-          minItems: 0
-          maxItems: 200
-        street2:
-          type: string
-          description: street address, line 2
-          example: Apt 6L
-          minItems: 0
-          maxItems: 200
-        street3:
-          type: string
-          description: street address, line 3
-          example: Sixth Floor
-          minItems: 0
-          maxItems: 200
-        city:
-          type: string
-          description: city
-          example: New York
-          minItems: 0
-          maxItems: 80
-        state:
-          type: string
-          description: state
-          example: NY
-          minItems: 0
-          maxItems: 80
-        country:
-          type: string
-          description: country (two-digit ISO code)
-          example: NY
-          pattern: ^[A-Z]{2}$
-        postal:
-          type: string
-          description: postal code
-          example: '10001'
-          minItems: 0
-          maxItems: 10
-        geo:
-          description: geopoint location
-          $ref: '#/components/schemas/Geopoint'
-        approxGeo:
-          description: approximate geopoint location (suitable for a map placement, but not exact location)
-          $ref: '#/components/schemas/Geopoint'
     Plan:
       type: object
       required:
@@ -330,23 +252,58 @@ components:
         stripeProductId:
           type: string
           description: stripe product id that this plan belongs to
-    Geopoint:
+    PaymentInfo:
       type: object
       required:
-      - type
-      - coordinates
+      - paymentType
       properties:
-        type:
+        paymentType:
           type: string
-          description: Type of point
-          readOnly: true
-        coordinates:
+          description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
+          example: CREDIT_CARD
+          enum:
+          - CREDIT_CARD
+          - INVOICE
+        creditCardEndDigits:
+          type: string
+          description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
+          example: '4242'
+        brand:
+          type: string
+          description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
+          example: Visa
+    ResultsCustomer:
+      type: object
+      required:
+      - data
+      properties:
+        data:
           type: array
-          description: The longitude and latitude of the point
-          readOnly: true
           items:
-            type: number
-            format: double
+            $ref: '#/components/schemas/Customer'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    UpdateSubscription:
+      type: object
+      required:
+      - paymentMethod
+      properties:
+        paymentMethod:
+          type: string
+          description: Payment method to create; 'INVOICE' to make subscription paid by invoice, or the ID of the payment method if to make the subscription automatically charge a card
+    InvoiceResponse:
+      type: object
+      required:
+      - invoices
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
     FeatureAccessOption:
       type: object
       required:
@@ -375,6 +332,53 @@ components:
           type: integer
           format: int32
           description: The feature option limit
+    ProductItem:
+      type: object
+      required:
+      - productId
+      - stripePriceId
+      properties:
+        productId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        stripePriceId:
+          type: string
+    Invoice:
+      type: object
+      required:
+      - number
+      - amount
+      - status
+      - createAt
+      properties:
+        number:
+          type: string
+          description: a unique identifying string for invoices
+          example: F38A6C8-0010
+        amount:
+          type: number
+          description: current final amount due for the invoices
+          example: '1002.31'
+        hostedInvoiceUrl:
+          type: string
+          description: URL for the hosted invoice page, which allows customers to view and pay an invoice
+          example: https://pay.stripe.com/invoice/invst_Nv8DFERQvTsBJqnZ4z19cGZBU1
+        invoicePdf:
+          type: string
+          description: the link to download the PDF for the invoice
+          example: https://pay.stripe.com/invoice/invst_wNK0BvV4iUOWOn5mzLT1ybQ2LC/pdf
+        status:
+          type: string
+          description: one of PAID, UNPAID, or VOID
+          example: PAID
+          enum:
+          - PAID
+          - UNPAID
+          - VOID
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2019-07-27T20:56:10Z'
     Customer:
       type: object
       required:
@@ -561,181 +565,50 @@ components:
           example: 588f7ee98f138b19220041a7
         updateAttribution:
           $ref: '#/components/schemas/Attribution'
-    UpdateCustomer:
+    Subscription:
+      type: object
+      required:
+      - nextInvoiceAt
+      - plan
+      - paymentInfo
+      properties:
+        nextInvoiceAt:
+          type: string
+          description: Timestamp when the next invoice will be generated
+          example: '2019-07-27T20:56:10Z'
+        plan:
+          description: Plan this subscription is for
+          $ref: '#/components/schemas/Plan'
+        paymentInfo:
+          description: Information about how the customer pays for this subscription
+          $ref: '#/components/schemas/PaymentInfo'
+    Attribution:
       type: object
       properties:
-        name:
+        principalUserId:
           type: string
-          description: name of customer
-        email:
-          type: string
-          description: email address for billing purposes
-        billAddress:
-          description: mailing address for billing purposes
-          $ref: '#/components/schemas/Address'
-        industry:
-          type: string
-          description: industry that customer is in
-        source:
-          type: string
-          description: source of customer signup
-          enum:
-          - ADP_MARKETPLACE
-          - SELF_SERVE
-          - SELF_SERVE_TEST
-          - SEQUOIA_ONE
-          - CONNECT
-        status:
-          type: string
-          description: current status
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - TRIAL
-          - CHURN
-          - PAYMENT_ERROR
-        salesforceAccountId:
-          type: string
-          description: salesforce account id
-          pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
-        products:
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          description: products that this customer has purchased
-          items:
-            $ref: '#/components/schemas/ProductItem'
-        trialProducts:
-          type: array
-          description: products this customer has temporary trial access to, each bounded by a date range
-          items:
-            $ref: '#/components/schemas/TrialProduct'
-        restrictedFeatures:
-          type: array
-          description: features that are restricted for the customer
           items:
             type: string
-            enum:
-            - AI_ACTION
-            - AI_AGENT
-            - AI_API_WRITE
-            - AI_SLACK_TEAM_CHAT
-            - ATS_SYNC
-            - BUDGET
-            - COMPENSATION_REVIEW
-            - CUSTOM_CALENDAR
-            - CUSTOM_FIELD
-            - CUSTOM_FIELD_READONLY
-            - CUSTOM_FORM
-            - CUSTOM_PROFILE_TAB
-            - CUSTOM_ROLE
-            - FORM_ANONYMOUS
-            - FORM_RELEASE
-            - FORM_SIGNATURE
-            - GOAL
-            - MULTI_PAYROLL
-            - PERFORMANCE_REVIEW
-            - REPORT
-            - REPORT_READONLY
-            - SCENARIO
-            - SIGNATURE
-            - SIGNATURE_QES
-            - SIMPLE_WORKFLOWS
-            - SURVEY
-            - TABLE
-            - TEMPLATE
-            - WORKDAY_ADAPTIVE
-            - PAYROLL_OUTBOUND
-            - APPROVAL_WORKFLOWS
-            - CONTENT
-            - IDENTITY_OUTBOUND
-            - ONBOARDING_OFFBOARDING
-            - TIMEOFF
-        featureOptionOverrides:
-          type: array
-          description: override feature options for the customer
-          items:
-            $ref: '#/components/schemas/FeatureAccessOption'
-        startDate:
+            example: 588f7ee98f138b19220041a7
+        eventId:
           type: string
-          format: date
-          description: initial date of billing
-        endDate:
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
           type: string
-          format: date
-          description: end of service date for churning customers -- on or after this date, service should be disabled
-        nextInvoiceDate:
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
           type: string
-          format: date
-          description: date of next invoice
-        primaryHeadCountFilter:
+        channel:
           type: string
-          description: primary headcount filter - used for billing purposes
-        secondaryHeadCountFilter:
-          type: string
-          description: secondary headcount filter - used for billing purposes
-        tertiaryHeadCountFilter:
-          type: string
-          description: tertiary headcount filter - used for billing purposes
-        arr:
-          type: number
-          description: current ARR of the customer based on most recent invoice
-        trialStartDate:
-          type: string
-          format: date
-          description: date this customer begins their trial period
-        trialEndDate:
-          type: string
-          format: date
-          description: date this customer ends their trial period
-        stripeSubscriptionSync:
-          type: string
-          description: Stripe subscription settings
           enum:
-          - SYNC
-          - DELETE
-    UpdateSubscription:
-      type: object
-      required:
-      - paymentMethod
-      properties:
-        paymentMethod:
-          type: string
-          description: Payment method to create; 'INVOICE' to make subscription paid by invoice, or the ID of the payment method if to make the subscription automatically charge a card
-    Invoice:
-      type: object
-      required:
-      - number
-      - amount
-      - status
-      - createAt
-      properties:
-        number:
-          type: string
-          description: a unique identifying string for invoices
-          example: F38A6C8-0010
-        amount:
-          type: number
-          description: current final amount due for the invoices
-          example: '1002.31'
-        hostedInvoiceUrl:
-          type: string
-          description: URL for the hosted invoice page, which allows customers to view and pay an invoice
-          example: https://pay.stripe.com/invoice/invst_Nv8DFERQvTsBJqnZ4z19cGZBU1
-        invoicePdf:
-          type: string
-          description: the link to download the PDF for the invoice
-          example: https://pay.stripe.com/invoice/invst_wNK0BvV4iUOWOn5mzLT1ybQ2LC/pdf
-        status:
-          type: string
-          description: one of PAID, UNPAID, or VOID
-          example: PAID
-          enum:
-          - PAID
-          - UNPAID
-          - VOID
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2019-07-27T20:56:10Z'
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     CreateCustomer:
       type: object
       required:
@@ -871,58 +744,6 @@ components:
           enum:
           - SYNC
           - DELETE
-    Subscription:
-      type: object
-      required:
-      - nextInvoiceAt
-      - plan
-      - paymentInfo
-      properties:
-        nextInvoiceAt:
-          type: string
-          description: Timestamp when the next invoice will be generated
-          example: '2019-07-27T20:56:10Z'
-        plan:
-          description: Plan this subscription is for
-          $ref: '#/components/schemas/Plan'
-        paymentInfo:
-          description: Information about how the customer pays for this subscription
-          $ref: '#/components/schemas/PaymentInfo'
-    ResultsCustomer:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customer'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    PaymentInfo:
-      type: object
-      required:
-      - paymentType
-      properties:
-        paymentType:
-          type: string
-          description: indicates how the customer has decided to pay; one of CREDIT_CARD, INVOICE
-          example: CREDIT_CARD
-          enum:
-          - CREDIT_CARD
-          - INVOICE
-        creditCardEndDigits:
-          type: string
-          description: if the customer has indicated they wish to pay by credit card, the last four digits of the credit card they are paying with. Null if the customer is paying by invoice.
-          example: '4242'
-        brand:
-          type: string
-          description: if the customer has indicated they wish to pay by credit card, the brand of the credit card they are paying with. Null if the customer is paying by invoice.
-          example: Visa
     TrialProduct:
       type: object
       required:
@@ -942,44 +763,104 @@ components:
           type: string
           format: date
           description: last date the trial grants access (inclusive)
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ProductItem:
+    PlanTier:
       type: object
       required:
-      - productId
-      - stripePriceId
+      - unitAmount
       properties:
-        productId:
+        upTo:
+          type: integer
+          format: int64
+          description: headcount up to this level is charged at the below rate
+        unitAmount:
+          type: number
+          description: PEPM rate
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
           type: string
-          example: 588f7ee98f138b19220041a7
-        stripePriceId:
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    Geopoint:
+      type: object
+      required:
+      - type
+      - coordinates
+      properties:
+        type:
           type: string
+          description: Type of point
+          readOnly: true
+        coordinates:
+          type: array
+          description: The longitude and latitude of the point
+          readOnly: true
+          items:
+            type: number
+            format: double
+    Address:
+      type: object
+      required:
+      - country
+      properties:
+        street1:
+          type: string
+          description: street address, line 1
+          example: 123 Anywhere Street
+          minItems: 0
+          maxItems: 200
+        street2:
+          type: string
+          description: street address, line 2
+          example: Apt 6L
+          minItems: 0
+          maxItems: 200
+        street3:
+          type: string
+          description: street address, line 3
+          example: Sixth Floor
+          minItems: 0
+          maxItems: 200
+        city:
+          type: string
+          description: city
+          example: New York
+          minItems: 0
+          maxItems: 80
+        state:
+          type: string
+          description: state
+          example: NY
+          minItems: 0
+          maxItems: 80
+        country:
+          type: string
+          description: country (two-digit ISO code)
+          example: NY
+          pattern: ^[A-Z]{2}$
+        postal:
+          type: string
+          description: postal code
+          example: '10001'
+          minItems: 0
+          maxItems: 10
+        geo:
+          description: geopoint location
+          $ref: '#/components/schemas/Geopoint'
+        approxGeo:
+          description: approximate geopoint location (suitable for a map placement, but not exact location)
+          $ref: '#/components/schemas/Geopoint'
     ResultsAccess:
       type: object
       required:
@@ -996,15 +877,134 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    PlanTier:
+    UpdateCustomer:
       type: object
-      required:
-      - unitAmount
       properties:
-        upTo:
-          type: integer
-          format: int64
-          description: headcount up to this level is charged at the below rate
-        unitAmount:
+        name:
+          type: string
+          description: name of customer
+        email:
+          type: string
+          description: email address for billing purposes
+        billAddress:
+          description: mailing address for billing purposes
+          $ref: '#/components/schemas/Address'
+        industry:
+          type: string
+          description: industry that customer is in
+        source:
+          type: string
+          description: source of customer signup
+          enum:
+          - ADP_MARKETPLACE
+          - SELF_SERVE
+          - SELF_SERVE_TEST
+          - SEQUOIA_ONE
+          - CONNECT
+        status:
+          type: string
+          description: current status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - TRIAL
+          - CHURN
+          - PAYMENT_ERROR
+        salesforceAccountId:
+          type: string
+          description: salesforce account id
+          pattern: ^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$
+        products:
+          type: array
+          description: products that this customer has purchased
+          items:
+            $ref: '#/components/schemas/ProductItem'
+        trialProducts:
+          type: array
+          description: products this customer has temporary trial access to, each bounded by a date range
+          items:
+            $ref: '#/components/schemas/TrialProduct'
+        restrictedFeatures:
+          type: array
+          description: features that are restricted for the customer
+          items:
+            type: string
+            enum:
+            - AI_ACTION
+            - AI_AGENT
+            - AI_API_WRITE
+            - AI_SLACK_TEAM_CHAT
+            - ATS_SYNC
+            - BUDGET
+            - COMPENSATION_REVIEW
+            - CUSTOM_CALENDAR
+            - CUSTOM_FIELD
+            - CUSTOM_FIELD_READONLY
+            - CUSTOM_FORM
+            - CUSTOM_PROFILE_TAB
+            - CUSTOM_ROLE
+            - FORM_ANONYMOUS
+            - FORM_RELEASE
+            - FORM_SIGNATURE
+            - GOAL
+            - MULTI_PAYROLL
+            - PERFORMANCE_REVIEW
+            - REPORT
+            - REPORT_READONLY
+            - SCENARIO
+            - SIGNATURE
+            - SIGNATURE_QES
+            - SIMPLE_WORKFLOWS
+            - SURVEY
+            - TABLE
+            - TEMPLATE
+            - WORKDAY_ADAPTIVE
+            - PAYROLL_OUTBOUND
+            - APPROVAL_WORKFLOWS
+            - CONTENT
+            - IDENTITY_OUTBOUND
+            - ONBOARDING_OFFBOARDING
+            - TIMEOFF
+        featureOptionOverrides:
+          type: array
+          description: override feature options for the customer
+          items:
+            $ref: '#/components/schemas/FeatureAccessOption'
+        startDate:
+          type: string
+          format: date
+          description: initial date of billing
+        endDate:
+          type: string
+          format: date
+          description: end of service date for churning customers -- on or after this date, service should be disabled
+        nextInvoiceDate:
+          type: string
+          format: date
+          description: date of next invoice
+        primaryHeadCountFilter:
+          type: string
+          description: primary headcount filter - used for billing purposes
+        secondaryHeadCountFilter:
+          type: string
+          description: secondary headcount filter - used for billing purposes
+        tertiaryHeadCountFilter:
+          type: string
+          description: tertiary headcount filter - used for billing purposes
+        arr:
           type: number
-          description: PEPM rate
+          description: current ARR of the customer based on most recent invoice
+        trialStartDate:
+          type: string
+          format: date
+          description: date this customer begins their trial period
+        trialEndDate:
+          type: string
+          format: date
+          description: date this customer ends their trial period
+        stripeSubscriptionSync:
+          type: string
+          description: Stripe subscription settings
+          enum:
+          - SYNC
+          - DELETE

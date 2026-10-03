@@ -130,25 +130,6 @@ paths:
         required: true
 components:
   schemas:
-    CreateEmailTemplate:
-      type: object
-      required:
-      - name
-      - category
-      properties:
-        name:
-          type: string
-          description: name of the email template
-          example: self_serve_welcome
-        category:
-          type: string
-          description: email category
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
     AccessAction:
       type: object
       required:
@@ -166,9 +147,17 @@ components:
           uniqueItems: true
           items:
             type: string
-    UpdateEmailTemplate:
+    EmailTemplate:
       type: object
+      required:
+      - id
+      - name
+      - category
       properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
         name:
           type: string
           description: name of the email template
@@ -182,17 +171,9 @@ components:
           - DATA_IMPORT_AND_SYNC_STATUS
           - TRIAL_REMINDERS
           - APPROVAL_NOTIFICATIONS
-    EmailTemplate:
+    UpdateEmailTemplate:
       type: object
-      required:
-      - id
-      - name
-      - category
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
         name:
           type: string
           description: name of the email template
@@ -221,6 +202,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    CreateEmailTemplate:
+      type: object
+      required:
+      - name
+      - category
+      properties:
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
     ResultsAccess:
       type: object
       required:

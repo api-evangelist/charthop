@@ -619,21 +619,6 @@ components:
           uniqueItems: true
           items:
             type: string
-    ResultsTimeOffPolicy:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeOffPolicy'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     LogData:
       type: object
       required:
@@ -657,229 +642,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    Process:
-      type: object
-      required:
-      - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
-      - createId
-      - createAt
-      - options
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id (user who requested the process run)
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
-          type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-        uuid:
-          type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
-    RequestedBalanceAdjustment:
-      type: object
-      required:
-      - personId
-      properties:
-        personId:
-          type: string
-          description: person id
-          example: 588f7ee98f138b19220041a7
-        days:
-          type: number
-          description: adjusted balance in days
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    AccrualConfig:
-      type: object
-      required:
-      - frequency
-      - accrualOffsetFromStartDate
-      properties:
-        frequency:
-          type: string
-          enum:
-          - SEMI_MONTHLY
-          - MONTHLY
-          - WEEKLY
-        monthlyDaysOfMonth:
-          type: array
-          items:
-            type: integer
-            format: int32
-        weeklyStartDate:
-          type: string
-          format: date
-        weeklyIncrement:
-          type: integer
-          format: int32
-        balanceCapInWholeDays:
-          type: integer
-          format: int32
-        accrualOffsetFromStartDate:
-          type: integer
-          format: int32
-    PolicyAction:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - OPEN
-          - CLOSE
-          - MOD_ALLOCATION
-          - ADJUST
-          - TRANSFER
-          - PRORATED_MOD
-          - FULL_MOD
-        exprString:
-          type: string
-    TimeOffBalanceAdjustmentBody:
-      type: object
-      required:
-      - balances
-      properties:
-        balances:
-          type: array
-          items:
-            $ref: '#/components/schemas/RequestedBalanceAdjustment'
-    EstimatedAccrual:
-      type: object
-      required:
-      - daysPerPeriod
-      properties:
-        daysPerPeriod:
-          type: number
     UpdateTimeOffPolicy:
       type: object
       properties:
@@ -1026,6 +788,238 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PolicyEvent'
+    TimeOffBalanceAdjustmentBody:
+      type: object
+      required:
+      - balances
+      properties:
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestedBalanceAdjustment'
+    PolicyEvent:
+      type: object
+      required:
+      - dateExpr
+      - action
+      properties:
+        dateExpr:
+          type: string
+        action:
+          $ref: '#/components/schemas/PolicyAction'
+        noteExpr:
+          type: string
+        groupId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: Display name for the milestone group this event belongs to
+          example: Tenure milestones
+          minItems: 1
+          maxItems: 80
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    PolicyAction:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - OPEN
+          - CLOSE
+          - MOD_ALLOCATION
+          - ADJUST
+          - TRANSFER
+          - PRORATED_MOD
+          - FULL_MOD
+        exprString:
+          type: string
+    EstimatedAccrual:
+      type: object
+      required:
+      - daysPerPeriod
+      properties:
+        daysPerPeriod:
+          type: number
+    AccrualConfig:
+      type: object
+      required:
+      - frequency
+      - accrualOffsetFromStartDate
+      properties:
+        frequency:
+          type: string
+          enum:
+          - SEMI_MONTHLY
+          - MONTHLY
+          - WEEKLY
+        monthlyDaysOfMonth:
+          type: array
+          items:
+            type: integer
+            format: int32
+        weeklyStartDate:
+          type: string
+          format: date
+        weeklyIncrement:
+          type: integer
+          format: int32
+        balanceCapInWholeDays:
+          type: integer
+          format: int32
+        accrualOffsetFromStartDate:
+          type: integer
+          format: int32
+    Process:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
     CreateTimeOffPolicy:
       type: object
       required:
@@ -1178,27 +1172,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PolicyEvent'
-    PolicyEvent:
+    RequestedBalanceAdjustment:
       type: object
       required:
-      - dateExpr
-      - action
+      - personId
       properties:
-        dateExpr:
+        personId:
           type: string
-        action:
-          $ref: '#/components/schemas/PolicyAction'
-        noteExpr:
-          type: string
-        groupId:
-          type: string
+          description: person id
           example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: Display name for the milestone group this event belongs to
-          example: Tenure milestones
-          minItems: 1
-          maxItems: 80
+        days:
+          type: number
+          description: adjusted balance in days
     ResultsAccess:
       type: object
       required:
@@ -1215,3 +1200,18 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    ResultsTimeOffPolicy:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeOffPolicy'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'

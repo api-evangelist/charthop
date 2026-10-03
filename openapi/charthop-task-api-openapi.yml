@@ -577,52 +577,6 @@ paths:
           description: unauthorized
 components:
   schemas:
-    TaskRemindRequest:
-      type: object
-      required:
-      - taskIds
-      properties:
-        taskIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        message:
-          type: string
-        messageChannel:
-          $ref: '#/components/schemas/MessageChannelConfig'
-    ResultsTask:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Task'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsData:
       type: object
       required:
@@ -644,6 +598,67 @@ components:
           type: object
           additionalProperties:
             type: object
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    UpdateTask:
+      type: object
+      properties:
+        status:
+          type: string
+          description: status of this task
+          enum:
+          - PENDING
+          - DONE
+          - EXPIRED
+          - SKIPPED
+        label:
+          type: string
+          description: The user-visible label for the task; if not set, will automatically default based on the task type
+        message:
+          type: string
+          description: The message attached to this task
+          example: this is the best task ever
+        shareAccess:
+          type: array
+          description: users who are specifically granted permission to view or edit this task
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        taskConfigId:
+          type: string
+          description: id of the TaskConfig
+          example: 588f7ee98f138b19220041a7
+        slug:
+          type: string
+          description: slug used to reference tasks in events
+          example: onboardingForm
+        dueAt:
+          type: string
+          description: due date for the task
+        pastDueAction:
+          type: string
+          description: what action to take when the task is past its due date
+          example: NONE
+          enum:
+          - NONE
+          - SET_EXPIRED
+        isSkippable:
+          type: boolean
+          description: check for if the task can be skipped
     LogData:
       type: object
       required:
@@ -667,288 +682,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    Process:
-      type: object
-      required:
-      - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
-      - createId
-      - createAt
-      - options
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id (user who requested the process run)
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
-          type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-        uuid:
-          type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    CreateTask:
-      type: object
-      required:
-      - orgId
-      - userId
-      - type
-      - entityId
-      - status
-      properties:
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        userId:
-          type: string
-          description: user who is responsible for the task
-          example: 588f7ee98f138b19220041a7
-        assessmentId:
-          type: string
-          description: parent assessment id that this task belongs to
-          example: 588f7ee98f138b19220041a7
-        parentEntityId:
-          type: string
-          description: parent entity id that this task belongs to, should be used with entityId
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: type of task
-          enum:
-          - FORM_SUBMIT
-          - FORM_RESPONSE_APPROVE
-          - FORM_RESPONSE_RESUBMIT
-          - CHANGE_APPROVE
-          - TIMEOFF_APPROVE
-          - SCENARIO_CHANGES_APPROVE
-          - SCENARIO_CHANGES_CREATE
-          - ORG_IMPORT
-          - COMP_REVIEW_APPROVAL_SUBMIT
-          - SCENARIO_APPROVAL_SUBMIT
-          - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
-          - ACTION
-          - SIGNATURE
-          - GOAL_PROGRESS
-          - TODO
-        entityId:
-          type: string
-          description: the primary entity being referenced by the task - for example for a FORM_SUBMIT, this will be the form
-          example: 588f7ee98f138b19220041a7
-        targetId:
-          type: string
-          description: the optional target entity being referenced by the task - for example for a FORM_SUBMIT, this will be the person
-          example: 588f7ee98f138b19220041a7
-        categoryId:
-          type: string
-          description: the data category that the task belongs to
-          example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: status of this task
-          enum:
-          - PENDING
-          - DONE
-          - EXPIRED
-          - SKIPPED
-        label:
-          type: string
-          description: The user-visible label for the task; if not set, will automatically default based on the task type
-        message:
-          type: string
-          description: The message attached to this task
-          example: this is the best task ever
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to view or edit this task
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        path:
-          type: string
-          description: the optional path of this task (only applies to Type == ORG_IMPORT)
-        taskConfigId:
-          type: string
-          description: id of the TaskConfig
-          example: 588f7ee98f138b19220041a7
-        slug:
-          type: string
-          description: slug used to reference tasks in events
-          example: onboardingForm
-        dueAt:
-          type: string
-          description: due date for the task
-        pastDueAction:
-          type: string
-          description: what action to take when the task is past its due date
-          example: NONE
-          enum:
-          - NONE
-          - SET_EXPIRED
-        isSkippable:
-          type: boolean
-          description: check for if the task can be skipped
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
-        access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
     TaskReassignRequest:
       type: object
       required:
@@ -961,23 +694,20 @@ components:
           type: string
         messageChannel:
           $ref: '#/components/schemas/MessageChannelConfig'
-    MessageChannelConfig:
+    TaskRemindRequest:
       type: object
       required:
-      - channels
-      - alwaysEmail
+      - taskIds
       properties:
-        channels:
+        taskIds:
           type: array
           items:
             type: string
-            enum:
-            - EMAIL
-            - CHAT
-            - CHAT_SLACK
-            - CHAT_TEAMS
-        alwaysEmail:
-          type: boolean
+            example: 588f7ee98f138b19220041a7
+        message:
+          type: string
+        messageChannel:
+          $ref: '#/components/schemas/MessageChannelConfig'
     Task:
       type: object
       required:
@@ -1133,9 +863,292 @@ components:
         isSkippable:
           type: boolean
           description: check for if the task can be skipped
-    UpdateTask:
+    ResultsTask:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Attribution:
       type: object
       properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    MessageChannelConfig:
+      type: object
+      required:
+      - channels
+      - alwaysEmail
+      properties:
+        channels:
+          type: array
+          items:
+            type: string
+            enum:
+            - EMAIL
+            - CHAT
+            - CHAT_SLACK
+            - CHAT_TEAMS
+        alwaysEmail:
+          type: boolean
+    Process:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
+    ShareAccess:
+      type: object
+      required:
+      - access
+      properties:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    CreateTask:
+      type: object
+      required:
+      - orgId
+      - userId
+      - type
+      - entityId
+      - status
+      properties:
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        userId:
+          type: string
+          description: user who is responsible for the task
+          example: 588f7ee98f138b19220041a7
+        assessmentId:
+          type: string
+          description: parent assessment id that this task belongs to
+          example: 588f7ee98f138b19220041a7
+        parentEntityId:
+          type: string
+          description: parent entity id that this task belongs to, should be used with entityId
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: type of task
+          enum:
+          - FORM_SUBMIT
+          - FORM_RESPONSE_APPROVE
+          - FORM_RESPONSE_RESUBMIT
+          - CHANGE_APPROVE
+          - TIMEOFF_APPROVE
+          - SCENARIO_CHANGES_APPROVE
+          - SCENARIO_CHANGES_CREATE
+          - ORG_IMPORT
+          - COMP_REVIEW_APPROVAL_SUBMIT
+          - SCENARIO_APPROVAL_SUBMIT
+          - APPROVAL_CHAIN_UPDATE_FALLBACK_APPROVER
+          - ACTION
+          - SIGNATURE
+          - GOAL_PROGRESS
+          - TODO
+        entityId:
+          type: string
+          description: the primary entity being referenced by the task - for example for a FORM_SUBMIT, this will be the form
+          example: 588f7ee98f138b19220041a7
+        targetId:
+          type: string
+          description: the optional target entity being referenced by the task - for example for a FORM_SUBMIT, this will be the person
+          example: 588f7ee98f138b19220041a7
+        categoryId:
+          type: string
+          description: the data category that the task belongs to
+          example: 588f7ee98f138b19220041a7
         status:
           type: string
           description: status of this task
@@ -1156,6 +1169,9 @@ components:
           description: users who are specifically granted permission to view or edit this task
           items:
             $ref: '#/components/schemas/ShareAccess'
+        path:
+          type: string
+          description: the optional path of this task (only applies to Type == ORG_IMPORT)
         taskConfigId:
           type: string
           description: id of the TaskConfig
@@ -1177,19 +1193,3 @@ components:
         isSkippable:
           type: boolean
           description: check for if the task can be skipped
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
