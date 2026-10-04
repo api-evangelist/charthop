@@ -130,23 +130,22 @@ paths:
         required: true
 components:
   schemas:
-    AccessAction:
+    UpdateEmailTemplate:
       type: object
-      required:
-      - action
       properties:
-        action:
+        name:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
     EmailTemplate:
       type: object
       required:
@@ -171,22 +170,22 @@ components:
           - DATA_IMPORT_AND_SYNC_STATUS
           - TRIAL_REMINDERS
           - APPROVAL_NOTIFICATIONS
-    UpdateEmailTemplate:
+    ResultsAccess:
       type: object
+      required:
+      - allowed
       properties:
-        name:
-          type: string
-          description: name of the email template
-          example: self_serve_welcome
-        category:
-          type: string
-          description: email category
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     ResultsEmailTemplate:
       type: object
       required:
@@ -221,19 +220,20 @@ components:
           - DATA_IMPORT_AND_SYNC_STATUS
           - TRIAL_REMINDERS
           - APPROVAL_NOTIFICATIONS
-    ResultsAccess:
+    AccessAction:
       type: object
       required:
-      - allowed
+      - action
       properties:
-        ids:
+        action:
+          type: string
+        fields:
           type: array
           uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
+        types:
           type: array
           uniqueItems: true
           items:
-            $ref: '#/components/schemas/AccessAction'
+            type: string

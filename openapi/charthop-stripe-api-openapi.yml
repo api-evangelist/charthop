@@ -90,6 +90,50 @@ paths:
           description: not found
 components:
   schemas:
+    ResultsStripeProduct:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StripeProduct'
+        next:
+          type: string
+    PlanTier:
+      type: object
+      required:
+      - unitAmount
+      properties:
+        upTo:
+          type: integer
+          format: int64
+          description: headcount up to this level is charged at the below rate
+        unitAmount:
+          type: number
+          description: PEPM rate
+    SetupIntent:
+      type: object
+      required:
+      - clientSecret
+      properties:
+        clientSecret:
+          type: string
+          description: Secret of setup_intent object created
+          example: st_ersasdfasdf
+    StripeProduct:
+      type: object
+      required:
+      - stripeId
+      - label
+      properties:
+        stripeId:
+          type: string
+          description: unique Stripe identifier for this product
+        label:
+          type: string
+          description: human-readable nickname for this product
     Plan:
       type: object
       required:
@@ -137,47 +181,3 @@ components:
             $ref: '#/components/schemas/Plan'
         next:
           type: string
-    ResultsStripeProduct:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StripeProduct'
-        next:
-          type: string
-    SetupIntent:
-      type: object
-      required:
-      - clientSecret
-      properties:
-        clientSecret:
-          type: string
-          description: Secret of setup_intent object created
-          example: st_ersasdfasdf
-    StripeProduct:
-      type: object
-      required:
-      - stripeId
-      - label
-      properties:
-        stripeId:
-          type: string
-          description: unique Stripe identifier for this product
-        label:
-          type: string
-          description: human-readable nickname for this product
-    PlanTier:
-      type: object
-      required:
-      - unitAmount
-      properties:
-        upTo:
-          type: integer
-          format: int64
-          description: headcount up to this level is charged at the below rate
-        unitAmount:
-          type: number
-          description: PEPM rate

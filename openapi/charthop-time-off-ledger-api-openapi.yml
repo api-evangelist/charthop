@@ -206,6 +206,138 @@ paths:
           description: Not Implemented
 components:
   schemas:
+    CreateTimeOffLedgerEntry:
+      type: object
+      required:
+      - orgId
+      - personId
+      - entryType
+      - date
+      - days
+      - entryAction
+      properties:
+        orgId:
+          type: string
+          description: org that the time off belongs to
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          description: person taking the time off
+          example: 588f7ee98f138b19220041a7
+        timeOffPolicyId:
+          type: string
+          description: Time off policy to which this entry pertains.
+          example: 588f7ee98f138b19220041a7
+        entryType:
+          type: string
+          description: Ledger entry type
+          enum:
+          - EXPIRATION
+          - BALANCE_RESET
+          - CARRYOVER
+          - UPFRONT_BALANCE
+          - ACCRUAL
+          - ADJUSTMENT
+          - TIME_OFF
+        externalId:
+          type: string
+          description: external identifier, if this entry exists in an external system
+        fromDate:
+          type: string
+          format: date
+          description: For time off, from date of time off, inclusive
+        fromDatePartialDay:
+          type: number
+          description: For time off, portion of the from date to take
+        fromDatePartialDayPeriod:
+          type: string
+          description: Portion of the from day requested (e.g. AM or PM)
+          enum:
+          - AM
+          - PM
+        untilDate:
+          type: string
+          format: date
+          description: For time off, until date of time off, exclusive
+        endDatePartialDay:
+          type: number
+          description: For time off, portion of the end date (day before the until date) to take
+        endDatePartialDayPeriod:
+          type: string
+          description: Portion of the end day requested (e.g. AM or PM)
+          enum:
+          - AM
+          - PM
+        date:
+          type: string
+          format: date
+          description: date on which this entry appears in the ledger
+        days:
+          type: number
+          description: Change to the balance made by this ledger entry. This value is always nonnegative; it is interpreted in the context of entryAction.
+        hours:
+          type: number
+          description: For time off, number of hours taken
+        entryAction:
+          type: string
+          description: Action this entry takes on the balance.
+          enum:
+          - SET
+          - MIN
+          - EXPIRE
+          - CARRYOVER
+          - ADD
+          - ADD_CLAMP
+          - SUBTRACT
+        typeDescription:
+          type: string
+          description: type of time off
+        note:
+          type: string
+          description: notes on the time off
+        approval:
+          type: string
+          description: approval status of the time off
+          enum:
+          - APPROVED
+          - PENDING
+          - CANCELLED
+          - REJECTED
+          - SUPERSEDED
+        approvalAt:
+          type: string
+          description: timestamp of approval
+          example: '2017-01-24T13:57:52Z'
+        approvalUserId:
+          type: string
+          description: user who either is the next one requesting approval, or the user who did the final approval or rejection
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        requestAt:
+          type: string
+          description: requested at timestamp -- often the same as createAt
+          example: '2017-01-24T13:57:52Z'
+      description: Time off ledger entry
+    CarryOverBalanceEntry:
+      type: object
+      required:
+      - balance
+      properties:
+        balance:
+          type: number
+        fromDate:
+          type: string
+          format: date
+        expireDate:
+          type: string
+          format: date
     TimeOffLedgerExportOptions:
       type: object
       properties:
@@ -235,36 +367,33 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    AccessAction:
+    Attribution:
       type: object
-      required:
-      - action
       properties:
-        action:
+        principalUserId:
           type: string
-        fields:
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          uniqueItems: true
           items:
             type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    CarryOverBalanceEntry:
-      type: object
-      required:
-      - balance
-      properties:
-        balance:
-          type: number
-        fromDate:
+            example: 588f7ee98f138b19220041a7
+        eventId:
           type: string
-          format: date
-        expireDate:
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
           type: string
-          format: date
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     LogData:
       type: object
       required:
@@ -288,6 +417,43 @@ components:
           type: object
           additionalProperties:
             type: object
+    ResultsData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+        totalRow:
+          type: object
+          additionalProperties:
+            type: object
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     TimeOffLedgerEntry:
       type: object
       required:
@@ -442,152 +608,23 @@ components:
           type: number
           description: Balance change from previous entry.
       description: Time off ledger entry
-    CreateTimeOffLedgerEntry:
+    AccessAction:
       type: object
       required:
-      - orgId
-      - personId
-      - entryType
-      - date
-      - days
-      - entryAction
+      - action
       properties:
-        orgId:
+        action:
           type: string
-          description: org that the time off belongs to
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          description: person taking the time off
-          example: 588f7ee98f138b19220041a7
-        timeOffPolicyId:
-          type: string
-          description: Time off policy to which this entry pertains.
-          example: 588f7ee98f138b19220041a7
-        entryType:
-          type: string
-          description: Ledger entry type
-          enum:
-          - EXPIRATION
-          - BALANCE_RESET
-          - CARRYOVER
-          - UPFRONT_BALANCE
-          - ACCRUAL
-          - ADJUSTMENT
-          - TIME_OFF
-        externalId:
-          type: string
-          description: external identifier, if this entry exists in an external system
-        fromDate:
-          type: string
-          format: date
-          description: For time off, from date of time off, inclusive
-        fromDatePartialDay:
-          type: number
-          description: For time off, portion of the from date to take
-        fromDatePartialDayPeriod:
-          type: string
-          description: Portion of the from day requested (e.g. AM or PM)
-          enum:
-          - AM
-          - PM
-        untilDate:
-          type: string
-          format: date
-          description: For time off, until date of time off, exclusive
-        endDatePartialDay:
-          type: number
-          description: For time off, portion of the end date (day before the until date) to take
-        endDatePartialDayPeriod:
-          type: string
-          description: Portion of the end day requested (e.g. AM or PM)
-          enum:
-          - AM
-          - PM
-        date:
-          type: string
-          format: date
-          description: date on which this entry appears in the ledger
-        days:
-          type: number
-          description: Change to the balance made by this ledger entry. This value is always nonnegative; it is interpreted in the context of entryAction.
-        hours:
-          type: number
-          description: For time off, number of hours taken
-        entryAction:
-          type: string
-          description: Action this entry takes on the balance.
-          enum:
-          - SET
-          - MIN
-          - EXPIRE
-          - CARRYOVER
-          - ADD
-          - ADD_CLAMP
-          - SUBTRACT
-        typeDescription:
-          type: string
-          description: type of time off
-        note:
-          type: string
-          description: notes on the time off
-        approval:
-          type: string
-          description: approval status of the time off
-          enum:
-          - APPROVED
-          - PENDING
-          - CANCELLED
-          - REJECTED
-          - SUPERSEDED
-        approvalAt:
-          type: string
-          description: timestamp of approval
-          example: '2017-01-24T13:57:52Z'
-        approvalUserId:
-          type: string
-          description: user who either is the next one requesting approval, or the user who did the final approval or rejection
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        requestAt:
-          type: string
-          description: requested at timestamp -- often the same as createAt
-          example: '2017-01-24T13:57:52Z'
-      description: Time off ledger entry
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
+        fields:
           type: array
+          uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     Process:
       type: object
       required:
@@ -710,40 +747,3 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ResultsData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        totalRow:
-          type: object
-          additionalProperties:
-            type: object
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

@@ -417,34 +417,6 @@ paths:
           description: not found
 components:
   schemas:
-    JobCodeMatchRequest:
-      type: object
-      properties:
-        jobIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        batchSize:
-          type: integer
-          format: int32
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsJobCode:
       type: object
       required:
@@ -460,69 +432,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    JobCodeExportOptions:
-      type: object
-      properties:
-        format:
-          type: string
-        splitColumns:
-          type: boolean
-    CreateJobCode:
-      type: object
-      required:
-      - orgId
-      - title
-      - code
-      properties:
-        orgId:
-          type: string
-          description: parent organization id (empty if global)
-          example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: job title corresponding to this job code
-          example: Data Engineer III
-        code:
-          type: string
-          description: code of job code
-          example: US-DAENG-03
-        notes:
-          description: description of the job code
-          $ref: '#/components/schemas/TextRef'
-        color:
-          type: string
-          description: hex color string for job code
-          pattern: ^#[a-f0-9]{6}$
-        image:
-          type: string
-          description: path to job code image
-          pattern: ^[a-zA-Z0-9._/-]*$
-        fieldValues:
-          type: object
-          additionalProperties:
-            type: object
-    JobCodeLinkedFieldsResponse:
-      type: object
-      required:
-      - fields
-      properties:
-        fields:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        fieldValues:
-          type: object
-          additionalProperties:
-            type: object
-        jobCodeId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        excludedOnFilledJobFields:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
     Attribution:
       type: object
       properties:
@@ -550,6 +459,155 @@ components:
           - SLACK
           - TEAMS
           - MCP
+    LogData:
+      type: object
+      required:
+      - level
+      - at
+      - data
+      properties:
+        level:
+          type: string
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    JobCodeLinkedFieldsResponse:
+      type: object
+      required:
+      - fields
+      properties:
+        fields:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        fieldValues:
+          type: object
+          additionalProperties:
+            type: object
+        jobCodeId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        excludedOnFilledJobFields:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    JobCode:
+      type: object
+      required:
+      - id
+      - orgId
+      - title
+      - code
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id (empty if global)
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: job title corresponding to this job code
+          example: Data Engineer III
+        code:
+          type: string
+          description: code of job code
+          example: US-DAENG-03
+        notes:
+          description: description of the job code
+          $ref: '#/components/schemas/TextRef'
+        color:
+          type: string
+          description: hex color string for job code
+          pattern: ^#[a-f0-9]{6}$
+        image:
+          type: string
+          description: path to job code image
+          pattern: ^[a-zA-Z0-9._/-]*$
+        fieldValues:
+          type: object
+          additionalProperties:
+            type: object
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+    JobCodeExportOptions:
+      type: object
+      properties:
+        format:
+          type: string
+        splitColumns:
+          type: boolean
     Process:
       type: object
       required:
@@ -672,49 +730,13 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    LogData:
+    CreateJobCode:
       type: object
       required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    TextRef:
-      type: object
-      properties:
-        textId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        text:
-          type: string
-    JobCode:
-      type: object
-      required:
-      - id
       - orgId
       - title
       - code
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
         orgId:
           type: string
           description: parent organization id (empty if global)
@@ -742,61 +764,39 @@ components:
           type: object
           additionalProperties:
             type: object
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    ResultsAccess:
+    JobCodeMatchRequest:
+      type: object
+      properties:
+        jobIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        batchSize:
+          type: integer
+          format: int32
+    AccessAction:
       type: object
       required:
-      - allowed
+      - action
       properties:
-        ids:
+        action:
+          type: string
+        fields:
           type: array
           uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
+        types:
           type: array
           uniqueItems: true
           items:
-            $ref: '#/components/schemas/AccessAction'
+            type: string
+    TextRef:
+      type: object
+      properties:
+        textId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        text:
+          type: string

@@ -162,62 +162,6 @@ paths:
           description: Time off adjustment not found
 components:
   schemas:
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    CreateTimeOffBalanceAdjustment:
-      type: object
-      required:
-      - timeOffPolicyId
-      - date
-      - personId
-      - days
-      properties:
-        timeOffPolicyId:
-          type: string
-          description: policy id to tie the balance to
-          example: 588f7ee98f138b19220041a7
-        date:
-          type: string
-          format: date
-          description: date of adjustment
-        personId:
-          type: string
-          description: person to tie the balance adjustment to
-          example: 588f7ee98f138b19220041a7
-        days:
-          type: number
-          description: balance adjustment
-    UpdateTimeOffBalanceAdjustment:
-      type: object
-      properties:
-        days:
-          type: number
-          description: balance adjustment
     TimeOffBalanceAdjustment:
       type: object
       required:
@@ -293,3 +237,59 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    UpdateTimeOffBalanceAdjustment:
+      type: object
+      properties:
+        days:
+          type: number
+          description: balance adjustment
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    CreateTimeOffBalanceAdjustment:
+      type: object
+      required:
+      - timeOffPolicyId
+      - date
+      - personId
+      - days
+      properties:
+        timeOffPolicyId:
+          type: string
+          description: policy id to tie the balance to
+          example: 588f7ee98f138b19220041a7
+        date:
+          type: string
+          format: date
+          description: date of adjustment
+        personId:
+          type: string
+          description: person to tie the balance adjustment to
+          example: 588f7ee98f138b19220041a7
+        days:
+          type: number
+          description: balance adjustment

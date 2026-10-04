@@ -186,6 +186,34 @@ paths:
           description: Not Implemented
 components:
   schemas:
+    CreateCategory:
+      type: object
+      required:
+      - label
+      properties:
+        orgId:
+          type: string
+          description: parent organization id (empty if built-in)
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label of category
+          example: Performance
+          minItems: 3
+          maxItems: 80
+        fieldIds:
+          type: array
+          description: set of field ids included in this category
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        nativeFields:
+          type: array
+          description: set of native field names included in this category
+          uniqueItems: true
+          items:
+            type: string
     Category:
       type: object
       required:
@@ -261,56 +289,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    CreateCategory:
-      type: object
-      required:
-      - label
-      properties:
-        orgId:
-          type: string
-          description: parent organization id (empty if built-in)
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label of category
-          example: Performance
-          minItems: 3
-          maxItems: 80
-        fieldIds:
-          type: array
-          description: set of field ids included in this category
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        nativeFields:
-          type: array
-          description: set of native field names included in this category
-          uniqueItems: true
-          items:
-            type: string
-    UpdateCategory:
-      type: object
-      properties:
-        label:
-          type: string
-          description: human-readable label of category
-          example: Performance
-          minItems: 3
-          maxItems: 80
-        fieldIds:
-          type: array
-          description: set of field ids included in this category
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        nativeFields:
-          type: array
-          description: set of native field names included in this category
-          uniqueItems: true
-          items:
-            type: string
     Attribution:
       type: object
       properties:
@@ -349,3 +327,25 @@ components:
             $ref: '#/components/schemas/Category'
         next:
           type: string
+    UpdateCategory:
+      type: object
+      properties:
+        label:
+          type: string
+          description: human-readable label of category
+          example: Performance
+          minItems: 3
+          maxItems: 80
+        fieldIds:
+          type: array
+          description: set of field ids included in this category
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        nativeFields:
+          type: array
+          description: set of native field names included in this category
+          uniqueItems: true
+          items:
+            type: string

@@ -453,503 +453,58 @@ paths:
           description: not found
 components:
   schemas:
-    CreateOrg:
+    Address:
       type: object
       required:
-      - name
-      - type
-      - estEmployees
-      - status
-      - currencies
-      - dataResidency
-      - timezone
-      - options
-      - onboarding
+      - country
       properties:
-        customerId:
+        street1:
           type: string
-          description: customer for billing processing
-          example: 588f7ee98f138b19220041a7
-        name:
+          description: street address, line 1
+          example: 123 Anywhere Street
+          minItems: 0
+          maxItems: 200
+        street2:
           type: string
-          description: name of organization
-          example: Acme Corp
-        slug:
+          description: street address, line 2
+          example: Apt 6L
+          minItems: 0
+          maxItems: 200
+        street3:
           type: string
-          description: unique slug of organization
-          example: acme-corp
-        type:
+          description: street address, line 3
+          example: Sixth Floor
+          minItems: 0
+          maxItems: 200
+        city:
           type: string
-          description: type of organization
-          example: PRIVATE
-          enum:
-          - PRIVATE
-          - PUBLIC
-          - EDU
-          - GOV
-          - NONPROFIT
-          - DEMO
-          - TEST
-          - PORTFOLIO
-        industry:
+          description: city
+          example: New York
+          minItems: 0
+          maxItems: 80
+        state:
           type: string
-          description: industry
-          example: Software and Internet
-        estEmployees:
-          type: integer
-          format: int32
-          description: approximate number of employees
-        estRevenue:
-          type: integer
-          format: int32
-          description: approximate amount of revenue
-        foundedYear:
+          description: state
+          example: NY
+          minItems: 0
+          maxItems: 80
+        country:
           type: string
-          description: year of founding
-          example: '1998'
-        address:
-          description: street address
-          $ref: '#/components/schemas/Address'
-        phone:
+          description: country (two-digit ISO code)
+          example: NY
+          pattern: ^[A-Z]{2}$
+        postal:
           type: string
-          description: company phone number in E.164 format
-          pattern: ^\+?[1-9]\d{1,14}$
-        email:
-          type: string
-          description: primary contact email
-          example: bob@example.com
-        url:
-          type: string
-          format: uri
-          description: website URL
-        domains:
-          type: array
-          description: domains used by this org
-          items:
-            $ref: '#/components/schemas/OrgDomain'
-        status:
-          type: string
-          description: current status of organization
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - DISABLED
-        imagePath:
-          type: string
-          description: path to full-sized profile image in storage
-          pattern: ^[a-zA-Z0-9._/-]+$
-        currencies:
-          type: array
-          description: types of currencies in use, with the first currency the primary currency
-          items:
-            type: string
-          minItems: 1
-          maxItems: 100
-        locales:
-          type: array
-          description: locales supported within the org based on user selection, with the first locale the primary locale (e.g., en_US, en_GB, fr_FR, fr_CA)
-          items:
-            type: string
-        dataResidency:
-          type: string
-          description: data residency of the org - the db cluster where this org's data resides
-          enum:
-          - GLOBAL
-          - US
-          - EU
-        stock:
-          type: string
-          description: stock symbol
-          example: GOOG
-        timezone:
-          type: string
-          description: timezone in use
-          example: America/New_York
-        appTimes:
-          type: array
-          description: approximate times of day in the org timezone for daily app syncs to run (if unset, syncs will run 2am-8am US Eastern Time)
-          example: 09:00
-          items:
-            type: string
-        fiscalStart:
-          type: integer
-          format: int32
-          description: number of months into the calendar year that the fiscal year starts (1 = February, 2 = March)
-        portfolioParentOrgId:
-          type: string
-          description: portfolio parent org ID
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-          description: start date of history
-        options:
-          description: org-public options
-          $ref: '#/components/schemas/OrgOptions'
-        internalOptions:
-          description: internal (ChartHop controlled) options
-          $ref: '#/components/schemas/InternalOrgOptions'
-        onboarding:
-          type: boolean
-          description: current onboarding status of an organization, allowing clearing of org
-        selfServeImporting:
-          type: boolean
-          description: completion status of initial import for orgs signed up via self serve
-        headCount:
-          type: integer
-          format: int32
-          description: number of total headcount currently in the org
-    Org:
-      type: object
-      required:
-      - id
-      - name
-      - slug
-      - options
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        customerId:
-          type: string
-          description: customer for billing processing
-          example: 588f7ee98f138b19220041a7
-        name:
-          type: string
-          description: name of organization
-          example: Acme Corp
-        slug:
-          type: string
-          description: unique slug of organization
-          example: acme-corp
-        type:
-          type: string
-          description: type of organization
-          example: PRIVATE
-          enum:
-          - PRIVATE
-          - PUBLIC
-          - EDU
-          - GOV
-          - NONPROFIT
-          - DEMO
-          - TEST
-          - PORTFOLIO
-        industry:
-          type: string
-          description: industry
-          example: Software and Internet
-        estEmployees:
-          type: integer
-          format: int32
-          description: approximate number of employees
-        estRevenue:
-          type: integer
-          format: int32
-          description: approximate amount of revenue
-        foundedYear:
-          type: string
-          description: year of founding
-          example: '1998'
-        address:
-          description: street address
-          $ref: '#/components/schemas/Address'
-        phone:
-          type: string
-          description: company phone number in E.164 format
-          pattern: ^\+?[1-9]\d{1,14}$
-        email:
-          type: string
-          description: primary contact email
-          example: bob@example.com
-        url:
-          type: string
-          format: uri
-          description: website URL
-        domains:
-          type: array
-          description: domains used by this org
-          items:
-            $ref: '#/components/schemas/OrgDomain'
-        status:
-          type: string
-          description: current status of organization
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - DISABLED
-        imagePath:
-          type: string
-          description: path to full-sized profile image in storage
-          pattern: ^[a-zA-Z0-9._/-]+$
-        currencies:
-          type: array
-          description: types of currencies in use, with the first currency the primary currency
-          items:
-            type: string
-          minItems: 1
-          maxItems: 100
-        locales:
-          type: array
-          description: locales supported within the org based on user selection, with the first locale the primary locale (e.g., en_US, en_GB, fr_FR, fr_CA)
-          items:
-            type: string
-        dataResidency:
-          type: string
-          description: data residency of the org - the db cluster where this org's data resides
-          enum:
-          - GLOBAL
-          - US
-          - EU
-        stock:
-          type: string
-          description: stock symbol
-          example: GOOG
-        timezone:
-          type: string
-          description: timezone in use
-          example: America/New_York
-        appTimes:
-          type: array
-          description: approximate times of day in the org timezone for daily app syncs to run (if unset, syncs will run 2am-8am US Eastern Time)
-          example: 09:00
-          items:
-            type: string
-        fiscalStart:
-          type: integer
-          format: int32
-          description: number of months into the calendar year that the fiscal year starts (1 = February, 2 = March)
-        headJobId:
-          type: string
-          description: head of the organization
-          example: 588f7ee98f138b19220041a7
-        unassignedManagerJobId:
-          type: string
-          description: Job ID that all jobs with missing manager report to in the organization
-          example: 588f7ee98f138b19220041a7
-        portfolioParentOrgId:
-          type: string
-          description: portfolio parent org ID
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-          description: start date of history
-        options:
-          description: org-public options
-          $ref: '#/components/schemas/OrgOptions'
-        internalOptions:
-          description: internal (ChartHop controlled) options
-          $ref: '#/components/schemas/InternalOrgOptions'
-        onboarding:
-          type: boolean
-          description: current onboarding status of an organization, allowing clearing of org
-        selfServeImporting:
-          type: boolean
-          description: completion status of initial import for orgs signed up via self serve
-        headCount:
-          type: integer
-          format: int32
-          description: number of total headcount currently in the org
-        userCount:
-          type: integer
-          format: int32
-          description: number of non-ChartHop, non-app users in the org
-        activeUserCount:
-          type: integer
-          format: int32
-          description: number of non-ChartHop, non-app users in the org active in the past month
-        activeAt:
-          type: string
-          description: last timestamp that any user was active in the org
-          example: '2017-01-24T13:57:52Z'
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        destroyAt:
-          type: string
-          description: timestamp that the org is marked for data destruction
-          readOnly: true
-          example: '2017-01-24T13:57:52Z'
-        destroyId:
-          type: string
-          description: user who marked the org for data destruction
-          readOnly: true
-          example: 588f7ee98f138b19220041a7
-        destroyedAt:
-          type: string
-          description: date at which this org was destroyed, can not be modified
-          readOnly: true
-    OrgUsersPersonsResponse:
-      type: object
-      required:
-      - rows
-      properties:
-        rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserListRow'
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    InternalOrgOptions:
-      type: object
-      properties:
-        adpOrganizationOID:
-          type: string
-        assessmentCount:
-          type: integer
-          format: int32
-        dashboardGettingStartedHidden:
-          type: boolean
-        dashboardNeedHelpHidden:
-          type: boolean
-        enableUniversalSso:
-          type: boolean
-        sequoiaOrgId:
-          type: string
-        tosAgreement:
-          type: boolean
-        fileUploadLimit:
-          type: integer
-          format: int64
-        maxFileUploadSize:
-          type: integer
-          format: int64
-        lowPriorityReports:
-          type: boolean
-        isInitialDataSynced:
-          type: boolean
-        maxReportDatapoints:
-          type: integer
-          format: int64
-        disableImportEvents:
-          type: boolean
-          description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
-        useAlphaSlackApp:
-          type: boolean
-          description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
-        extraFields:
-          type: object
-          additionalProperties:
-            type: object
-    TestEmailRequest:
-      type: object
-      required:
-      - welcomeEmailSubject
-      - welcomeEmailButtonLabel
-      - welcomeEmailBody
-      properties:
-        welcomeEmailSubject:
-          type: string
-        welcomeEmailButtonLabel:
-          type: string
-        welcomeEmailBody:
-          type: string
-    AppInstallCodeValidateRequest:
-      type: object
-      required:
-      - authorizationCode
-      - issueAccessToken
-      properties:
-        authorizationCode:
-          type: string
-          description: authorization code token value
-        issueAccessToken:
-          type: boolean
-          description: flag indicating if authorization code should be exchanged for an access token
-    OrgUsersPersonsCountResponse:
-      type: object
-      required:
-      - joinedCount
-      - invitedCount
-      - notInvitedCount
-      properties:
-        joinedCount:
-          type: integer
-          format: int32
-        invitedCount:
-          type: integer
-          format: int32
-        notInvitedCount:
-          type: integer
-          format: int32
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    OrgDomain:
-      type: object
-      required:
-      - domain
-      - aliases
-      properties:
-        domain:
-          type: string
-        aliases:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+          description: postal code
+          example: '10001'
+          minItems: 0
+          maxItems: 10
+        geo:
+          description: geopoint location
+          $ref: '#/components/schemas/Geopoint'
+        approxGeo:
+          description: approximate geopoint location (suitable for a map placement, but not exact location)
+          $ref: '#/components/schemas/Geopoint'
     OrgOptions:
       type: object
       properties:
@@ -1651,16 +1206,157 @@ components:
           type: integer
           format: int32
           description: 'Maximum number of job codes allowed for AI job-code matching (default: 1000)'
-    LayoutButton:
+    Layout:
       type: object
       required:
-      - url
-      - label
+      - rows
       properties:
-        url:
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayoutRow'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
           type: string
-        label:
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
           type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    MessageChannelConfig:
+      type: object
+      required:
+      - channels
+      - alwaysEmail
+      properties:
+        channels:
+          type: array
+          items:
+            type: string
+            enum:
+            - EMAIL
+            - CHAT
+            - CHAT_SLACK
+            - CHAT_TEAMS
+        alwaysEmail:
+          type: boolean
+    ResultsOrg:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Org'
+        next:
+          type: string
+    OrgUsersPersonsCountResponse:
+      type: object
+      required:
+      - joinedCount
+      - invitedCount
+      - notInvitedCount
+      properties:
+        joinedCount:
+          type: integer
+          format: int32
+        invitedCount:
+          type: integer
+          format: int32
+        notInvitedCount:
+          type: integer
+          format: int32
+    OrgUsersPersonsResponse:
+      type: object
+      required:
+      - rows
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserListRow'
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    LayoutRow:
+      type: object
+      required:
+      - columns
+      - format
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayoutColumn'
+        format:
+          type: string
+    OrgDomain:
+      type: object
+      required:
+      - domain
+      - aliases
+      properties:
+        domain:
+          type: string
+        aliases:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    Geopoint:
+      type: object
+      required:
+      - type
+      - coordinates
+      properties:
+        type:
+          type: string
+          description: Type of point
+          readOnly: true
+        coordinates:
+          type: array
+          description: The longitude and latitude of the point
+          readOnly: true
+          items:
+            type: number
+            format: double
+    AgreementRequest:
+      type: object
+      required:
+      - action
+      - legalDocId
+      properties:
+        action:
+          type: string
+          description: action taken
+          enum:
+          - AGREE
+          - CANCEL
+        legalDocId:
+          type: string
+          description: legal document entity id
+          example: 588f7ee98f138b19220041a7
     LogData:
       type: object
       required:
@@ -1684,6 +1380,118 @@ components:
           type: object
           additionalProperties:
             type: object
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    AccessTokenResponse:
+      type: object
+      required:
+      - access_token
+      - expires_in
+      properties:
+        access_token:
+          type: string
+          description: access token value
+          readOnly: true
+          example: 2YotnFZFEjr1zCsicMWsdv
+        token_type:
+          type: string
+          description: access token type
+          readOnly: true
+          example: bearer
+        expires_in:
+          type: integer
+          format: int32
+          description: expiration time of token, in seconds
+          readOnly: true
+          example: '86400'
+        refresh_token:
+          type: string
+          description: refresh token value
+          readOnly: true
+          example: tGzv3JOkF0XG5Qx2TlKWIA
+        scope:
+          type: string
+          description: scope of the access token
+          readOnly: true
+          example: admin
+        redirect_uri:
+          type: string
+          description: redirect uri of the access token
+          readOnly: true
+          example: com.charthop.mobile://oauth
+    LayoutColumn:
+      type: object
+      required:
+      - blocks
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+    Block:
+      type: object
+      properties:
+        type:
+          type: string
+          description: the type of this block, or null if legacy
+          enum:
+          - CONTENT
+          - TASK
+          - CALENDAR
+        label:
+          type: string
+          description: human readable label for this block
+        height:
+          type: object
+          description: fixed height in px, or expand if “stretch”, or fit to contents if null
+        targetFilter:
+          type: string
+          description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
+        readFilter:
+          type: string
+          description: filter condition expression applied to this block, relative to the viewer
+        formIds:
+          type: array
+          description: form ids to surface responses in this block
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        fields:
+          type: array
+          description: fields retrieved in this block
+          items:
+            type: string
+        title:
+          type: string
+          description: title to show in block header
+        content:
+          type: string
+          description: template content returned in this block
+        contentTr:
+          description: template content returned in this block, translated
+          $ref: '#/components/schemas/Translations'
+        primaryButton:
+          description: primary CTA button
+          $ref: '#/components/schemas/LayoutButton'
+        secondaryButton:
+          description: secondary CTA button
+          $ref: '#/components/schemas/LayoutButton'
     WelcomeEmailSettings:
       type: object
       required:
@@ -1704,6 +1512,386 @@ components:
         welcomeEmailBody:
           type: string
           description: Body
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Name:
+      type: object
+      required:
+      - last
+      properties:
+        first:
+          type: string
+          description: first name
+          example: Jane
+          minItems: 0
+          maxItems: 80
+        middle:
+          type: string
+          description: middle name
+          example: Quidditch
+          minItems: 0
+          maxItems: 80
+        last:
+          type: string
+          description: last name
+          example: Public
+          minItems: 0
+          maxItems: 80
+        pref:
+          type: string
+          description: preferred first name
+          example: JQ
+          minItems: 0
+          maxItems: 80
+        prefLast:
+          type: string
+          description: preferred last name
+          example: Smith
+          minItems: 0
+          maxItems: 80
+    Org:
+      type: object
+      required:
+      - id
+      - name
+      - slug
+      - options
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        customerId:
+          type: string
+          description: customer for billing processing
+          example: 588f7ee98f138b19220041a7
+        name:
+          type: string
+          description: name of organization
+          example: Acme Corp
+        slug:
+          type: string
+          description: unique slug of organization
+          example: acme-corp
+        type:
+          type: string
+          description: type of organization
+          example: PRIVATE
+          enum:
+          - PRIVATE
+          - PUBLIC
+          - EDU
+          - GOV
+          - NONPROFIT
+          - DEMO
+          - TEST
+          - PORTFOLIO
+        industry:
+          type: string
+          description: industry
+          example: Software and Internet
+        estEmployees:
+          type: integer
+          format: int32
+          description: approximate number of employees
+        estRevenue:
+          type: integer
+          format: int32
+          description: approximate amount of revenue
+        foundedYear:
+          type: string
+          description: year of founding
+          example: '1998'
+        address:
+          description: street address
+          $ref: '#/components/schemas/Address'
+        phone:
+          type: string
+          description: company phone number in E.164 format
+          pattern: ^\+?[1-9]\d{1,14}$
+        email:
+          type: string
+          description: primary contact email
+          example: bob@example.com
+        url:
+          type: string
+          format: uri
+          description: website URL
+        domains:
+          type: array
+          description: domains used by this org
+          items:
+            $ref: '#/components/schemas/OrgDomain'
+        status:
+          type: string
+          description: current status of organization
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DISABLED
+        imagePath:
+          type: string
+          description: path to full-sized profile image in storage
+          pattern: ^[a-zA-Z0-9._/-]+$
+        currencies:
+          type: array
+          description: types of currencies in use, with the first currency the primary currency
+          items:
+            type: string
+          minItems: 1
+          maxItems: 100
+        locales:
+          type: array
+          description: locales supported within the org based on user selection, with the first locale the primary locale (e.g., en_US, en_GB, fr_FR, fr_CA)
+          items:
+            type: string
+        dataResidency:
+          type: string
+          description: data residency of the org - the db cluster where this org's data resides
+          enum:
+          - GLOBAL
+          - US
+          - EU
+        stock:
+          type: string
+          description: stock symbol
+          example: GOOG
+        timezone:
+          type: string
+          description: timezone in use
+          example: America/New_York
+        appTimes:
+          type: array
+          description: approximate times of day in the org timezone for daily app syncs to run (if unset, syncs will run 2am-8am US Eastern Time)
+          example: 09:00
+          items:
+            type: string
+        fiscalStart:
+          type: integer
+          format: int32
+          description: number of months into the calendar year that the fiscal year starts (1 = February, 2 = March)
+        headJobId:
+          type: string
+          description: head of the organization
+          example: 588f7ee98f138b19220041a7
+        unassignedManagerJobId:
+          type: string
+          description: Job ID that all jobs with missing manager report to in the organization
+          example: 588f7ee98f138b19220041a7
+        portfolioParentOrgId:
+          type: string
+          description: portfolio parent org ID
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+          description: start date of history
+        options:
+          description: org-public options
+          $ref: '#/components/schemas/OrgOptions'
+        internalOptions:
+          description: internal (ChartHop controlled) options
+          $ref: '#/components/schemas/InternalOrgOptions'
+        onboarding:
+          type: boolean
+          description: current onboarding status of an organization, allowing clearing of org
+        selfServeImporting:
+          type: boolean
+          description: completion status of initial import for orgs signed up via self serve
+        headCount:
+          type: integer
+          format: int32
+          description: number of total headcount currently in the org
+        userCount:
+          type: integer
+          format: int32
+          description: number of non-ChartHop, non-app users in the org
+        activeUserCount:
+          type: integer
+          format: int32
+          description: number of non-ChartHop, non-app users in the org active in the past month
+        activeAt:
+          type: string
+          description: last timestamp that any user was active in the org
+          example: '2017-01-24T13:57:52Z'
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        destroyAt:
+          type: string
+          description: timestamp that the org is marked for data destruction
+          readOnly: true
+          example: '2017-01-24T13:57:52Z'
+        destroyId:
+          type: string
+          description: user who marked the org for data destruction
+          readOnly: true
+          example: 588f7ee98f138b19220041a7
+        destroyedAt:
+          type: string
+          description: date at which this org was destroyed, can not be modified
+          readOnly: true
+    Process:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
     UserListRow:
       type: object
       required:
@@ -1764,33 +1952,41 @@ components:
           type: string
         updateAt:
           type: string
-    AgreementRequest:
+    LayoutButton:
       type: object
       required:
-      - action
-      - legalDocId
+      - url
+      - label
       properties:
-        action:
+        url:
           type: string
-          description: action taken
-          enum:
-          - AGREE
-          - CANCEL
-        legalDocId:
+        label:
           type: string
-          description: legal document entity id
-          example: 588f7ee98f138b19220041a7
-    ResultsOrg:
+    Translations:
       type: object
       required:
-      - data
+      - values
       properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    AppInstallCodeValidateResponse:
+      type: object
+      required:
+      - userId
+      properties:
+        userId:
+          type: string
+          description: userId that created the app install authorization code
+          example: 64b050ef762ef7deb38ac723
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Org'
-        next:
+          type: object
+          description: data associated with the app install authorization code
+          example: '{ "orgId": "64b05135e1342073d3d45984" }'
+        accessToken:
           type: string
+          description: access token issued from app install authorization code
     UpdateOrg:
       type: object
       properties:
@@ -1927,411 +2123,215 @@ components:
           type: integer
           format: int32
           description: number of total headcount currently in the org
-    AccessTokenResponse:
+    InternalOrgOptions:
       type: object
-      required:
-      - access_token
-      - expires_in
       properties:
-        access_token:
+        adpOrganizationOID:
           type: string
-          description: access token value
-          readOnly: true
-          example: 2YotnFZFEjr1zCsicMWsdv
-        token_type:
-          type: string
-          description: access token type
-          readOnly: true
-          example: bearer
-        expires_in:
+        assessmentCount:
           type: integer
           format: int32
-          description: expiration time of token, in seconds
-          readOnly: true
-          example: '86400'
-        refresh_token:
+        dashboardGettingStartedHidden:
+          type: boolean
+        dashboardNeedHelpHidden:
+          type: boolean
+        enableUniversalSso:
+          type: boolean
+        sequoiaOrgId:
           type: string
-          description: refresh token value
-          readOnly: true
-          example: tGzv3JOkF0XG5Qx2TlKWIA
-        scope:
-          type: string
-          description: scope of the access token
-          readOnly: true
-          example: admin
-        redirect_uri:
-          type: string
-          description: redirect uri of the access token
-          readOnly: true
-          example: com.charthop.mobile://oauth
-    Process:
-      type: object
-      required:
-      - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
-      - createId
-      - createAt
-      - options
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id (user who requested the process run)
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
-          type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
+        tosAgreement:
+          type: boolean
+        fileUploadLimit:
+          type: integer
+          format: int64
+        maxFileUploadSize:
+          type: integer
+          format: int64
+        lowPriorityReports:
+          type: boolean
+        isInitialDataSynced:
+          type: boolean
+        maxReportDatapoints:
+          type: integer
+          format: int64
+        disableImportEvents:
+          type: boolean
+          description: Whether to disable event notifications on imports -- should only be used temporarily in performance-critical initial imports
+        useAlphaSlackApp:
+          type: boolean
+          description: Use the alpha Slack app (a second real Slack app sharing the global 'slack' install) instead of the default for inbound hooks and outbound messages — ChartHop-staff only, for Slack-team app-review testing
+        extraFields:
           type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
           additionalProperties:
             type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-        uuid:
-          type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
-    MessageChannelConfig:
+    CreateOrg:
       type: object
       required:
-      - channels
-      - alwaysEmail
-      properties:
-        channels:
-          type: array
-          items:
-            type: string
-            enum:
-            - EMAIL
-            - CHAT
-            - CHAT_SLACK
-            - CHAT_TEAMS
-        alwaysEmail:
-          type: boolean
-    Block:
-      type: object
-      properties:
-        type:
-          type: string
-          description: the type of this block, or null if legacy
-          enum:
-          - CONTENT
-          - TASK
-          - CALENDAR
-        label:
-          type: string
-          description: human readable label for this block
-        height:
-          type: object
-          description: fixed height in px, or expand if “stretch”, or fit to contents if null
-        targetFilter:
-          type: string
-          description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
-        readFilter:
-          type: string
-          description: filter condition expression applied to this block, relative to the viewer
-        formIds:
-          type: array
-          description: form ids to surface responses in this block
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        fields:
-          type: array
-          description: fields retrieved in this block
-          items:
-            type: string
-        title:
-          type: string
-          description: title to show in block header
-        content:
-          type: string
-          description: template content returned in this block
-        contentTr:
-          description: template content returned in this block, translated
-          $ref: '#/components/schemas/Translations'
-        primaryButton:
-          description: primary CTA button
-          $ref: '#/components/schemas/LayoutButton'
-        secondaryButton:
-          description: secondary CTA button
-          $ref: '#/components/schemas/LayoutButton'
-    Name:
-      type: object
-      required:
-      - last
-      properties:
-        first:
-          type: string
-          description: first name
-          example: Jane
-          minItems: 0
-          maxItems: 80
-        middle:
-          type: string
-          description: middle name
-          example: Quidditch
-          minItems: 0
-          maxItems: 80
-        last:
-          type: string
-          description: last name
-          example: Public
-          minItems: 0
-          maxItems: 80
-        pref:
-          type: string
-          description: preferred first name
-          example: JQ
-          minItems: 0
-          maxItems: 80
-        prefLast:
-          type: string
-          description: preferred last name
-          example: Smith
-          minItems: 0
-          maxItems: 80
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    LayoutRow:
-      type: object
-      required:
-      - columns
-      - format
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/LayoutColumn'
-        format:
-          type: string
-    Geopoint:
-      type: object
-      required:
+      - name
       - type
-      - coordinates
+      - estEmployees
+      - status
+      - currencies
+      - dataResidency
+      - timezone
+      - options
+      - onboarding
       properties:
+        customerId:
+          type: string
+          description: customer for billing processing
+          example: 588f7ee98f138b19220041a7
+        name:
+          type: string
+          description: name of organization
+          example: Acme Corp
+        slug:
+          type: string
+          description: unique slug of organization
+          example: acme-corp
         type:
           type: string
-          description: Type of point
-          readOnly: true
-        coordinates:
+          description: type of organization
+          example: PRIVATE
+          enum:
+          - PRIVATE
+          - PUBLIC
+          - EDU
+          - GOV
+          - NONPROFIT
+          - DEMO
+          - TEST
+          - PORTFOLIO
+        industry:
+          type: string
+          description: industry
+          example: Software and Internet
+        estEmployees:
+          type: integer
+          format: int32
+          description: approximate number of employees
+        estRevenue:
+          type: integer
+          format: int32
+          description: approximate amount of revenue
+        foundedYear:
+          type: string
+          description: year of founding
+          example: '1998'
+        address:
+          description: street address
+          $ref: '#/components/schemas/Address'
+        phone:
+          type: string
+          description: company phone number in E.164 format
+          pattern: ^\+?[1-9]\d{1,14}$
+        email:
+          type: string
+          description: primary contact email
+          example: bob@example.com
+        url:
+          type: string
+          format: uri
+          description: website URL
+        domains:
           type: array
-          description: The longitude and latitude of the point
-          readOnly: true
+          description: domains used by this org
           items:
-            type: number
-            format: double
-    Address:
-      type: object
-      required:
-      - country
-      properties:
-        street1:
+            $ref: '#/components/schemas/OrgDomain'
+        status:
           type: string
-          description: street address, line 1
-          example: 123 Anywhere Street
-          minItems: 0
-          maxItems: 200
-        street2:
+          description: current status of organization
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DISABLED
+        imagePath:
           type: string
-          description: street address, line 2
-          example: Apt 6L
-          minItems: 0
-          maxItems: 200
-        street3:
-          type: string
-          description: street address, line 3
-          example: Sixth Floor
-          minItems: 0
-          maxItems: 200
-        city:
-          type: string
-          description: city
-          example: New York
-          minItems: 0
-          maxItems: 80
-        state:
-          type: string
-          description: state
-          example: NY
-          minItems: 0
-          maxItems: 80
-        country:
-          type: string
-          description: country (two-digit ISO code)
-          example: NY
-          pattern: ^[A-Z]{2}$
-        postal:
-          type: string
-          description: postal code
-          example: '10001'
-          minItems: 0
-          maxItems: 10
-        geo:
-          description: geopoint location
-          $ref: '#/components/schemas/Geopoint'
-        approxGeo:
-          description: approximate geopoint location (suitable for a map placement, but not exact location)
-          $ref: '#/components/schemas/Geopoint'
-    LayoutColumn:
-      type: object
-      required:
-      - blocks
-      properties:
-        blocks:
+          description: path to full-sized profile image in storage
+          pattern: ^[a-zA-Z0-9._/-]+$
+        currencies:
           type: array
-          items:
-            $ref: '#/components/schemas/Block'
-    Layout:
-      type: object
-      required:
-      - rows
-      properties:
-        rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/LayoutRow'
-    AppInstallCodeValidateResponse:
-      type: object
-      required:
-      - userId
-      properties:
-        userId:
-          type: string
-          description: userId that created the app install authorization code
-          example: 64b050ef762ef7deb38ac723
-        data:
-          type: object
-          description: data associated with the app install authorization code
-          example: '{ "orgId": "64b05135e1342073d3d45984" }'
-        accessToken:
-          type: string
-          description: access token issued from app install authorization code
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
+          description: types of currencies in use, with the first currency the primary currency
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
+          minItems: 1
+          maxItems: 100
+        locales:
           type: array
-          uniqueItems: true
+          description: locales supported within the org based on user selection, with the first locale the primary locale (e.g., en_US, en_GB, fr_FR, fr_CA)
           items:
-            $ref: '#/components/schemas/AccessAction'
+            type: string
+        dataResidency:
+          type: string
+          description: data residency of the org - the db cluster where this org's data resides
+          enum:
+          - GLOBAL
+          - US
+          - EU
+        stock:
+          type: string
+          description: stock symbol
+          example: GOOG
+        timezone:
+          type: string
+          description: timezone in use
+          example: America/New_York
+        appTimes:
+          type: array
+          description: approximate times of day in the org timezone for daily app syncs to run (if unset, syncs will run 2am-8am US Eastern Time)
+          example: 09:00
+          items:
+            type: string
+        fiscalStart:
+          type: integer
+          format: int32
+          description: number of months into the calendar year that the fiscal year starts (1 = February, 2 = March)
+        portfolioParentOrgId:
+          type: string
+          description: portfolio parent org ID
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+          description: start date of history
+        options:
+          description: org-public options
+          $ref: '#/components/schemas/OrgOptions'
+        internalOptions:
+          description: internal (ChartHop controlled) options
+          $ref: '#/components/schemas/InternalOrgOptions'
+        onboarding:
+          type: boolean
+          description: current onboarding status of an organization, allowing clearing of org
+        selfServeImporting:
+          type: boolean
+          description: completion status of initial import for orgs signed up via self serve
+        headCount:
+          type: integer
+          format: int32
+          description: number of total headcount currently in the org
+    AppInstallCodeValidateRequest:
+      type: object
+      required:
+      - authorizationCode
+      - issueAccessToken
+      properties:
+        authorizationCode:
+          type: string
+          description: authorization code token value
+        issueAccessToken:
+          type: boolean
+          description: flag indicating if authorization code should be exchanged for an access token
+    TestEmailRequest:
+      type: object
+      required:
+      - welcomeEmailSubject
+      - welcomeEmailButtonLabel
+      - welcomeEmailBody
+      properties:
+        welcomeEmailSubject:
+          type: string
+        welcomeEmailButtonLabel:
+          type: string
+        welcomeEmailBody:
+          type: string

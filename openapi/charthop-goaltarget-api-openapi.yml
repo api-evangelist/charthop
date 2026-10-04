@@ -264,150 +264,6 @@ paths:
           description: not found
 components:
   schemas:
-    GoalTargetValue:
-      type: object
-      required:
-      - value
-      properties:
-        targetValueTypeId:
-          type: string
-          description: the type of the target value (for example, 'Stretch' vs 'Minimum'), extracted from the goal type's targetValues
-          example: 588f7ee98f138b19220041a7
-        value:
-          description: target value to achieve (should be a numeric value, either number, money, or percentage)
-          example: '100000'
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    UpdateGoalTarget:
-      type: object
-      properties:
-        goalId:
-          type: string
-          description: goal id that this target belongs to
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable name of the goal target
-          example: Increase Revenue at least 10% in Q1
-        slug:
-          type: string
-          description: url-safe slug for the goal target, auto-generated from goal slug and label if not provided
-        startValue:
-          description: starting point value for this target, as-of the date of the goal
-          example: '100000'
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
-        targetValues:
-          type: array
-          description: potential target values we're working to achieve
-          items:
-            $ref: '#/components/schemas/GoalTargetValue'
-        direction:
-          type: string
-          description: direction of the target -- whether we want to minimize or maximize the value
-          enum:
-          - MINIMIZE
-          - MAXIMIZE
-          - TARGET
-        type:
-          type: string
-          description: type of the target value
-          enum:
-          - MILESTONE
-          - MONEY
-          - PERCENT
-          - INTEGER
-          - DECIMAL
-        valueExpr:
-          type: string
-          description: Carrot expression used to compute the current value versus target -- if not provided, GoalProgress will be used to track progress
-        startDate:
-          type: string
-          format: date
-          description: start date for this goal target
-        endDate:
-          type: string
-          format: date
-          description: end date for this goal target
-    CreateGoalTarget:
-      type: object
-      required:
-      - goalId
-      - type
-      - startDate
-      - endDate
-      properties:
-        goalId:
-          type: string
-          description: goal id that this target belongs to
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable name of the goal target
-          example: Increase Revenue at least 10% in Q1
-        slug:
-          type: string
-          description: url-safe slug for the goal target, auto-generated from goal slug and label if not provided
-        startValue:
-          description: starting point value for this target, as-of the date of the goal
-          example: '100000'
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
-        targetValues:
-          type: array
-          description: potential target values we're working to achieve
-          items:
-            $ref: '#/components/schemas/GoalTargetValue'
-        direction:
-          type: string
-          description: direction of the target -- whether we want to minimize or maximize the value
-          enum:
-          - MINIMIZE
-          - MAXIMIZE
-          - TARGET
-        type:
-          type: string
-          description: type of the target value
-          enum:
-          - MILESTONE
-          - MONEY
-          - PERCENT
-          - INTEGER
-          - DECIMAL
-        valueExpr:
-          type: string
-          description: Carrot expression used to compute the current value versus target -- if not provided, GoalProgress will be used to track progress
-        startDate:
-          type: string
-          format: date
-          description: start date for this goal target
-        endDate:
-          type: string
-          format: date
-          description: end date for this goal target
     ResultsGoalTarget:
       type: object
       required:
@@ -423,33 +279,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
     GoalTarget:
       type: object
       required:
@@ -560,19 +389,33 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    GoalTargetActual:
+    Attribution:
       type: object
-      required:
-      - goalTargetId
       properties:
-        goalTargetId:
+        principalUserId:
           type: string
           example: 588f7ee98f138b19220041a7
-        value:
-          anyOf:
-          - type: string
-          - type: number
-          - type: boolean
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     ResultsAccess:
       type: object
       required:
@@ -589,3 +432,160 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    UpdateGoalTarget:
+      type: object
+      properties:
+        goalId:
+          type: string
+          description: goal id that this target belongs to
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable name of the goal target
+          example: Increase Revenue at least 10% in Q1
+        slug:
+          type: string
+          description: url-safe slug for the goal target, auto-generated from goal slug and label if not provided
+        startValue:
+          description: starting point value for this target, as-of the date of the goal
+          example: '100000'
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean
+        targetValues:
+          type: array
+          description: potential target values we're working to achieve
+          items:
+            $ref: '#/components/schemas/GoalTargetValue'
+        direction:
+          type: string
+          description: direction of the target -- whether we want to minimize or maximize the value
+          enum:
+          - MINIMIZE
+          - MAXIMIZE
+          - TARGET
+        type:
+          type: string
+          description: type of the target value
+          enum:
+          - MILESTONE
+          - MONEY
+          - PERCENT
+          - INTEGER
+          - DECIMAL
+        valueExpr:
+          type: string
+          description: Carrot expression used to compute the current value versus target -- if not provided, GoalProgress will be used to track progress
+        startDate:
+          type: string
+          format: date
+          description: start date for this goal target
+        endDate:
+          type: string
+          format: date
+          description: end date for this goal target
+    GoalTargetActual:
+      type: object
+      required:
+      - goalTargetId
+      properties:
+        goalTargetId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        value:
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean
+    CreateGoalTarget:
+      type: object
+      required:
+      - goalId
+      - type
+      - startDate
+      - endDate
+      properties:
+        goalId:
+          type: string
+          description: goal id that this target belongs to
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable name of the goal target
+          example: Increase Revenue at least 10% in Q1
+        slug:
+          type: string
+          description: url-safe slug for the goal target, auto-generated from goal slug and label if not provided
+        startValue:
+          description: starting point value for this target, as-of the date of the goal
+          example: '100000'
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean
+        targetValues:
+          type: array
+          description: potential target values we're working to achieve
+          items:
+            $ref: '#/components/schemas/GoalTargetValue'
+        direction:
+          type: string
+          description: direction of the target -- whether we want to minimize or maximize the value
+          enum:
+          - MINIMIZE
+          - MAXIMIZE
+          - TARGET
+        type:
+          type: string
+          description: type of the target value
+          enum:
+          - MILESTONE
+          - MONEY
+          - PERCENT
+          - INTEGER
+          - DECIMAL
+        valueExpr:
+          type: string
+          description: Carrot expression used to compute the current value versus target -- if not provided, GoalProgress will be used to track progress
+        startDate:
+          type: string
+          format: date
+          description: start date for this goal target
+        endDate:
+          type: string
+          format: date
+          description: end date for this goal target
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    GoalTargetValue:
+      type: object
+      required:
+      - value
+      properties:
+        targetValueTypeId:
+          type: string
+          description: the type of the target value (for example, 'Stretch' vs 'Minimum'), extracted from the goal type's targetValues
+          example: 588f7ee98f138b19220041a7
+        value:
+          description: target value to achieve (should be a numeric value, either number, money, or percentage)
+          example: '100000'
+          anyOf:
+          - type: string
+          - type: number
+          - type: boolean

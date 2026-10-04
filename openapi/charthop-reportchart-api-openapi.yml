@@ -326,92 +326,137 @@ paths:
           description: not found
 components:
   schemas:
-    CreateReportChart:
+    ReportFilter:
       type: object
       required:
       - label
-      - type
-      - query
-      - sort
+      - filter
       properties:
         label:
           type: string
-          description: chart label
-          example: Headcount Report
-          minItems: 1
-          maxItems: 255
-        type:
-          type: string
-          description: chart type
-          enum:
-          - LINE
-          - AREA
-          - STACKED
-          - BAR
-          - VERTICAL_BAR
-          - HORIZONTAL_BAR
-          - PIE
-          - TABLE
-          - TABLE_CROSSTAB
-          - SINGLE_METRIC
-          - BUBBLE
-          - HEADER
-          - TEXT
-          - GAUGE
-          - WATERFALL
-          - WATERFALL_TIMESERIES
-          - HEATMAP
-          - GEO
-          - GEO_HEATMAP
-          - GEO_SCATTER
-          - RADAR
-          - N_GRID
-          - NETWORK
-          - COMBO
-          - COMBO_TIMESERIES
-          - DONUT
-          - FUNNEL
-          - FUNNEL_TIMESERIES
-          - SANKEY
-          - SANKEY_TIMESERIES
-          - WORDCLOUD
-          - EMOJI_CLOUD
-          - CALENDAR_HEATMAP
-          - GANTT
+          description: human-readable label for the filter
         filter:
           type: string
-          description: filter that applies to this chart
-          example: department='Engineering'
-        filterOverride:
+          description: filter expression
+    GroupByConfig:
+      type: object
+      properties:
+        overrides:
+          type: array
+          description: Overrides by label of label, color, or sort order
+          items:
+            $ref: '#/components/schemas/LabelOverride'
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to display
+        includeOther:
           type: boolean
-          description: whether the chart filter overrides the global filter
-        query:
-          description: query for all series in the chart
-          $ref: '#/components/schemas/ReportQuery'
+          description: When combined with limit, whether to include an 'Other' group
+        includeNone:
+          type: boolean
+          description: Whether to include a 'None' group (null values aggregated)
+        includeAllValues:
+          type: boolean
+          description: When combined with fieldId or questionId, will include all values from that fieldId or questionId, even if none of them were used
+        fieldId:
+          type: string
+          description: The field to use to retrieve values, when includeAllValues is in use
+          example: 588f7ee98f138b19220041a7
+        questionId:
+          type: string
+          description: The question to use to retrieve values, when includeAllValues is in use
+          example: 588f7ee98f138b19220041a7
+        sortBy:
+          type: string
+          description: Whether to sort the results -- by default, will sort by label if there is no limit, will sort by value descending if there is a limit
+          enum:
+          - LABEL
+          - KEY
+          - VALUE
+          - COUNT
+        sortDirection:
+          type: string
+          description: The direction to sort the results
+          enum:
+          - ASC
+          - DESC
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    LabelOverride:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: The unique identifier to use to locate the key to override. For entities and enum values, this will be an id. For numbers, this will be the normalized numeric representation. For others, this will be the string
+        label:
+          type: string
+          description: If set, overrides this label
+        color:
+          type: string
+          description: If set, overrides the default color
         sort:
           type: integer
           format: int32
-          description: sort order
-        isAdvancedQueryMode:
-          type: boolean
-          description: whether the chart configuration is using advanced mode
-    AccessAction:
+          description: If set, overrides the sorting order
+    ResultsReportChart:
       type: object
       required:
-      - action
+      - data
       properties:
-        action:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportChart'
+        next:
           type: string
-        fields:
+        access:
           type: array
-          uniqueItems: true
           items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+            $ref: '#/components/schemas/ResultsAccess'
     ReportSeriesQuery:
       type: object
       required:
@@ -558,51 +603,75 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    LabelOverride:
+    CreateReportChart:
       type: object
       required:
-      - id
+      - label
+      - type
+      - query
+      - sort
       properties:
-        id:
-          type: string
-          description: The unique identifier to use to locate the key to override. For entities and enum values, this will be an id. For numbers, this will be the normalized numeric representation. For others, this will be the string
         label:
           type: string
-          description: If set, overrides this label
-        color:
+          description: chart label
+          example: Headcount Report
+          minItems: 1
+          maxItems: 255
+        type:
           type: string
-          description: If set, overrides the default color
+          description: chart type
+          enum:
+          - LINE
+          - AREA
+          - STACKED
+          - BAR
+          - VERTICAL_BAR
+          - HORIZONTAL_BAR
+          - PIE
+          - TABLE
+          - TABLE_CROSSTAB
+          - SINGLE_METRIC
+          - BUBBLE
+          - HEADER
+          - TEXT
+          - GAUGE
+          - WATERFALL
+          - WATERFALL_TIMESERIES
+          - HEATMAP
+          - GEO
+          - GEO_HEATMAP
+          - GEO_SCATTER
+          - RADAR
+          - N_GRID
+          - NETWORK
+          - COMBO
+          - COMBO_TIMESERIES
+          - DONUT
+          - FUNNEL
+          - FUNNEL_TIMESERIES
+          - SANKEY
+          - SANKEY_TIMESERIES
+          - WORDCLOUD
+          - EMOJI_CLOUD
+          - CALENDAR_HEATMAP
+          - GANTT
+        filter:
+          type: string
+          description: filter that applies to this chart
+          example: department='Engineering'
+        filterOverride:
+          type: boolean
+          description: whether the chart filter overrides the global filter
+        query:
+          description: query for all series in the chart
+          $ref: '#/components/schemas/ReportQuery'
         sort:
           type: integer
           format: int32
-          description: If set, overrides the sorting order
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+          description: sort order
+        isAdvancedQueryMode:
+          type: boolean
+          description: whether the chart configuration is using advanced mode
     ReportQuery:
       type: object
       required:
@@ -647,6 +716,23 @@ components:
         options:
           type: object
           description: options, including format, filter, scenarioId, projectHires, and numerous display options
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     UpdateReportChart:
       type: object
       properties:
@@ -711,89 +797,3 @@ components:
         isAdvancedQueryMode:
           type: boolean
           description: whether the chart configuration is using advanced mode
-    ReportFilter:
-      type: object
-      required:
-      - label
-      - filter
-      properties:
-        label:
-          type: string
-          description: human-readable label for the filter
-        filter:
-          type: string
-          description: filter expression
-    ResultsReportChart:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportChart'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    GroupByConfig:
-      type: object
-      properties:
-        overrides:
-          type: array
-          description: Overrides by label of label, color, or sort order
-          items:
-            $ref: '#/components/schemas/LabelOverride'
-        limit:
-          type: integer
-          format: int32
-          description: Maximum number of results to display
-        includeOther:
-          type: boolean
-          description: When combined with limit, whether to include an 'Other' group
-        includeNone:
-          type: boolean
-          description: Whether to include a 'None' group (null values aggregated)
-        includeAllValues:
-          type: boolean
-          description: When combined with fieldId or questionId, will include all values from that fieldId or questionId, even if none of them were used
-        fieldId:
-          type: string
-          description: The field to use to retrieve values, when includeAllValues is in use
-          example: 588f7ee98f138b19220041a7
-        questionId:
-          type: string
-          description: The question to use to retrieve values, when includeAllValues is in use
-          example: 588f7ee98f138b19220041a7
-        sortBy:
-          type: string
-          description: Whether to sort the results -- by default, will sort by label if there is no limit, will sort by value descending if there is a limit
-          enum:
-          - LABEL
-          - KEY
-          - VALUE
-          - COUNT
-        sortDirection:
-          type: string
-          description: The direction to sort the results
-          enum:
-          - ASC
-          - DESC
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

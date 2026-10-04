@@ -241,6 +241,21 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    ResultsStockGrantEntity:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockGrantEntity'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     ResultsAccess:
       type: object
       required:
@@ -274,18 +289,3 @@ components:
           uniqueItems: true
           items:
             type: string
-    ResultsStockGrantEntity:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StockGrantEntity'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'

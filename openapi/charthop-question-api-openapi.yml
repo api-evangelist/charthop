@@ -189,23 +189,6 @@ paths:
           description: not found
 components:
   schemas:
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsQuestion:
       type: object
       required:
@@ -325,197 +308,6 @@ components:
         options:
           description: validation options
           $ref: '#/components/schemas/FieldOptions'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    UpdateQuestion:
-      type: object
-      properties:
-        question:
-          type: string
-          description: text of the question
-          example: What is your favorite color?
-        questionTr:
-          description: translations for the question text
-          $ref: '#/components/schemas/Translations'
-        fieldId:
-          type: string
-          description: if the question is linked to a field, the id of that field. Any question responses will be automatically saved to the field
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: datatype of the question
-          enum:
-          - ADDRESS
-          - AUDIO
-          - BOOLEAN
-          - COMP
-          - COMPOUND
-          - COMP_BAND
-          - CONTACTS
-          - CURRENCY
-          - DATE
-          - DECIMAL
-          - ELAPSED_DAYS
-          - ELAPSED_MONTHS
-          - ELAPSED_YEARS
-          - EMAIL
-          - ENUM
-          - ENUM_EXPR
-          - ENUM_MULTI
-          - ENUM_SCALE
-          - EXPR
-          - FILE
-          - GROUP
-          - GROUPS
-          - GROUP_ASSIGNMENTS
-          - GROUP_TYPE
-          - GROUP_POSITION_ASSIGNMENTS
-          - IMAGE
-          - INTEGER
-          - JOB
-          - JOB_CODE
-          - JOBS
-          - JOB_TIER
-          - LIST
-          - MAP
-          - MONEY
-          - NAME
-          - OBJECT
-          - PAY_INTERVAL
-          - PERCENT
-          - PERSON
-          - PERSONS
-          - PHONE
-          - STOCKGRANT
-          - STRING
-          - TABLE_REF
-          - TEXT
-          - TIMEOFF
-          - TIMESTAMP
-          - TRACKED_GROUP
-          - URL
-          - USER
-          - VARIABLE_COMP
-          - VARIABLE_COMPS
-        plural:
-          type: string
-          description: plural type of the question datatype (either SINGLE, LIST, or SET)
-          enum:
-          - SINGLE
-          - LIST
-          - SET
-        values:
-          type: array
-          description: possible values (enum type only)
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        places:
-          type: integer
-          format: int32
-          description: number of decimal places for numeric values
-        options:
-          description: validation options
-          $ref: '#/components/schemas/FieldOptions'
-    FieldOptions:
-      type: object
-      properties:
-        min:
-          type: string
-          description: minimum value, for numeric and date fields
-        max:
-          type: string
-          description: maximum value, for numeric and date fields
-        minItems:
-          type: integer
-          format: int32
-        maxItems:
-          type: integer
-          format: int32
-        stackRank:
-          type: boolean
-        step:
-          type: number
-        enableEditDialog:
-          type: boolean
-        requiredJobField:
-          type: boolean
-        excludeTargetPersonId:
-          type: boolean
-        maxLength:
-          type: integer
-          format: int32
-        readOnly:
-          type: boolean
-        includeFormer:
-          type: boolean
-        effectiveDated:
-          type: boolean
-        unique:
-          type: boolean
-        required:
-          type: boolean
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
     Question:
       type: object
       required:
@@ -659,6 +451,33 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     ResultsAccess:
       type: object
       required:
@@ -675,3 +494,184 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    UpdateQuestion:
+      type: object
+      properties:
+        question:
+          type: string
+          description: text of the question
+          example: What is your favorite color?
+        questionTr:
+          description: translations for the question text
+          $ref: '#/components/schemas/Translations'
+        fieldId:
+          type: string
+          description: if the question is linked to a field, the id of that field. Any question responses will be automatically saved to the field
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: datatype of the question
+          enum:
+          - ADDRESS
+          - AUDIO
+          - BOOLEAN
+          - COMP
+          - COMPOUND
+          - COMP_BAND
+          - CONTACTS
+          - CURRENCY
+          - DATE
+          - DECIMAL
+          - ELAPSED_DAYS
+          - ELAPSED_MONTHS
+          - ELAPSED_YEARS
+          - EMAIL
+          - ENUM
+          - ENUM_EXPR
+          - ENUM_MULTI
+          - ENUM_SCALE
+          - EXPR
+          - FILE
+          - GROUP
+          - GROUPS
+          - GROUP_ASSIGNMENTS
+          - GROUP_TYPE
+          - GROUP_POSITION_ASSIGNMENTS
+          - IMAGE
+          - INTEGER
+          - JOB
+          - JOB_CODE
+          - JOBS
+          - JOB_TIER
+          - LIST
+          - MAP
+          - MONEY
+          - NAME
+          - OBJECT
+          - PAY_INTERVAL
+          - PERCENT
+          - PERSON
+          - PERSONS
+          - PHONE
+          - STOCKGRANT
+          - STRING
+          - TABLE_REF
+          - TEXT
+          - TIMEOFF
+          - TIMESTAMP
+          - TRACKED_GROUP
+          - URL
+          - USER
+          - VARIABLE_COMP
+          - VARIABLE_COMPS
+        plural:
+          type: string
+          description: plural type of the question datatype (either SINGLE, LIST, or SET)
+          enum:
+          - SINGLE
+          - LIST
+          - SET
+        values:
+          type: array
+          description: possible values (enum type only)
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        places:
+          type: integer
+          format: int32
+          description: number of decimal places for numeric values
+        options:
+          description: validation options
+          $ref: '#/components/schemas/FieldOptions'
+    FieldOptions:
+      type: object
+      properties:
+        min:
+          type: string
+          description: minimum value, for numeric and date fields
+        max:
+          type: string
+          description: maximum value, for numeric and date fields
+        minItems:
+          type: integer
+          format: int32
+        maxItems:
+          type: integer
+          format: int32
+        stackRank:
+          type: boolean
+        step:
+          type: number
+        enableEditDialog:
+          type: boolean
+        requiredJobField:
+          type: boolean
+        excludeTargetPersonId:
+          type: boolean
+        maxLength:
+          type: integer
+          format: int32
+        readOnly:
+          type: boolean
+        includeFormer:
+          type: boolean
+        effectiveDated:
+          type: boolean
+        unique:
+          type: boolean
+        required:
+          type: boolean
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'

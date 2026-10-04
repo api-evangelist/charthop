@@ -179,18 +179,16 @@ components:
           example: abajlijj
         publicKeyCredentialCreationOptions:
           type: object
-    WebAuthnStartVerifyResponse:
+    WebAuthnRequest:
       type: object
       required:
       - requestId
-      - assertionRequest
+      - credentialResponse
       properties:
         requestId:
           type: string
-          description: String id of the request, this needs to be sent back from the client to finish the registration
-          example: abajlijj
-        assertionRequest:
-          type: object
+        credentialResponse:
+          type: string
     WebRegisteredCredential:
       type: object
       required:
@@ -216,13 +214,15 @@ components:
         createdAt:
           type: string
           description: When was this created
-    WebAuthnRequest:
+    WebAuthnStartVerifyResponse:
       type: object
       required:
       - requestId
-      - credentialResponse
+      - assertionRequest
       properties:
         requestId:
           type: string
-        credentialResponse:
-          type: string
+          description: String id of the request, this needs to be sent back from the client to finish the registration
+          example: abajlijj
+        assertionRequest:
+          type: object

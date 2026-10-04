@@ -423,6 +423,103 @@ paths:
           description: not found
 components:
   schemas:
+    CompBandUpdateOperation:
+      type: object
+      required:
+      - compBandId
+      - update
+      properties:
+        compBandId:
+          type: string
+          description: Comp band ID to update
+          example: 588f7ee98f138b19220041a7
+        update:
+          description: Update data
+          $ref: '#/components/schemas/UpdateCompBand'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    CompBandSchema:
+      type: object
+      required:
+      - jobLevelValues
+      - fields
+      properties:
+        jobLevelValues:
+          type: array
+          description: Job level values
+          items:
+            type: string
+        jobTierOneField:
+          description: First job tier field configuration
+          $ref: '#/components/schemas/JobTierFieldSchema'
+        jobTierTwoField:
+          description: Second job tier field configuration
+          $ref: '#/components/schemas/JobTierFieldSchema'
+        jobTierThreeField:
+          description: Third job tier field configuration
+          $ref: '#/components/schemas/JobTierFieldSchema'
+        fields:
+          type: array
+          description: List of available compensation fields that have non-null values across comp bands
+          items:
+            type: string
+    JobTierField:
+      type: object
+      required:
+      - value
+      properties:
+        code:
+          type: string
+        value:
+          type: string
+    LogData:
+      type: object
+      required:
+      - level
+      - at
+      - data
+      properties:
+        level:
+          type: string
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
     ResultsCompBand:
       type: object
       required:
@@ -438,6 +535,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    TableRowRef:
+      type: object
+      required:
+      - tableId
+      - tableName
+      - id
+      properties:
+        tableId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        tableName:
+          type: string
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: object
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     CompBandCount:
       type: object
       required:
@@ -446,6 +577,82 @@ components:
         bandCount:
           type: integer
           format: int64
+    UpdateCompBand:
+      type: object
+      required:
+      - label
+      - color
+      - baseInterval
+      properties:
+        label:
+          type: string
+          description: human-readable name of content
+          example: L15
+        color:
+          type: string
+          description: hex color associated with the band level
+          example: '#ffee4a'
+        baseCompMax:
+          description: maximum base compensation for the band
+          $ref: '#/components/schemas/Money'
+        baseCompMid:
+          description: midpoint base compensation for the band
+          $ref: '#/components/schemas/Money'
+        baseCompMin:
+          description: minimum base compensation for the band
+          $ref: '#/components/schemas/Money'
+        baseSpread:
+          type: number
+          description: spread percent used to calculate base comp from the midpoint
+        baseInterval:
+          description: interval of compensation for the base, hourly or annual
+          $ref: '#/components/schemas/EnumValue'
+        baseTargetPay:
+          description: base target pay associated with open jobs at this band level
+          $ref: '#/components/schemas/Money'
+        baseTargetPayPercentile:
+          type: number
+          description: base target pay associated with open jobs at this band level, as a percentile
+        equityTargetShares:
+          type: number
+          description: target equity for the band, in shares
+        equityTargetPercentOfBase:
+          type: number
+          description: target equity for the band, as a percentage of base
+        equityTargetValue:
+          type: number
+          description: target equity for the band, as a monetary value, in the same currency as the base
+        equityRefreshShares:
+          type: number
+          description: refresh grant equity for the band, in shares
+        equityRefreshPercentOfBase:
+          type: number
+          description: refresh grant equity for the band, as a percentage of base
+        equityRefreshValue:
+          type: number
+          description: refresh grant equity for the band, as a monetary value, in the same currency as the base
+        variableValue:
+          description: variable compensation for the band
+          $ref: '#/components/schemas/Money'
+        variablePercentOfBase:
+          type: number
+          description: variable compensation for the band, specified as a percentage of base
+        startingSalary:
+          description: the default starting salary for this band
+          $ref: '#/components/schemas/Money'
+        jobTierOneField:
+          description: first job tier associated with the comp band
+          $ref: '#/components/schemas/JobTierField'
+        jobTierTwoField:
+          description: second job tier associated with the comp band
+          $ref: '#/components/schemas/JobTierField'
+        jobTierThreeField:
+          description: third job tier associated with the comp band
+          $ref: '#/components/schemas/JobTierField'
+        jobLevel:
+          type: string
+          description: job level associated with the comp band
+          example: 588f7ee98f138b19220041a7
     CompBand:
       type: object
       required:
@@ -581,256 +788,22 @@ components:
           type: string
           format: date
           description: when this entity stops existing in org history
-    TableRowRef:
+    ResultsAccess:
       type: object
       required:
-      - tableId
-      - tableName
-      - id
+      - allowed
       properties:
-        tableId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        tableName:
-          type: string
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: object
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    CompBandUpdateOperation:
-      type: object
-      required:
-      - compBandId
-      - update
-      properties:
-        compBandId:
-          type: string
-          description: Comp band ID to update
-          example: 588f7ee98f138b19220041a7
-        update:
-          description: Update data
-          $ref: '#/components/schemas/UpdateCompBand'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
+        ids:
           type: array
+          uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    BulkCompBandUpdateRequest:
-      type: object
-      required:
-      - updates
-      properties:
-        updates:
+        allowed:
           type: array
-          description: List of update operations to perform
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/CompBandUpdateOperation'
-        date:
-          type: string
-          format: date
-          description: Effective date for all updates
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    JobTierField:
-      type: object
-      required:
-      - value
-      properties:
-        code:
-          type: string
-        value:
-          type: string
-    UpdateCompBand:
-      type: object
-      required:
-      - label
-      - color
-      - baseInterval
-      properties:
-        label:
-          type: string
-          description: human-readable name of content
-          example: L15
-        color:
-          type: string
-          description: hex color associated with the band level
-          example: '#ffee4a'
-        baseCompMax:
-          description: maximum base compensation for the band
-          $ref: '#/components/schemas/Money'
-        baseCompMid:
-          description: midpoint base compensation for the band
-          $ref: '#/components/schemas/Money'
-        baseCompMin:
-          description: minimum base compensation for the band
-          $ref: '#/components/schemas/Money'
-        baseSpread:
-          type: number
-          description: spread percent used to calculate base comp from the midpoint
-        baseInterval:
-          description: interval of compensation for the base, hourly or annual
-          $ref: '#/components/schemas/EnumValue'
-        baseTargetPay:
-          description: base target pay associated with open jobs at this band level
-          $ref: '#/components/schemas/Money'
-        baseTargetPayPercentile:
-          type: number
-          description: base target pay associated with open jobs at this band level, as a percentile
-        equityTargetShares:
-          type: number
-          description: target equity for the band, in shares
-        equityTargetPercentOfBase:
-          type: number
-          description: target equity for the band, as a percentage of base
-        equityTargetValue:
-          type: number
-          description: target equity for the band, as a monetary value, in the same currency as the base
-        equityRefreshShares:
-          type: number
-          description: refresh grant equity for the band, in shares
-        equityRefreshPercentOfBase:
-          type: number
-          description: refresh grant equity for the band, as a percentage of base
-        equityRefreshValue:
-          type: number
-          description: refresh grant equity for the band, as a monetary value, in the same currency as the base
-        variableValue:
-          description: variable compensation for the band
-          $ref: '#/components/schemas/Money'
-        variablePercentOfBase:
-          type: number
-          description: variable compensation for the band, specified as a percentage of base
-        startingSalary:
-          description: the default starting salary for this band
-          $ref: '#/components/schemas/Money'
-        jobTierOneField:
-          description: first job tier associated with the comp band
-          $ref: '#/components/schemas/JobTierField'
-        jobTierTwoField:
-          description: second job tier associated with the comp band
-          $ref: '#/components/schemas/JobTierField'
-        jobTierThreeField:
-          description: third job tier associated with the comp band
-          $ref: '#/components/schemas/JobTierField'
-        jobLevel:
-          type: string
-          description: job level associated with the comp band
-          example: 588f7ee98f138b19220041a7
-    CompBandSchema:
-      type: object
-      required:
-      - jobLevelValues
-      - fields
-      properties:
-        jobLevelValues:
-          type: array
-          description: Job level values
-          items:
-            type: string
-        jobTierOneField:
-          description: First job tier field configuration
-          $ref: '#/components/schemas/JobTierFieldSchema'
-        jobTierTwoField:
-          description: Second job tier field configuration
-          $ref: '#/components/schemas/JobTierFieldSchema'
-        jobTierThreeField:
-          description: Third job tier field configuration
-          $ref: '#/components/schemas/JobTierFieldSchema'
-        fields:
-          type: array
-          description: List of available compensation fields that have non-null values across comp bands
-          items:
-            type: string
+            $ref: '#/components/schemas/AccessAction'
     Process:
       type: object
       required:
@@ -953,22 +926,78 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    AccessAction:
+    BulkCompBandUpdateRequest:
       type: object
       required:
-      - action
+      - updates
       properties:
-        action:
-          type: string
-        fields:
+        updates:
           type: array
-          uniqueItems: true
+          description: List of update operations to perform
+          items:
+            $ref: '#/components/schemas/CompBandUpdateOperation'
+        date:
+          type: string
+          format: date
+          description: Effective date for all updates
+    EnumValue:
+      type: object
+      required:
+      - name
+      - label
+      properties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'
+    JobTierFieldSchema:
+      type: object
+      required:
+      - values
+      properties:
+        code:
+          type: string
+          description: Field code (e.g., department)
+        values:
+          type: array
+          description: All possible values for this field across comp bands
           items:
             type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
             type: string
     Money:
       type: object
@@ -983,19 +1012,6 @@ components:
         places:
           type: integer
           format: int32
-    JobTierFieldSchema:
-      type: object
-      required:
-      - values
-      properties:
-        code:
-          type: string
-          description: Field code (e.g., department)
-        values:
-          type: array
-          description: All possible values for this field across comp bands
-          items:
-            type: string
     CreateCompBand:
       type: object
       required:
@@ -1073,19 +1089,3 @@ components:
           type: string
           description: job level associated with the comp band
           example: 588f7ee98f138b19220041a7
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

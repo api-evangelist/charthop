@@ -170,9 +170,35 @@ paths:
         required: true
 components:
   schemas:
-    UpdateProduct:
+    ResultsProduct:
       type: object
+      required:
+      - data
       properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Product:
+      type: object
+      required:
+      - name
+      - sku
+      - salesforceProductId
+      - stripeProductId
+      - features
+      - status
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
         name:
           type: string
           description: name of product
@@ -327,6 +353,50 @@ components:
           - ACTIVE
           - LEGACY
           - INACTIVE
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    FeatureAccessOption:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        name:
+          type: string
+          description: The name of the feature option tied to the feature access
+          example: smart_fields
+          enum:
+          - CONFIGURED_ROLES
+          - SMART_FIELDS
+          - APP_FIELD_MAPPERS
+          - MULTI_PAYROLL_INSTALLS
+        description:
+          type: string
+          description: The description of the feature option
+        type:
+          type: string
+          description: The feature option type
+          enum:
+          - LIMIT
+          - FULL_ACCESS
+        limit:
+          type: integer
+          format: int32
+          description: The feature option limit
     AccessAction:
       type: object
       required:
@@ -344,20 +414,9 @@ components:
           uniqueItems: true
           items:
             type: string
-    Product:
+    UpdateProduct:
       type: object
-      required:
-      - name
-      - sku
-      - salesforceProductId
-      - stripeProductId
-      - features
-      - status
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
         name:
           type: string
           description: name of product
@@ -430,62 +489,3 @@ components:
           - ACTIVE
           - LEGACY
           - INACTIVE
-    ResultsProduct:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    FeatureAccessOption:
-      type: object
-      required:
-      - name
-      - type
-      properties:
-        name:
-          type: string
-          description: The name of the feature option tied to the feature access
-          example: smart_fields
-          enum:
-          - CONFIGURED_ROLES
-          - SMART_FIELDS
-          - APP_FIELD_MAPPERS
-          - MULTI_PAYROLL_INSTALLS
-        description:
-          type: string
-          description: The description of the feature option
-        type:
-          type: string
-          description: The feature option type
-          enum:
-          - LIMIT
-          - FULL_ACCESS
-        limit:
-          type: integer
-          format: int32
-          description: The feature option limit

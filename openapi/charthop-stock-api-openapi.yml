@@ -227,37 +227,6 @@ components:
           example: 588f7ee98f138b19220041a7
         updateAttribution:
           $ref: '#/components/schemas/Attribution'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    UpdateStockPrice:
-      type: object
-      properties:
-        orgId:
-          type: string
-          description: org id that this stock price derives from
-          example: 588f7ee98f138b19220041a7
-        price:
-          type: number
-          description: price per share
-        total:
-          type: integer
-          format: int64
-          description: total shares outstanding
     Attribution:
       type: object
       properties:
@@ -285,21 +254,6 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    ResultsStockPrice:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StockPrice'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     ResultsAccess:
       type: object
       required:
@@ -316,3 +270,49 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    UpdateStockPrice:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: org id that this stock price derives from
+          example: 588f7ee98f138b19220041a7
+        price:
+          type: number
+          description: price per share
+        total:
+          type: integer
+          format: int64
+          description: total shares outstanding
+    ResultsStockPrice:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockPrice'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string

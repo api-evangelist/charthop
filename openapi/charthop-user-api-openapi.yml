@@ -508,31 +508,6 @@ paths:
         required: true
 components:
   schemas:
-    WebRegisteredCredential:
-      type: object
-      required:
-      - credentialId
-      - publicKeyBase64
-      - userHandleBase64
-      - signatureCount
-      - createdAt
-      properties:
-        credentialId:
-          type: string
-          description: Credential id
-        publicKeyBase64:
-          type: string
-          description: The public key we're saving
-        userHandleBase64:
-          type: string
-          description: The user handle - a random 64 bits of data
-        signatureCount:
-          type: integer
-          format: int64
-          description: This is used to protect against duplicated key attacks
-        createdAt:
-          type: string
-          description: When was this created
     CreateUser:
       type: object
       required:
@@ -608,126 +583,33 @@ components:
         agentConfig:
           description: per-user agent configuration overrides
           $ref: '#/components/schemas/AiAgentConfig'
-    TargetedInstruction:
-      type: object
-      required:
-      - filter
-      - instructions
-      properties:
-        filter:
-          type: string
-          description: filter expression matched against the current viewer's person record
-        instructions:
-          type: string
-          description: instructions injected into the chat prompt when filter matches
-    PolicyRule:
+    Attribution:
       type: object
       properties:
-        allow:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
-          description: allow rules
-          example: '[''job:read'', ''person.read'']'
-          items:
-            type: string
-        deny:
-          type: array
-          description: deny rules
-          example: '[''job:read'', ''person.read'']'
-          items:
-            type: string
-        categories:
-          type: array
-          description: categories the rule is limited to
-          example: '[''Compensation'', ''Stock Grants'']'
-          items:
-            type: string
-        fields:
-          type: array
-          description: fields the rule is limited to
-          example: '[''base'']'
-          items:
-            type: string
-        departmentIds:
-          type: array
-          description: departments the rule is limited to
-          uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        filter:
-          type: string
-          description: custom filter the rule is limited to
-          example: department:engineering and under:me
-        directions:
-          type: array
-          description: directions that the rule applies to -- either self or under
-          items:
-            type: string
-        types:
-          type: array
-          description: types that the rule applies to
-          items:
-            type: string
-        targets:
-          type: array
-          description: targets allowed for messaging (email addresses, chat channels, user ids)
-          items:
-            $ref: '#/components/schemas/PolicyRuleTarget'
-        visibleSensitive:
-          type: array
-          description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
-          items:
-            type: string
-        fieldsSensitive:
-          type: array
-          description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
-          items:
-            type: string
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
-        access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
-    PolicyRuleTarget:
-      type: object
-      properties:
-        userId:
-          type: string
-        personId:
+        eventId:
           type: string
           example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
         channel:
           type: string
-        email:
-          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     AiAgentConfig:
       type: object
       properties:
@@ -777,98 +659,6 @@ components:
           description: audience-scoped instruction snippets injected into the chat prompt when the filter matches the current viewer's person record; size and filter syntax are checked by AgentValidationService before persisting
           items:
             $ref: '#/components/schemas/TargetedInstruction'
-    InviteUsersRequest:
-      type: object
-      required:
-      - createUsers
-      properties:
-        createUsers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateUser'
-        emailSettings:
-          $ref: '#/components/schemas/WelcomeEmailSettings'
-    UserEmailSetting:
-      type: object
-      required:
-      - category
-      - subscribed
-      properties:
-        category:
-          type: string
-          description: Category of emails
-          example: ADMINISTRATIVE
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
-        subscribed:
-          type: boolean
-          description: Is user subscribed to the category of emails
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    WelcomeEmailSettings:
-      type: object
-      required:
-      - isEnabled
-      - welcomeEmailSubject
-      - welcomeEmailButtonLabel
-      - welcomeEmailBody
-      properties:
-        isEnabled:
-          type: boolean
-          description: Whether to send a welcome email
-        welcomeEmailSubject:
-          type: string
-          description: Subject
-        welcomeEmailButtonLabel:
-          type: string
-          description: Button label
-        welcomeEmailBody:
-          type: string
-          description: Body
-    ResultsUser:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     BundleInstallEntity:
       type: object
       required:
@@ -900,6 +690,48 @@ components:
         originalId:
           type: string
           example: 588f7ee98f138b19220041a7
+    BundleInstall:
+      type: object
+      required:
+      - entities
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundleInstallEntity'
+    ShareAccess:
+      type: object
+      required:
+      - access
+      properties:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
     UpdateUser:
       type: object
       properties:
@@ -967,6 +799,378 @@ components:
         agentConfig:
           description: per-user agent configuration overrides
           $ref: '#/components/schemas/AiAgentConfig'
+    TargetedInstruction:
+      type: object
+      required:
+      - filter
+      - instructions
+      properties:
+        filter:
+          type: string
+          description: filter expression matched against the current viewer's person record
+        instructions:
+          type: string
+          description: instructions injected into the chat prompt when filter matches
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    UserCount:
+      type: object
+      required:
+      - totalCount
+      - joinedCount
+      - invitedCount
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        joinedCount:
+          type: integer
+          format: int64
+        invitedCount:
+          type: integer
+          format: int64
+    MessagingConfig:
+      type: object
+      properties:
+        slackAppId:
+          type: string
+        slackClientId:
+          type: string
+        slackBotUserId:
+          type: string
+    InviteUsersRequest:
+      type: object
+      required:
+      - createUsers
+      properties:
+        createUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateUser'
+        emailSettings:
+          $ref: '#/components/schemas/WelcomeEmailSettings'
+    EmailRequest:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: email address
+          example: example@example.com
+    WelcomeEmailSettings:
+      type: object
+      required:
+      - isEnabled
+      - welcomeEmailSubject
+      - welcomeEmailButtonLabel
+      - welcomeEmailBody
+      properties:
+        isEnabled:
+          type: boolean
+          description: Whether to send a welcome email
+        welcomeEmailSubject:
+          type: string
+          description: Subject
+        welcomeEmailButtonLabel:
+          type: string
+          description: Button label
+        welcomeEmailBody:
+          type: string
+          description: Body
+    OrgAccess:
+      type: object
+      required:
+      - orgId
+      - access
+      properties:
+        orgId:
+          type: string
+          description: org id
+          example: 5887a7718f138b6a2a0041a7
+        personId:
+          type: string
+          description: person id, if this user directly corresponds with a person
+          example: 5887a7718f138b6a2a0041a7
+        access:
+          type: string
+          description: legacy access permission level
+          enum:
+          - NONE
+          - PREBOARDING
+          - VIEW
+          - LIMITED
+          - MEMBER_LIMITED_COMP
+          - MEMBER
+          - CUSTOM
+          - TECH_OWNER
+          - TIMEOFF
+          - CONTACT
+          - COMP_CASH
+          - COMP_EQUITY
+          - COMP_ALL
+          - RECRUIT_SENSITIVE
+          - RECRUIT_PRIMARY
+          - SENSITIVE_LIMITED_COMP
+          - SENSITIVE
+          - PRIMARY
+          - PEOPLE_OPS_ADMIN
+          - PEOPLE_OPS_ADMIN_NO_COMP_DATA
+          - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
+          - OWNER
+        groupIds:
+          type: array
+          description: group ids that the above access applies to
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        expr:
+          type: string
+          description: expression that the above access applies to
+        expireAt:
+          type: string
+          description: timestamp that this org access will expire
+        roleId:
+          type: string
+          description: the role id that defines the users access
+          example: 5887a7718f138b6a2a0041a7
+        status:
+          type: string
+          description: Onboarding status of the user in this org
+          enum:
+          - INACTIVE
+          - PREBOARDING
+          - ACTIVATION
+          - ACTIVE
+          - OFFBOARDED
+        homeEmail:
+          type: string
+          description: Personal email address of user, while they are preboarding
+          example: bob@example.com
+          minItems: 0
+          maxItems: 120
+        workEmail:
+          type: string
+          description: Work email address of user, once they have started
+          example: robert.doe@example.com
+          minItems: 0
+          maxItems: 120
+        workRoleId:
+          type: string
+          description: Active role ID that defines the user's access once they have started
+          example: 67c851da3dd1668c2fdd7e44
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Name:
+      type: object
+      required:
+      - last
+      properties:
+        first:
+          type: string
+          description: first name
+          example: Jane
+          minItems: 0
+          maxItems: 80
+        middle:
+          type: string
+          description: middle name
+          example: Quidditch
+          minItems: 0
+          maxItems: 80
+        last:
+          type: string
+          description: last name
+          example: Public
+          minItems: 0
+          maxItems: 80
+        pref:
+          type: string
+          description: preferred first name
+          example: JQ
+          minItems: 0
+          maxItems: 80
+        prefLast:
+          type: string
+          description: preferred last name
+          example: Smith
+          minItems: 0
+          maxItems: 80
+    UserEmailSetting:
+      type: object
+      required:
+      - category
+      - subscribed
+      properties:
+        category:
+          type: string
+          description: Category of emails
+          example: ADMINISTRATIVE
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS
+        subscribed:
+          type: boolean
+          description: Is user subscribed to the category of emails
+    WebRegisteredCredential:
+      type: object
+      required:
+      - credentialId
+      - publicKeyBase64
+      - userHandleBase64
+      - signatureCount
+      - createdAt
+      properties:
+        credentialId:
+          type: string
+          description: Credential id
+        publicKeyBase64:
+          type: string
+          description: The public key we're saving
+        userHandleBase64:
+          type: string
+          description: The user handle - a random 64 bits of data
+        signatureCount:
+          type: integer
+          format: int64
+          description: This is used to protect against duplicated key attacks
+        createdAt:
+          type: string
+          description: When was this created
+    ChangePasswordRequest:
+      type: object
+      required:
+      - newPassword
+      properties:
+        newPassword:
+          type: string
+          description: password to change to
+        oldPassword:
+          type: string
+          description: password to change from
+    PolicyRule:
+      type: object
+      properties:
+        allow:
+          type: array
+          description: allow rules
+          example: '[''job:read'', ''person.read'']'
+          items:
+            type: string
+        deny:
+          type: array
+          description: deny rules
+          example: '[''job:read'', ''person.read'']'
+          items:
+            type: string
+        categories:
+          type: array
+          description: categories the rule is limited to
+          example: '[''Compensation'', ''Stock Grants'']'
+          items:
+            type: string
+        fields:
+          type: array
+          description: fields the rule is limited to
+          example: '[''base'']'
+          items:
+            type: string
+        departmentIds:
+          type: array
+          description: departments the rule is limited to
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        filter:
+          type: string
+          description: custom filter the rule is limited to
+          example: department:engineering and under:me
+        directions:
+          type: array
+          description: directions that the rule applies to -- either self or under
+          items:
+            type: string
+        types:
+          type: array
+          description: types that the rule applies to
+          items:
+            type: string
+        targets:
+          type: array
+          description: targets allowed for messaging (email addresses, chat channels, user ids)
+          items:
+            $ref: '#/components/schemas/PolicyRuleTarget'
+        visibleSensitive:
+          type: array
+          description: if specified, controls visibility of sensitive entities -- for example, ['Manager Shared', 'Manager Only']
+          items:
+            type: string
+        fieldsSensitive:
+          type: array
+          description: if specified, controls applicability of fields by sensitivity -- for example, ['Manager Shared', 'Manager Only']
+          items:
+            type: string
+    ResultsUser:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    PolicyRuleTarget:
+      type: object
+      properties:
+        userId:
+          type: string
+        personId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        channel:
+          type: string
+        email:
+          type: string
     User:
       type: object
       required:
@@ -1127,207 +1331,3 @@ components:
         agentConfig:
           description: per-user agent configuration overrides
           $ref: '#/components/schemas/AiAgentConfig'
-    MessagingConfig:
-      type: object
-      properties:
-        slackAppId:
-          type: string
-        slackClientId:
-          type: string
-        slackBotUserId:
-          type: string
-    ChangePasswordRequest:
-      type: object
-      required:
-      - newPassword
-      properties:
-        newPassword:
-          type: string
-          description: password to change to
-        oldPassword:
-          type: string
-          description: password to change from
-    Name:
-      type: object
-      required:
-      - last
-      properties:
-        first:
-          type: string
-          description: first name
-          example: Jane
-          minItems: 0
-          maxItems: 80
-        middle:
-          type: string
-          description: middle name
-          example: Quidditch
-          minItems: 0
-          maxItems: 80
-        last:
-          type: string
-          description: last name
-          example: Public
-          minItems: 0
-          maxItems: 80
-        pref:
-          type: string
-          description: preferred first name
-          example: JQ
-          minItems: 0
-          maxItems: 80
-        prefLast:
-          type: string
-          description: preferred last name
-          example: Smith
-          minItems: 0
-          maxItems: 80
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    EmailRequest:
-      type: object
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          description: email address
-          example: example@example.com
-    UserCount:
-      type: object
-      required:
-      - totalCount
-      - joinedCount
-      - invitedCount
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        joinedCount:
-          type: integer
-          format: int64
-        invitedCount:
-          type: integer
-          format: int64
-    BundleInstall:
-      type: object
-      required:
-      - entities
-      properties:
-        entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/BundleInstallEntity'
-    OrgAccess:
-      type: object
-      required:
-      - orgId
-      - access
-      properties:
-        orgId:
-          type: string
-          description: org id
-          example: 5887a7718f138b6a2a0041a7
-        personId:
-          type: string
-          description: person id, if this user directly corresponds with a person
-          example: 5887a7718f138b6a2a0041a7
-        access:
-          type: string
-          description: legacy access permission level
-          enum:
-          - NONE
-          - PREBOARDING
-          - VIEW
-          - LIMITED
-          - MEMBER_LIMITED_COMP
-          - MEMBER
-          - CUSTOM
-          - TECH_OWNER
-          - TIMEOFF
-          - CONTACT
-          - COMP_CASH
-          - COMP_EQUITY
-          - COMP_ALL
-          - RECRUIT_SENSITIVE
-          - RECRUIT_PRIMARY
-          - SENSITIVE_LIMITED_COMP
-          - SENSITIVE
-          - PRIMARY
-          - PEOPLE_OPS_ADMIN
-          - PEOPLE_OPS_ADMIN_NO_COMP_DATA
-          - PEOPLE_OPS_ADMIN_NO_SENSITIVE_DATA
-          - OWNER
-        groupIds:
-          type: array
-          description: group ids that the above access applies to
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        expr:
-          type: string
-          description: expression that the above access applies to
-        expireAt:
-          type: string
-          description: timestamp that this org access will expire
-        roleId:
-          type: string
-          description: the role id that defines the users access
-          example: 5887a7718f138b6a2a0041a7
-        status:
-          type: string
-          description: Onboarding status of the user in this org
-          enum:
-          - INACTIVE
-          - PREBOARDING
-          - ACTIVATION
-          - ACTIVE
-          - OFFBOARDED
-        homeEmail:
-          type: string
-          description: Personal email address of user, while they are preboarding
-          example: bob@example.com
-          minItems: 0
-          maxItems: 120
-        workEmail:
-          type: string
-          description: Work email address of user, once they have started
-          example: robert.doe@example.com
-          minItems: 0
-          maxItems: 120
-        workRoleId:
-          type: string
-          description: Active role ID that defines the user's access once they have started
-          example: 67c851da3dd1668c2fdd7e44
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

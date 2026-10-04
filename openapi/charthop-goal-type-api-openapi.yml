@@ -195,6 +195,180 @@ paths:
           description: not found
 components:
   schemas:
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    CreateGoalType:
+      type: object
+      required:
+      - label
+      properties:
+        label:
+          type: string
+          description: name of goal type
+        comments:
+          type: string
+          description: whether or not comments are enabled or required
+          enum:
+          - REQUIRED
+          - OPTIONAL
+          - DISABLED
+        doneLevels:
+          type: array
+          description: definition of done for DONE goal
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        confidenceLevels:
+          type: array
+          description: if confidence updates are enabled, what types of confidence levels are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        completionLevels:
+          type: array
+          description: if milestones are enabled, what types of completion statuses are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        forecastTypes:
+          type: array
+          description: if forecasting is enabled, what types of forecasts are supported
+          items:
+            $ref: '#/components/schemas/GoalForecastType'
+        targetValues:
+          type: array
+          description: stretch target types
+          items:
+            $ref: '#/components/schemas/GoalTargetValueType'
+        progressUpdateConfig:
+          description: configuration for automated progress update reminders
+          $ref: '#/components/schemas/GoalProgressUpdateConfig'
+        isPersonal:
+          type: boolean
+          description: whether this goal type is for personal goals (as opposed to organizational goals)
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    GoalTargetValueType:
+      type: object
+      required:
+      - label
+      - color
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+        labelTr:
+          $ref: '#/components/schemas/Translations'
+        color:
+          type: string
+    MessageChannelConfig:
+      type: object
+      required:
+      - channels
+      - alwaysEmail
+      properties:
+        channels:
+          type: array
+          items:
+            type: string
+            enum:
+            - EMAIL
+            - CHAT
+            - CHAT_SLACK
+            - CHAT_TEAMS
+        alwaysEmail:
+          type: boolean
+    UpdateGoalType:
+      type: object
+      properties:
+        label:
+          type: string
+          description: name of goal type
+        comments:
+          type: string
+          description: whether or not comments are enabled or required
+          enum:
+          - REQUIRED
+          - OPTIONAL
+          - DISABLED
+        doneLevels:
+          type: array
+          description: definition of done for DONE goal
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        confidenceLevels:
+          type: array
+          description: if confidence updates are enabled, what types of confidence levels are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        completionLevels:
+          type: array
+          description: if milestones are enabled, what types of completion statuses are supported
+          items:
+            $ref: '#/components/schemas/EnumValue'
+        forecastTypes:
+          type: array
+          description: if forecasting is enabled, what types of forecasts are supported
+          items:
+            $ref: '#/components/schemas/GoalForecastType'
+        targetValues:
+          type: array
+          description: stretch target types
+          items:
+            $ref: '#/components/schemas/GoalTargetValueType'
+        progressUpdateConfig:
+          description: configuration for automated progress update reminders
+          $ref: '#/components/schemas/GoalProgressUpdateConfig'
+        isPersonal:
+          type: boolean
+          description: whether this goal type is for personal goals (as opposed to organizational goals)
     AccessAction:
       type: object
       required:
@@ -212,21 +386,21 @@ components:
           uniqueItems: true
           items:
             type: string
-    ResultsGoalType:
+    GoalProgressUpdateConfig:
       type: object
       required:
-      - data
+      - schedule
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GoalType'
-        next:
+        schedule:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
+          description: schedule to send progress reminders, in crontab format
+          example: 5 4 * * *
+        messageChannel:
+          description: the channel to send progress reminders to
+          $ref: '#/components/schemas/MessageChannelConfig'
+        message:
+          type: string
+          description: custom message, if any, to include with progress reminders
     GoalType:
       type: object
       required:
@@ -324,15 +498,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
     GoalForecastType:
       type: object
       required:
@@ -354,124 +519,6 @@ components:
           $ref: '#/components/schemas/Translations'
         color:
           type: string
-    UpdateGoalType:
-      type: object
-      properties:
-        label:
-          type: string
-          description: name of goal type
-        comments:
-          type: string
-          description: whether or not comments are enabled or required
-          enum:
-          - REQUIRED
-          - OPTIONAL
-          - DISABLED
-        doneLevels:
-          type: array
-          description: definition of done for DONE goal
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        confidenceLevels:
-          type: array
-          description: if confidence updates are enabled, what types of confidence levels are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        completionLevels:
-          type: array
-          description: if milestones are enabled, what types of completion statuses are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        forecastTypes:
-          type: array
-          description: if forecasting is enabled, what types of forecasts are supported
-          items:
-            $ref: '#/components/schemas/GoalForecastType'
-        targetValues:
-          type: array
-          description: stretch target types
-          items:
-            $ref: '#/components/schemas/GoalTargetValueType'
-        progressUpdateConfig:
-          description: configuration for automated progress update reminders
-          $ref: '#/components/schemas/GoalProgressUpdateConfig'
-        isPersonal:
-          type: boolean
-          description: whether this goal type is for personal goals (as opposed to organizational goals)
-    GoalTargetValueType:
-      type: object
-      required:
-      - label
-      - color
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-        labelTr:
-          $ref: '#/components/schemas/Translations'
-        color:
-          type: string
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    GoalProgressUpdateConfig:
-      type: object
-      required:
-      - schedule
-      properties:
-        schedule:
-          type: string
-          description: schedule to send progress reminders, in crontab format
-          example: 5 4 * * *
-        messageChannel:
-          description: the channel to send progress reminders to
-          $ref: '#/components/schemas/MessageChannelConfig'
-        message:
-          type: string
-          description: custom message, if any, to include with progress reminders
-    MessageChannelConfig:
-      type: object
-      required:
-      - channels
-      - alwaysEmail
-      properties:
-        channels:
-          type: array
-          items:
-            type: string
-            enum:
-            - EMAIL
-            - CHAT
-            - CHAT_SLACK
-            - CHAT_TEAMS
-        alwaysEmail:
-          type: boolean
     EnumValue:
       type: object
       required:
@@ -509,65 +556,18 @@ components:
         labelTr:
           description: translations for the label
           $ref: '#/components/schemas/Translations'
-    CreateGoalType:
+    ResultsGoalType:
       type: object
       required:
-      - label
+      - data
       properties:
-        label:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoalType'
+        next:
           type: string
-          description: name of goal type
-        comments:
-          type: string
-          description: whether or not comments are enabled or required
-          enum:
-          - REQUIRED
-          - OPTIONAL
-          - DISABLED
-        doneLevels:
+        access:
           type: array
-          description: definition of done for DONE goal
           items:
-            $ref: '#/components/schemas/EnumValue'
-        confidenceLevels:
-          type: array
-          description: if confidence updates are enabled, what types of confidence levels are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        completionLevels:
-          type: array
-          description: if milestones are enabled, what types of completion statuses are supported
-          items:
-            $ref: '#/components/schemas/EnumValue'
-        forecastTypes:
-          type: array
-          description: if forecasting is enabled, what types of forecasts are supported
-          items:
-            $ref: '#/components/schemas/GoalForecastType'
-        targetValues:
-          type: array
-          description: stretch target types
-          items:
-            $ref: '#/components/schemas/GoalTargetValueType'
-        progressUpdateConfig:
-          description: configuration for automated progress update reminders
-          $ref: '#/components/schemas/GoalProgressUpdateConfig'
-        isPersonal:
-          type: boolean
-          description: whether this goal type is for personal goals (as opposed to organizational goals)
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
+            $ref: '#/components/schemas/ResultsAccess'

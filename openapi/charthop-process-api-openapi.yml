@@ -671,38 +671,62 @@ paths:
         description: state
 components:
   schemas:
-    ProcessEventUpdate:
+    UpdateProcess:
       type: object
-      required:
-      - type
-      - payload
       properties:
-        type:
+        status:
           type: string
+          description: current status of process
           enum:
-          - FIELD
-          - CONTACT
-          - COMP
+          - PENDING
+          - RUNNING
+          - DONE
           - ERROR
-        payload:
-          $ref: '#/components/schemas/ProcessEventUpdatePayload'
-    AccessAction:
+        filePath:
+          type: string
+          description: data file path
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+    ProcessEventResponse:
       type: object
       required:
-      - action
+      - events
       properties:
-        action:
-          type: string
-        fields:
+        events:
           type: array
-          uniqueItems: true
           items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+            $ref: '#/components/schemas/ProcessEvent'
     ResultsProcess:
       type: object
       required:
@@ -718,38 +742,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    ProcessEventResponse:
-      type: object
-      required:
-      - events
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProcessEvent'
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
     CreateProcess:
       type: object
       required:
@@ -826,22 +818,6 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
     Attribution:
       type: object
       properties:
@@ -869,41 +845,80 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    ProcessEvent:
+    LogData:
       type: object
       required:
-      - type
-      - updates
+      - level
       - at
+      - data
       properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        type:
+        level:
           type: string
           enum:
-          - DEPART
-          - HIRE
-          - UPDATE
-          - CREATE_PERSON
+          - INFO
+          - WARN
           - ERROR
-          - INBOUND
-          - CHANGE
-          - OUTBOUND_CREATE
-          - OUTBOUND_UPDATE
-          - OUTBOUND_DELETE
-          - INITIATING_CREATE
-          - INITIATING_DELETE
-        entityData:
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
           type: object
           additionalProperties:
             type: object
-        updates:
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    ProcessEventUpdatePayload:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+        currency:
+          type: string
+        contactFormat:
+          type: string
+          enum:
+          - PHONE
+          - EMAIL
+          - ID
+        errorMessage:
+          type: string
+    AppendLogRequest:
+      type: object
+      required:
+      - log
+      properties:
+        log:
           type: array
           items:
-            $ref: '#/components/schemas/ProcessEventUpdate'
-        at:
-          type: string
+            $ref: '#/components/schemas/LogData'
+    AppProcessStatus:
+      type: object
+      properties:
+        appLastSync:
+          description: last application sync
+          $ref: '#/components/schemas/Process'
+        appLastSuccessSync:
+          description: last successful sync
+          $ref: '#/components/schemas/Process'
     Process:
       type: object
       required:
@@ -1026,85 +1041,70 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    UpdateProcess:
-      type: object
-      properties:
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-    AppProcessStatus:
-      type: object
-      properties:
-        appLastSync:
-          description: last application sync
-          $ref: '#/components/schemas/Process'
-        appLastSuccessSync:
-          description: last successful sync
-          $ref: '#/components/schemas/Process'
-    AppendLogRequest:
+    AccessAction:
       type: object
       required:
-      - log
+      - action
       properties:
-        log:
+        action:
+          type: string
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/LogData'
-    ProcessEventUpdatePayload:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ProcessEventUpdate:
       type: object
+      required:
+      - type
+      - payload
       properties:
-        key:
-          type: string
-        value:
-          type: object
-        currency:
-          type: string
-        contactFormat:
+        type:
           type: string
           enum:
-          - PHONE
-          - EMAIL
-          - ID
-        errorMessage:
+          - FIELD
+          - CONTACT
+          - COMP
+          - ERROR
+        payload:
+          $ref: '#/components/schemas/ProcessEventUpdatePayload'
+    ProcessEvent:
+      type: object
+      required:
+      - type
+      - updates
+      - at
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          enum:
+          - DEPART
+          - HIRE
+          - UPDATE
+          - CREATE_PERSON
+          - ERROR
+          - INBOUND
+          - CHANGE
+          - OUTBOUND_CREATE
+          - OUTBOUND_UPDATE
+          - OUTBOUND_DELETE
+          - INITIATING_CREATE
+          - INITIATING_DELETE
+        entityData:
+          type: object
+          additionalProperties:
+            type: object
+        updates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessEventUpdate'
+        at:
           type: string

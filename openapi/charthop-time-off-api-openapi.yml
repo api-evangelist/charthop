@@ -377,33 +377,64 @@ paths:
         required: true
 components:
   schemas:
-    CalculatedTimeOffBalance:
+    ResultsTimeOffEntity:
       type: object
       required:
-      - daysTaken
-      - hoursTaken
-      - excludedDays
+      - data
       properties:
-        daysTaken:
-          type: number
-        hoursTaken:
-          type: number
-        balanceBeforeRequest:
-          type: number
-        carryOverBeforeRequest:
-          type: number
-        balanceAfterRequest:
-          type: number
-        carryOverAfterRequest:
-          type: number
-        excludedDays:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/ExcludedDay'
-        approverJobId:
+            $ref: '#/components/schemas/TimeOffEntity'
+        next:
           type: string
-          example: 588f7ee98f138b19220041a7
-        errorMessage:
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    TimeOff:
+      type: object
+      required:
+      - id
+      - startDate
+      - endDate
+      properties:
+        id:
+          type: string
+          description: unique id of a time off request
+        startDate:
+          type: string
+          format: date
+          description: start date of time off, inclusive
+        endDate:
+          type: string
+          format: date
+          description: end date of time off, inclusive
+        days:
+          type: number
+          description: number of days used
+        hours:
+          type: number
+          description: number of hours used
+        type:
+          type: string
+          description: type of time off
+        note:
+          type: string
+          description: notes on the time off
+        approval:
+          type: string
+          description: approval status of the time off
+          enum:
+          - APPROVED
+          - PENDING
+          - CANCELLED
+          - REJECTED
+          - SUPERSEDED
+    TimeOffApproval:
+      type: object
+      properties:
+        message:
           type: string
     CreateTimeOffEntity:
       type: object
@@ -479,6 +510,60 @@ components:
           type: string
           description: requested at timestamp -- often the same as createAt
           example: '2017-01-24T13:57:52Z'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    ExcludedDay:
+      type: object
+      required:
+      - date
+      - dayLabel
+      properties:
+        date:
+          type: string
+          format: date
+        dayLabel:
+          type: string
     TimeOffRequest:
       type: object
       required:
@@ -515,21 +600,23 @@ components:
           example: 588f7ee98f138b19220041a7
         note:
           type: string
-    ResultsTimeOffEntity:
+    AccessAction:
       type: object
       required:
-      - data
+      - action
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeOffEntity'
-        next:
+        action:
           type: string
-        access:
+        fields:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ResultsAccess'
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     TimeOffEntity:
       type: object
       required:
@@ -659,62 +746,34 @@ components:
           type: string
           description: requested at timestamp -- often the same as createAt
           example: '2017-01-24T13:57:52Z'
-    TimeOff:
+    CalculatedTimeOffBalance:
       type: object
       required:
-      - id
-      - startDate
-      - endDate
+      - daysTaken
+      - hoursTaken
+      - excludedDays
       properties:
-        id:
-          type: string
-          description: unique id of a time off request
-        startDate:
-          type: string
-          format: date
-          description: start date of time off, inclusive
-        endDate:
-          type: string
-          format: date
-          description: end date of time off, inclusive
-        days:
+        daysTaken:
           type: number
-          description: number of days used
-        hours:
+        hoursTaken:
           type: number
-          description: number of hours used
-        type:
-          type: string
-          description: type of time off
-        note:
-          type: string
-          description: notes on the time off
-        approval:
-          type: string
-          description: approval status of the time off
-          enum:
-          - APPROVED
-          - PENDING
-          - CANCELLED
-          - REJECTED
-          - SUPERSEDED
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
+        balanceBeforeRequest:
+          type: number
+        carryOverBeforeRequest:
+          type: number
+        balanceAfterRequest:
+          type: number
+        carryOverAfterRequest:
+          type: number
+        excludedDays:
           type: array
-          uniqueItems: true
           items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+            $ref: '#/components/schemas/ExcludedDay'
+        approverJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        errorMessage:
+          type: string
     UpdateTimeOffEntity:
       type: object
       properties:
@@ -776,62 +835,3 @@ components:
           type: string
           description: requested at timestamp -- often the same as createAt
           example: '2017-01-24T13:57:52Z'
-    ExcludedDay:
-      type: object
-      required:
-      - date
-      - dayLabel
-      properties:
-        date:
-          type: string
-          format: date
-        dayLabel:
-          type: string
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    TimeOffApproval:
-      type: object
-      properties:
-        message:
-          type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

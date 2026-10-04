@@ -836,100 +836,6 @@ paths:
         required: true
 components:
   schemas:
-    ResultsData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-        totalRow:
-          type: object
-          additionalProperties:
-            type: object
-    CreateTable:
-      type: object
-      required:
-      - name
-      - effectiveDated
-      properties:
-        name:
-          type: string
-          description: name of table
-          example: budget-data
-        label:
-          type: string
-          description: human readable label for the table
-          example: Budget Data
-        effectiveDated:
-          type: boolean
-          description: whether or not the table is time tracked with effective dates (allows time travel or not). If false, then the values set in the table will be the same across all dates.
-        sensitive:
-          type: string
-          description: base sensitivity of this table and entities in it -- should be either ORG or HIGH
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to this table
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
     UpdateTable:
       type: object
       properties:
@@ -964,6 +870,48 @@ components:
           description: users who are specifically granted permission to this table
           items:
             $ref: '#/components/schemas/ShareAccess'
+    ReorderColumns:
+      type: object
+      required:
+      - columns
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+    ShareAccess:
+      type: object
+      required:
+      - access
+      properties:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
     Attribution:
       type: object
       properties:
@@ -991,7 +939,46 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    ResultsTable:
+    LogData:
+      type: object
+      required:
+      - level
+      - at
+      - data
+      properties:
+        level:
+          type: string
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    ResultsData:
       type: object
       required:
       - data
@@ -999,13 +986,115 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Table'
+            type: object
+            additionalProperties:
+              type: object
         next:
           type: string
         access:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+        totalRow:
+          type: object
+          additionalProperties:
+            type: object
+    Table:
+      type: object
+      required:
+      - id
+      - name
+      - label
+      - effectiveDated
+      - sensitive
+      - shareAccess
+      - rowCount
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        name:
+          type: string
+          description: name of table
+          example: budget-data
+        label:
+          type: string
+          description: human readable label for the table
+          example: Budget Data
+        labelColumnId:
+          type: string
+          description: if set, use this column id as the label when referencing rows
+          example: 588f7ee98f138b19220041a7
+        effectiveDated:
+          type: boolean
+          description: whether or not the table is time tracked with effective dates (allows time travel or not). If false, then the values set in the table will be the same across all dates.
+        sensitive:
+          type: string
+          description: base sensitivity of this table and entities in it -- should be either ORG or HIGH
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        shareAccess:
+          type: array
+          description: users who are specifically granted permission to this table
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        rowCount:
+          type: integer
+          format: int64
+          description: number of rows in the table
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
     Process:
       type: object
       required:
@@ -1128,67 +1217,44 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ReorderColumns:
+    ResultsTable:
       type: object
       required:
-      - columns
+      - data
       properties:
-        columns:
+        data:
           type: array
           items:
-            type: string
-    ShareAccess:
-      type: object
-      required:
-      - access
-      properties:
+            $ref: '#/components/schemas/Table'
+        next:
+          type: string
         access:
-          type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
-    Table:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    AccessAction:
       type: object
       required:
-      - id
-      - name
-      - label
-      - effectiveDated
-      - sensitive
-      - shareAccess
-      - rowCount
+      - action
       properties:
-        id:
+        action:
           type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    CreateTable:
+      type: object
+      required:
+      - name
+      - effectiveDated
+      properties:
         name:
           type: string
           description: name of table
@@ -1197,10 +1263,6 @@ components:
           type: string
           description: human readable label for the table
           example: Budget Data
-        labelColumnId:
-          type: string
-          description: if set, use this column id as the label when referencing rows
-          example: 588f7ee98f138b19220041a7
         effectiveDated:
           type: boolean
           description: whether or not the table is time tracked with effective dates (allows time travel or not). If false, then the values set in the table will be the same across all dates.
@@ -1220,65 +1282,3 @@ components:
           description: users who are specifically granted permission to this table
           items:
             $ref: '#/components/schemas/ShareAccess'
-        rowCount:
-          type: integer
-          format: int64
-          description: number of rows in the table
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

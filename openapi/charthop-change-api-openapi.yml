@@ -802,6 +802,34 @@ paths:
           description: not found
 components:
   schemas:
+    BulkUpdateRequest:
+      type: object
+      required:
+      - jobIds
+      - update
+      - date
+      properties:
+        jobIds:
+          type: array
+          description: list of job ids to update
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        update:
+          description: update to perform
+          $ref: '#/components/schemas/JobUpdate'
+        date:
+          type: string
+          format: date
+          description: date of update
+        scenarioId:
+          type: string
+          description: scenario id
+          example: 588f7ee98f138b19220041a7
+        note:
+          type: string
+          description: note for update
     Comp:
       type: object
       properties:
@@ -834,411 +862,6 @@ components:
           - PERFORMANCE_SHARES
           - PHANTOM_STOCK
           - RSA
-    VariableComp:
-      type: object
-      required:
-      - type
-      - interval
-      properties:
-        type:
-          type: string
-          description: compensation type
-          enum:
-          - BONUS
-          - COMMISSION
-        interval:
-          type: string
-          description: compensation interval
-          enum:
-          - YEARLY
-      description: 'variable compensation
-
-        Implementations: VariableCompPercent, VariableCompPercent'
-      discriminator:
-        propertyName: compType
-    ResultsChange:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Change'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ChangeData:
-      type: object
-      required:
-      - change
-      - data
-      - cost
-      properties:
-        change:
-          description: the change that was applied
-          $ref: '#/components/schemas/Change'
-        data:
-          type: object
-          description: the returned data fields requested
-          additionalProperties:
-            type: object
-        cost:
-          type: number
-          description: the annualized impact of this change, denoted in organization's currency
-        lockedFields:
-          type: array
-          description: set of locked fields for this change
-          uniqueItems: true
-          items:
-            type: string
-    PayInterval:
-      type: object
-      required:
-      - interval
-      - pay
-      properties:
-        interval:
-          type: string
-          description: Interval (annual or hourly)
-          enum:
-          - YEARLY
-          - MONTHLY
-          - WEEKLY
-          - DAILY
-          - HOURLY
-        pay:
-          description: Pay over the given interval
-          $ref: '#/components/schemas/Money'
-        hoursPerWeek:
-          type: integer
-          format: int32
-          description: working hours per week if interval=hourly
-          example: '40'
-        weeksPerYear:
-          type: integer
-          format: int32
-          description: working weeks per year if interval=hourly
-          example: '52'
-        monthsPerYear:
-          type: integer
-          format: int32
-          description: months per year if interval=month
-          example: '52'
-        daysPerYear:
-          type: integer
-          format: int32
-          description: days per year if interval=day
-          example: '250'
-    CreateChange:
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: job id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        scenarioId:
-          type: string
-          description: scenario that this change belongs to
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          description: the id of the person involved, or empty if no person attached to job
-          example: 588f7ee98f138b19220041a7
-        otherJobId:
-          type: string
-          description: for MOVE changes, the id of the job moving from; for RELATE changes, the id of the other job
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: type of change
-          enum:
-          - HIRE
-          - DEPART
-          - MOVE
-          - UPCOMING
-          - CREATE
-          - UPDATE
-          - DATA
-          - DELETE
-          - RELATE
-          - BACKFILL
-        date:
-          type: string
-          format: date
-          description: date of change
-        announceDate:
-          type: string
-          format: date
-          description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
-        departType:
-          type: string
-          description: for DEPART changes, the type of departure
-          enum:
-          - VOLUNTARY
-          - INVOLUNTARY
-        departRegret:
-          type: string
-          description: for DEPART changes, whether the departure is regrettable
-          enum:
-          - REGRET
-          - NONREGRET
-        reason:
-          type: string
-          description: the reason of the change
-        promotionType:
-          type: string
-          description: if it's a promotion or a demotion
-          enum:
-          - PROMOTION
-          - DEMOTION
-          - NONE
-        job:
-          description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
-          $ref: '#/components/schemas/PartialJob'
-        update:
-          description: for UPDATE changes, the data being updated
-          $ref: '#/components/schemas/JobUpdate'
-        note:
-          type: string
-          description: note on the change
-        mergeId:
-          type: string
-          description: merged by user id, if this change was merged
-          example: 588f7ee98f138b19220041a7
-        mergeScenarioId:
-          type: string
-          description: scenario that this change was merged in from, if the change originally came from a scenario
-          example: 588f7ee98f138b19220041a7
-        overrideDefaults:
-          type: object
-          description: for job code linked field overrides, records the default job code value
-          additionalProperties:
-            type: object
-        autoAppliedDefaults:
-          type: object
-          description: for job code linked fields, records which fields were auto-populated from defaults
-          additionalProperties:
-            type: object
-    ResultsChangeData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangeData'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    StockGrant:
-      type: object
-      required:
-      - id
-      - stock
-      - date
-      - shares
-      - price
-      - type
-      - vestSchedule
-      properties:
-        id:
-          type: string
-          description: unique identifier of grant
-        stock:
-          type: string
-          description: ticker symbol of this stock
-          example: GOOG
-        date:
-          type: string
-          format: date
-          description: date of grant
-        vestStartDate:
-          type: string
-          format: date
-          description: vesting start date of grant
-        expireDate:
-          type: string
-          format: date
-          description: expiration date of grant
-        shares:
-          type: number
-          description: number of shares granted
-        price:
-          type: number
-          description: per share strike price
-        type:
-          type: string
-          description: type of grant
-          enum:
-          - ISO
-          - NSO
-          - RSU
-          - SAR
-          - PERFORMANCE_SHARES
-          - PHANTOM_STOCK
-          - RSA
-        vestSchedule:
-          type: string
-          description: vesting schedule
-        originalPrice:
-          type: number
-          description: original per share value of stock (grant price at time of issue)
-        currentPrice:
-          type: number
-          description: current per share value of stock
-        vestedShares:
-          type: number
-          description: current number of shares vested
-        vestedSharesNextYear:
-          type: number
-          description: number of shares vested one year from today
-        vestedSharesByDate:
-          type: object
-          description: number of shares vested, by future date
-          additionalProperties:
-            type: number
-        vestEndDate:
-          type: string
-          format: date
-          description: vesting end date
-        cancelDate:
-          type: string
-          format: date
-          description: cancellation date
-        terminationDate:
-          type: string
-          format: date
-          description: termination date — vesting freezes on this date when the holder separates
-        lastExercisableDate:
-          type: string
-          format: date
-          description: last date on which vested shares can be exercised; after this the grant is forfeited
-        details:
-          type: string
-          description: details of the grant (arbitrary text)
-        description:
-          type: string
-          description: human-readable description of vesting schedule
-    BulkUpdateRequest:
-      type: object
-      required:
-      - jobIds
-      - update
-      - date
-      properties:
-        jobIds:
-          type: array
-          description: list of job ids to update
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        update:
-          description: update to perform
-          $ref: '#/components/schemas/JobUpdate'
-        date:
-          type: string
-          format: date
-          description: date of update
-        scenarioId:
-          type: string
-          description: scenario id
-          example: 588f7ee98f138b19220041a7
-        note:
-          type: string
-          description: note for update
-    CompensationHistoryRow:
-      type: object
-      required:
-      - changeId
-      - jobId
-      - date
-      - name
-      properties:
-        changeId:
-          type: string
-          description: id of the change that produced this row
-          example: 588f7ee98f138b19220041a7
-        personId:
-          type: string
-          description: person id at the time of the change
-          example: 588f7ee98f138b19220041a7
-        jobId:
-          type: string
-          description: job id at the time of the change
-          example: 588f7ee98f138b19220041a7
-        date:
-          type: object
-          description: date the comp change took effect
-        name:
-          type: string
-          description: person's full name (first last)
-        workEmail:
-          type: string
-          description: person's work email
-        title:
-          type: string
-          description: job title as of the change date
-        basePay:
-          type: object
-          description: annualized base pay as of the change date
-        variablePay:
-          type: object
-          description: annualized variable target pay as of the change date
-        total:
-          type: object
-          description: base + variable pay (only when both share a currency)
-        department:
-          type: object
-          description: department group as of the change date
-        manager:
-          type: object
-          description: manager (person) as of the change date
-    UpcomingChange:
-      type: object
-      required:
-      - date
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          enum:
-          - HIRE
-          - DEPART
-          - MOVE
-          - UPCOMING
-          - CREATE
-          - UPDATE
-          - DATA
-          - DELETE
-          - RELATE
-          - BACKFILL
-        date:
-          type: string
-          format: date
-        announceDate:
-          type: string
-          format: date
-        personId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        otherPersonId:
-          type: string
-          example: 588f7ee98f138b19220041a7
     ScenarioChangesWithBudgetRollup:
       type: object
       required:
@@ -1255,6 +878,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    BulkChangeRequest:
+      type: object
+      required:
+      - changes
+      properties:
+        changes:
+          type: array
+          description: list of changes to create
+          items:
+            $ref: '#/components/schemas/CreateChange'
     Attribution:
       type: object
       properties:
@@ -1282,616 +915,6 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    UpdateScenarioChangeResponse:
-      type: object
-      required:
-      - processId
-      - data
-      properties:
-        processId:
-          type: integer
-          format: int32
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangeData'
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    JobUpdate:
-      type: object
-      properties:
-        addRelationships:
-          type: array
-          description: relationships to add
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        removeRelationships:
-          type: array
-          description: relationships to remove
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        addGroupIds:
-          type: array
-          description: groups to add
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        removeGroupIds:
-          type: array
-          description: groups to remove
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        setGroupIds:
-          type: object
-          description: groups to set
-          additionalProperties:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        grant:
-          description: stock grant to add
-          $ref: '#/components/schemas/StockGrant'
-        timeOff:
-          description: time off to add
-          $ref: '#/components/schemas/TimeOff'
-        title:
-          type: string
-          description: new title
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: new compensation level
-          $ref: '#/components/schemas/Comp'
-        placement:
-          type: string
-          description: new placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: new employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        sensitive:
-          type: string
-          description: new view sensitivity
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        startDatePlanned:
-          type: string
-          format: date
-          description: planned start date
-        startDatePlannedRemove:
-          type: boolean
-          description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
-        startDate:
-          type: string
-          format: date
-          description: new expected start date - will update to person start date in future
-        backfillPersonId:
-          type: string
-          description: set who this job is backfilling
-          example: 588f7ee98f138b19220041a7
-        jobCodeId:
-          type: string
-          description: set (or unset) the job code for this job
-          example: 588f7ee98f138b19220041a7
-        hasUnsetFields:
-          type: boolean
-          description: set who this job is backfilling
-        fields:
-          type: object
-          description: custom fields values to set
-          additionalProperties:
-            type: object
-    Process:
-      type: object
-      required:
-      - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
-      - createId
-      - createAt
-      - options
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id (user who requested the process run)
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
-          type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-        uuid:
-          type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
-    ApproveChange:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - STRUCK
-          - CONFLICT
-          - INACTIVE
-          - PROPOSED
-        approvalNote:
-          type: string
-        changeId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    JobRelationship:
-      type: object
-      required:
-      - jobId
-      - type
-      properties:
-        jobId:
-          type: string
-          description: destination job id
-          example: 5887a7718f138b6a2a0041a7
-        type:
-          type: string
-          description: type of relationship
-          enum:
-          - MANAGER
-          - DIRECT
-          - INDIRECT_MANAGER
-          - INDIRECT
-          - NONE
-    ResultsCompensationHistoryRow:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompensationHistoryRow'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    TimeOff:
-      type: object
-      required:
-      - id
-      - startDate
-      - endDate
-      properties:
-        id:
-          type: string
-          description: unique id of a time off request
-        startDate:
-          type: string
-          format: date
-          description: start date of time off, inclusive
-        endDate:
-          type: string
-          format: date
-          description: end date of time off, inclusive
-        days:
-          type: number
-          description: number of days used
-        hours:
-          type: number
-          description: number of hours used
-        type:
-          type: string
-          description: type of time off
-        note:
-          type: string
-          description: notes on the time off
-        approval:
-          type: string
-          description: approval status of the time off
-          enum:
-          - APPROVED
-          - PENDING
-          - CANCELLED
-          - REJECTED
-          - SUPERSEDED
-    ChangeStatusResponse:
-      type: object
-      required:
-      - processId
-      - status
-      properties:
-        processId:
-          type: integer
-          format: int32
-        status:
-          type: boolean
-    UpdateChange:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          description: date of change
-        announceDate:
-          type: string
-          format: date
-          description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
-        status:
-          type: string
-          description: whether the change is active or not
-          enum:
-          - ACTIVE
-          - STRUCK
-          - CONFLICT
-          - INACTIVE
-          - PROPOSED
-        departType:
-          type: string
-          description: for DEPART changes, the type of departure
-          enum:
-          - VOLUNTARY
-          - INVOLUNTARY
-        departRegret:
-          type: string
-          description: for DEPART changes, whether the departure is regrettable
-          enum:
-          - REGRET
-          - NONREGRET
-        reason:
-          type: string
-          description: the reason of the change
-        promotionType:
-          type: string
-          description: if it's a promotion or a demotion
-          enum:
-          - PROMOTION
-          - DEMOTION
-          - NONE
-        job:
-          description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
-          $ref: '#/components/schemas/PartialJob'
-        update:
-          description: for UPDATE changes, the data being updated
-          $ref: '#/components/schemas/JobUpdate'
-        note:
-          type: string
-          description: note on the change
-        approvalNote:
-          type: string
-          description: approval/rejection note
-          example: Not acceptable
-    BulkChangeRequest:
-      type: object
-      required:
-      - changes
-      properties:
-        changes:
-          type: array
-          description: list of changes to create
-          items:
-            $ref: '#/components/schemas/CreateChange'
-    PartialJob:
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: globally unique job id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        snapshotId:
-          type: string
-          description: snapshot that this job belongs to
-          example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: job title
-          example: Senior Engineer
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: compensation
-          $ref: '#/components/schemas/Comp'
-        sensitive:
-          type: string
-          description: view sensitive of the job while open
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        relationships:
-          type: array
-          description: relationship to other jobs
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        groupIds:
-          type: array
-          description: groups that this job is a member of
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        groupIdsByType:
-          type: object
-          description: groups that this job is a member of, mapped by group type id
-          additionalProperties:
-            type: array
-            uniqueItems: true
-            items:
-              type: string
-              example: 588f7ee98f138b19220041a7
-        placement:
-          type: string
-          description: guidance on placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        state:
-          type: string
-          description: current state - whether the job is open, filled, or has someone departed or hired
-          enum:
-          - OPEN
-          - FILLED
-          - DEPART
-          - START
-        fields:
-          type: object
-          description: fields containing custom data
-          additionalProperties:
-            type: object
-        fieldDates:
-          type: object
-          description: dates of the field data
-          additionalProperties:
-            type: string
-            format: date
-        fieldsProposed:
-          type: object
-          description: proposed values for fields
-          additionalProperties:
-            type: object
-        createDate:
-          type: string
-          format: date
-          description: job creation date
-        startDate:
-          type: string
-          format: date
-          description: for empty jobs, expected start date - for filled jobs, confirmed start date
-        startDatePlanned:
-          type: string
-          format: date
-          description: expected start date whether job is open or has been filled - doesn't change when job is filled
-        personStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the org after the latest departure (if any)
-        personEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing, the last day of that person in the org
-        personJobStartDate:
-          type: string
-          format: date
-          description: if personId is present, the first day of that person in the job
-        personIdDate:
-          type: string
-          format: date
-          description: if personId is present, the first day that the personId actually filled the job
-        personJobEndDate:
-          type: string
-          format: date
-          description: if personId is present and the person is departing or moving out, the last day of that person in the job
-        personId:
-          type: string
-          description: the person holding this job -- either currently in the job, or upcoming announced hire
-          example: 588f7ee98f138b19220041a7
-        backfillPersonId:
-          type: string
-          description: the person who most recently held the job, who this represents a backfill for
-          example: 588f7ee98f138b19220041a7
-        jobCodeId:
-          type: string
-          description: the ID of the job code for this job
-          example: 588f7ee98f138b19220041a7
-        backfillByJobId:
-          type: string
-          description: another job which is planned to be a backfill for this job
-          example: 588f7ee98f138b19220041a7
-        upcoming:
-          type: array
-          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
-          items:
-            $ref: '#/components/schemas/UpcomingChange'
-        scenarioId:
-          type: string
-          description: scenario that the job was created in (null if job is on primary timeline)
-          example: 588f7ee98f138b19220041a7
-        scenarioChangedId:
-          type: string
-          description: scenario that the job was changed in (null if job is on primary timeline)
-          example: 588f7ee98f138b19220041a7
-        fetchState:
-          type: string
-          description: scenario that the job was changed in (null if job is on primary timeline)
-          enum:
-          - PERSON
-          - STRUCTURE
-          - ALL
     Change:
       type: object
       required:
@@ -2111,19 +1134,424 @@ components:
         canEdit:
           type: boolean
           description: flag indicating whether authorized user can modify this change (will vary depending on user)
-    Money:
+    ChangeData:
       type: object
       required:
-      - amount
-      - currency
+      - change
+      - data
+      - cost
       properties:
-        amount:
+        change:
+          description: the change that was applied
+          $ref: '#/components/schemas/Change'
+        data:
+          type: object
+          description: the returned data fields requested
+          additionalProperties:
+            type: object
+        cost:
           type: number
-        currency:
+          description: the annualized impact of this change, denoted in organization's currency
+        lockedFields:
+          type: array
+          description: set of locked fields for this change
+          uniqueItems: true
+          items:
+            type: string
+    ResultsChangeData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeData'
+        next:
           type: string
-        places:
-          type: integer
-          format: int32
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    CreateChange:
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: job id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        scenarioId:
+          type: string
+          description: scenario that this change belongs to
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          description: the id of the person involved, or empty if no person attached to job
+          example: 588f7ee98f138b19220041a7
+        otherJobId:
+          type: string
+          description: for MOVE changes, the id of the job moving from; for RELATE changes, the id of the other job
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: type of change
+          enum:
+          - HIRE
+          - DEPART
+          - MOVE
+          - UPCOMING
+          - CREATE
+          - UPDATE
+          - DATA
+          - DELETE
+          - RELATE
+          - BACKFILL
+        date:
+          type: string
+          format: date
+          description: date of change
+        announceDate:
+          type: string
+          format: date
+          description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+        departType:
+          type: string
+          description: for DEPART changes, the type of departure
+          enum:
+          - VOLUNTARY
+          - INVOLUNTARY
+        departRegret:
+          type: string
+          description: for DEPART changes, whether the departure is regrettable
+          enum:
+          - REGRET
+          - NONREGRET
+        reason:
+          type: string
+          description: the reason of the change
+        promotionType:
+          type: string
+          description: if it's a promotion or a demotion
+          enum:
+          - PROMOTION
+          - DEMOTION
+          - NONE
+        job:
+          description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+          $ref: '#/components/schemas/PartialJob'
+        update:
+          description: for UPDATE changes, the data being updated
+          $ref: '#/components/schemas/JobUpdate'
+        note:
+          type: string
+          description: note on the change
+        mergeId:
+          type: string
+          description: merged by user id, if this change was merged
+          example: 588f7ee98f138b19220041a7
+        mergeScenarioId:
+          type: string
+          description: scenario that this change was merged in from, if the change originally came from a scenario
+          example: 588f7ee98f138b19220041a7
+        overrideDefaults:
+          type: object
+          description: for job code linked field overrides, records the default job code value
+          additionalProperties:
+            type: object
+        autoAppliedDefaults:
+          type: object
+          description: for job code linked fields, records which fields were auto-populated from defaults
+          additionalProperties:
+            type: object
+    ResultsCompensationHistoryRow:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompensationHistoryRow'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    LogData:
+      type: object
+      required:
+      - level
+      - at
+      - data
+      properties:
+        level:
+          type: string
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+    StockGrant:
+      type: object
+      required:
+      - id
+      - stock
+      - date
+      - shares
+      - price
+      - type
+      - vestSchedule
+      properties:
+        id:
+          type: string
+          description: unique identifier of grant
+        stock:
+          type: string
+          description: ticker symbol of this stock
+          example: GOOG
+        date:
+          type: string
+          format: date
+          description: date of grant
+        vestStartDate:
+          type: string
+          format: date
+          description: vesting start date of grant
+        expireDate:
+          type: string
+          format: date
+          description: expiration date of grant
+        shares:
+          type: number
+          description: number of shares granted
+        price:
+          type: number
+          description: per share strike price
+        type:
+          type: string
+          description: type of grant
+          enum:
+          - ISO
+          - NSO
+          - RSU
+          - SAR
+          - PERFORMANCE_SHARES
+          - PHANTOM_STOCK
+          - RSA
+        vestSchedule:
+          type: string
+          description: vesting schedule
+        originalPrice:
+          type: number
+          description: original per share value of stock (grant price at time of issue)
+        currentPrice:
+          type: number
+          description: current per share value of stock
+        vestedShares:
+          type: number
+          description: current number of shares vested
+        vestedSharesNextYear:
+          type: number
+          description: number of shares vested one year from today
+        vestedSharesByDate:
+          type: object
+          description: number of shares vested, by future date
+          additionalProperties:
+            type: number
+        vestEndDate:
+          type: string
+          format: date
+          description: vesting end date
+        cancelDate:
+          type: string
+          format: date
+          description: cancellation date
+        terminationDate:
+          type: string
+          format: date
+          description: termination date — vesting freezes on this date when the holder separates
+        lastExercisableDate:
+          type: string
+          format: date
+          description: last date on which vested shares can be exercised; after this the grant is forfeited
+        details:
+          type: string
+          description: details of the grant (arbitrary text)
+        description:
+          type: string
+          description: human-readable description of vesting schedule
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    CompensationHistoryRow:
+      type: object
+      required:
+      - changeId
+      - jobId
+      - date
+      - name
+      properties:
+        changeId:
+          type: string
+          description: id of the change that produced this row
+          example: 588f7ee98f138b19220041a7
+        personId:
+          type: string
+          description: person id at the time of the change
+          example: 588f7ee98f138b19220041a7
+        jobId:
+          type: string
+          description: job id at the time of the change
+          example: 588f7ee98f138b19220041a7
+        date:
+          type: object
+          description: date the comp change took effect
+        name:
+          type: string
+          description: person's full name (first last)
+        workEmail:
+          type: string
+          description: person's work email
+        title:
+          type: string
+          description: job title as of the change date
+        basePay:
+          type: object
+          description: annualized base pay as of the change date
+        variablePay:
+          type: object
+          description: annualized variable target pay as of the change date
+        total:
+          type: object
+          description: base + variable pay (only when both share a currency)
+        department:
+          type: object
+          description: department group as of the change date
+        manager:
+          type: object
+          description: manager (person) as of the change date
+    TimeOff:
+      type: object
+      required:
+      - id
+      - startDate
+      - endDate
+      properties:
+        id:
+          type: string
+          description: unique id of a time off request
+        startDate:
+          type: string
+          format: date
+          description: start date of time off, inclusive
+        endDate:
+          type: string
+          format: date
+          description: end date of time off, inclusive
+        days:
+          type: number
+          description: number of days used
+        hours:
+          type: number
+          description: number of hours used
+        type:
+          type: string
+          description: type of time off
+        note:
+          type: string
+          description: notes on the time off
+        approval:
+          type: string
+          description: approval status of the time off
+          enum:
+          - APPROVED
+          - PENDING
+          - CANCELLED
+          - REJECTED
+          - SUPERSEDED
+    UpdateChange:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: date of change
+        announceDate:
+          type: string
+          format: date
+          description: for HIRE and DEPART changes, the announce date, if the announce date is different from the date of change
+        status:
+          type: string
+          description: whether the change is active or not
+          enum:
+          - ACTIVE
+          - STRUCK
+          - CONFLICT
+          - INACTIVE
+          - PROPOSED
+        departType:
+          type: string
+          description: for DEPART changes, the type of departure
+          enum:
+          - VOLUNTARY
+          - INVOLUNTARY
+        departRegret:
+          type: string
+          description: for DEPART changes, whether the departure is regrettable
+          enum:
+          - REGRET
+          - NONREGRET
+        reason:
+          type: string
+          description: the reason of the change
+        promotionType:
+          type: string
+          description: if it's a promotion or a demotion
+          enum:
+          - PROMOTION
+          - DEMOTION
+          - NONE
+        job:
+          description: for CREATE changes, the initial job data; for other changes, the title and groups at the time of change
+          $ref: '#/components/schemas/PartialJob'
+        update:
+          description: for UPDATE changes, the data being updated
+          $ref: '#/components/schemas/JobUpdate'
+        note:
+          type: string
+          description: note on the change
+        approvalNote:
+          type: string
+          description: approval/rejection note
+          example: Not acceptable
     ResultsAccess:
       type: object
       required:
@@ -2140,3 +1568,575 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    PayInterval:
+      type: object
+      required:
+      - interval
+      - pay
+      properties:
+        interval:
+          type: string
+          description: Interval (annual or hourly)
+          enum:
+          - YEARLY
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          - HOURLY
+        pay:
+          description: Pay over the given interval
+          $ref: '#/components/schemas/Money'
+        hoursPerWeek:
+          type: integer
+          format: int32
+          description: working hours per week if interval=hourly
+          example: '40'
+        weeksPerYear:
+          type: integer
+          format: int32
+          description: working weeks per year if interval=hourly
+          example: '52'
+        monthsPerYear:
+          type: integer
+          format: int32
+          description: months per year if interval=month
+          example: '52'
+        daysPerYear:
+          type: integer
+          format: int32
+          description: days per year if interval=day
+          example: '250'
+    PartialJob:
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: globally unique job id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        snapshotId:
+          type: string
+          description: snapshot that this job belongs to
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: job title
+          example: Senior Engineer
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: compensation
+          $ref: '#/components/schemas/Comp'
+        sensitive:
+          type: string
+          description: view sensitive of the job while open
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        relationships:
+          type: array
+          description: relationship to other jobs
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        groupIds:
+          type: array
+          description: groups that this job is a member of
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        groupIdsByType:
+          type: object
+          description: groups that this job is a member of, mapped by group type id
+          additionalProperties:
+            type: array
+            uniqueItems: true
+            items:
+              type: string
+              example: 588f7ee98f138b19220041a7
+        placement:
+          type: string
+          description: guidance on placement
+          enum:
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        state:
+          type: string
+          description: current state - whether the job is open, filled, or has someone departed or hired
+          enum:
+          - OPEN
+          - FILLED
+          - DEPART
+          - START
+        fields:
+          type: object
+          description: fields containing custom data
+          additionalProperties:
+            type: object
+        fieldDates:
+          type: object
+          description: dates of the field data
+          additionalProperties:
+            type: string
+            format: date
+        fieldsProposed:
+          type: object
+          description: proposed values for fields
+          additionalProperties:
+            type: object
+        createDate:
+          type: string
+          format: date
+          description: job creation date
+        startDate:
+          type: string
+          format: date
+          description: for empty jobs, expected start date - for filled jobs, confirmed start date
+        startDatePlanned:
+          type: string
+          format: date
+          description: expected start date whether job is open or has been filled - doesn't change when job is filled
+        personStartDate:
+          type: string
+          format: date
+          description: if personId is present, the first day of that person in the org after the latest departure (if any)
+        personEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing, the last day of that person in the org
+        personJobStartDate:
+          type: string
+          format: date
+          description: if personId is present, the first day of that person in the job
+        personIdDate:
+          type: string
+          format: date
+          description: if personId is present, the first day that the personId actually filled the job
+        personJobEndDate:
+          type: string
+          format: date
+          description: if personId is present and the person is departing or moving out, the last day of that person in the job
+        personId:
+          type: string
+          description: the person holding this job -- either currently in the job, or upcoming announced hire
+          example: 588f7ee98f138b19220041a7
+        backfillPersonId:
+          type: string
+          description: the person who most recently held the job, who this represents a backfill for
+          example: 588f7ee98f138b19220041a7
+        jobCodeId:
+          type: string
+          description: the ID of the job code for this job
+          example: 588f7ee98f138b19220041a7
+        backfillByJobId:
+          type: string
+          description: another job which is planned to be a backfill for this job
+          example: 588f7ee98f138b19220041a7
+        upcoming:
+          type: array
+          description: if a HIRE, MOVE, or DEPART are upcoming, the details on those changes - should only include id, type, date, announceDate, personId
+          items:
+            $ref: '#/components/schemas/UpcomingChange'
+        scenarioId:
+          type: string
+          description: scenario that the job was created in (null if job is on primary timeline)
+          example: 588f7ee98f138b19220041a7
+        scenarioChangedId:
+          type: string
+          description: scenario that the job was changed in (null if job is on primary timeline)
+          example: 588f7ee98f138b19220041a7
+        fetchState:
+          type: string
+          description: scenario that the job was changed in (null if job is on primary timeline)
+          enum:
+          - PERSON
+          - STRUCTURE
+          - ALL
+    Process:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
+          type: array
+          description: list of log data that occurred during running of this process
+          items:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
+    ApproveChange:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - STRUCK
+          - CONFLICT
+          - INACTIVE
+          - PROPOSED
+        approvalNote:
+          type: string
+        changeId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+    VariableComp:
+      type: object
+      required:
+      - type
+      - interval
+      properties:
+        type:
+          type: string
+          description: compensation type
+          enum:
+          - BONUS
+          - COMMISSION
+        interval:
+          type: string
+          description: compensation interval
+          enum:
+          - YEARLY
+      description: 'variable compensation
+
+        Implementations: VariableCompPercent, VariableCompPercent'
+      discriminator:
+        propertyName: compType
+    JobRelationship:
+      type: object
+      required:
+      - jobId
+      - type
+      properties:
+        jobId:
+          type: string
+          description: destination job id
+          example: 5887a7718f138b6a2a0041a7
+        type:
+          type: string
+          description: type of relationship
+          enum:
+          - MANAGER
+          - DIRECT
+          - INDIRECT_MANAGER
+          - INDIRECT
+          - NONE
+    JobUpdate:
+      type: object
+      properties:
+        addRelationships:
+          type: array
+          description: relationships to add
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        removeRelationships:
+          type: array
+          description: relationships to remove
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        addGroupIds:
+          type: array
+          description: groups to add
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        removeGroupIds:
+          type: array
+          description: groups to remove
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        setGroupIds:
+          type: object
+          description: groups to set
+          additionalProperties:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        grant:
+          description: stock grant to add
+          $ref: '#/components/schemas/StockGrant'
+        timeOff:
+          description: time off to add
+          $ref: '#/components/schemas/TimeOff'
+        title:
+          type: string
+          description: new title
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: new compensation level
+          $ref: '#/components/schemas/Comp'
+        placement:
+          type: string
+          description: new placement
+          enum:
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: new employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        sensitive:
+          type: string
+          description: new view sensitivity
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        startDatePlanned:
+          type: string
+          format: date
+          description: planned start date
+        startDatePlannedRemove:
+          type: boolean
+          description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
+        startDate:
+          type: string
+          format: date
+          description: new expected start date - will update to person start date in future
+        backfillPersonId:
+          type: string
+          description: set who this job is backfilling
+          example: 588f7ee98f138b19220041a7
+        jobCodeId:
+          type: string
+          description: set (or unset) the job code for this job
+          example: 588f7ee98f138b19220041a7
+        hasUnsetFields:
+          type: boolean
+          description: set who this job is backfilling
+        fields:
+          type: object
+          description: custom fields values to set
+          additionalProperties:
+            type: object
+    UpdateScenarioChangeResponse:
+      type: object
+      required:
+      - processId
+      - data
+      properties:
+        processId:
+          type: integer
+          format: int32
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeData'
+    ResultsChange:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    ChangeStatusResponse:
+      type: object
+      required:
+      - processId
+      - status
+      properties:
+        processId:
+          type: integer
+          format: int32
+        status:
+          type: boolean
+    UpcomingChange:
+      type: object
+      required:
+      - date
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          enum:
+          - HIRE
+          - DEPART
+          - MOVE
+          - UPCOMING
+          - CREATE
+          - UPDATE
+          - DATA
+          - DELETE
+          - RELATE
+          - BACKFILL
+        date:
+          type: string
+          format: date
+        announceDate:
+          type: string
+          format: date
+        personId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        otherPersonId:
+          type: string
+          example: 588f7ee98f138b19220041a7

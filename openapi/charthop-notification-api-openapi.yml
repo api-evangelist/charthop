@@ -46,41 +46,6 @@ paths:
         required: true
 components:
   schemas:
-    NotificationRequest:
-      type: object
-      required:
-      - templateName
-      - toUserIds
-      - jobData
-      properties:
-        templateName:
-          type: string
-          description: name of message template
-        toUserIds:
-          type: array
-          description: user ids for users to be notified
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        jobData:
-          description: Job data variables used for email templates
-          $ref: '#/components/schemas/NotificationJobData'
-        atsName:
-          type: string
-          description: name of the ATS system
-        orgName:
-          type: string
-          description: name of the organization
-        userName:
-          type: string
-          description: preferred name of the user
-        syncSummary:
-          type: string
-          description: summary of reason for email
-        processId:
-          type: string
-          description: id of the sync history process
-          example: 588f7ee98f138b19220041a7
     NotificationJobData:
       type: object
       properties:
@@ -136,3 +101,38 @@ components:
           format: date
         hireName:
           type: string
+    NotificationRequest:
+      type: object
+      required:
+      - templateName
+      - toUserIds
+      - jobData
+      properties:
+        templateName:
+          type: string
+          description: name of message template
+        toUserIds:
+          type: array
+          description: user ids for users to be notified
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        jobData:
+          description: Job data variables used for email templates
+          $ref: '#/components/schemas/NotificationJobData'
+        atsName:
+          type: string
+          description: name of the ATS system
+        orgName:
+          type: string
+          description: name of the organization
+        userName:
+          type: string
+          description: preferred name of the user
+        syncSummary:
+          type: string
+          description: summary of reason for email
+        processId:
+          type: string
+          description: id of the sync history process
+          example: 588f7ee98f138b19220041a7

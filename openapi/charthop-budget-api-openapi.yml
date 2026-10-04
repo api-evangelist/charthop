@@ -284,156 +284,6 @@ paths:
           description: not found
 components:
   schemas:
-    UpdateBudget:
-      type: object
-      properties:
-        slug:
-          type: string
-          description: url-safe slug for the budget, auto-generated from label if not provided
-        label:
-          type: string
-          description: human-readable label for the budget
-        ownerPersonIds:
-          type: array
-          description: list of persons who own this budget
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        groupIds:
-          type: array
-          description: list of group IDs (e.g. department) for this budget
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        color:
-          type: string
-          description: color of budget
-          pattern: ^#[a-f0-9]{6}$
-        startDate:
-          type: string
-          format: date
-          description: start date of the budget
-        endDate:
-          type: string
-          format: date
-          description: end date of the budget
-        sensitive:
-          type: string
-          description: sensitivity level of budget
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to view or edit this budget
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        costExpr:
-          type: string
-          description: calculation to compute cost
-        status:
-          type: string
-          description: status of the budget
-          enum:
-          - DRAFT
-          - ACTIVE
-          - ARCHIVED
-        amount:
-          description: budget amount for the current date (time tracked field)
-          $ref: '#/components/schemas/Money'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    ResultsBudget:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Budget'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    Money:
-      type: object
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          type: number
-        currency:
-          type: string
-        places:
-          type: integer
-          format: int32
     ShareAccess:
       type: object
       required:
@@ -533,6 +383,126 @@ components:
         amount:
           description: budget amount for the current date (time tracked field)
           $ref: '#/components/schemas/Money'
+    ResultsBudget:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Budget'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    UpdateBudget:
+      type: object
+      properties:
+        slug:
+          type: string
+          description: url-safe slug for the budget, auto-generated from label if not provided
+        label:
+          type: string
+          description: human-readable label for the budget
+        ownerPersonIds:
+          type: array
+          description: list of persons who own this budget
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        groupIds:
+          type: array
+          description: list of group IDs (e.g. department) for this budget
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        color:
+          type: string
+          description: color of budget
+          pattern: ^#[a-f0-9]{6}$
+        startDate:
+          type: string
+          format: date
+          description: start date of the budget
+        endDate:
+          type: string
+          format: date
+          description: end date of the budget
+        sensitive:
+          type: string
+          description: sensitivity level of budget
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        shareAccess:
+          type: array
+          description: users who are specifically granted permission to view or edit this budget
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        costExpr:
+          type: string
+          description: calculation to compute cost
+        status:
+          type: string
+          description: status of the budget
+          enum:
+          - DRAFT
+          - ACTIVE
+          - ARCHIVED
+        amount:
+          description: budget amount for the current date (time tracked field)
+          $ref: '#/components/schemas/Money'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     Budget:
       type: object
       required:
@@ -652,3 +622,33 @@ components:
           type: string
           description: last updated timestamp
           example: '2017-01-24T13:57:52Z'
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string

@@ -303,98 +303,6 @@ paths:
           description: not found
 components:
   schemas:
-    ContentBlock:
-      type: object
-      required:
-      - content
-      properties:
-        content:
-          type: string
-        contentTr:
-          $ref: '#/components/schemas/Translations'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    UpdateContent:
-      type: object
-      properties:
-        parentContentId:
-          type: string
-          description: parent content id in the hierarchy
-          example: 588f7ee98f138b19220041a7
-        title:
-          type: string
-          description: title of the content page
-          example: Benefits Policies
-        titleTr:
-          description: translations of the title
-          $ref: '#/components/schemas/Translations'
-        path:
-          type: string
-          description: full path to the content, if not set, defaults to an id/slug generated URL
-          example: employee-info/benefits-policies
-        blocks:
-          type: array
-          description: content blocks
-          items:
-            $ref: '#/components/schemas/ContentBlock'
-        imagePath:
-          type: string
-          description: path to the image for the page
-          example: path/to/image.jpg
-          pattern: ^[a-zA-Z0-9._/-]+$
-        emoji:
-          type: string
-          description: emoji, if an emoji is used to represent the page
-          example: 💥
-          minItems: 0
-          maxItems: 64
-        coverImagePath:
-          type: string
-          description: path to the cover image for the content page
-          example: path/to/image.jpg
-          pattern: ^[a-zA-Z0-9._/-]+$
-        sensitive:
-          type: string
-          description: sensitivity level (ORG public, HIGHly sensitive, or PRIVATE)
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        shareAccess:
-          type: array
-          description: list of users and groups who have the content shared with them
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        status:
-          type: string
-          description: current status of the content page
-          enum:
-          - DRAFT
-          - ACTIVE
-          - ARCHIVED
-        sort:
-          type: integer
-          format: int32
-          description: sort index within parent content
     Translations:
       type: object
       required:
@@ -404,18 +312,46 @@ components:
           type: object
           additionalProperties:
             type: string
-    ContentRender:
+    ShareAccess:
       type: object
       required:
-      - title
-      - blocks
+      - access
       properties:
-        title:
+        access:
           type: string
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentBlock'
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
+    HomepageContentRender:
+      type: object
+      required:
+      - content
+      properties:
+        content:
+          type: string
     CreateContent:
       type: object
       required:
@@ -522,6 +458,48 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    ContentBlock:
+      type: object
+      required:
+      - content
+      properties:
+        content:
+          type: string
+        contentTr:
+          $ref: '#/components/schemas/Translations'
     Content:
       type: object
       required:
@@ -641,59 +619,81 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    ShareAccess:
+    ContentRender:
       type: object
       required:
-      - access
+      - title
+      - blocks
       properties:
-        access:
+        title:
           type: string
-          description: access permission level
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBlock'
+    UpdateContent:
+      type: object
+      properties:
+        parentContentId:
+          type: string
+          description: parent content id in the hierarchy
+          example: 588f7ee98f138b19220041a7
+        title:
+          type: string
+          description: title of the content page
+          example: Benefits Policies
+        titleTr:
+          description: translations of the title
+          $ref: '#/components/schemas/Translations'
+        path:
+          type: string
+          description: full path to the content, if not set, defaults to an id/slug generated URL
+          example: employee-info/benefits-policies
+        blocks:
+          type: array
+          description: content blocks
+          items:
+            $ref: '#/components/schemas/ContentBlock'
+        imagePath:
+          type: string
+          description: path to the image for the page
+          example: path/to/image.jpg
+          pattern: ^[a-zA-Z0-9._/-]+$
+        emoji:
+          type: string
+          description: emoji, if an emoji is used to represent the page
+          example: 💥
+          minItems: 0
+          maxItems: 64
+        coverImagePath:
+          type: string
+          description: path to the cover image for the content page
+          example: path/to/image.jpg
+          pattern: ^[a-zA-Z0-9._/-]+$
+        sensitive:
+          type: string
+          description: sensitivity level (ORG public, HIGHly sensitive, or PRIVATE)
           enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
-    HomepageContentRender:
-      type: object
-      required:
-      - content
-      properties:
-        content:
-          type: string
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        shareAccess:
           type: array
-          uniqueItems: true
+          description: list of users and groups who have the content shared with them
           items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
+            $ref: '#/components/schemas/ShareAccess'
+        status:
+          type: string
+          description: current status of the content page
+          enum:
+          - DRAFT
+          - ACTIVE
+          - ARCHIVED
+        sort:
+          type: integer
+          format: int32
+          description: sort index within parent content

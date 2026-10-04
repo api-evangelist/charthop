@@ -123,6 +123,98 @@ components:
           type: integer
           format: int32
           description: decimal places to round native Money fields
+    UpdateOrgConfig:
+      type: object
+      properties:
+        hiddenFieldIds:
+          type: array
+          description: set of hidden field ids of an org
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        builtinCategoryMap:
+          type: array
+          description: set of maps of the custom fields that belongs to a built-in category
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/BuiltInCategoryMap'
+        builtinFieldConfig:
+          type: array
+          description: Org configuration for built-in fields
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/BuiltInFieldConfig'
+        compensationBandsConfig:
+          description: Org configuration for compensation bands tiers, multipliers, and job levels
+          $ref: '#/components/schemas/CompensationBandsConfig'
+        smartCurrencyOptions:
+          type: array
+          description: Options for where to source a currency to use when currency is unknown. order specific
+          example: PERSON_HOME_ADDRESS_COUNTRY
+          items:
+            $ref: '#/components/schemas/SmartCurrencyOption'
+        smartCurrencyDefault:
+          type: string
+          description: The default currency to use when currency is unknown and there are no options set in smartCurrencyOptions
+          example: USD
+        requiredJobFields:
+          type: array
+          description: Org configuration for required job fields
+          uniqueItems: true
+          items:
+            type: string
+        scenarioApprovalChains:
+          type: object
+          description: Configures which approval chains to use with specific scenario types
+          additionalProperties:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        isOpenJobRoleApprovalEnabled:
+          type: boolean
+          description: Whether to show open job approval on Open Job Profile page
+        isNotifySubmitterPerStage:
+          type: boolean
+          description: Whether to notify the scenario submitter each time an approval stage completes
+        jobCodeFieldIds:
+          type: array
+          description: The set of field IDs that job codes can be set up to auto-fill
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        grantConfiguration:
+          type: array
+          description: Org Grant Configuration
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/GrantAlias'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
     StartingSalaryConfig:
       type: object
       required:
@@ -151,6 +243,183 @@ components:
         includeVariableComp:
           type: boolean
           description: Whether to include variable compensation in starting compensation
+    CompensationBandsConfig:
+      type: object
+      required:
+      - annualizedSalaries
+      - hourlySalaries
+      - hoursPerWeek
+      - weeksPerYear
+      - hasTargetSalary
+      - hasLocationMultiplier
+      - currencyRounding
+      properties:
+        annualizedSalaries:
+          type: boolean
+          description: whether annualized salaries are used
+        annualizedSalariesType:
+          type: string
+          description: how annualized salaries are represented
+        hourlySalaries:
+          type: boolean
+          description: whether hourly salaries are used
+        hourlySalariesType:
+          type: string
+          description: how hourly salaries are represented
+        hoursPerWeek:
+          type: number
+          description: how many hours per week to use when calculating comp bands
+        weeksPerYear:
+          type: number
+          description: how many weeks per year to use when calculating comp bands
+        hasTargetSalary:
+          type: boolean
+          description: target salary within a comp band
+        targetSalaryType:
+          type: string
+          description: how target salaries are represented
+        equityFormat:
+          type: string
+          description: equity format
+        refreshEquityFormat:
+          type: string
+          description: refresh grant equity format
+        variableBonusFormat:
+          type: string
+          description: variable bonus format
+        tiersNotMappedToCodes:
+          type: boolean
+          description: whether or not the tiers are mapped to fields. after we migrate all the tiers to be mapped, this flag can be removed
+        firstTier:
+          type: string
+          description: the org's first tier for their comp bands
+        secondTier:
+          type: string
+          description: the org's second tier for their comp bands
+        thirdTier:
+          type: string
+          description: the org's third tier for their comp bands
+        hasLocationMultiplier:
+          type: boolean
+          description: whether the org's location data is used as multipliers
+        jobLevelSource:
+          type: string
+          description: the source for the band job levels
+        marketJobLevelSystem:
+          type: string
+          description: comparable market job level system
+        currencyRounding:
+          type: array
+          description: currency rounding settings in the UI
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Money'
+        hasMigratedBands:
+          type: boolean
+          description: has migrated V1 bands
+        startingSalaryConfig:
+          description: Starting salary configuration for all comp bands in the org
+          $ref: '#/components/schemas/StartingSalaryConfig'
+    SmartCurrencyOption:
+      type: object
+      required:
+      - name
+      - enabled
+      properties:
+        name:
+          type: string
+          description: codename for the option
+          enum:
+          - PERSON_HOME_ADDRESS_COUNTRY
+          - JOB_LOCATION_COUNTRY
+          - JOB_CURRENCY
+        enabled:
+          type: boolean
+          description: determines if this option should be used
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    CreateOrgConfig:
+      type: object
+      required:
+      - orgId
+      properties:
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        hiddenFieldIds:
+          type: array
+          description: set of hidden field ids of an org
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        builtinCategoryMap:
+          type: array
+          description: set of maps of the custom fields that belongs to a built-in category
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/BuiltInCategoryMap'
+        builtinFieldConfig:
+          type: array
+          description: Org configuration for built-in fields
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/BuiltInFieldConfig'
+        compensationBandsConfig:
+          description: Org configuration for compensation bands tiers, multipliers, and job levels
+          $ref: '#/components/schemas/CompensationBandsConfig'
+        smartCurrencyOptions:
+          type: array
+          description: Options for where to source a currency to use when currency is unknown. order specific
+          example: PERSON_HOME_ADDRESS_COUNTRY
+          items:
+            $ref: '#/components/schemas/SmartCurrencyOption'
+        smartCurrencyDefault:
+          type: string
+          description: The default currency to use when currency is unknown and there are no options set in smartCurrencyOptions
+          example: USD
+        requiredJobFields:
+          type: array
+          description: Org configuration for required job fields
+          uniqueItems: true
+          items:
+            type: string
+        scenarioApprovalChains:
+          type: object
+          description: Configures which approval chains to use with specific scenario types
+          additionalProperties:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        isOpenJobRoleApprovalEnabled:
+          type: boolean
+          description: Whether to show open job approval on Open Job Profile page
+        isNotifySubmitterPerStage:
+          type: boolean
+          description: Whether to notify the scenario submitter each time an approval stage completes
+        jobCodeFieldIds:
+          type: array
+          description: The set of field IDs that job codes can be set up to auto-fill
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        grantConfiguration:
+          type: array
+          description: Org Grant Configuration
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/GrantAlias'
     BuiltInCategoryMap:
       type: object
       required:
@@ -168,26 +437,6 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    GrantAlias:
-      type: object
-      required:
-      - grantType
-      - enabled
-      properties:
-        alias:
-          type: string
-        grantType:
-          type: string
-          enum:
-          - ISO
-          - NSO
-          - RSU
-          - SAR
-          - PERFORMANCE_SHARES
-          - PHANTOM_STOCK
-          - RSA
-        enabled:
-          type: boolean
     OrgConfig:
       type: object
       required:
@@ -305,272 +554,23 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/GrantAlias'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    UpdateOrgConfig:
-      type: object
-      properties:
-        hiddenFieldIds:
-          type: array
-          description: set of hidden field ids of an org
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        builtinCategoryMap:
-          type: array
-          description: set of maps of the custom fields that belongs to a built-in category
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/BuiltInCategoryMap'
-        builtinFieldConfig:
-          type: array
-          description: Org configuration for built-in fields
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/BuiltInFieldConfig'
-        compensationBandsConfig:
-          description: Org configuration for compensation bands tiers, multipliers, and job levels
-          $ref: '#/components/schemas/CompensationBandsConfig'
-        smartCurrencyOptions:
-          type: array
-          description: Options for where to source a currency to use when currency is unknown. order specific
-          example: PERSON_HOME_ADDRESS_COUNTRY
-          items:
-            $ref: '#/components/schemas/SmartCurrencyOption'
-        smartCurrencyDefault:
-          type: string
-          description: The default currency to use when currency is unknown and there are no options set in smartCurrencyOptions
-          example: USD
-        requiredJobFields:
-          type: array
-          description: Org configuration for required job fields
-          uniqueItems: true
-          items:
-            type: string
-        scenarioApprovalChains:
-          type: object
-          description: Configures which approval chains to use with specific scenario types
-          additionalProperties:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        isOpenJobRoleApprovalEnabled:
-          type: boolean
-          description: Whether to show open job approval on Open Job Profile page
-        isNotifySubmitterPerStage:
-          type: boolean
-          description: Whether to notify the scenario submitter each time an approval stage completes
-        jobCodeFieldIds:
-          type: array
-          description: The set of field IDs that job codes can be set up to auto-fill
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        grantConfiguration:
-          type: array
-          description: Org Grant Configuration
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/GrantAlias'
-    SmartCurrencyOption:
+    GrantAlias:
       type: object
       required:
-      - name
+      - grantType
       - enabled
       properties:
-        name:
+        alias:
           type: string
-          description: codename for the option
+        grantType:
+          type: string
           enum:
-          - PERSON_HOME_ADDRESS_COUNTRY
-          - JOB_LOCATION_COUNTRY
-          - JOB_CURRENCY
+          - ISO
+          - NSO
+          - RSU
+          - SAR
+          - PERFORMANCE_SHARES
+          - PHANTOM_STOCK
+          - RSA
         enabled:
           type: boolean
-          description: determines if this option should be used
-    Money:
-      type: object
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          type: number
-        currency:
-          type: string
-        places:
-          type: integer
-          format: int32
-    CompensationBandsConfig:
-      type: object
-      required:
-      - annualizedSalaries
-      - hourlySalaries
-      - hoursPerWeek
-      - weeksPerYear
-      - hasTargetSalary
-      - hasLocationMultiplier
-      - currencyRounding
-      properties:
-        annualizedSalaries:
-          type: boolean
-          description: whether annualized salaries are used
-        annualizedSalariesType:
-          type: string
-          description: how annualized salaries are represented
-        hourlySalaries:
-          type: boolean
-          description: whether hourly salaries are used
-        hourlySalariesType:
-          type: string
-          description: how hourly salaries are represented
-        hoursPerWeek:
-          type: number
-          description: how many hours per week to use when calculating comp bands
-        weeksPerYear:
-          type: number
-          description: how many weeks per year to use when calculating comp bands
-        hasTargetSalary:
-          type: boolean
-          description: target salary within a comp band
-        targetSalaryType:
-          type: string
-          description: how target salaries are represented
-        equityFormat:
-          type: string
-          description: equity format
-        refreshEquityFormat:
-          type: string
-          description: refresh grant equity format
-        variableBonusFormat:
-          type: string
-          description: variable bonus format
-        tiersNotMappedToCodes:
-          type: boolean
-          description: whether or not the tiers are mapped to fields. after we migrate all the tiers to be mapped, this flag can be removed
-        firstTier:
-          type: string
-          description: the org's first tier for their comp bands
-        secondTier:
-          type: string
-          description: the org's second tier for their comp bands
-        thirdTier:
-          type: string
-          description: the org's third tier for their comp bands
-        hasLocationMultiplier:
-          type: boolean
-          description: whether the org's location data is used as multipliers
-        jobLevelSource:
-          type: string
-          description: the source for the band job levels
-        marketJobLevelSystem:
-          type: string
-          description: comparable market job level system
-        currencyRounding:
-          type: array
-          description: currency rounding settings in the UI
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/Money'
-        hasMigratedBands:
-          type: boolean
-          description: has migrated V1 bands
-        startingSalaryConfig:
-          description: Starting salary configuration for all comp bands in the org
-          $ref: '#/components/schemas/StartingSalaryConfig'
-    CreateOrgConfig:
-      type: object
-      required:
-      - orgId
-      properties:
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        hiddenFieldIds:
-          type: array
-          description: set of hidden field ids of an org
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        builtinCategoryMap:
-          type: array
-          description: set of maps of the custom fields that belongs to a built-in category
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/BuiltInCategoryMap'
-        builtinFieldConfig:
-          type: array
-          description: Org configuration for built-in fields
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/BuiltInFieldConfig'
-        compensationBandsConfig:
-          description: Org configuration for compensation bands tiers, multipliers, and job levels
-          $ref: '#/components/schemas/CompensationBandsConfig'
-        smartCurrencyOptions:
-          type: array
-          description: Options for where to source a currency to use when currency is unknown. order specific
-          example: PERSON_HOME_ADDRESS_COUNTRY
-          items:
-            $ref: '#/components/schemas/SmartCurrencyOption'
-        smartCurrencyDefault:
-          type: string
-          description: The default currency to use when currency is unknown and there are no options set in smartCurrencyOptions
-          example: USD
-        requiredJobFields:
-          type: array
-          description: Org configuration for required job fields
-          uniqueItems: true
-          items:
-            type: string
-        scenarioApprovalChains:
-          type: object
-          description: Configures which approval chains to use with specific scenario types
-          additionalProperties:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        isOpenJobRoleApprovalEnabled:
-          type: boolean
-          description: Whether to show open job approval on Open Job Profile page
-        isNotifySubmitterPerStage:
-          type: boolean
-          description: Whether to notify the scenario submitter each time an approval stage completes
-        jobCodeFieldIds:
-          type: array
-          description: The set of field IDs that job codes can be set up to auto-fill
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        grantConfiguration:
-          type: array
-          description: Org Grant Configuration
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/GrantAlias'

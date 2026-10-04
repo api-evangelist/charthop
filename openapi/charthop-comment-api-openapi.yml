@@ -340,6 +340,92 @@ paths:
           description: not found
 components:
   schemas:
+    CreateComment:
+      type: object
+      required:
+      - entityId
+      - entityType
+      - content
+      properties:
+        parentEntityId:
+          type: string
+          description: parent entity id that this comment belongs to, should be used with entityId
+          example: 588f7ee98f138b19220041a7
+        entityId:
+          type: string
+          description: entity the comment was posted on
+          example: 588f7ee98f138b19220041a7
+        entityType:
+          type: string
+          description: type of entity the comment was posted on
+          enum:
+          - CHANGE
+          - ASSESSMENT
+          - SCENARIO
+          - FORM_RESPONSE
+          - APPROVAL_APPROVE
+          - APPROVAL_REJECT
+          - APPROVAL_REASSIGN
+          - APPROVAL_WITHDRAW
+        commentAction:
+          type: string
+          description: action that happened together with the comment
+          enum:
+          - APPROVE
+          - REJECT
+          - REQUEST_CHANGES
+        content:
+          description: content of comment
+          $ref: '#/components/schemas/Markup'
+    UpdateComment:
+      type: object
+      properties:
+        content:
+          description: content of comment
+          $ref: '#/components/schemas/Markup'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     Markup:
       type: object
       required:
@@ -356,6 +442,23 @@ components:
         value:
           type: string
           description: Markup content in its source format
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     Comment:
       type: object
       required:
@@ -447,23 +550,6 @@ components:
           example: 588f7ee98f138b19220041a7
         deleteAttribution:
           $ref: '#/components/schemas/Attribution'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ResultsComment:
       type: object
       required:
@@ -479,89 +565,3 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    CreateComment:
-      type: object
-      required:
-      - entityId
-      - entityType
-      - content
-      properties:
-        parentEntityId:
-          type: string
-          description: parent entity id that this comment belongs to, should be used with entityId
-          example: 588f7ee98f138b19220041a7
-        entityId:
-          type: string
-          description: entity the comment was posted on
-          example: 588f7ee98f138b19220041a7
-        entityType:
-          type: string
-          description: type of entity the comment was posted on
-          enum:
-          - CHANGE
-          - ASSESSMENT
-          - SCENARIO
-          - FORM_RESPONSE
-          - APPROVAL_APPROVE
-          - APPROVAL_REJECT
-          - APPROVAL_REASSIGN
-          - APPROVAL_WITHDRAW
-        commentAction:
-          type: string
-          description: action that happened together with the comment
-          enum:
-          - APPROVE
-          - REJECT
-          - REQUEST_CHANGES
-        content:
-          description: content of comment
-          $ref: '#/components/schemas/Markup'
-    UpdateComment:
-      type: object
-      properties:
-        content:
-          description: content of comment
-          $ref: '#/components/schemas/Markup'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'

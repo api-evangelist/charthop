@@ -166,6 +166,58 @@ paths:
           description: not found
 components:
   schemas:
+    ResultsApprovalRequestScenarioResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRequestScenarioResponse'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ApprovalChainStageOverride:
+      type: object
+      required:
+      - stageOverrideId
+      - approvalChainStageId
+      - status
+      - order
+      properties:
+        stageOverrideId:
+          type: string
+          description: unique id for stage
+          example: 588f7ee98f138b19220041a7
+        approvalChainStageId:
+          type: string
+          description: parent approval chain stage id
+          example: 588f7ee98f138b19220041a7
+        groups:
+          type: array
+          description: approval group override
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+        status:
+          type: string
+          description: status of the stage
+          enum:
+          - CANCELED
+          - REJECTED
+          - PENDING
+          - ACTIVE
+          - REVIEWED
+          - APPROVED
+          - SKIPPED
+          - SUBMITTED
+        order:
+          type: integer
+          format: int32
+          description: order of the stage
     ApprovalRequestScenarioResponse:
       type: object
       required:
@@ -231,23 +283,6 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     ApprovalGroupApprover:
       type: object
       required:
@@ -288,6 +323,22 @@ components:
         updateAt:
           type: string
           description: The date the status was updated last
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     ApprovalGroup:
       type: object
       required:
@@ -317,37 +368,6 @@ components:
           type: integer
           format: int32
           description: minimum number of approvers required in this group for approval (null means all approvers required)
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    ResultsApprovalRequestScenarioResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRequestScenarioResponse'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     ApprovalRequestTimeoffResponse:
       type: object
       required:
@@ -397,40 +417,20 @@ components:
           example: 588f7ee98f138b19220041a7
         deleteAt:
           type: string
-    ApprovalChainStageOverride:
+    AccessAction:
       type: object
       required:
-      - stageOverrideId
-      - approvalChainStageId
-      - status
-      - order
+      - action
       properties:
-        stageOverrideId:
+        action:
           type: string
-          description: unique id for stage
-          example: 588f7ee98f138b19220041a7
-        approvalChainStageId:
-          type: string
-          description: parent approval chain stage id
-          example: 588f7ee98f138b19220041a7
-        groups:
+        fields:
           type: array
-          description: approval group override
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ApprovalGroup'
-        status:
-          type: string
-          description: status of the stage
-          enum:
-          - CANCELED
-          - REJECTED
-          - PENDING
-          - ACTIVE
-          - REVIEWED
-          - APPROVED
-          - SKIPPED
-          - SUBMITTED
-        order:
-          type: integer
-          format: int32
-          description: order of the stage
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string

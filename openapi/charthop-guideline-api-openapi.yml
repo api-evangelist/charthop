@@ -163,6 +163,18 @@ paths:
                 $ref: '#/components/schemas/ResultsGuidelineCalculation'
 components:
   schemas:
+    MoneyRange:
+      type: object
+      properties:
+        max:
+          description: the maximum value in the range (type = Money)
+          $ref: '#/components/schemas/Money'
+        min:
+          description: the minimum value in the range (type = Money)
+          $ref: '#/components/schemas/Money'
+        target:
+          description: the target value for the range (type = Money)
+          $ref: '#/components/schemas/Money'
     UpdateGuideline:
       type: object
       properties:
@@ -233,100 +245,6 @@ components:
         fixedValueRange:
           description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
           $ref: '#/components/schemas/ValueRange'
-    ValueRange:
-      type: object
-      properties:
-        max:
-          type: number
-          description: the maximum value in the range (type = BigDecimal)
-        min:
-          type: number
-          description: the minimum value in the range (type = BigDecimal)
-        target:
-          type: number
-          description: the target value for the range (type = BigDecimal)
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    GuidelineCalculation:
-      type: object
-      required:
-      - guidelineId
-      - jobId
-      - compReviewId
-      - guidelineLabel
-      - appliedField
-      - flagMode
-      - isDeviated
-      - deviation
-      - fields
-      properties:
-        guidelineId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        jobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        compReviewId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        budgetPoolId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        guidelineLabel:
-          type: string
-        min:
-          type: object
-        max:
-          type: object
-        target:
-          type: object
-        appliedField:
-          type: string
-        flagMode:
-          type: string
-          enum:
-          - DEVIATION_THRESHOLD
-          - NONE
-        flagDeviationThreshold:
-          type: number
-        isDeviated:
-          type: boolean
-        deviation:
-          $ref: '#/components/schemas/Deviation'
-        fields:
-          type: object
-          additionalProperties:
-            type: object
-    ResultsGuidelineCalculation:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GuidelineCalculation'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     Guideline:
       type: object
       required:
@@ -462,56 +380,67 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    ResultsGuideline:
+    BasisCondition:
       type: object
       required:
-      - data
+      - conditionExpr
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Guideline'
-        next:
+        conditionExpr:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    Deviation:
-      type: object
-      properties:
-        min:
-          type: object
-        max:
-          type: object
-    ResultsAccess:
+        amountRange:
+          $ref: '#/components/schemas/MoneyRange'
+        valueRange:
+          $ref: '#/components/schemas/ValueRange'
+    GuidelineCalculation:
       type: object
       required:
-      - allowed
+      - guidelineId
+      - jobId
+      - compReviewId
+      - guidelineLabel
+      - appliedField
+      - flagMode
+      - isDeviated
+      - deviation
+      - fields
       properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    MoneyRange:
-      type: object
-      properties:
-        max:
-          description: the maximum value in the range (type = Money)
-          $ref: '#/components/schemas/Money'
+        guidelineId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        jobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        compReviewId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        budgetPoolId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        guidelineLabel:
+          type: string
         min:
-          description: the minimum value in the range (type = Money)
-          $ref: '#/components/schemas/Money'
+          type: object
+        max:
+          type: object
         target:
-          description: the target value for the range (type = Money)
-          $ref: '#/components/schemas/Money'
+          type: object
+        appliedField:
+          type: string
+        flagMode:
+          type: string
+          enum:
+          - DEVIATION_THRESHOLD
+          - NONE
+        flagDeviationThreshold:
+          type: number
+        isDeviated:
+          type: boolean
+        deviation:
+          $ref: '#/components/schemas/Deviation'
+        fields:
+          type: object
+          additionalProperties:
+            type: object
     Attribution:
       type: object
       properties:
@@ -539,19 +468,49 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    Money:
+    ResultsAccess:
       type: object
       required:
-      - amount
-      - currency
+      - allowed
       properties:
-        amount:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    ValueRange:
+      type: object
+      properties:
+        max:
           type: number
-        currency:
+          description: the maximum value in the range (type = BigDecimal)
+        min:
+          type: number
+          description: the minimum value in the range (type = BigDecimal)
+        target:
+          type: number
+          description: the target value for the range (type = BigDecimal)
+    ResultsGuidelineCalculation:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuidelineCalculation'
+        next:
           type: string
-        places:
-          type: integer
-          format: int32
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     BasisFieldMatrix:
       type: object
       required:
@@ -566,6 +525,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BasisCondition'
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
     CreateGuideline:
       type: object
       required:
@@ -649,14 +621,42 @@ components:
         fixedValueRange:
           description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
           $ref: '#/components/schemas/ValueRange'
-    BasisCondition:
+    AccessAction:
       type: object
       required:
-      - conditionExpr
+      - action
       properties:
-        conditionExpr:
+        action:
           type: string
-        amountRange:
-          $ref: '#/components/schemas/MoneyRange'
-        valueRange:
-          $ref: '#/components/schemas/ValueRange'
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    Deviation:
+      type: object
+      properties:
+        min:
+          type: object
+        max:
+          type: object
+    ResultsGuideline:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Guideline'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'

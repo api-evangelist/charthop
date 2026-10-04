@@ -581,6 +581,36 @@ paths:
         required: true
 components:
   schemas:
+    EmailRequest:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: email address
+          example: example@example.com
+    AppOauthUserConnection:
+      type: object
+      required:
+      - tokenId
+      - userId
+      - issuedAt
+      properties:
+        tokenId:
+          type: string
+          description: the oauth token id, used to revoke the connection
+        userId:
+          type: string
+          description: the id of the user who authorized
+        issuedAt:
+          type: string
+          description: when the connection was authorized
+          example: '2017-01-24T13:57:52Z'
+        activeAt:
+          type: string
+          description: when the connection was last used for an API call
+          example: '2017-01-24T13:57:52Z'
     AccessTokenRequest:
       type: object
       required:
@@ -608,15 +638,6 @@ components:
         redirectUri:
           type: string
           description: redirect_uri for OAuth2.0 PKCE
-    EmailRequest:
-      type: object
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          description: email address
-          example: example@example.com
     RevokeAppOauthTokensRequest:
       type: object
       required:
@@ -650,30 +671,6 @@ components:
           type: string
         orgId:
           type: string
-    ConnectUriResponse:
-      type: object
-      required:
-      - uri
-      properties:
-        uri:
-          type: string
-          description: uri to use for oath
-          example: https://api.tryfinch.com/connect/sessions
-    AppOauthConnectionStatus:
-      type: object
-      required:
-      - connected
-      properties:
-        connected:
-          type: boolean
-          description: whether an org-level OAuth token is currently connected
-        connectedAt:
-          type: string
-          description: when the org-level token was issued, if connected
-          example: '2017-01-24T13:57:52Z'
-        connectedById:
-          type: string
-          description: id of the user who set up the org-level connection, if connected
     AccessTokenResponse:
       type: object
       required:
@@ -711,6 +708,21 @@ components:
           description: redirect uri of the access token
           readOnly: true
           example: com.charthop.mobile://oauth
+    AppOauthConnectionStatus:
+      type: object
+      required:
+      - connected
+      properties:
+        connected:
+          type: boolean
+          description: whether an org-level OAuth token is currently connected
+        connectedAt:
+          type: string
+          description: when the org-level token was issued, if connected
+          example: '2017-01-24T13:57:52Z'
+        connectedById:
+          type: string
+          description: id of the user who set up the org-level connection, if connected
     IdpAccessTokenResponse:
       type: object
       required:
@@ -745,24 +757,12 @@ components:
         scope:
           type: string
           description: scope being requested
-    AppOauthUserConnection:
+    ConnectUriResponse:
       type: object
       required:
-      - tokenId
-      - userId
-      - issuedAt
+      - uri
       properties:
-        tokenId:
+        uri:
           type: string
-          description: the oauth token id, used to revoke the connection
-        userId:
-          type: string
-          description: the id of the user who authorized
-        issuedAt:
-          type: string
-          description: when the connection was authorized
-          example: '2017-01-24T13:57:52Z'
-        activeAt:
-          type: string
-          description: when the connection was last used for an API call
-          example: '2017-01-24T13:57:52Z'
+          description: uri to use for oath
+          example: https://api.tryfinch.com/connect/sessions
