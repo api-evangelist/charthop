@@ -651,22 +651,322 @@ paths:
         required: true
 components:
   schemas:
-    CombineScenarioRequest:
+    UpdateScenario:
       type: object
-      required:
-      - scenarioIds
       properties:
-        scenarioIds:
+        name:
+          type: string
+          description: scenario name
+          example: Q4 Conservative Plan
+          minItems: 1
+          maxItems: 80
+        description:
+          type: string
+          description: scenario description
+          example: Q4 Conservative Plan
+          minItems: 0
+          maxItems: 2000
+        startDate:
+          type: string
+          format: date
+          description: date that this scenario diverges from primary
+          example: '2017-01-15'
+        status:
+          type: string
+          description: status of scenario
+          enum:
+          - OPEN
+          - INACTIVE
+          - MERGED
+          - DRAFT
+          - ARCHIVED
+        shareAccess:
           type: array
-          description: scenarios to combine
+          description: users who are specifically granted permission to this scenario
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        startDateFixed:
+          type: string
+          description: whether or not the start date should stay fixed in time, or update to today's date as time passes
+          enum:
+          - FIXED
+          - TODAY
+        validJobIdSet:
+          type: array
+          description: This scenario changes are restricted to the following jobIds
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        copyOnly:
-          type: boolean
-        useScenarioDateForChanges:
-          type: boolean
+        entityId:
+          type: string
+          description: The entity this scenario is associated with
+          example: 588f7ee98f138b19220041a7
+        entityType:
+          type: string
+          description: The type of entity associated with this scenario
+          enum:
+          - COMP_REVIEW
+        sharedViewConfig:
+          type: array
+          description: View configurations associated with this scenario
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ScenarioSharedViewConfig'
+        budget:
+          description: Total budget associated with the scenario
+          $ref: '#/components/schemas/Money'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsScenario:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Scenario'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    CreateScenario:
+      type: object
+      required:
+      - name
+      - startDateFixed
+      properties:
+        name:
+          type: string
+          description: scenario name
+          example: Q4 Conservative Plan
+          minItems: 1
+          maxItems: 80
+        description:
+          type: string
+          description: scenario description
+          example: Q4 Conservative Plan
+          minItems: 0
+          maxItems: 2000
+        startDate:
+          type: string
+          format: date
+          description: date that this scenario diverges from primary
+          example: '2017-01-15'
+        status:
+          type: string
+          description: status of scenario
+          enum:
+          - OPEN
+          - INACTIVE
+          - MERGED
+          - DRAFT
+          - ARCHIVED
+        shareAccess:
+          type: array
+          description: users who are specifically granted permission to this scenario
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        type:
+          type: string
+          description: Type of scenario to be created
+          enum:
+          - GENERAL
+          - COMP
+          - PROMOTION
+          - TERMINATE
+          - CREATE_JOB
+          - UPDATE_JOB
+          - BUDGET
+          - BACKFILL
+        startDateFixed:
+          type: string
+          description: whether or not the start date should stay fixed in time, or update to today's date as time passes
+          enum:
+          - FIXED
+          - TODAY
+        query:
+          type: string
+          description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
+        validJobIdSet:
+          type: array
+          description: This scenario changes are restricted to the following jobIds
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        entityId:
+          type: string
+          description: The entity this scenario is associated with
+          example: 588f7ee98f138b19220041a7
+        entityType:
+          type: string
+          description: The type of entity associated with this scenario
+          enum:
+          - COMP_REVIEW
+        sharedViewConfig:
+          type: array
+          description: View configurations associated with this scenario
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ScenarioSharedViewConfig'
+        budget:
+          description: Total budget associated with the scenario
+          $ref: '#/components/schemas/Money'
+    CostImpact:
+      type: object
+      required:
+      - annual
+      - firstMonth
+      - months
+      properties:
+        annual:
+          type: number
+          description: total annual run-rate impact
+        firstMonth:
+          type: string
+          description: first month to be affected
+        months:
+          type: array
+          description: impact to each month, starting at firstMonth
+          items:
+            type: number
+    AdjustScenarioDateRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: date to use as new start date
+        days:
+          type: integer
+          format: int32
+          description: number of days to adjust forward
+    LogData:
+      type: object
+      required:
+      - level
+      - at
+      - data
+      properties:
+        level:
+          type: string
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+    ShareAccess:
+      type: object
+      required:
+      - access
+      properties:
+        access:
+          type: string
+          description: access permission level
+          enum:
+          - NONE
+          - LIMITED_READ
+          - LIMITED_WRITE
+          - STANDARD_READ
+          - STANDARD_WRITE
+          - COMPENSATION_READ
+          - FULL_READ
+          - COMP_PLANNING_PARTICIPANT
+          - COMPENSATION_WRITE
+          - WRITE
+          - COMPENSATION_OWNER
+          - OWNER
+        userId:
+          type: string
+          description: user id
+          example: 5887a7718f138b6a2a0041a7
+        groupId:
+          type: string
+          description: group id
+          example: 5887a7718f138b6a2a0041a7
+        fields:
+          type: string
+          description: fields
+          example: name,image,title
+    ScenarioBudgetImpact:
+      type: object
+      required:
+      - budgetId
+      - budgetLabel
+      - primaryUsage
+      - scenarioUsage
+      - amount
+      properties:
+        budgetId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        budgetLabel:
+          type: string
+        budgetColor:
+          type: string
+        primaryUsage:
+          description: usage in primary absent the scenario's changes
+          $ref: '#/components/schemas/Money'
+        scenarioUsage:
+          description: usage within the scenario
+          $ref: '#/components/schemas/Money'
+        amount:
+          description: total amount available in the budget
+          $ref: '#/components/schemas/Money'
     Scenario:
       type: object
       required:
@@ -850,66 +1150,6 @@ components:
         budget:
           description: Total budget associated with the scenario
           $ref: '#/components/schemas/Money'
-    ResultsEvent:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Event'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    CostImpact:
-      type: object
-      required:
-      - annual
-      - firstMonth
-      - months
-      properties:
-        annual:
-          type: number
-          description: total annual run-rate impact
-        firstMonth:
-          type: string
-          description: first month to be affected
-        months:
-          type: array
-          description: impact to each month, starting at firstMonth
-          items:
-            type: number
     ScenarioMetadata:
       type: object
       required:
@@ -954,110 +1194,19 @@ components:
           type: string
           description: most recent summary calculation ended at timestamp
           example: '2017-01-24T13:57:52Z'
-    ShareAccess:
+    Money:
       type: object
       required:
-      - access
+      - amount
+      - currency
       properties:
-        access:
+        amount:
+          type: number
+        currency:
           type: string
-          description: access permission level
-          enum:
-          - NONE
-          - LIMITED_READ
-          - LIMITED_WRITE
-          - STANDARD_READ
-          - STANDARD_WRITE
-          - COMPENSATION_READ
-          - FULL_READ
-          - COMP_PLANNING_PARTICIPANT
-          - COMPENSATION_WRITE
-          - WRITE
-          - COMPENSATION_OWNER
-          - OWNER
-        userId:
-          type: string
-          description: user id
-          example: 5887a7718f138b6a2a0041a7
-        groupId:
-          type: string
-          description: group id
-          example: 5887a7718f138b6a2a0041a7
-        fields:
-          type: string
-          description: fields
-          example: name,image,title
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    ResultsScenario:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Scenario'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ScenarioSharedViewConfig:
-      type: object
-      properties:
-        customColumnNames:
-          type: array
-          description: list of column names to display
-          items:
-            type: string
-        columnWidths:
-          type: object
-          description: map of column names to widths
-          additionalProperties:
-            type: integer
-            format: int32
-        type:
-          type: string
-          description: type of view
-          enum:
-          - ALL_CHANGES_GROUPED
-          - CREATE
-          - HIRE
-          - DELETE
-          - DEPART
-          - COMP
-          - UPDATE
-          - MOVE
-        updateId:
-          type: string
-          description: update id
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: update at
+        places:
+          type: integer
+          format: int32
     AccessAction:
       type: object
       required:
@@ -1075,112 +1224,6 @@ components:
           uniqueItems: true
           items:
             type: string
-    ScenarioBudgetImpact:
-      type: object
-      required:
-      - budgetId
-      - budgetLabel
-      - primaryUsage
-      - scenarioUsage
-      - amount
-      properties:
-        budgetId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        budgetLabel:
-          type: string
-        budgetColor:
-          type: string
-        primaryUsage:
-          description: usage in primary absent the scenario's changes
-          $ref: '#/components/schemas/Money'
-        scenarioUsage:
-          description: usage within the scenario
-          $ref: '#/components/schemas/Money'
-        amount:
-          description: total amount available in the budget
-          $ref: '#/components/schemas/Money'
-    UpdateScenario:
-      type: object
-      properties:
-        name:
-          type: string
-          description: scenario name
-          example: Q4 Conservative Plan
-          minItems: 1
-          maxItems: 80
-        description:
-          type: string
-          description: scenario description
-          example: Q4 Conservative Plan
-          minItems: 0
-          maxItems: 2000
-        startDate:
-          type: string
-          format: date
-          description: date that this scenario diverges from primary
-          example: '2017-01-15'
-        status:
-          type: string
-          description: status of scenario
-          enum:
-          - OPEN
-          - INACTIVE
-          - MERGED
-          - DRAFT
-          - ARCHIVED
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to this scenario
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        startDateFixed:
-          type: string
-          description: whether or not the start date should stay fixed in time, or update to today's date as time passes
-          enum:
-          - FIXED
-          - TODAY
-        validJobIdSet:
-          type: array
-          description: This scenario changes are restricted to the following jobIds
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        entityId:
-          type: string
-          description: The entity this scenario is associated with
-          example: 588f7ee98f138b19220041a7
-        entityType:
-          type: string
-          description: The type of entity associated with this scenario
-          enum:
-          - COMP_REVIEW
-        sharedViewConfig:
-          type: array
-          description: View configurations associated with this scenario
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/ScenarioSharedViewConfig'
-        budget:
-          description: Total budget associated with the scenario
-          $ref: '#/components/schemas/Money'
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
     Process:
       type: object
       required:
@@ -1303,17 +1346,6 @@ components:
           type: string
           description: unique ID of the process at queue time
           example: 84db3c6e-0877-4436-8af1-768c06b29586
-    AdjustScenarioDateRequest:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          description: date to use as new start date
-        days:
-          type: integer
-          format: int32
-          description: number of days to adjust forward
     Event:
       type: object
       required:
@@ -1555,99 +1587,67 @@ components:
         code:
           type: string
           description: event code, for example job.update
-    CreateScenario:
+    ScenarioSharedViewConfig:
       type: object
-      required:
-      - name
-      - startDateFixed
       properties:
-        name:
-          type: string
-          description: scenario name
-          example: Q4 Conservative Plan
-          minItems: 1
-          maxItems: 80
-        description:
-          type: string
-          description: scenario description
-          example: Q4 Conservative Plan
-          minItems: 0
-          maxItems: 2000
-        startDate:
-          type: string
-          format: date
-          description: date that this scenario diverges from primary
-          example: '2017-01-15'
-        status:
-          type: string
-          description: status of scenario
-          enum:
-          - OPEN
-          - INACTIVE
-          - MERGED
-          - DRAFT
-          - ARCHIVED
-        shareAccess:
+        customColumnNames:
           type: array
-          description: users who are specifically granted permission to this scenario
+          description: list of column names to display
           items:
-            $ref: '#/components/schemas/ShareAccess'
+            type: string
+        columnWidths:
+          type: object
+          description: map of column names to widths
+          additionalProperties:
+            type: integer
+            format: int32
         type:
           type: string
-          description: Type of scenario to be created
+          description: type of view
           enum:
-          - GENERAL
+          - ALL_CHANGES_GROUPED
+          - CREATE
+          - HIRE
+          - DELETE
+          - DEPART
           - COMP
-          - PROMOTION
-          - TERMINATE
-          - CREATE_JOB
-          - UPDATE_JOB
-          - BUDGET
-          - BACKFILL
-        startDateFixed:
+          - UPDATE
+          - MOVE
+        updateId:
           type: string
-          description: whether or not the start date should stay fixed in time, or update to today's date as time passes
-          enum:
-          - FIXED
-          - TODAY
-        query:
+          description: update id
+          example: 588f7ee98f138b19220041a7
+        updateAt:
           type: string
-          description: Query for selecting which people/jobs are initially included in the scenario (only applies to promotion scenarios)
-        validJobIdSet:
+          description: update at
+    CombineScenarioRequest:
+      type: object
+      required:
+      - scenarioIds
+      properties:
+        scenarioIds:
           type: array
-          description: This scenario changes are restricted to the following jobIds
+          description: scenarios to combine
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        entityId:
-          type: string
-          description: The entity this scenario is associated with
-          example: 588f7ee98f138b19220041a7
-        entityType:
-          type: string
-          description: The type of entity associated with this scenario
-          enum:
-          - COMP_REVIEW
-        sharedViewConfig:
-          type: array
-          description: View configurations associated with this scenario
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/ScenarioSharedViewConfig'
-        budget:
-          description: Total budget associated with the scenario
-          $ref: '#/components/schemas/Money'
-    Money:
+        copyOnly:
+          type: boolean
+        useScenarioDateForChanges:
+          type: boolean
+    ResultsEvent:
       type: object
       required:
-      - amount
-      - currency
+      - data
       properties:
-        amount:
-          type: number
-        currency:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        next:
           type: string
-        places:
-          type: integer
-          format: int32
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'

@@ -167,6 +167,28 @@ paths:
           description: not found
 components:
   schemas:
+    WebAuthnStartVerifyResponse:
+      type: object
+      required:
+      - requestId
+      - assertionRequest
+      properties:
+        requestId:
+          type: string
+          description: String id of the request, this needs to be sent back from the client to finish the registration
+          example: abajlijj
+        assertionRequest:
+          type: object
+    WebAuthnRequest:
+      type: object
+      required:
+      - requestId
+      - credentialResponse
+      properties:
+        requestId:
+          type: string
+        credentialResponse:
+          type: string
     WebAuthnStartRegisterResponse:
       type: object
       required:
@@ -179,16 +201,6 @@ components:
           example: abajlijj
         publicKeyCredentialCreationOptions:
           type: object
-    WebAuthnRequest:
-      type: object
-      required:
-      - requestId
-      - credentialResponse
-      properties:
-        requestId:
-          type: string
-        credentialResponse:
-          type: string
     WebRegisteredCredential:
       type: object
       required:
@@ -214,15 +226,3 @@ components:
         createdAt:
           type: string
           description: When was this created
-    WebAuthnStartVerifyResponse:
-      type: object
-      required:
-      - requestId
-      - assertionRequest
-      properties:
-        requestId:
-          type: string
-          description: String id of the request, this needs to be sent back from the client to finish the registration
-          example: abajlijj
-        assertionRequest:
-          type: object

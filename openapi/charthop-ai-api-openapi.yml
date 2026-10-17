@@ -892,179 +892,6 @@ paths:
           description: not found
 components:
   schemas:
-    AiChatMessage:
-      type: object
-      required:
-      - id
-      - blocks
-      - at
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        userId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        userName:
-          type: string
-        externalUserId:
-          type: string
-        externalId:
-          type: string
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiChatMessageBlock'
-        at:
-          type: string
-        latencyMs:
-          type: integer
-          format: int64
-        inputTokenCount:
-          type: integer
-          format: int32
-        outputTokenCount:
-          type: integer
-          format: int32
-        cacheReadInputTokenCount:
-          type: integer
-          format: int32
-        cacheWriteInputTokenCount:
-          type: integer
-          format: int32
-        feedbackScore:
-          type: integer
-          format: int32
-        feedbackText:
-          type: string
-        actionButtons:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiToolActionButton'
-        fileIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    AiToolActionButton:
-      type: object
-      required:
-      - label
-      - url
-      properties:
-        label:
-          type: string
-        url:
-          type: string
-          format: uri
-        iconUrl:
-          type: string
-          format: uri
-    AiChatRequest:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        label:
-          type: string
-        initialAiMessage:
-          type: string
-        initialAiMessageAt:
-          type: string
-        dataContext:
-          type: string
-          enum:
-          - ASSESSMENT
-          - ASSESSMENT_CALIBRATE
-          - COMP_REVIEW
-          - PERSON_COMMON
-          - DASHBOARD
-          - FORM_COMPLETE
-          - GOAL
-          - SCENARIO
-          - SCENARIO_IMPACT
-          - TRANSCRIPT
-          - PROCESS_LOG
-        dataContextParams:
-          type: object
-          additionalProperties:
-            type: object
-        url:
-          type: string
-          format: uri
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-        agentUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        fileIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    UpdateAiAgentMemory:
-      type: object
-      properties:
-        content:
-          type: string
-          description: text content of the memory
-          minItems: 0
-          maxItems: 2000
-        importance:
-          type: number
-          format: double
-          description: importance score from 0.0 (low) to 1.0 (high)
-        expireAt:
-          type: string
-          description: optional expiration timestamp; memory is auto-deleted after this time
-          example: '2017-01-24T13:57:52Z'
-    AiChatRejectToolRequest:
-      type: object
-      required:
-      - toolUseIds
-      properties:
-        toolUseIds:
-          type: array
-          items:
-            type: string
-        message:
-          type: string
-    AiExpressionTranslateRequest:
-      type: object
-      required:
-      - text
-      properties:
-        text:
-          type: string
-    AiToolUse:
-      type: object
-      required:
-      - toolUseId
-      - name
-      - input
-      properties:
-        toolUseId:
-          type: string
-        name:
-          type: string
-        input:
-          type: object
-          additionalProperties:
-            type: object
-        entity:
-          $ref: '#/components/schemas/AiToolEntity'
-        summary:
-          type: string
-        readOnly:
-          type: boolean
     AiToolResult:
       type: object
       required:
@@ -1097,6 +924,45 @@ components:
           items:
             type: string
             example: 588f7ee98f138b19220041a7
+    AiChatFeedback:
+      type: object
+      required:
+      - score
+      properties:
+        score:
+          type: integer
+          format: int32
+    AiExpressionTranslateRequest:
+      type: object
+      required:
+      - text
+      properties:
+        text:
+          type: string
+    UpdateAiConfig:
+      type: object
+      properties:
+        prompts:
+          type: array
+          description: list of configured prompts for various use cases
+          items:
+            $ref: '#/components/schemas/AiPromptConfig'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     AiChat:
       type: object
       required:
@@ -1272,6 +1138,229 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    AiPromptConfig:
+      type: object
+      required:
+      - type
+      - aiPromptId
+      properties:
+        type:
+          type: string
+          enum:
+          - AUTO_CHAT
+          - CHAT
+          - CHAT_SHOULD_RESPOND
+          - CHAT_SUMMARY
+          - FORM_RESPONSE_SUMMARY
+          - REPORT_RESULT_SUMMARY
+          - SCENARIO_PLANNING
+          - CQL
+          - CQL_TRANSLATE
+          - PROMPT_SUGGEST
+          - JOB_CODE_MATCH
+        aiPromptId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        userId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+    DetectLanguageResponse:
+      type: object
+      required:
+      - language
+      properties:
+        language:
+          type: string
+    ResultsAiChat:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiChat'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    AiChatMessage:
+      type: object
+      required:
+      - id
+      - blocks
+      - at
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        userId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        userName:
+          type: string
+        externalUserId:
+          type: string
+        externalId:
+          type: string
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiChatMessageBlock'
+        at:
+          type: string
+        latencyMs:
+          type: integer
+          format: int64
+        inputTokenCount:
+          type: integer
+          format: int32
+        outputTokenCount:
+          type: integer
+          format: int32
+        cacheReadInputTokenCount:
+          type: integer
+          format: int32
+        cacheWriteInputTokenCount:
+          type: integer
+          format: int32
+        feedbackScore:
+          type: integer
+          format: int32
+        feedbackText:
+          type: string
+        actionButtons:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiToolActionButton'
+        fileIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    AiToolEntity:
+      type: object
+      required:
+      - id
+      - label
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        imagePath:
+          type: string
+        entityType:
+          type: string
+    AiChatChannel:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+        externalId:
+          type: string
+        threadId:
+          type: string
+        name:
+          type: string
+    AiToolUse:
+      type: object
+      required:
+      - toolUseId
+      - name
+      - input
+      properties:
+        toolUseId:
+          type: string
+        name:
+          type: string
+        input:
+          type: object
+          additionalProperties:
+            type: object
+        entity:
+          $ref: '#/components/schemas/AiToolEntity'
+        summary:
+          type: string
+        readOnly:
+          type: boolean
+    AiTranslateResponse:
+      type: object
+      required:
+      - outputTexts
+      properties:
+        outputTexts:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    AiExpressionTranslateResponse:
+      type: object
+      required:
+      - expression
+      properties:
+        expression:
+          type: string
+    AiTranslateRequest:
+      type: object
+      required:
+      - inputTexts
+      - inputLocale
+      - outputLocales
+      properties:
+        inputTexts:
+          type: array
+          items:
+            type: string
+        inputLocale:
+          type: string
+        outputLocales:
+          type: array
+          items:
+            type: string
+    AiSuggestedPromptsResponse:
+      type: object
+      required:
+      - prompts
+      properties:
+        prompts:
+          type: array
+          items:
+            type: string
+    AiChatApproveToolRequest:
+      type: object
+      required:
+      - toolUseIds
+      properties:
+        toolUseIds:
+          type: array
+          items:
+            type: string
+    AiToolActionButton:
+      type: object
+      required:
+      - label
+      - url
+      properties:
+        label:
+          type: string
+        url:
+          type: string
+          format: uri
+        iconUrl:
+          type: string
+          format: uri
     ShareAccess:
       type: object
       required:
@@ -1305,153 +1394,6 @@ components:
           type: string
           description: fields
           example: name,image,title
-    AiChatMessageBlock:
-      type: object
-      properties:
-        dataContextMessage:
-          type: string
-        contextMessage:
-          type: string
-        message:
-          type: string
-        toolUse:
-          $ref: '#/components/schemas/AiToolUse'
-        toolResult:
-          $ref: '#/components/schemas/AiToolResult'
-    AiToolEntity:
-      type: object
-      required:
-      - id
-      - label
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-        imagePath:
-          type: string
-        entityType:
-          type: string
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    DetectLanguageResponse:
-      type: object
-      required:
-      - language
-      properties:
-        language:
-          type: string
-    AiSuggestedPromptsResponse:
-      type: object
-      required:
-      - prompts
-      properties:
-        prompts:
-          type: array
-          items:
-            type: string
-    AiChatChannel:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-        externalId:
-          type: string
-        threadId:
-          type: string
-        name:
-          type: string
-    UpdateAiChat:
-      type: object
-      properties:
-        label:
-          type: string
-          description: label for the chat (defaults to the first question asked)
-        shareAccess:
-          type: array
-          description: users who are specifically granted permission to view or edit this chat
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-    AiChatAnswerToolRequest:
-      type: object
-      required:
-      - toolUseId
-      - answers
-      properties:
-        toolUseId:
-          type: string
-        answers:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-        message:
-          type: string
-    AiExpressionTranslateResponse:
-      type: object
-      required:
-      - expression
-      properties:
-        expression:
-          type: string
-    SummarizeResponse:
-      type: object
-      required:
-      - summary
-      - responseCount
-      properties:
-        summary:
-          type: string
-        responseCount:
-          type: integer
-          format: int32
-    ResultsAiChat:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AiChat'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    UpdateAiConfig:
-      type: object
-      properties:
-        prompts:
-          type: array
-          description: list of configured prompts for various use cases
-          items:
-            $ref: '#/components/schemas/AiPromptConfig'
     CreateAiAgentMemory:
       type: object
       required:
@@ -1487,6 +1429,17 @@ components:
           type: string
           description: id of the AI chat that created this memory
           example: 588f7ee98f138b19220041a7
+    AiChatRejectToolRequest:
+      type: object
+      required:
+      - toolUseIds
+      properties:
+        toolUseIds:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
     DetectLanguageRequest:
       type: object
       required:
@@ -1494,74 +1447,22 @@ components:
       properties:
         text:
           type: string
-    ResultsAccess:
+    UpdateAiAgentMemory:
       type: object
-      required:
-      - allowed
       properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    TabularData:
-      type: object
-      required:
-      - columnNames
-      - rows
-      properties:
-        columnNames:
-          type: array
-          items:
-            type: string
-        rows:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        totalRow:
-          type: object
-          additionalProperties:
-            type: object
-        date:
+        content:
           type: string
-          format: date
-        next:
+          description: text content of the memory
+          minItems: 0
+          maxItems: 2000
+        importance:
+          type: number
+          format: double
+          description: importance score from 0.0 (low) to 1.0 (high)
+        expireAt:
           type: string
-          example: 588f7ee98f138b19220041a7
-    AiPromptConfig:
-      type: object
-      required:
-      - type
-      - aiPromptId
-      properties:
-        type:
-          type: string
-          enum:
-          - AUTO_CHAT
-          - CHAT
-          - CHAT_SHOULD_RESPOND
-          - CHAT_SUMMARY
-          - FORM_RESPONSE_SUMMARY
-          - REPORT_RESULT_SUMMARY
-          - SCENARIO_PLANNING
-          - CQL
-          - CQL_TRANSLATE
-          - PROMPT_SUGGEST
-          - JOB_CODE_MATCH
-        aiPromptId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        userId:
-          type: string
-          example: 588f7ee98f138b19220041a7
+          description: optional expiration timestamp; memory is auto-deleted after this time
+          example: '2017-01-24T13:57:52Z'
     SummarizeFormResponsesRequest:
       type: object
       required:
@@ -1580,51 +1481,36 @@ components:
           type: string
         targetPersonFilter:
           type: string
-    AiChatFeedback:
+    AccessAction:
       type: object
       required:
-      - score
+      - action
       properties:
-        score:
-          type: integer
-          format: int32
-    AiTranslateResponse:
-      type: object
-      required:
-      - outputTexts
-      properties:
-        outputTexts:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    AiChatApproveToolRequest:
-      type: object
-      required:
-      - toolUseIds
-      properties:
-        toolUseIds:
-          type: array
-          items:
-            type: string
-    AiTranslateRequest:
-      type: object
-      required:
-      - inputTexts
-      - inputLocale
-      - outputLocales
-      properties:
-        inputTexts:
-          type: array
-          items:
-            type: string
-        inputLocale:
+        action:
           type: string
-        outputLocales:
+        fields:
           type: array
+          uniqueItems: true
           items:
             type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    AiChatMessageBlock:
+      type: object
+      properties:
+        dataContextMessage:
+          type: string
+        contextMessage:
+          type: string
+        message:
+          type: string
+        toolUse:
+          $ref: '#/components/schemas/AiToolUse'
+        toolResult:
+          $ref: '#/components/schemas/AiToolResult'
     AiChatSummary:
       type: object
       required:
@@ -1664,3 +1550,117 @@ components:
           type: string
         at:
           type: string
+    AiChatRequest:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        label:
+          type: string
+        initialAiMessage:
+          type: string
+        initialAiMessageAt:
+          type: string
+        dataContext:
+          type: string
+          enum:
+          - ASSESSMENT
+          - ASSESSMENT_CALIBRATE
+          - COMP_REVIEW
+          - PERSON_COMMON
+          - DASHBOARD
+          - FORM_COMPLETE
+          - GOAL
+          - SCENARIO
+          - SCENARIO_IMPACT
+          - TRANSCRIPT
+          - PROCESS_LOG
+        dataContextParams:
+          type: object
+          additionalProperties:
+            type: object
+        url:
+          type: string
+          format: uri
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+        agentUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        fileIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    AiChatAnswerToolRequest:
+      type: object
+      required:
+      - toolUseId
+      - answers
+      properties:
+        toolUseId:
+          type: string
+        answers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        message:
+          type: string
+    SummarizeResponse:
+      type: object
+      required:
+      - summary
+      - responseCount
+      properties:
+        summary:
+          type: string
+        responseCount:
+          type: integer
+          format: int32
+    TabularData:
+      type: object
+      required:
+      - columnNames
+      - rows
+      properties:
+        columnNames:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        totalRow:
+          type: object
+          additionalProperties:
+            type: object
+        date:
+          type: string
+          format: date
+        next:
+          type: string
+          example: 588f7ee98f138b19220041a7
+    UpdateAiChat:
+      type: object
+      properties:
+        label:
+          type: string
+          description: label for the chat (defaults to the first question asked)
+        shareAccess:
+          type: array
+          description: users who are specifically granted permission to view or edit this chat
+          items:
+            $ref: '#/components/schemas/ShareAccess'

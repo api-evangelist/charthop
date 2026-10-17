@@ -163,21 +163,22 @@ paths:
                 $ref: '#/components/schemas/ResultsGuidelineCalculation'
 components:
   schemas:
-    MoneyRange:
+    CreateGuideline:
       type: object
+      required:
+      - compReviewId
+      - label
+      - appliedField
+      - sourceField
+      - calculationType
+      - flagMode
+      - enablePopulateValue
+      - basisType
       properties:
-        max:
-          description: the maximum value in the range (type = Money)
-          $ref: '#/components/schemas/Money'
-        min:
-          description: the minimum value in the range (type = Money)
-          $ref: '#/components/schemas/Money'
-        target:
-          description: the target value for the range (type = Money)
-          $ref: '#/components/schemas/Money'
-    UpdateGuideline:
-      type: object
-      properties:
+        compReviewId:
+          type: string
+          description: comp review id
+          example: 588f7ee98f138b19220041a7
         label:
           type: string
           description: guideline name
@@ -380,137 +381,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    BasisCondition:
-      type: object
-      required:
-      - conditionExpr
-      properties:
-        conditionExpr:
-          type: string
-        amountRange:
-          $ref: '#/components/schemas/MoneyRange'
-        valueRange:
-          $ref: '#/components/schemas/ValueRange'
-    GuidelineCalculation:
-      type: object
-      required:
-      - guidelineId
-      - jobId
-      - compReviewId
-      - guidelineLabel
-      - appliedField
-      - flagMode
-      - isDeviated
-      - deviation
-      - fields
-      properties:
-        guidelineId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        jobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        compReviewId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        budgetPoolId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        guidelineLabel:
-          type: string
-        min:
-          type: object
-        max:
-          type: object
-        target:
-          type: object
-        appliedField:
-          type: string
-        flagMode:
-          type: string
-          enum:
-          - DEVIATION_THRESHOLD
-          - NONE
-        flagDeviationThreshold:
-          type: number
-        isDeviated:
-          type: boolean
-        deviation:
-          $ref: '#/components/schemas/Deviation'
-        fields:
-          type: object
-          additionalProperties:
-            type: object
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    ValueRange:
-      type: object
-      properties:
-        max:
-          type: number
-          description: the maximum value in the range (type = BigDecimal)
-        min:
-          type: number
-          description: the minimum value in the range (type = BigDecimal)
-        target:
-          type: number
-          description: the target value for the range (type = BigDecimal)
-    ResultsGuidelineCalculation:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GuidelineCalculation'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     BasisFieldMatrix:
       type: object
       required:
@@ -525,35 +395,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BasisCondition'
-    Money:
+    UpdateGuideline:
       type: object
-      required:
-      - amount
-      - currency
       properties:
-        amount:
-          type: number
-        currency:
-          type: string
-        places:
-          type: integer
-          format: int32
-    CreateGuideline:
-      type: object
-      required:
-      - compReviewId
-      - label
-      - appliedField
-      - sourceField
-      - calculationType
-      - flagMode
-      - enablePopulateValue
-      - basisType
-      properties:
-        compReviewId:
-          type: string
-          description: comp review id
-          example: 588f7ee98f138b19220041a7
         label:
           type: string
           description: guideline name
@@ -621,6 +465,119 @@ components:
         fixedValueRange:
           description: the value range if basisType.FIXED, the appliedField is NOT of type Money, and the guidelines are not dependent on given fields (no BasisFieldMatrix is present)
           $ref: '#/components/schemas/ValueRange'
+    BasisCondition:
+      type: object
+      required:
+      - conditionExpr
+      properties:
+        conditionExpr:
+          type: string
+        amountRange:
+          $ref: '#/components/schemas/MoneyRange'
+        valueRange:
+          $ref: '#/components/schemas/ValueRange'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    MoneyRange:
+      type: object
+      properties:
+        max:
+          description: the maximum value in the range (type = Money)
+          $ref: '#/components/schemas/Money'
+        min:
+          description: the minimum value in the range (type = Money)
+          $ref: '#/components/schemas/Money'
+        target:
+          description: the target value for the range (type = Money)
+          $ref: '#/components/schemas/Money'
+    ResultsGuideline:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Guideline'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    Money:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        places:
+          type: integer
+          format: int32
+    ValueRange:
+      type: object
+      properties:
+        max:
+          type: number
+          description: the maximum value in the range (type = BigDecimal)
+        min:
+          type: number
+          description: the minimum value in the range (type = BigDecimal)
+        target:
+          type: number
+          description: the target value for the range (type = BigDecimal)
+    Deviation:
+      type: object
+      properties:
+        min:
+          type: object
+        max:
+          type: object
     AccessAction:
       type: object
       required:
@@ -638,14 +595,7 @@ components:
           uniqueItems: true
           items:
             type: string
-    Deviation:
-      type: object
-      properties:
-        min:
-          type: object
-        max:
-          type: object
-    ResultsGuideline:
+    ResultsGuidelineCalculation:
       type: object
       required:
       - data
@@ -653,10 +603,60 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Guideline'
+            $ref: '#/components/schemas/GuidelineCalculation'
         next:
           type: string
         access:
           type: array
           items:
             $ref: '#/components/schemas/ResultsAccess'
+    GuidelineCalculation:
+      type: object
+      required:
+      - guidelineId
+      - jobId
+      - compReviewId
+      - guidelineLabel
+      - appliedField
+      - flagMode
+      - isDeviated
+      - deviation
+      - fields
+      properties:
+        guidelineId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        jobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        compReviewId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        budgetPoolId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        guidelineLabel:
+          type: string
+        min:
+          type: object
+        max:
+          type: object
+        target:
+          type: object
+        appliedField:
+          type: string
+        flagMode:
+          type: string
+          enum:
+          - DEVIATION_THRESHOLD
+          - NONE
+        flagDeviationThreshold:
+          type: number
+        isDeviated:
+          type: boolean
+        deviation:
+          $ref: '#/components/schemas/Deviation'
+        fields:
+          type: object
+          additionalProperties:
+            type: object

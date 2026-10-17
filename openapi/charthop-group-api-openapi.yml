@@ -953,61 +953,6 @@ paths:
         required: true
 components:
   schemas:
-    AddRmvGroupMemberRequest:
-      type: object
-      required:
-      - jobIds
-      properties:
-        jobIds:
-          type: array
-          description: job IDs to add to or remove from the group
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-    GroupDescriptionRender:
-      type: object
-      required:
-      - content
-      properties:
-        content:
-          type: string
-    CombineGroupRequest:
-      type: object
-      required:
-      - fromGroupId
-      properties:
-        fromGroupId:
-          type: string
-          description: combine from group id
-          example: 588f7ee98f138b19220041a7
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
     Process:
       type: object
       required:
@@ -1153,40 +1098,6 @@ components:
           type: object
           additionalProperties:
             type: object
-    GroupHistoryValue:
-      type: object
-      required:
-      - date
-      - userId
-      properties:
-        date:
-          type: string
-          format: date
-          description: date of value change
-        value:
-          type: object
-          description: value
-        userId:
-          type: string
-          description: user who changed the value
-          example: 588f7ee98f138b19220041a7
-    GroupParent:
-      type: object
-      required:
-      - id
-      - type
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          description: type of the parent
-          example: GROUP
-          enum:
-          - GROUP
-          - JOB
     ResultsData:
       type: object
       required:
@@ -1208,48 +1119,34 @@ components:
           type: object
           additionalProperties:
             type: object
-    ResultsAccess:
+    CombineGroupRequest:
       type: object
       required:
-      - allowed
+      - fromGroupId
       properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    GroupGraphCount:
+        fromGroupId:
+          type: string
+          description: combine from group id
+          example: 588f7ee98f138b19220041a7
+    GroupCount:
       type: object
       required:
-      - jobCount
-      - personCount
-      - groupCountByGroupTypeId
-      - groupCount
+      - totalGroupCount
+      - relationshipGroupCount
+      - orphanedGroupCount
       properties:
-        jobCount:
-          type: integer
-          format: int32
-          description: number of jobs
-        personCount:
-          type: integer
-          format: int32
-          description: number of persons
-        groupCountByGroupTypeId:
-          type: object
-          description: number of groups by group type id
-          additionalProperties:
-            type: integer
-            format: int32
-        groupCount:
+        totalGroupCount:
           type: integer
           format: int32
           description: total number of groups
+        relationshipGroupCount:
+          type: integer
+          format: int32
+          description: number of groups that are part of a larger group tree
+        orphanedGroupCount:
+          type: integer
+          format: int32
+          description: number of orphaned groups that do not belong to any group tree
     GroupTypeRef:
       type: object
       required:
@@ -1260,6 +1157,18 @@ components:
           example: 588f7ee98f138b19220041a7
         name:
           type: string
+    GroupGraphResults:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupGraphResult'
+        nextId:
+          type: string
+          example: 588f7ee98f138b19220041a7
     GroupGraphResult:
       type: object
       required:
@@ -1293,6 +1202,116 @@ components:
         underCount:
           description: number of groups/jobs "below" this group
           $ref: '#/components/schemas/GroupGraphCount'
+    GroupHistoryValue:
+      type: object
+      required:
+      - date
+      - userId
+      properties:
+        date:
+          type: string
+          format: date
+          description: date of value change
+        value:
+          type: object
+          description: value
+        userId:
+          type: string
+          description: user who changed the value
+          example: 588f7ee98f138b19220041a7
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    GroupDescriptionRender:
+      type: object
+      required:
+      - content
+      properties:
+        content:
+          type: string
+    GroupParent:
+      type: object
+      required:
+      - id
+      - type
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          description: type of the parent
+          example: GROUP
+          enum:
+          - GROUP
+          - JOB
+    GroupGraphCount:
+      type: object
+      required:
+      - jobCount
+      - personCount
+      - groupCountByGroupTypeId
+      - groupCount
+      properties:
+        jobCount:
+          type: integer
+          format: int32
+          description: number of jobs
+        personCount:
+          type: integer
+          format: int32
+          description: number of persons
+        groupCountByGroupTypeId:
+          type: object
+          description: number of groups by group type id
+          additionalProperties:
+            type: integer
+            format: int32
+        groupCount:
+          type: integer
+          format: int32
+          description: total number of groups
     DeleteFromHistoryEligibility:
       type: object
       required:
@@ -1316,54 +1335,6 @@ components:
             - REFERENCED_BY_SCENARIO
             - REFERENCED_BY_COMP_REVIEW
             - REFERENCED_BY_TIMEOFF_POLICY
-    GroupGraphResults:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GroupGraphResult'
-        nextId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-    GroupCount:
-      type: object
-      required:
-      - totalGroupCount
-      - relationshipGroupCount
-      - orphanedGroupCount
-      properties:
-        totalGroupCount:
-          type: integer
-          format: int32
-          description: total number of groups
-        relationshipGroupCount:
-          type: integer
-          format: int32
-          description: number of groups that are part of a larger group tree
-        orphanedGroupCount:
-          type: integer
-          format: int32
-          description: number of orphaned groups that do not belong to any group tree
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     GroupHistoryRecord:
       type: object
       required:
@@ -1389,3 +1360,32 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/GroupHistoryValue'
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    AddRmvGroupMemberRequest:
+      type: object
+      required:
+      - jobIds
+      properties:
+        jobIds:
+          type: array
+          description: job IDs to add to or remove from the group
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7

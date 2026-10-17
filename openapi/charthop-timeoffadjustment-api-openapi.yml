@@ -243,6 +243,29 @@ components:
         days:
           type: number
           description: balance adjustment
+    CreateTimeOffBalanceAdjustment:
+      type: object
+      required:
+      - timeOffPolicyId
+      - date
+      - personId
+      - days
+      properties:
+        timeOffPolicyId:
+          type: string
+          description: policy id to tie the balance to
+          example: 588f7ee98f138b19220041a7
+        date:
+          type: string
+          format: date
+          description: date of adjustment
+        personId:
+          type: string
+          description: person to tie the balance adjustment to
+          example: 588f7ee98f138b19220041a7
+        days:
+          type: number
+          description: balance adjustment
     Attribution:
       type: object
       properties:
@@ -270,26 +293,3 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    CreateTimeOffBalanceAdjustment:
-      type: object
-      required:
-      - timeOffPolicyId
-      - date
-      - personId
-      - days
-      properties:
-        timeOffPolicyId:
-          type: string
-          description: policy id to tie the balance to
-          example: 588f7ee98f138b19220041a7
-        date:
-          type: string
-          format: date
-          description: date of adjustment
-        personId:
-          type: string
-          description: person to tie the balance adjustment to
-          example: 588f7ee98f138b19220041a7
-        days:
-          type: number
-          description: balance adjustment

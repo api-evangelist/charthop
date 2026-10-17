@@ -174,6 +174,53 @@ paths:
           description: not found
 components:
   schemas:
+    ResultsAiHint:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AiHint'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    CreateAiHint:
+      type: object
+      required:
+      - name
+      - content
+      properties:
+        name:
+          type: string
+          description: unique name for this hint
+        toolName:
+          type: string
+          description: tool name this hint applies to, e.g. Create, Update, Delete, DataExplorer
+        entityType:
+          type: string
+          description: entity type this hint applies to, e.g. ACTION, FORM, REPORT
+        keywords:
+          type: array
+          description: keywords that trigger this hint when matched in user messages
+          items:
+            type: string
+        schema:
+          type: string
+          description: optional schema override; if null, auto-generated from the entity adapter's create class
+        addHintIds:
+          type: array
+          description: additional hint ids to include when this hint is surfaced
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        content:
+          type: string
+          description: the hint content to provide to the AI
     UpdateAiHint:
       type: object
       properties:
@@ -203,21 +250,22 @@ components:
         content:
           type: string
           description: the hint content to provide to the AI
-    ResultsAiHint:
+    ResultsAccess:
       type: object
       required:
-      - data
+      - allowed
       properties:
-        data:
+        ids:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/AiHint'
-        next:
-          type: string
-        access:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
           type: array
+          uniqueItems: true
           items:
-            $ref: '#/components/schemas/ResultsAccess'
+            $ref: '#/components/schemas/AccessAction'
     Attribution:
       type: object
       properties:
@@ -245,22 +293,23 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    ResultsAccess:
+    AccessAction:
       type: object
       required:
-      - allowed
+      - action
       properties:
-        ids:
+        action:
+          type: string
+        fields:
           type: array
           uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
+        types:
           type: array
           uniqueItems: true
           items:
-            $ref: '#/components/schemas/AccessAction'
+            type: string
     AiHint:
       type: object
       required:
@@ -339,52 +388,3 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    CreateAiHint:
-      type: object
-      required:
-      - name
-      - content
-      properties:
-        name:
-          type: string
-          description: unique name for this hint
-        toolName:
-          type: string
-          description: tool name this hint applies to, e.g. Create, Update, Delete, DataExplorer
-        entityType:
-          type: string
-          description: entity type this hint applies to, e.g. ACTION, FORM, REPORT
-        keywords:
-          type: array
-          description: keywords that trigger this hint when matched in user messages
-          items:
-            type: string
-        schema:
-          type: string
-          description: optional schema override; if null, auto-generated from the entity adapter's create class
-        addHintIds:
-          type: array
-          description: additional hint ids to include when this hint is surfaced
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        content:
-          type: string
-          description: the hint content to provide to the AI

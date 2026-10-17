@@ -130,22 +130,6 @@ paths:
         required: true
 components:
   schemas:
-    UpdateEmailTemplate:
-      type: object
-      properties:
-        name:
-          type: string
-          description: name of the email template
-          example: self_serve_welcome
-        category:
-          type: string
-          description: email category
-          enum:
-          - ADMINISTRATIVE
-          - BILLING
-          - DATA_IMPORT_AND_SYNC_STATUS
-          - TRIAL_REMINDERS
-          - APPROVAL_NOTIFICATIONS
     EmailTemplate:
       type: object
       required:
@@ -186,21 +170,6 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ResultsEmailTemplate:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmailTemplate'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     CreateEmailTemplate:
       type: object
       required:
@@ -220,6 +189,21 @@ components:
           - DATA_IMPORT_AND_SYNC_STATUS
           - TRIAL_REMINDERS
           - APPROVAL_NOTIFICATIONS
+    ResultsEmailTemplate:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailTemplate'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     AccessAction:
       type: object
       required:
@@ -237,3 +221,19 @@ components:
           uniqueItems: true
           items:
             type: string
+    UpdateEmailTemplate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of the email template
+          example: self_serve_welcome
+        category:
+          type: string
+          description: email category
+          enum:
+          - ADMINISTRATIVE
+          - BILLING
+          - DATA_IMPORT_AND_SYNC_STATUS
+          - TRIAL_REMINDERS
+          - APPROVAL_NOTIFICATIONS

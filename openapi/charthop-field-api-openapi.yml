@@ -473,28 +473,114 @@ paths:
         required: true
 components:
   schemas:
-    TableRef:
-      type: object
-      properties:
-        tableId:
-          type: string
-          description: the table id this field references
-          example: 588f7ee98f138b19220041a7
-        tableName:
-          type: string
-          description: the table name this field references
-    Translations:
+    EnumValue:
       type: object
       required:
-      - values
+      - name
+      - label
       properties:
-        values:
-          type: object
-          additionalProperties:
+        name:
+          type: string
+          description: enum value name
+        label:
+          type: string
+          description: enum value label
+        color:
+          type: string
+          description: color of property
+          pattern: ^#[a-f0-9]{6}$
+        expr:
+          type: string
+          description: computed expression, for ENUM_EXPR type
+        num:
+          type: number
+          description: numeric value, for ENUM_SCALE type
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        rank:
+          type: integer
+          format: int32
+          description: rank order, if selected in rank order
+        id:
+          type: string
+          description: unique identifier for enum
+          example: 588f7ee98f138b19220041a7
+        labelTr:
+          description: translations for the label
+          $ref: '#/components/schemas/Translations'
+    FieldRemoveCategoryRequest:
+      type: object
+      required:
+      - fieldIds
+      properties:
+        fieldIds:
+          type: array
+          description: Field ids
+          uniqueItems: true
+          items:
             type: string
-    UpdateField:
+            example: 588f7ee98f138b19220041a7
+    FieldRemoveOverrideRequest:
+      type: object
+      required:
+      - fieldIds
+      properties:
+        fieldIds:
+          type: array
+          description: Field ids
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+    ResultsField:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        next:
+          type: string
+    ResultsPartialField:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartialField'
+        next:
+          type: string
+    DtValue:
       type: object
       properties:
+        value:
+          type: object
+    Field:
+      type: object
+      required:
+      - id
+      - name
+      - label
+      - type
+      - plural
+      - isUnique
+      - isRequired
+      - sensitive
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id (empty if global)
+          example: 588f7ee98f138b19220041a7
         name:
           type: string
           description: short field name
@@ -669,37 +755,6 @@ components:
           - ORG
           - USER
           - NONE
-        sensitive:
-          type: string
-          description: sensitivity level of data
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        hideExpr:
-          type: boolean
-          description: hide expression-derived values from non-sensitive users
-        expireDays:
-          type: integer
-          format: int32
-          description: number of days after which the data becomes invalid
-        status:
-          type: string
-          description: the status of the field
-          enum:
-          - ACTIVE
-          - HIDDEN
-        sort:
-          type: integer
-          format: int32
-          description: sort order within a table
-        tableRef:
-          description: the table and label this field references, only applicable when Type equals TABLE_REF
-          $ref: '#/components/schemas/TableRef'
         isUnique:
           type: boolean
           description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
@@ -709,33 +764,16 @@ components:
         isEffectiveDated:
           type: boolean
           description: indicates that this field value is effective-dated
-        dataFetchTypes:
-          type: array
-          description: set of data fetch types
-          uniqueItems: true
-          items:
-            type: string
-            enum:
-            - BASIC
-            - UPDATE
-            - CHANGE
-            - RELATIONSHIP_MANAGER
-            - RELATIONSHIP_ALL
-            - TITLE
-            - PROMOTION
-            - GROUP
-            - COMP
-            - COMP_HISTORY
-            - GRANT
-            - TIMEOFF
-            - PERSON_JOIN
-            - ALL_DATA
         aliases:
           type: array
           description: set of aliases for this field
           uniqueItems: true
           items:
             type: string
+        groupTypeId:
+          type: string
+          description: if this is a group membership field, the group type ID it's for
+          example: 588f7ee98f138b19220041a7
         calc:
           type: string
           description: unique ID for the function that runs to calculate the value of this field. For native fields only
@@ -945,52 +983,106 @@ components:
           - WEEKS_PER_YEAR
           - WORK_ADDRESS
           - UPCOMING
-        categoryId:
-          type: string
-          description: ID of the category to which this field belongs, if any
-          example: 588f7ee98f138b19220041a7
         classification:
           type: string
           description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
           enum:
           - COMPOUND
+        sensitive:
+          type: string
+          description: sensitivity level of data
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        hideExpr:
+          type: boolean
+          description: hide expression-derived values from non-sensitive users
+        expireDays:
+          type: integer
+          format: int32
+          description: number of days after which the data becomes invalid
+        categoryId:
+          type: string
+          description: the category the field belongs to
+          example: 588f7ee98f138b19220041a7
+        categoryIds:
+          type: array
+          description: the categories the field belongs to
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          description: the status of the field
+          enum:
+          - ACTIVE
+          - HIDDEN
+        tableId:
+          type: string
+          description: the table id this field applies to, only applicable when EntityType equals TABLE
+          example: 588f7ee98f138b19220041a7
+        tableName:
+          type: string
+        tableRef:
+          description: the table and label this field references, only applicable when Type equals TABLE_REF
+          $ref: '#/components/schemas/TableRef'
+        readonly:
+          type: boolean
+        builtIn:
+          type: boolean
+        canOverrideSensitivity:
+          type: boolean
         places:
           type: integer
           format: int32
-          description: number of decimal places for numeric values
+          description: number of decimal places for money values
         isAutoIncrement:
           type: boolean
-          description: whether this field should auto-increment. For unique STRING or INT fields only
+          description: whenther this field should auto-increment. For unique STRING or INT fields only
         autoIncConfig:
           description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
           $ref: '#/components/schemas/AutoIncFieldConfig'
         shouldAutoAddValue:
           type: boolean
           description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
-    FieldStatusUpdateRequest:
-      type: object
-      required:
-      - updateStatus
-      - fieldIds
-      - reservedFieldNames
-      properties:
-        updateStatus:
+        overrideRevert:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DtValue'
+        overrideName:
           type: string
-          description: New status to update
-          enum:
-          - ACTIVE
-          - HIDDEN
-        fieldIds:
-          type: array
-          description: Field ids to apply status to
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        reservedFieldNames:
-          type: array
-          description: Reserved field names to apply status to
-          items:
-            type: string
+        hasSubfields:
+          type: boolean
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
     CreateField:
       type: object
       required:
@@ -1486,94 +1578,6 @@ components:
         shouldAutoAddValue:
           type: boolean
           description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    ResultsPartialField:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartialField'
-        next:
-          type: string
-    ResultsField:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-        next:
-          type: string
-    AutoIncFieldConfig:
-      type: object
-      required:
-      - upperCase
-      - padDigits
-      - separator
-      - prefixParts
-      properties:
-        upperCase:
-          type: boolean
-          description: convert any lower-case characters in the value to upper case
-        padDigits:
-          type: integer
-          format: int32
-          description: length of the numeric part of the value (left-padded with zeroes)
-        separator:
-          type: string
-          description: separator character to use between parts of the value
-          enum:
-          - HYPHEN
-          - UNDERSCORE
-          - SPACE
-          - NONE
-        prefixParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AutoIncFieldPart'
-    FieldRemoveOverrideRequest:
-      type: object
-      required:
-      - fieldIds
-      properties:
-        fieldIds:
-          type: array
-          description: Field ids
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
     PartialField:
       type: object
       properties:
@@ -2107,6 +2111,30 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
+    FieldStatusUpdateRequest:
+      type: object
+      required:
+      - updateStatus
+      - fieldIds
+      - reservedFieldNames
+      properties:
+        updateStatus:
+          type: string
+          description: New status to update
+          enum:
+          - ACTIVE
+          - HIDDEN
+        fieldIds:
+          type: array
+          description: Field ids to apply status to
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        reservedFieldNames:
+          type: array
+          description: Reserved field names to apply status to
+          items:
+            type: string
     FieldOptions:
       type: object
       properties:
@@ -2145,38 +2173,78 @@ components:
           type: boolean
         required:
           type: boolean
-    FieldRemoveCategoryRequest:
+    AutoIncFieldConfig:
       type: object
       required:
-      - fieldIds
+      - upperCase
+      - padDigits
+      - separator
+      - prefixParts
       properties:
-        fieldIds:
+        upperCase:
+          type: boolean
+          description: convert any lower-case characters in the value to upper case
+        padDigits:
+          type: integer
+          format: int32
+          description: length of the numeric part of the value (left-padded with zeroes)
+        separator:
+          type: string
+          description: separator character to use between parts of the value
+          enum:
+          - HYPHEN
+          - UNDERSCORE
+          - SPACE
+          - NONE
+        prefixParts:
           type: array
-          description: Field ids
-          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AutoIncFieldPart'
+    AutoIncFieldPart:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          type: string
+          enum:
+          - LITERAL_STRING
+          - GROUP_CODE
+        value:
+          type: object
+        defaultValue:
+          type: string
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-    Field:
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    UpdateField:
       type: object
-      required:
-      - id
-      - name
-      - label
-      - type
-      - plural
-      - isUnique
-      - isRequired
-      - sensitive
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id (empty if global)
-          example: 588f7ee98f138b19220041a7
         name:
           type: string
           description: short field name
@@ -2351,6 +2419,37 @@ components:
           - ORG
           - USER
           - NONE
+        sensitive:
+          type: string
+          description: sensitivity level of data
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        hideExpr:
+          type: boolean
+          description: hide expression-derived values from non-sensitive users
+        expireDays:
+          type: integer
+          format: int32
+          description: number of days after which the data becomes invalid
+        status:
+          type: string
+          description: the status of the field
+          enum:
+          - ACTIVE
+          - HIDDEN
+        sort:
+          type: integer
+          format: int32
+          description: sort order within a table
+        tableRef:
+          description: the table and label this field references, only applicable when Type equals TABLE_REF
+          $ref: '#/components/schemas/TableRef'
         isUnique:
           type: boolean
           description: indicates that this field value is unique in conjunction with entityType PERSON or JOB
@@ -2360,16 +2459,33 @@ components:
         isEffectiveDated:
           type: boolean
           description: indicates that this field value is effective-dated
+        dataFetchTypes:
+          type: array
+          description: set of data fetch types
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - BASIC
+            - UPDATE
+            - CHANGE
+            - RELATIONSHIP_MANAGER
+            - RELATIONSHIP_ALL
+            - TITLE
+            - PROMOTION
+            - GROUP
+            - COMP
+            - COMP_HISTORY
+            - GRANT
+            - TIMEOFF
+            - PERSON_JOIN
+            - ALL_DATA
         aliases:
           type: array
           description: set of aliases for this field
           uniqueItems: true
           items:
             type: string
-        groupTypeId:
-          type: string
-          description: if this is a group membership field, the group type ID it's for
-          example: 588f7ee98f138b19220041a7
         calc:
           type: string
           description: unique ID for the function that runs to calculate the value of this field. For native fields only
@@ -2579,160 +2695,44 @@ components:
           - WEEKS_PER_YEAR
           - WORK_ADDRESS
           - UPCOMING
+        categoryId:
+          type: string
+          description: ID of the category to which this field belongs, if any
+          example: 588f7ee98f138b19220041a7
         classification:
           type: string
           description: indicates how this field is calculated (whether it's stored in the DB, evaluated through the expression service, or compound)
           enum:
           - COMPOUND
-        sensitive:
-          type: string
-          description: sensitivity level of data
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        hideExpr:
-          type: boolean
-          description: hide expression-derived values from non-sensitive users
-        expireDays:
-          type: integer
-          format: int32
-          description: number of days after which the data becomes invalid
-        categoryId:
-          type: string
-          description: the category the field belongs to
-          example: 588f7ee98f138b19220041a7
-        categoryIds:
-          type: array
-          description: the categories the field belongs to
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: the status of the field
-          enum:
-          - ACTIVE
-          - HIDDEN
-        tableId:
-          type: string
-          description: the table id this field applies to, only applicable when EntityType equals TABLE
-          example: 588f7ee98f138b19220041a7
-        tableName:
-          type: string
-        tableRef:
-          description: the table and label this field references, only applicable when Type equals TABLE_REF
-          $ref: '#/components/schemas/TableRef'
-        readonly:
-          type: boolean
-        builtIn:
-          type: boolean
-        canOverrideSensitivity:
-          type: boolean
         places:
           type: integer
           format: int32
-          description: number of decimal places for money values
+          description: number of decimal places for numeric values
         isAutoIncrement:
           type: boolean
-          description: whenther this field should auto-increment. For unique STRING or INT fields only
+          description: whether this field should auto-increment. For unique STRING or INT fields only
         autoIncConfig:
           description: configuration for auto-increment fields. For unique STRING or INT fields, set autoIncrement to true
           $ref: '#/components/schemas/AutoIncFieldConfig'
         shouldAutoAddValue:
           type: boolean
           description: Whether the values for ENUM or ENUM_MULTI field can be added automatically by syncs and CSV imports
-        overrideRevert:
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DtValue'
-        overrideName:
-          type: string
-        hasSubfields:
-          type: boolean
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    AutoIncFieldPart:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          type: string
-          enum:
-          - LITERAL_STRING
-          - GROUP_CODE
-        value:
-          type: object
-        defaultValue:
-          type: string
-    EnumValue:
-      type: object
-      required:
-      - name
-      - label
-      properties:
-        name:
-          type: string
-          description: enum value name
-        label:
-          type: string
-          description: enum value label
-        color:
-          type: string
-          description: color of property
-          pattern: ^#[a-f0-9]{6}$
-        expr:
-          type: string
-          description: computed expression, for ENUM_EXPR type
-        num:
-          type: number
-          description: numeric value, for ENUM_SCALE type
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-        rank:
-          type: integer
-          format: int32
-          description: rank order, if selected in rank order
-        id:
-          type: string
-          description: unique identifier for enum
-          example: 588f7ee98f138b19220041a7
-        labelTr:
-          description: translations for the label
-          $ref: '#/components/schemas/Translations'
-    DtValue:
+            type: string
+    TableRef:
       type: object
       properties:
-        value:
-          type: object
+        tableId:
+          type: string
+          description: the table id this field references
+          example: 588f7ee98f138b19220041a7
+        tableName:
+          type: string
+          description: the table name this field references

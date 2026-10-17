@@ -194,6 +194,18 @@ paths:
           description: feature not enabled or no delegate set
 components:
   schemas:
+    BulkSetDelegatesRequest:
+      type: object
+      required:
+      - changes
+      - notify
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DelegateChange'
+        notify:
+          type: boolean
     ApprovalDelegate:
       type: object
       required:
@@ -262,6 +274,30 @@ components:
           type: string
           description: last updated timestamp
           example: '2017-01-24T13:57:52Z'
+    DelegateChange:
+      type: object
+      required:
+      - userId
+      - type
+      properties:
+        userId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        type:
+          type: string
+          enum:
+          - SCENARIO
+          - TIME_OFF
+          - FORM
+        delegateJobId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
     SetDelegateRequest:
       type: object
       required:
@@ -276,18 +312,23 @@ components:
         endDate:
           type: string
           format: date
-    BulkSetDelegatesRequest:
+    RepresentedApprover:
       type: object
       required:
-      - changes
-      - notify
+      - approverUserId
+      - type
       properties:
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/DelegateChange'
-        notify:
-          type: boolean
+        approverUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        approverName:
+          $ref: '#/components/schemas/Name'
+        type:
+          type: string
+          enum:
+          - SCENARIO
+          - TIME_OFF
+          - FORM
     Attribution:
       type: object
       properties:
@@ -315,30 +356,6 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    DelegateChange:
-      type: object
-      required:
-      - userId
-      - type
-      properties:
-        userId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        type:
-          type: string
-          enum:
-          - SCENARIO
-          - TIME_OFF
-          - FORM
-        delegateJobId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
     Name:
       type: object
       required:
@@ -374,20 +391,3 @@ components:
           example: Smith
           minItems: 0
           maxItems: 80
-    RepresentedApprover:
-      type: object
-      required:
-      - approverUserId
-      - type
-      properties:
-        approverUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        approverName:
-          $ref: '#/components/schemas/Name'
-        type:
-          type: string
-          enum:
-          - SCENARIO
-          - TIME_OFF
-          - FORM

@@ -447,6 +447,80 @@ paths:
           description: not found
 components:
   schemas:
+    LayoutButton:
+      type: object
+      required:
+      - url
+      - label
+      properties:
+        url:
+          type: string
+        label:
+          type: string
+    UpdateProfileTab:
+      type: object
+      properties:
+        label:
+          type: string
+          description: human-readable name of profile tab
+          example: Performance
+        labelTr:
+          description: translations for the human-readable label
+          $ref: '#/components/schemas/Translations'
+        blocks:
+          type: array
+          description: ordered list of blocks contained by profile tab
+          items:
+            $ref: '#/components/schemas/Block'
+        layout:
+          description: block layout configuration
+          $ref: '#/components/schemas/Layout'
+        status:
+          type: string
+          description: status of the profile tab
+          enum:
+          - ACTIVE
+          - INACTIVE
+        targetFilter:
+          type: string
+          description: filter that controls on which profiles this tab will appear
+        readFilter:
+          type: string
+          description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+    ResultsProfileTabResponseCard:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileTabResponseCard'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ResultsProfileTab:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileTab'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     FormVersionInfo:
       type: object
       required:
@@ -468,21 +542,462 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FormQuestionInfo'
-    ResultsProfileTabSummary:
+    ProfileTabResponseCard:
       type: object
       required:
-      - data
+      - id
+      - date
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileTabSummary'
-        next:
+        id:
           type: string
-        access:
+          example: 588f7ee98f138b19220041a7
+        date:
+          type: string
+          format: date
+        change:
+          $ref: '#/components/schemas/Change'
+        formResponse:
+          $ref: '#/components/schemas/FormResponse'
+        formVersion:
+          $ref: '#/components/schemas/FormVersionInfo'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
           type: array
           items:
-            $ref: '#/components/schemas/ResultsAccess'
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ProfileTab:
+      type: object
+      required:
+      - id
+      - orgId
+      - label
+      - blocks
+      - status
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable name of profile tab
+          example: Performance
+        labelTr:
+          description: translations for the human-readable label
+          $ref: '#/components/schemas/Translations'
+        blocks:
+          type: array
+          description: ordered list of blocks contained by profile tab
+          items:
+            $ref: '#/components/schemas/Block'
+        layout:
+          description: block layout configuration
+          $ref: '#/components/schemas/Layout'
+        status:
+          type: string
+          description: status of the profile tab
+          enum:
+          - ACTIVE
+          - INACTIVE
+        targetFilter:
+          type: string
+          description: filter that controls on which profiles this tab will appear
+        readFilter:
+          type: string
+          description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
+        sort:
+          type: integer
+          format: int32
+          description: sort order
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+    LayoutRow:
+      type: object
+      required:
+      - columns
+      - format
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayoutColumn'
+        format:
+          type: string
+    FormResponse:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent organization id
+          example: 588f7ee98f138b19220041a7
+        externalId:
+          type: string
+          description: if the response was imported from an external system, the unique identifier of the response from that system
+          example: google:1234567890
+        formId:
+          type: string
+          description: form id that the response is a response for
+          example: 588f7ee98f138b19220041a7
+        formVersionId:
+          type: string
+          description: form version id that the response is a response for
+          example: 588f7ee98f138b19220041a7
+        submitPersonId:
+          type: string
+          description: person id who filled out the form response (null if anonymous)
+          example: 588f7ee98f138b19220041a7
+        submitUserId:
+          type: string
+          description: user id who filled out the form response (can be null if anonymous or imported data)
+          example: 588f7ee98f138b19220041a7
+        submitAttribution:
+          description: attribution information, if an agent completed the form on behalf of a principal
+          $ref: '#/components/schemas/Attribution'
+        changeId:
+          type: string
+          description: change id, if the form response is linked to a DATA change
+          example: 588f7ee98f138b19220041a7
+        assessmentId:
+          type: string
+          description: assessment id, if the form response is related to an assesment
+          example: 588f7ee98f138b19220041a7
+        createProcessId:
+          type: string
+          description: process id, if the form response was created from an import process
+          example: 588f7ee98f138b19220041a7
+        updateProcessId:
+          type: string
+          description: process id, if the form response was updated from an import process
+          example: 588f7ee98f138b19220041a7
+        shareAccess:
+          type: array
+          description: list of share access, if the form response has been shared with anyone
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        authorSensitive:
+          type: string
+          description: sensitivity level of the author of the form response, if it differs from the form response
+          enum:
+          - ANONYMOUS
+          - PRIVATE
+          - HIGH
+          - MANAGER
+        authorData:
+          type: object
+          description: demographic field data connected with the author of the form response
+          additionalProperties:
+            type: object
+        targetEntityId:
+          type: string
+          description: target entity id -- the entity that the form response is about
+          example: 588f7ee98f138b19220041a7
+        targetEntityType:
+          type: string
+          description: target entity type -- the entity that the form response is about
+          enum:
+          - NONE
+          - PERSON
+        answers:
+          type: array
+          description: list of answers in the form response
+          items:
+            $ref: '#/components/schemas/FormResponseAnswer'
+        submitAt:
+          type: string
+          description: timestamp that the form response was submitted
+        approvalAt:
+          type: string
+          description: timestamp that the form response was approved
+        approvalId:
+          type: string
+          description: user id who approved the form response
+          example: 588f7ee98f138b19220041a7
+        approvalNote:
+          type: string
+          description: note left by the user who approved -- this is for backwards compatibility with the old approval system
+        releaseAt:
+          type: string
+          description: timestamp that the form response was released
+        releaseId:
+          type: string
+          description: user id who released the form response
+          example: 588f7ee98f138b19220041a7
+        fileId:
+          type: string
+          description: if the form response was exported into a file for signature, the id of that file
+          example: 588f7ee98f138b19220041a7
+        signAt:
+          type: string
+          description: timestamp that the form response's associated file was fully signed
+        signerUserIds:
+          type: array
+          description: user ids who signed the form response, if it was signed
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        status:
+          type: string
+          description: status of form response
+          enum:
+          - ACTIVE
+          - PROPOSED
+          - REJECTED
+          - AWAITING_CHANGES
+          - UNRELEASED
+        commentCount:
+          type: integer
+          format: int32
+          description: number of comments
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+    VariableComp:
+      type: object
+      required:
+      - type
+      - interval
+      properties:
+        type:
+          type: string
+          description: compensation type
+          enum:
+          - BONUS
+          - COMMISSION
+        interval:
+          type: string
+          description: compensation interval
+          enum:
+          - YEARLY
+      description: 'variable compensation
+
+        Implementations: VariableCompPercent, VariableCompPercent'
+      discriminator:
+        propertyName: compType
+    Layout:
+      type: object
+      required:
+      - rows
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayoutRow'
+    StockGrant:
+      type: object
+      required:
+      - id
+      - stock
+      - date
+      - shares
+      - price
+      - type
+      - vestSchedule
+      properties:
+        id:
+          type: string
+          description: unique identifier of grant
+        stock:
+          type: string
+          description: ticker symbol of this stock
+          example: GOOG
+        date:
+          type: string
+          format: date
+          description: date of grant
+        vestStartDate:
+          type: string
+          format: date
+          description: vesting start date of grant
+        expireDate:
+          type: string
+          format: date
+          description: expiration date of grant
+        shares:
+          type: number
+          description: number of shares granted
+        price:
+          type: number
+          description: per share strike price
+        type:
+          type: string
+          description: type of grant
+          enum:
+          - ISO
+          - NSO
+          - RSU
+          - SAR
+          - PERFORMANCE_SHARES
+          - PHANTOM_STOCK
+          - RSA
+        vestSchedule:
+          type: string
+          description: vesting schedule
+        originalPrice:
+          type: number
+          description: original per share value of stock (grant price at time of issue)
+        currentPrice:
+          type: number
+          description: current per share value of stock
+        vestedShares:
+          type: number
+          description: current number of shares vested
+        vestedSharesNextYear:
+          type: number
+          description: number of shares vested one year from today
+        vestedSharesByDate:
+          type: object
+          description: number of shares vested, by future date
+          additionalProperties:
+            type: number
+        vestEndDate:
+          type: string
+          format: date
+          description: vesting end date
+        cancelDate:
+          type: string
+          format: date
+          description: cancellation date
+        terminationDate:
+          type: string
+          format: date
+          description: termination date — vesting freezes on this date when the holder separates
+        lastExercisableDate:
+          type: string
+          format: date
+          description: last date on which vested shares can be exercised; after this the grant is forfeited
+        details:
+          type: string
+          description: details of the grant (arbitrary text)
+        description:
+          type: string
+          description: human-readable description of vesting schedule
     Comp:
       type: object
       properties:
@@ -515,42 +1030,67 @@ components:
           - PERFORMANCE_SHARES
           - PHANTOM_STOCK
           - RSA
-    Layout:
+    JobRelationship:
       type: object
       required:
-      - rows
+      - jobId
+      - type
       properties:
-        rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/LayoutRow'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
+        jobId:
           type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
+          description: destination job id
+          example: 5887a7718f138b6a2a0041a7
+        type:
           type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
+          description: type of relationship
           enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+          - MANAGER
+          - DIRECT
+          - INDIRECT_MANAGER
+          - INDIRECT
+          - NONE
+    ProfileTabSummary:
+      type: object
+      required:
+      - id
+      - label
+      - isBuiltin
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+        labelTr:
+          $ref: '#/components/schemas/Translations'
+        isBuiltin:
+          type: boolean
+        isSensitive:
+          type: boolean
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+        layout:
+          $ref: '#/components/schemas/Layout'
+    Translations:
+      type: object
+      required:
+      - values
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    LayoutColumn:
+      type: object
+      required:
+      - blocks
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
     Change:
       type: object
       required:
@@ -770,52 +1310,6 @@ components:
         canEdit:
           type: boolean
           description: flag indicating whether authorized user can modify this change (will vary depending on user)
-    UpdateProfileTab:
-      type: object
-      properties:
-        label:
-          type: string
-          description: human-readable name of profile tab
-          example: Performance
-        labelTr:
-          description: translations for the human-readable label
-          $ref: '#/components/schemas/Translations'
-        blocks:
-          type: array
-          description: ordered list of blocks contained by profile tab
-          items:
-            $ref: '#/components/schemas/Block'
-        layout:
-          description: block layout configuration
-          $ref: '#/components/schemas/Layout'
-        status:
-          type: string
-          description: status of the profile tab
-          enum:
-          - ACTIVE
-          - INACTIVE
-        targetFilter:
-          type: string
-          description: filter that controls on which profiles this tab will appear
-        readFilter:
-          type: string
-          description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-    LayoutRow:
-      type: object
-      required:
-      - columns
-      - format
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/LayoutColumn'
-        format:
-          type: string
     ShareAccess:
       type: object
       required:
@@ -849,145 +1343,134 @@ components:
           type: string
           description: fields
           example: name,image,title
-    ProfileTabSummary:
+    FormResponseAnswer:
       type: object
       required:
       - id
-      - label
-      - isBuiltin
+      - questionId
       properties:
         id:
           type: string
           example: 588f7ee98f138b19220041a7
-        label:
+        questionId:
           type: string
-        labelTr:
-          $ref: '#/components/schemas/Translations'
-        isBuiltin:
-          type: boolean
-        isSensitive:
-          type: boolean
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Block'
-        layout:
-          $ref: '#/components/schemas/Layout'
-    StockGrant:
-      type: object
-      required:
-      - id
-      - stock
-      - date
-      - shares
-      - price
-      - type
-      - vestSchedule
-      properties:
-        id:
-          type: string
-          description: unique identifier of grant
-        stock:
-          type: string
-          description: ticker symbol of this stock
-          example: GOOG
-        date:
-          type: string
-          format: date
-          description: date of grant
-        vestStartDate:
-          type: string
-          format: date
-          description: vesting start date of grant
-        expireDate:
-          type: string
-          format: date
-          description: expiration date of grant
-        shares:
-          type: number
-          description: number of shares granted
-        price:
-          type: number
-          description: per share strike price
+          example: 588f7ee98f138b19220041a7
+        value:
+          type: object
         type:
           type: string
-          description: type of grant
           enum:
-          - ISO
-          - NSO
-          - RSU
-          - SAR
-          - PERFORMANCE_SHARES
-          - PHANTOM_STOCK
-          - RSA
-        vestSchedule:
+          - ADDRESS
+          - AUDIO
+          - BOOLEAN
+          - COMP
+          - COMPOUND
+          - COMP_BAND
+          - CONTACTS
+          - CURRENCY
+          - DATE
+          - DECIMAL
+          - ELAPSED_DAYS
+          - ELAPSED_MONTHS
+          - ELAPSED_YEARS
+          - EMAIL
+          - ENUM
+          - ENUM_EXPR
+          - ENUM_MULTI
+          - ENUM_SCALE
+          - EXPR
+          - FILE
+          - GROUP
+          - GROUPS
+          - GROUP_ASSIGNMENTS
+          - GROUP_TYPE
+          - GROUP_POSITION_ASSIGNMENTS
+          - IMAGE
+          - INTEGER
+          - JOB
+          - JOB_CODE
+          - JOBS
+          - JOB_TIER
+          - LIST
+          - MAP
+          - MONEY
+          - NAME
+          - OBJECT
+          - PAY_INTERVAL
+          - PERCENT
+          - PERSON
+          - PERSONS
+          - PHONE
+          - STOCKGRANT
+          - STRING
+          - TABLE_REF
+          - TEXT
+          - TIMEOFF
+          - TIMESTAMP
+          - TRACKED_GROUP
+          - URL
+          - USER
+          - VARIABLE_COMP
+          - VARIABLE_COMPS
+        plural:
           type: string
-          description: vesting schedule
-        originalPrice:
-          type: number
-          description: original per share value of stock (grant price at time of issue)
-        currentPrice:
-          type: number
-          description: current per share value of stock
-        vestedShares:
-          type: number
-          description: current number of shares vested
-        vestedSharesNextYear:
-          type: number
-          description: number of shares vested one year from today
-        vestedSharesByDate:
-          type: object
-          description: number of shares vested, by future date
-          additionalProperties:
-            type: number
-        vestEndDate:
-          type: string
-          format: date
-          description: vesting end date
-        cancelDate:
-          type: string
-          format: date
-          description: cancellation date
-        terminationDate:
-          type: string
-          format: date
-          description: termination date — vesting freezes on this date when the holder separates
-        lastExercisableDate:
-          type: string
-          format: date
-          description: last date on which vested shares can be exercised; after this the grant is forfeited
-        details:
-          type: string
-          description: details of the grant (arbitrary text)
-        description:
-          type: string
-          description: human-readable description of vesting schedule
-    AccessAction:
+          enum:
+          - SINGLE
+          - LIST
+          - SET
+    PayInterval:
       type: object
       required:
-      - action
+      - interval
+      - pay
       properties:
-        action:
+        interval:
           type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    LayoutColumn:
+          description: Interval (annual or hourly)
+          enum:
+          - YEARLY
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          - HOURLY
+        pay:
+          description: Pay over the given interval
+          $ref: '#/components/schemas/Money'
+        hoursPerWeek:
+          type: integer
+          format: int32
+          description: working hours per week if interval=hourly
+          example: '40'
+        weeksPerYear:
+          type: integer
+          format: int32
+          description: working weeks per year if interval=hourly
+          example: '52'
+        monthsPerYear:
+          type: integer
+          format: int32
+          description: months per year if interval=month
+          example: '52'
+        daysPerYear:
+          type: integer
+          format: int32
+          description: days per year if interval=day
+          example: '250'
+    ResultsProfileTabSummary:
       type: object
       required:
-      - blocks
+      - data
       properties:
-        blocks:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/Block'
+            $ref: '#/components/schemas/ProfileTabSummary'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     TimeOff:
       type: object
       required:
@@ -1027,72 +1510,56 @@ components:
           - CANCELLED
           - REJECTED
           - SUPERSEDED
-    Block:
+    Money:
       type: object
+      required:
+      - amount
+      - currency
       properties:
-        type:
+        amount:
+          type: number
+        currency:
           type: string
-          description: the type of this block, or null if legacy
-          enum:
-          - CONTENT
-          - TASK
-          - CALENDAR
-        label:
+        places:
+          type: integer
+          format: int32
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
           type: string
-          description: human readable label for this block
-        height:
-          type: object
-          description: fixed height in px, or expand if “stretch”, or fit to contents if null
-        targetFilter:
-          type: string
-          description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
-        readFilter:
-          type: string
-          description: filter condition expression applied to this block, relative to the viewer
-        formIds:
+        fields:
           type: array
-          description: form ids to surface responses in this block
           uniqueItems: true
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        fields:
+        types:
           type: array
-          description: fields retrieved in this block
+          uniqueItems: true
           items:
             type: string
-        title:
-          type: string
-          description: title to show in block header
-        content:
-          type: string
-          description: template content returned in this block
-        contentTr:
-          description: template content returned in this block, translated
-          $ref: '#/components/schemas/Translations'
-        primaryButton:
-          description: primary CTA button
-          $ref: '#/components/schemas/LayoutButton'
-        secondaryButton:
-          description: secondary CTA button
-          $ref: '#/components/schemas/LayoutButton'
-    ProfileTab:
+    FormQuestionInfo:
       type: object
       required:
       - id
-      - orgId
+      - question
+      properties:
+        id:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        question:
+          type: string
+        questionTr:
+          $ref: '#/components/schemas/Translations'
+    CreateProfileTab:
+      type: object
+      required:
       - label
       - blocks
       - status
       properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
         label:
           type: string
           description: human-readable name of profile tab
@@ -1124,102 +1591,109 @@ components:
           type: integer
           format: int32
           description: sort order
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    ResultsAccess:
+    JobUpdate:
       type: object
-      required:
-      - allowed
       properties:
-        ids:
+        addRelationships:
           type: array
+          description: relationships to add
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        removeRelationships:
+          type: array
+          description: relationships to remove
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/JobRelationship'
+        addGroupIds:
+          type: array
+          description: groups to add
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        allowed:
+        removeGroupIds:
           type: array
+          description: groups to remove
           uniqueItems: true
           items:
-            $ref: '#/components/schemas/AccessAction'
-    PayInterval:
-      type: object
-      required:
-      - interval
-      - pay
-      properties:
-        interval:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        setGroupIds:
+          type: object
+          description: groups to set
+          additionalProperties:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        grant:
+          description: stock grant to add
+          $ref: '#/components/schemas/StockGrant'
+        timeOff:
+          description: time off to add
+          $ref: '#/components/schemas/TimeOff'
+        title:
           type: string
-          description: Interval (annual or hourly)
+          description: new title
+          minItems: 1
+          maxItems: 160
+        comp:
+          description: new compensation level
+          $ref: '#/components/schemas/Comp'
+        placement:
+          type: string
+          description: new placement
           enum:
-          - YEARLY
-          - MONTHLY
-          - WEEKLY
-          - DAILY
-          - HOURLY
-        pay:
-          description: Pay over the given interval
-          $ref: '#/components/schemas/Money'
-        hoursPerWeek:
-          type: integer
-          format: int32
-          description: working hours per week if interval=hourly
-          example: '40'
-        weeksPerYear:
-          type: integer
-          format: int32
-          description: working weeks per year if interval=hourly
-          example: '52'
-        monthsPerYear:
-          type: integer
-          format: int32
-          description: months per year if interval=month
-          example: '52'
-        daysPerYear:
-          type: integer
-          format: int32
-          description: days per year if interval=day
-          example: '250'
+          - NORMAL
+          - ASSISTANT
+        employment:
+          type: string
+          description: new employment status
+          enum:
+          - FULL
+          - PART
+          - TEMP
+          - CONTRACT
+          - INTERN
+          - EXPAT
+        sensitive:
+          type: string
+          description: new view sensitivity
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        startDatePlanned:
+          type: string
+          format: date
+          description: planned start date
+        startDatePlannedRemove:
+          type: boolean
+          description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
+        startDate:
+          type: string
+          format: date
+          description: new expected start date - will update to person start date in future
+        backfillPersonId:
+          type: string
+          description: set who this job is backfilling
+          example: 588f7ee98f138b19220041a7
+        jobCodeId:
+          type: string
+          description: set (or unset) the job code for this job
+          example: 588f7ee98f138b19220041a7
+        hasUnsetFields:
+          type: boolean
+          description: set who this job is backfilling
+        fields:
+          type: object
+          description: custom fields values to set
+          additionalProperties:
+            type: object
     PartialJob:
       type: object
       properties:
@@ -1385,529 +1859,55 @@ components:
           - PERSON
           - STRUCTURE
           - ALL
-    ResultsProfileTab:
+    Block:
       type: object
-      required:
-      - data
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileTab'
-        next:
+        type:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    FormResponse:
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent organization id
-          example: 588f7ee98f138b19220041a7
-        externalId:
-          type: string
-          description: if the response was imported from an external system, the unique identifier of the response from that system
-          example: google:1234567890
-        formId:
-          type: string
-          description: form id that the response is a response for
-          example: 588f7ee98f138b19220041a7
-        formVersionId:
-          type: string
-          description: form version id that the response is a response for
-          example: 588f7ee98f138b19220041a7
-        submitPersonId:
-          type: string
-          description: person id who filled out the form response (null if anonymous)
-          example: 588f7ee98f138b19220041a7
-        submitUserId:
-          type: string
-          description: user id who filled out the form response (can be null if anonymous or imported data)
-          example: 588f7ee98f138b19220041a7
-        submitAttribution:
-          description: attribution information, if an agent completed the form on behalf of a principal
-          $ref: '#/components/schemas/Attribution'
-        changeId:
-          type: string
-          description: change id, if the form response is linked to a DATA change
-          example: 588f7ee98f138b19220041a7
-        assessmentId:
-          type: string
-          description: assessment id, if the form response is related to an assesment
-          example: 588f7ee98f138b19220041a7
-        createProcessId:
-          type: string
-          description: process id, if the form response was created from an import process
-          example: 588f7ee98f138b19220041a7
-        updateProcessId:
-          type: string
-          description: process id, if the form response was updated from an import process
-          example: 588f7ee98f138b19220041a7
-        shareAccess:
-          type: array
-          description: list of share access, if the form response has been shared with anyone
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        authorSensitive:
-          type: string
-          description: sensitivity level of the author of the form response, if it differs from the form response
+          description: the type of this block, or null if legacy
           enum:
-          - ANONYMOUS
-          - PRIVATE
-          - HIGH
-          - MANAGER
-        authorData:
+          - CONTENT
+          - TASK
+          - CALENDAR
+        label:
+          type: string
+          description: human readable label for this block
+        height:
           type: object
-          description: demographic field data connected with the author of the form response
-          additionalProperties:
-            type: object
-        targetEntityId:
-          type: string
-          description: target entity id -- the entity that the form response is about
-          example: 588f7ee98f138b19220041a7
-        targetEntityType:
-          type: string
-          description: target entity type -- the entity that the form response is about
-          enum:
-          - NONE
-          - PERSON
-        answers:
-          type: array
-          description: list of answers in the form response
-          items:
-            $ref: '#/components/schemas/FormResponseAnswer'
-        submitAt:
-          type: string
-          description: timestamp that the form response was submitted
-        approvalAt:
-          type: string
-          description: timestamp that the form response was approved
-        approvalId:
-          type: string
-          description: user id who approved the form response
-          example: 588f7ee98f138b19220041a7
-        approvalNote:
-          type: string
-          description: note left by the user who approved -- this is for backwards compatibility with the old approval system
-        releaseAt:
-          type: string
-          description: timestamp that the form response was released
-        releaseId:
-          type: string
-          description: user id who released the form response
-          example: 588f7ee98f138b19220041a7
-        fileId:
-          type: string
-          description: if the form response was exported into a file for signature, the id of that file
-          example: 588f7ee98f138b19220041a7
-        signAt:
-          type: string
-          description: timestamp that the form response's associated file was fully signed
-        signerUserIds:
-          type: array
-          description: user ids who signed the form response, if it was signed
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        status:
-          type: string
-          description: status of form response
-          enum:
-          - ACTIVE
-          - PROPOSED
-          - REJECTED
-          - AWAITING_CHANGES
-          - UNRELEASED
-        commentCount:
-          type: integer
-          format: int32
-          description: number of comments
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-    FormQuestionInfo:
-      type: object
-      required:
-      - id
-      - question
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        question:
-          type: string
-        questionTr:
-          $ref: '#/components/schemas/Translations'
-    LayoutButton:
-      type: object
-      required:
-      - url
-      - label
-      properties:
-        url:
-          type: string
-        label:
-          type: string
-    ResultsProfileTabResponseCard:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileTabResponseCard'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    CreateProfileTab:
-      type: object
-      required:
-      - label
-      - blocks
-      - status
-      properties:
-        label:
-          type: string
-          description: human-readable name of profile tab
-          example: Performance
-        labelTr:
-          description: translations for the human-readable label
-          $ref: '#/components/schemas/Translations'
-        blocks:
-          type: array
-          description: ordered list of blocks contained by profile tab
-          items:
-            $ref: '#/components/schemas/Block'
-        layout:
-          description: block layout configuration
-          $ref: '#/components/schemas/Layout'
-        status:
-          type: string
-          description: status of the profile tab
-          enum:
-          - ACTIVE
-          - INACTIVE
+          description: fixed height in px, or expand if “stretch”, or fit to contents if null
         targetFilter:
           type: string
-          description: filter that controls on which profiles this tab will appear
+          description: filter condition expression applied to this block, used to determine whether the content appears on the target or not
         readFilter:
           type: string
-          description: filter that controls which viewers can read this profile tab. The profileTab:read permission, if present, overrides this filter
-        sort:
-          type: integer
-          format: int32
-          description: sort order
-    Translations:
-      type: object
-      required:
-      - values
-      properties:
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    VariableComp:
-      type: object
-      required:
-      - type
-      - interval
-      properties:
-        type:
-          type: string
-          description: compensation type
-          enum:
-          - BONUS
-          - COMMISSION
-        interval:
-          type: string
-          description: compensation interval
-          enum:
-          - YEARLY
-      description: 'variable compensation
-
-        Implementations: VariableCompPercent, VariableCompPercent'
-      discriminator:
-        propertyName: compType
-    JobRelationship:
-      type: object
-      required:
-      - jobId
-      - type
-      properties:
-        jobId:
-          type: string
-          description: destination job id
-          example: 5887a7718f138b6a2a0041a7
-        type:
-          type: string
-          description: type of relationship
-          enum:
-          - MANAGER
-          - DIRECT
-          - INDIRECT_MANAGER
-          - INDIRECT
-          - NONE
-    FormResponseAnswer:
-      type: object
-      required:
-      - id
-      - questionId
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        questionId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        value:
-          type: object
-        type:
-          type: string
-          enum:
-          - ADDRESS
-          - AUDIO
-          - BOOLEAN
-          - COMP
-          - COMPOUND
-          - COMP_BAND
-          - CONTACTS
-          - CURRENCY
-          - DATE
-          - DECIMAL
-          - ELAPSED_DAYS
-          - ELAPSED_MONTHS
-          - ELAPSED_YEARS
-          - EMAIL
-          - ENUM
-          - ENUM_EXPR
-          - ENUM_MULTI
-          - ENUM_SCALE
-          - EXPR
-          - FILE
-          - GROUP
-          - GROUPS
-          - GROUP_ASSIGNMENTS
-          - GROUP_TYPE
-          - GROUP_POSITION_ASSIGNMENTS
-          - IMAGE
-          - INTEGER
-          - JOB
-          - JOB_CODE
-          - JOBS
-          - JOB_TIER
-          - LIST
-          - MAP
-          - MONEY
-          - NAME
-          - OBJECT
-          - PAY_INTERVAL
-          - PERCENT
-          - PERSON
-          - PERSONS
-          - PHONE
-          - STOCKGRANT
-          - STRING
-          - TABLE_REF
-          - TEXT
-          - TIMEOFF
-          - TIMESTAMP
-          - TRACKED_GROUP
-          - URL
-          - USER
-          - VARIABLE_COMP
-          - VARIABLE_COMPS
-        plural:
-          type: string
-          enum:
-          - SINGLE
-          - LIST
-          - SET
-    JobUpdate:
-      type: object
-      properties:
-        addRelationships:
+          description: filter condition expression applied to this block, relative to the viewer
+        formIds:
           type: array
-          description: relationships to add
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        removeRelationships:
-          type: array
-          description: relationships to remove
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/JobRelationship'
-        addGroupIds:
-          type: array
-          description: groups to add
+          description: form ids to surface responses in this block
           uniqueItems: true
           items:
             type: string
             example: 588f7ee98f138b19220041a7
-        removeGroupIds:
+        fields:
           type: array
-          description: groups to remove
-          uniqueItems: true
+          description: fields retrieved in this block
           items:
             type: string
-            example: 588f7ee98f138b19220041a7
-        setGroupIds:
-          type: object
-          description: groups to set
-          additionalProperties:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        grant:
-          description: stock grant to add
-          $ref: '#/components/schemas/StockGrant'
-        timeOff:
-          description: time off to add
-          $ref: '#/components/schemas/TimeOff'
         title:
           type: string
-          description: new title
-          minItems: 1
-          maxItems: 160
-        comp:
-          description: new compensation level
-          $ref: '#/components/schemas/Comp'
-        placement:
+          description: title to show in block header
+        content:
           type: string
-          description: new placement
-          enum:
-          - NORMAL
-          - ASSISTANT
-        employment:
-          type: string
-          description: new employment status
-          enum:
-          - FULL
-          - PART
-          - TEMP
-          - CONTRACT
-          - INTERN
-          - EXPAT
-        sensitive:
-          type: string
-          description: new view sensitivity
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        startDatePlanned:
-          type: string
-          format: date
-          description: planned start date
-        startDatePlannedRemove:
-          type: boolean
-          description: remove planned start date. if both startDatePlanned and startDatePlannedRemove are set, startDatePlanned takes precedence
-        startDate:
-          type: string
-          format: date
-          description: new expected start date - will update to person start date in future
-        backfillPersonId:
-          type: string
-          description: set who this job is backfilling
-          example: 588f7ee98f138b19220041a7
-        jobCodeId:
-          type: string
-          description: set (or unset) the job code for this job
-          example: 588f7ee98f138b19220041a7
-        hasUnsetFields:
-          type: boolean
-          description: set who this job is backfilling
-        fields:
-          type: object
-          description: custom fields values to set
-          additionalProperties:
-            type: object
-    ProfileTabResponseCard:
-      type: object
-      required:
-      - id
-      - date
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        date:
-          type: string
-          format: date
-        change:
-          $ref: '#/components/schemas/Change'
-        formResponse:
-          $ref: '#/components/schemas/FormResponse'
-        formVersion:
-          $ref: '#/components/schemas/FormVersionInfo'
-    Money:
-      type: object
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          type: number
-        currency:
-          type: string
-        places:
-          type: integer
-          format: int32
+          description: template content returned in this block
+        contentTr:
+          description: template content returned in this block, translated
+          $ref: '#/components/schemas/Translations'
+        primaryButton:
+          description: primary CTA button
+          $ref: '#/components/schemas/LayoutButton'
+        secondaryButton:
+          description: secondary CTA button
+          $ref: '#/components/schemas/LayoutButton'
     UpcomingChange:
       type: object
       required:

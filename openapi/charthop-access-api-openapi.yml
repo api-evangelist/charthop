@@ -103,13 +103,6 @@ paths:
           description: not found
 components:
   schemas:
-    AccessResponse:
-      type: object
-      properties:
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
     ResultsAccess:
       type: object
       required:
@@ -126,6 +119,13 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
+    AccessResponse:
+      type: object
+      properties:
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     AccessAction:
       type: object
       required:

@@ -170,6 +170,23 @@ paths:
         required: true
 components:
   schemas:
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     ResultsProduct:
       type: object
       required:
@@ -199,6 +216,97 @@ components:
           type: string
           description: globally unique id
           example: 588f7ee98f138b19220041a7
+        name:
+          type: string
+          description: name of product
+          example: Compensation Reviews
+        sku:
+          type: string
+          description: unique sku of product
+          example: compensation-reviews
+        salesforceProductId:
+          type: string
+          description: corresponding product id in salesforce
+          example: 01t4T000000RpgKQAS
+        stripeProductId:
+          type: string
+          description: corresponding product id in stripe
+          example: prod_12345ABC
+        features:
+          type: array
+          description: set of features this product has access to
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - AI_ACTION
+            - AI_AGENT
+            - AI_API_WRITE
+            - AI_SLACK_TEAM_CHAT
+            - ATS_SYNC
+            - BUDGET
+            - COMPENSATION_REVIEW
+            - CUSTOM_CALENDAR
+            - CUSTOM_FIELD
+            - CUSTOM_FIELD_READONLY
+            - CUSTOM_FORM
+            - CUSTOM_PROFILE_TAB
+            - CUSTOM_ROLE
+            - FORM_ANONYMOUS
+            - FORM_RELEASE
+            - FORM_SIGNATURE
+            - GOAL
+            - MULTI_PAYROLL
+            - PERFORMANCE_REVIEW
+            - REPORT
+            - REPORT_READONLY
+            - SCENARIO
+            - SIGNATURE
+            - SIGNATURE_QES
+            - SIMPLE_WORKFLOWS
+            - SURVEY
+            - TABLE
+            - TEMPLATE
+            - WORKDAY_ADAPTIVE
+            - PAYROLL_OUTBOUND
+            - APPROVAL_WORKFLOWS
+            - CONTENT
+            - IDENTITY_OUTBOUND
+            - ONBOARDING_OFFBOARDING
+            - TIMEOFF
+        featureOptions:
+          type: object
+          description: map of options for the feature
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FeatureAccessOption'
+        status:
+          type: string
+          description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
+          enum:
+          - ACTIVE
+          - LEGACY
+          - INACTIVE
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    UpdateProduct:
+      type: object
+      properties:
         name:
           type: string
           description: name of product
@@ -353,22 +461,6 @@ components:
           - ACTIVE
           - LEGACY
           - INACTIVE
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
     FeatureAccessOption:
       type: object
       required:
@@ -397,95 +489,3 @@ components:
           type: integer
           format: int32
           description: The feature option limit
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    UpdateProduct:
-      type: object
-      properties:
-        name:
-          type: string
-          description: name of product
-          example: Compensation Reviews
-        sku:
-          type: string
-          description: unique sku of product
-          example: compensation-reviews
-        salesforceProductId:
-          type: string
-          description: corresponding product id in salesforce
-          example: 01t4T000000RpgKQAS
-        stripeProductId:
-          type: string
-          description: corresponding product id in stripe
-          example: prod_12345ABC
-        features:
-          type: array
-          description: set of features this product has access to
-          uniqueItems: true
-          items:
-            type: string
-            enum:
-            - AI_ACTION
-            - AI_AGENT
-            - AI_API_WRITE
-            - AI_SLACK_TEAM_CHAT
-            - ATS_SYNC
-            - BUDGET
-            - COMPENSATION_REVIEW
-            - CUSTOM_CALENDAR
-            - CUSTOM_FIELD
-            - CUSTOM_FIELD_READONLY
-            - CUSTOM_FORM
-            - CUSTOM_PROFILE_TAB
-            - CUSTOM_ROLE
-            - FORM_ANONYMOUS
-            - FORM_RELEASE
-            - FORM_SIGNATURE
-            - GOAL
-            - MULTI_PAYROLL
-            - PERFORMANCE_REVIEW
-            - REPORT
-            - REPORT_READONLY
-            - SCENARIO
-            - SIGNATURE
-            - SIGNATURE_QES
-            - SIMPLE_WORKFLOWS
-            - SURVEY
-            - TABLE
-            - TEMPLATE
-            - WORKDAY_ADAPTIVE
-            - PAYROLL_OUTBOUND
-            - APPROVAL_WORKFLOWS
-            - CONTENT
-            - IDENTITY_OUTBOUND
-            - ONBOARDING_OFFBOARDING
-            - TIMEOFF
-        featureOptions:
-          type: object
-          description: map of options for the feature
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/FeatureAccessOption'
-        status:
-          type: string
-          description: whether the product is Active (currently being sold), Legacy (in use, but not being sold to new customers), or Inactive (no longer in use by any active customers)
-          enum:
-          - ACTIVE
-          - LEGACY
-          - INACTIVE

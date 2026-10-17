@@ -605,36 +605,277 @@ paths:
           description: not found
 components:
   schemas:
-    ResultsCalendarEntryCondensed:
+    Process:
       type: object
       required:
-      - data
+      - id
+      - orgId
+      - label
+      - type
+      - status
+      - runUserId
+      - createId
+      - createAt
+      - options
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CalendarEntryCondensed'
-        next:
+        id:
           type: string
-        access:
+          description: globally unique id
+          example: 588f7ee98f138b19220041a7
+        orgId:
+          type: string
+          description: parent org id
+          example: 588f7ee98f138b19220041a7
+        label:
+          type: string
+          description: human-readable label that identifies this process
+        type:
+          type: string
+          description: process type
+        status:
+          type: string
+          description: current status of process
+          enum:
+          - PENDING
+          - RUNNING
+          - DONE
+          - ERROR
+        filePath:
+          type: string
+          description: data file path
+        logPath:
+          type: string
+          description: data log path
+        runUserId:
+          type: string
+          description: user id who is running the process
+          example: 588f7ee98f138b19220041a7
+        parentProcessId:
+          type: string
+          description: process id of parent process
+          example: 588f7ee98f138b19220041a7
+        createId:
+          type: string
+          description: created by user id (user who requested the process run)
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        startAt:
+          type: string
+          description: started at timestamp
+          example: '2017-01-24T13:57:52Z'
+        endAt:
+          type: string
+          description: ended at timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+          description: status or error message
+        progress:
+          type: number
+          format: double
+          description: percent progress so far
+        internalError:
+          type: string
+          description: internal-only error message
+        options:
+          type: object
+          description: options passed to the process
+        results:
+          type: object
+          description: results summary for the process
+          additionalProperties:
+            type: object
+        logDataList:
           type: array
+          description: list of log data that occurred during running of this process
           items:
-            $ref: '#/components/schemas/ResultsAccess'
-    ResultsCalendarEntry:
+            $ref: '#/components/schemas/LogData'
+        state:
+          type: object
+          description: process-specific state data
+        summary:
+          type: string
+          description: human-readable, searchable summary of what this process did
+        appId:
+          type: string
+          description: app id of the process
+          example: 588f7ee98f138b19220041a7
+        uuid:
+          type: string
+          description: unique ID of the process at queue time
+          example: 84db3c6e-0877-4436-8af1-768c06b29586
+    LogData:
       type: object
       required:
+      - level
+      - at
       - data
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CalendarEntry'
-        next:
+        level:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
+          enum:
+          - INFO
+          - WARN
+          - ERROR
+        at:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+    CreateCalendarEntry:
+      type: object
+      required:
+      - calendarId
+      - label
+      - from
+      - until
+      properties:
+        orgId:
+          type: string
+          description: parent organization id
+          example: 665f3ad1e47a82bf1d3d180b
+        calendarId:
+          type: string
+          description: calendar to which this event pertains
+          example: 665f3aabe88164e4ef6c3a22
+        label:
+          type: string
+          description: human-readable label for event
+        description:
+          type: string
+        from:
+          type: string
+          format: date
+          description: start date for event (inclusive)
+          example: '2024-02-29'
+        until:
+          type: string
+          format: date
+          description: end date for event (exclusive)
+          example: '2024-04-01'
+        entityType:
+          type: string
+          description: type of associated entity
+          example: PERSON
+          enum:
+          - ACTION
+          - AGREEMENT
+          - AI_AGENT
+          - AI_AGENT_MEMORY
+          - AI_CHAT
+          - AI_CONFIG
+          - AI_CREDIT_LIMIT
+          - AI_CREDIT_USAGE
+          - AI_HINT
+          - AI_PROMPT
+          - APP
+          - APP_CONFIG
+          - APPROVAL_CHAIN
+          - APPROVAL_CHAIN_STAGE
+          - APPROVAL_DELEGATE
+          - APPROVAL_REQUEST
+          - ASSESSMENT
+          - BUDGET
+          - BUDGET_POOL
+          - BUNDLE
+          - CALENDAR
+          - CALENDAR_ENTRY
+          - CATEGORY
+          - CATEGORY_SORT
+          - CHANGE
+          - COMMENT
+          - COMP_BAND
+          - COMP_REVIEW
+          - CONTENT
+          - CUSTOMER
+          - DATA_VIEW
+          - EXCHANGE_RATE
+          - EMAIL_TEMPLATE
+          - EVENT
+          - FIELD
+          - FILE
+          - FORM
+          - FORM_DRAFT
+          - FORM_RESPONSE
+          - GEOCODE
+          - GROUP
+          - GROUP_TYPE
+          - GOAL
+          - GOAL_PROGRESS
+          - GOAL_TARGET
+          - GOAL_TYPE
+          - GUIDELINE
+          - JOB
+          - JOB_CODE
+          - JOB_LEVEL
+          - MEDIA
+          - MESSAGE
+          - MULTIPLIER
+          - ORG
+          - ORG_CONFIG
+          - PERSON
+          - PROFILE_TAB
+          - POLICY
+          - PROCESS
+          - PRODUCT
+          - QUERY_TOKEN
+          - QUESTION
+          - REPORT
+          - REPORT_CHART
+          - ROLE
+          - SCENARIO
+          - SIGNATURE
+          - SIGNATURE_REQUEST
+          - STOCK_GRANT
+          - STOCK_PRICE
+          - TABLE
+          - TABLE_ROW
+          - TASK_CONFIG
+          - TEMPLATE
+          - TASK
+          - TOKEN
+          - TIMEOFF
+          - TIMEOFF_BALANCE_ADJUSTMENT
+          - TIMEOFF_LEDGER_ENTRY
+          - TIMEOFF_POLICY
+          - TRANSCRIPT
+          - USER
+        entityId:
+          type: string
+          description: associated entity
+          example: 665f6952552f7e3e5beea7c9
+        personId:
+          type: string
+          description: person id for person-related calendar entries
+          example: 665f6952552f7e3e5beea7c9
     ShareAccess:
       type: object
       required:
@@ -668,28 +909,43 @@ components:
           type: string
           description: fields
           example: name,image,title
-    Calendar:
+    ResultsCalendarEntry:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarEntry'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    CalendarEntryCondensed:
       type: object
       required:
       - id
-      - type
+      - orgId
+      - calendarId
+      - calendarType
       - label
-      - color
-      - sensitive
-      - status
-      - isBuiltIn
+      - from
+      - entryCount
       properties:
         id:
           type: string
-          description: globally unique id
-          example: 665f3aabe88164e4ef6c3a22
+          example: 588f7ee98f138b19220041a7
         orgId:
           type: string
-          description: parent organization id
-          example: 665f3ad1e47a82bf1d3d180b
-        type:
+          example: 588f7ee98f138b19220041a7
+        calendarId:
           type: string
-          description: type of calendar
+          example: 588f7ee98f138b19220041a7
+        calendarType:
+          type: string
           enum:
           - ANNIVERSARY
           - BIRTHDAY
@@ -704,87 +960,17 @@ components:
           - HOLIDAY
         label:
           type: string
-          description: human-readable label for calendar
-        description:
+        from:
           type: string
-        color:
+          format: date
+        until:
           type: string
-        imagePath:
-          type: string
-          pattern: ^[a-zA-Z0-9._/-]*$
-        emoji:
-          type: string
-          description: emoji, if an emoji is used to represent the calendar
-          example: 💥
-          minItems: 0
-          maxItems: 64
-        sensitive:
-          type: string
-          description: base sensitivity of this calendar and entities in it -- should be PRIVATE, ORG or HIGH
-          enum:
-          - GLOBAL
-          - ORG
-          - SENSITIVE
-          - PERSONAL
-          - MANAGER
-          - HIGH
-          - PRIVATE
-        shareAccess:
-          type: array
-          description: list of users and groups who have the content shared with them
-          items:
-            $ref: '#/components/schemas/ShareAccess'
-        status:
-          type: string
-          description: whether the calendar is active or not
-          enum:
-          - ACTIVE
-          - INACTIVE
-        createId:
-          type: string
-          description: created by user id
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        deleteId:
-          type: string
-          description: deleted by user id
-          example: 588f7ee98f138b19220041a7
-        deleteBehalfId:
-          type: string
-          description: deleted on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        deleteAttribution:
-          $ref: '#/components/schemas/Attribution'
-        deleteAt:
-          type: string
-          description: deleted timestamp
-          example: '2017-01-24T13:57:52Z'
-        isBuiltIn:
-          type: boolean
-          readOnly: true
+          format: date
+        singleEntry:
+          $ref: '#/components/schemas/CalendarEntry'
+        entryCount:
+          type: integer
+          format: int32
     CalendarEntry:
       type: object
       required:
@@ -958,417 +1144,6 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    Attribution:
-      type: object
-      properties:
-        principalUserId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
-          enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
-    LogData:
-      type: object
-      required:
-      - level
-      - at
-      - data
-      properties:
-        level:
-          type: string
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-        at:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-    ResultsAccess:
-      type: object
-      required:
-      - allowed
-      properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    CalendarEntryCondensed:
-      type: object
-      required:
-      - id
-      - orgId
-      - calendarId
-      - calendarType
-      - label
-      - from
-      - entryCount
-      properties:
-        id:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        calendarId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        calendarType:
-          type: string
-          enum:
-          - ANNIVERSARY
-          - BIRTHDAY
-          - COMP_REVIEW
-          - REVIEW
-          - SURVEY
-          - TASK
-          - TIMEOFF
-          - START_DATE
-          - END_DATE
-          - CUSTOM
-          - HOLIDAY
-        label:
-          type: string
-        from:
-          type: string
-          format: date
-        until:
-          type: string
-          format: date
-        singleEntry:
-          $ref: '#/components/schemas/CalendarEntry'
-        entryCount:
-          type: integer
-          format: int32
-    ResultsCalendar:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Calendar'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    Process:
-      type: object
-      required:
-      - id
-      - orgId
-      - label
-      - type
-      - status
-      - runUserId
-      - createId
-      - createAt
-      - options
-      properties:
-        id:
-          type: string
-          description: globally unique id
-          example: 588f7ee98f138b19220041a7
-        orgId:
-          type: string
-          description: parent org id
-          example: 588f7ee98f138b19220041a7
-        label:
-          type: string
-          description: human-readable label that identifies this process
-        type:
-          type: string
-          description: process type
-        status:
-          type: string
-          description: current status of process
-          enum:
-          - PENDING
-          - RUNNING
-          - DONE
-          - ERROR
-        filePath:
-          type: string
-          description: data file path
-        logPath:
-          type: string
-          description: data log path
-        runUserId:
-          type: string
-          description: user id who is running the process
-          example: 588f7ee98f138b19220041a7
-        parentProcessId:
-          type: string
-          description: process id of parent process
-          example: 588f7ee98f138b19220041a7
-        createId:
-          type: string
-          description: created by user id (user who requested the process run)
-          example: 588f7ee98f138b19220041a7
-        createBehalfId:
-          type: string
-          description: created on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        createAttribution:
-          $ref: '#/components/schemas/Attribution'
-        createAt:
-          type: string
-          description: created timestamp
-          example: '2017-01-24T13:57:52Z'
-        updateId:
-          type: string
-          description: last updated by user id
-          example: 588f7ee98f138b19220041a7
-        updateBehalfId:
-          type: string
-          description: last updated on behalf of user id
-          example: 588f7ee98f138b19220041a7
-        updateAttribution:
-          $ref: '#/components/schemas/Attribution'
-        updateAt:
-          type: string
-          description: last updated timestamp
-          example: '2017-01-24T13:57:52Z'
-        startAt:
-          type: string
-          description: started at timestamp
-          example: '2017-01-24T13:57:52Z'
-        endAt:
-          type: string
-          description: ended at timestamp
-          example: '2017-01-24T13:57:52Z'
-        message:
-          type: string
-          description: status or error message
-        progress:
-          type: number
-          format: double
-          description: percent progress so far
-        internalError:
-          type: string
-          description: internal-only error message
-        options:
-          type: object
-          description: options passed to the process
-        results:
-          type: object
-          description: results summary for the process
-          additionalProperties:
-            type: object
-        logDataList:
-          type: array
-          description: list of log data that occurred during running of this process
-          items:
-            $ref: '#/components/schemas/LogData'
-        state:
-          type: object
-          description: process-specific state data
-        summary:
-          type: string
-          description: human-readable, searchable summary of what this process did
-        appId:
-          type: string
-          description: app id of the process
-          example: 588f7ee98f138b19220041a7
-        uuid:
-          type: string
-          description: unique ID of the process at queue time
-          example: 84db3c6e-0877-4436-8af1-768c06b29586
-    UpdateCalendarEntry:
-      type: object
-      properties:
-        label:
-          type: string
-          description: human-readable label for event
-        description:
-          type: string
-        from:
-          type: string
-          format: date
-          description: start date for event (inclusive)
-          example: '2024-02-29'
-        until:
-          type: string
-          format: date
-          description: end date for event (exclusive)
-          example: '2024-04-01'
-    CreateCalendarEntry:
-      type: object
-      required:
-      - calendarId
-      - label
-      - from
-      - until
-      properties:
-        orgId:
-          type: string
-          description: parent organization id
-          example: 665f3ad1e47a82bf1d3d180b
-        calendarId:
-          type: string
-          description: calendar to which this event pertains
-          example: 665f3aabe88164e4ef6c3a22
-        label:
-          type: string
-          description: human-readable label for event
-        description:
-          type: string
-        from:
-          type: string
-          format: date
-          description: start date for event (inclusive)
-          example: '2024-02-29'
-        until:
-          type: string
-          format: date
-          description: end date for event (exclusive)
-          example: '2024-04-01'
-        entityType:
-          type: string
-          description: type of associated entity
-          example: PERSON
-          enum:
-          - ACTION
-          - AGREEMENT
-          - AI_AGENT
-          - AI_AGENT_MEMORY
-          - AI_CHAT
-          - AI_CONFIG
-          - AI_CREDIT_LIMIT
-          - AI_CREDIT_USAGE
-          - AI_HINT
-          - AI_PROMPT
-          - APP
-          - APP_CONFIG
-          - APPROVAL_CHAIN
-          - APPROVAL_CHAIN_STAGE
-          - APPROVAL_DELEGATE
-          - APPROVAL_REQUEST
-          - ASSESSMENT
-          - BUDGET
-          - BUDGET_POOL
-          - BUNDLE
-          - CALENDAR
-          - CALENDAR_ENTRY
-          - CATEGORY
-          - CATEGORY_SORT
-          - CHANGE
-          - COMMENT
-          - COMP_BAND
-          - COMP_REVIEW
-          - CONTENT
-          - CUSTOMER
-          - DATA_VIEW
-          - EXCHANGE_RATE
-          - EMAIL_TEMPLATE
-          - EVENT
-          - FIELD
-          - FILE
-          - FORM
-          - FORM_DRAFT
-          - FORM_RESPONSE
-          - GEOCODE
-          - GROUP
-          - GROUP_TYPE
-          - GOAL
-          - GOAL_PROGRESS
-          - GOAL_TARGET
-          - GOAL_TYPE
-          - GUIDELINE
-          - JOB
-          - JOB_CODE
-          - JOB_LEVEL
-          - MEDIA
-          - MESSAGE
-          - MULTIPLIER
-          - ORG
-          - ORG_CONFIG
-          - PERSON
-          - PROFILE_TAB
-          - POLICY
-          - PROCESS
-          - PRODUCT
-          - QUERY_TOKEN
-          - QUESTION
-          - REPORT
-          - REPORT_CHART
-          - ROLE
-          - SCENARIO
-          - SIGNATURE
-          - SIGNATURE_REQUEST
-          - STOCK_GRANT
-          - STOCK_PRICE
-          - TABLE
-          - TABLE_ROW
-          - TASK_CONFIG
-          - TEMPLATE
-          - TASK
-          - TOKEN
-          - TIMEOFF
-          - TIMEOFF_BALANCE_ADJUSTMENT
-          - TIMEOFF_LEDGER_ENTRY
-          - TIMEOFF_POLICY
-          - TRANSCRIPT
-          - USER
-        entityId:
-          type: string
-          description: associated entity
-          example: 665f6952552f7e3e5beea7c9
-        personId:
-          type: string
-          description: person id for person-related calendar entries
-          example: 665f6952552f7e3e5beea7c9
     CreateCalendar:
       type: object
       required:
@@ -1431,6 +1206,231 @@ components:
           enum:
           - ACTIVE
           - INACTIVE
+    ResultsCalendarEntryCondensed:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalendarEntryCondensed'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ResultsAccess:
+      type: object
+      required:
+      - allowed
+      properties:
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
+    Calendar:
+      type: object
+      required:
+      - id
+      - type
+      - label
+      - color
+      - sensitive
+      - status
+      - isBuiltIn
+      properties:
+        id:
+          type: string
+          description: globally unique id
+          example: 665f3aabe88164e4ef6c3a22
+        orgId:
+          type: string
+          description: parent organization id
+          example: 665f3ad1e47a82bf1d3d180b
+        type:
+          type: string
+          description: type of calendar
+          enum:
+          - ANNIVERSARY
+          - BIRTHDAY
+          - COMP_REVIEW
+          - REVIEW
+          - SURVEY
+          - TASK
+          - TIMEOFF
+          - START_DATE
+          - END_DATE
+          - CUSTOM
+          - HOLIDAY
+        label:
+          type: string
+          description: human-readable label for calendar
+        description:
+          type: string
+        color:
+          type: string
+        imagePath:
+          type: string
+          pattern: ^[a-zA-Z0-9._/-]*$
+        emoji:
+          type: string
+          description: emoji, if an emoji is used to represent the calendar
+          example: 💥
+          minItems: 0
+          maxItems: 64
+        sensitive:
+          type: string
+          description: base sensitivity of this calendar and entities in it -- should be PRIVATE, ORG or HIGH
+          enum:
+          - GLOBAL
+          - ORG
+          - SENSITIVE
+          - PERSONAL
+          - MANAGER
+          - HIGH
+          - PRIVATE
+        shareAccess:
+          type: array
+          description: list of users and groups who have the content shared with them
+          items:
+            $ref: '#/components/schemas/ShareAccess'
+        status:
+          type: string
+          description: whether the calendar is active or not
+          enum:
+          - ACTIVE
+          - INACTIVE
+        createId:
+          type: string
+          description: created by user id
+          example: 588f7ee98f138b19220041a7
+        createBehalfId:
+          type: string
+          description: created on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        createAttribution:
+          $ref: '#/components/schemas/Attribution'
+        createAt:
+          type: string
+          description: created timestamp
+          example: '2017-01-24T13:57:52Z'
+        updateId:
+          type: string
+          description: last updated by user id
+          example: 588f7ee98f138b19220041a7
+        updateBehalfId:
+          type: string
+          description: last updated on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        updateAttribution:
+          $ref: '#/components/schemas/Attribution'
+        updateAt:
+          type: string
+          description: last updated timestamp
+          example: '2017-01-24T13:57:52Z'
+        deleteId:
+          type: string
+          description: deleted by user id
+          example: 588f7ee98f138b19220041a7
+        deleteBehalfId:
+          type: string
+          description: deleted on behalf of user id
+          example: 588f7ee98f138b19220041a7
+        deleteAttribution:
+          $ref: '#/components/schemas/Attribution'
+        deleteAt:
+          type: string
+          description: deleted timestamp
+          example: '2017-01-24T13:57:52Z'
+        isBuiltIn:
+          type: boolean
+          readOnly: true
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsCalendar:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Calendar'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    UpdateCalendarEntry:
+      type: object
+      properties:
+        label:
+          type: string
+          description: human-readable label for event
+        description:
+          type: string
+        from:
+          type: string
+          format: date
+          description: start date for event (inclusive)
+          example: '2024-02-29'
+        until:
+          type: string
+          format: date
+          description: end date for event (exclusive)
+          example: '2024-04-01'
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
     UpdateCalendar:
       type: object
       properties:

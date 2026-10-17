@@ -90,6 +90,15 @@ paths:
           description: not found
 components:
   schemas:
+    SetupIntent:
+      type: object
+      required:
+      - clientSecret
+      properties:
+        clientSecret:
+          type: string
+          description: Secret of setup_intent object created
+          example: st_ersasdfasdf
     ResultsStripeProduct:
       type: object
       required:
@@ -101,27 +110,17 @@ components:
             $ref: '#/components/schemas/StripeProduct'
         next:
           type: string
-    PlanTier:
+    ResultsPlan:
       type: object
       required:
-      - unitAmount
+      - data
       properties:
-        upTo:
-          type: integer
-          format: int64
-          description: headcount up to this level is charged at the below rate
-        unitAmount:
-          type: number
-          description: PEPM rate
-    SetupIntent:
-      type: object
-      required:
-      - clientSecret
-      properties:
-        clientSecret:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plan'
+        next:
           type: string
-          description: Secret of setup_intent object created
-          example: st_ersasdfasdf
     StripeProduct:
       type: object
       required:
@@ -170,14 +169,15 @@ components:
         stripeProductId:
           type: string
           description: stripe product id that this plan belongs to
-    ResultsPlan:
+    PlanTier:
       type: object
       required:
-      - data
+      - unitAmount
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Plan'
-        next:
-          type: string
+        upTo:
+          type: integer
+          format: int64
+          description: headcount up to this level is charged at the below rate
+        unitAmount:
+          type: number
+          description: PEPM rate

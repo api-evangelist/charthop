@@ -214,29 +214,21 @@ paths:
           description: not found
 components:
   schemas:
-    UpdateMultiplier:
+    ResultsMultiplier:
       type: object
+      required:
+      - data
       properties:
-        label:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Multiplier'
+        next:
           type: string
-          description: human-readable name of multiplier
-          example: Non-technical
-        code:
-          type: string
-        value:
-          type: number
-          description: amount to multiply the initial value by
-          example: '0.75'
-        expr:
-          type: string
-          description: calculated expression to match against the job
-          example: department!="Engineering"
-          minItems: 0
-          maxItems: 1000
-        category:
-          type: string
-          description: tag to group multipliers together by
-          example: Location
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
     Multiplier:
       type: object
       required:
@@ -316,33 +308,22 @@ components:
           type: string
           description: deleted timestamp
           example: '2017-01-24T13:57:52Z'
-    CreateMultiplier:
+    ResultsAccess:
       type: object
       required:
-      - label
-      - value
-      - expr
+      - allowed
       properties:
-        label:
-          type: string
-          description: human-readable name of multiplier
-          example: Non-technical
-        code:
-          type: string
-        value:
-          type: number
-          description: amount to multiply the initial value by
-          example: '0.75'
-        expr:
-          type: string
-          description: calculated expression to match against the job
-          example: department!="Engineering"
-          minItems: 0
-          maxItems: 1000
-        category:
-          type: string
-          description: tag to group multipliers together by
-          example: Location
+        ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        allowed:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/AccessAction'
     Attribution:
       type: object
       properties:
@@ -370,37 +351,29 @@ components:
           - SLACK
           - TEAMS
           - MCP
-    ResultsAccess:
+    UpdateMultiplier:
       type: object
-      required:
-      - allowed
       properties:
-        ids:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        allowed:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/AccessAction'
-    ResultsMultiplier:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Multiplier'
-        next:
+        label:
           type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
+          description: human-readable name of multiplier
+          example: Non-technical
+        code:
+          type: string
+        value:
+          type: number
+          description: amount to multiply the initial value by
+          example: '0.75'
+        expr:
+          type: string
+          description: calculated expression to match against the job
+          example: department!="Engineering"
+          minItems: 0
+          maxItems: 1000
+        category:
+          type: string
+          description: tag to group multipliers together by
+          example: Location
     AccessAction:
       type: object
       required:
@@ -418,3 +391,30 @@ components:
           uniqueItems: true
           items:
             type: string
+    CreateMultiplier:
+      type: object
+      required:
+      - label
+      - value
+      - expr
+      properties:
+        label:
+          type: string
+          description: human-readable name of multiplier
+          example: Non-technical
+        code:
+          type: string
+        value:
+          type: number
+          description: amount to multiply the initial value by
+          example: '0.75'
+        expr:
+          type: string
+          description: calculated expression to match against the job
+          example: department!="Engineering"
+          minItems: 0
+          maxItems: 1000
+        category:
+          type: string
+          description: tag to group multipliers together by
+          example: Location

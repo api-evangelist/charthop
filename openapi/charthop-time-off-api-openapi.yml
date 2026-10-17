@@ -377,65 +377,6 @@ paths:
         required: true
 components:
   schemas:
-    ResultsTimeOffEntity:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeOffEntity'
-        next:
-          type: string
-        access:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsAccess'
-    TimeOff:
-      type: object
-      required:
-      - id
-      - startDate
-      - endDate
-      properties:
-        id:
-          type: string
-          description: unique id of a time off request
-        startDate:
-          type: string
-          format: date
-          description: start date of time off, inclusive
-        endDate:
-          type: string
-          format: date
-          description: end date of time off, inclusive
-        days:
-          type: number
-          description: number of days used
-        hours:
-          type: number
-          description: number of hours used
-        type:
-          type: string
-          description: type of time off
-        note:
-          type: string
-          description: notes on the time off
-        approval:
-          type: string
-          description: approval status of the time off
-          enum:
-          - APPROVED
-          - PENDING
-          - CANCELLED
-          - REJECTED
-          - SUPERSEDED
-    TimeOffApproval:
-      type: object
-      properties:
-        message:
-          type: string
     CreateTimeOffEntity:
       type: object
       required:
@@ -510,33 +451,67 @@ components:
           type: string
           description: requested at timestamp -- often the same as createAt
           example: '2017-01-24T13:57:52Z'
-    Attribution:
+    UpdateTimeOffEntity:
       type: object
       properties:
-        principalUserId:
+        externalId:
           type: string
-          example: 588f7ee98f138b19220041a7
-        agentUserIds:
-          type: array
-          items:
-            type: string
-            example: 588f7ee98f138b19220041a7
-        eventId:
+          description: external identifier, if time off synced from external system
+        startDate:
           type: string
-          example: 588f7ee98f138b19220041a7
-        aiChatId:
+          format: date
+          description: start date of time off, inclusive
+        startDatePartialDay:
+          type: number
+          description: 'portion of the start date to take '
+        startDatePartialDayPeriod:
           type: string
-          example: 588f7ee98f138b19220041a7
-        aiToolUseId:
-          type: string
-        channel:
-          type: string
+          description: Portion of the start day requested (e.g. AM or PM)
           enum:
-          - WEB
-          - MOBILE
-          - SLACK
-          - TEAMS
-          - MCP
+          - AM
+          - PM
+        endDate:
+          type: string
+          format: date
+          description: end date of time off, inclusive
+        endDatePartialDay:
+          type: number
+          description: portion of the end date to take
+        endDatePartialDayPeriod:
+          type: string
+          description: Portion of the end day requested (e.g. AM or PM)
+          enum:
+          - AM
+          - PM
+        days:
+          type: number
+          description: number of days used
+        hours:
+          type: number
+          description: number of hours used
+        typeDescription:
+          type: string
+          description: type of time off
+        timeOffPolicyId:
+          type: string
+          description: policy id to pull the balance from
+          example: 588f7ee98f138b19220041a7
+        note:
+          type: string
+          description: notes on the time off
+        approval:
+          type: string
+          description: approval status of the time off
+          enum:
+          - APPROVED
+          - PENDING
+          - CANCELLED
+          - REJECTED
+          - SUPERSEDED
+        requestAt:
+          type: string
+          description: requested at timestamp -- often the same as createAt
+          example: '2017-01-24T13:57:52Z'
     ResultsAccess:
       type: object
       required:
@@ -553,70 +528,6 @@ components:
           uniqueItems: true
           items:
             $ref: '#/components/schemas/AccessAction'
-    ExcludedDay:
-      type: object
-      required:
-      - date
-      - dayLabel
-      properties:
-        date:
-          type: string
-          format: date
-        dayLabel:
-          type: string
-    TimeOffRequest:
-      type: object
-      required:
-      - startDate
-      - endDate
-      properties:
-        startDate:
-          type: string
-          format: date
-        startDatePartialDay:
-          type: number
-        startDatePartialDayPeriod:
-          type: string
-          enum:
-          - AM
-          - PM
-        endDate:
-          type: string
-          format: date
-        endDatePartialDay:
-          type: number
-        endDatePartialDayPeriod:
-          type: string
-          enum:
-          - AM
-          - PM
-        personId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        typeDescription:
-          type: string
-        timeOffPolicyId:
-          type: string
-          example: 588f7ee98f138b19220041a7
-        note:
-          type: string
-    AccessAction:
-      type: object
-      required:
-      - action
-      properties:
-        action:
-          type: string
-        fields:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        types:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
     TimeOffEntity:
       type: object
       required:
@@ -746,6 +657,103 @@ components:
           type: string
           description: requested at timestamp -- often the same as createAt
           example: '2017-01-24T13:57:52Z'
+    Attribution:
+      type: object
+      properties:
+        principalUserId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        agentUserIds:
+          type: array
+          items:
+            type: string
+            example: 588f7ee98f138b19220041a7
+        eventId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiChatId:
+          type: string
+          example: 588f7ee98f138b19220041a7
+        aiToolUseId:
+          type: string
+        channel:
+          type: string
+          enum:
+          - WEB
+          - MOBILE
+          - SLACK
+          - TEAMS
+          - MCP
+    ResultsTimeOffEntity:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeOffEntity'
+        next:
+          type: string
+        access:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsAccess'
+    ExcludedDay:
+      type: object
+      required:
+      - date
+      - dayLabel
+      properties:
+        date:
+          type: string
+          format: date
+        dayLabel:
+          type: string
+    TimeOff:
+      type: object
+      required:
+      - id
+      - startDate
+      - endDate
+      properties:
+        id:
+          type: string
+          description: unique id of a time off request
+        startDate:
+          type: string
+          format: date
+          description: start date of time off, inclusive
+        endDate:
+          type: string
+          format: date
+          description: end date of time off, inclusive
+        days:
+          type: number
+          description: number of days used
+        hours:
+          type: number
+          description: number of hours used
+        type:
+          type: string
+          description: type of time off
+        note:
+          type: string
+          description: notes on the time off
+        approval:
+          type: string
+          description: approval status of the time off
+          enum:
+          - APPROVED
+          - PENDING
+          - CANCELLED
+          - REJECTED
+          - SUPERSEDED
+    TimeOffApproval:
+      type: object
+      properties:
+        message:
+          type: string
     CalculatedTimeOffBalance:
       type: object
       required:
@@ -774,64 +782,56 @@ components:
           example: 588f7ee98f138b19220041a7
         errorMessage:
           type: string
-    UpdateTimeOffEntity:
+    TimeOffRequest:
       type: object
+      required:
+      - startDate
+      - endDate
       properties:
-        externalId:
-          type: string
-          description: external identifier, if time off synced from external system
         startDate:
           type: string
           format: date
-          description: start date of time off, inclusive
         startDatePartialDay:
           type: number
-          description: 'portion of the start date to take '
         startDatePartialDayPeriod:
           type: string
-          description: Portion of the start day requested (e.g. AM or PM)
           enum:
           - AM
           - PM
         endDate:
           type: string
           format: date
-          description: end date of time off, inclusive
         endDatePartialDay:
           type: number
-          description: portion of the end date to take
         endDatePartialDayPeriod:
           type: string
-          description: Portion of the end day requested (e.g. AM or PM)
           enum:
           - AM
           - PM
-        days:
-          type: number
-          description: number of days used
-        hours:
-          type: number
-          description: number of hours used
+        personId:
+          type: string
+          example: 588f7ee98f138b19220041a7
         typeDescription:
           type: string
-          description: type of time off
         timeOffPolicyId:
           type: string
-          description: policy id to pull the balance from
           example: 588f7ee98f138b19220041a7
         note:
           type: string
-          description: notes on the time off
-        approval:
+    AccessAction:
+      type: object
+      required:
+      - action
+      properties:
+        action:
           type: string
-          description: approval status of the time off
-          enum:
-          - APPROVED
-          - PENDING
-          - CANCELLED
-          - REJECTED
-          - SUPERSEDED
-        requestAt:
-          type: string
-          description: requested at timestamp -- often the same as createAt
-          example: '2017-01-24T13:57:52Z'
+        fields:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        types:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
