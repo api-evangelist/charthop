@@ -2,12 +2,14 @@ generated: '2026-10-14'
 method: searched
 checked:
 - adp/integrations/adp-integration-edges.yml
+- google-workspace/integrations/google-workspace-integration-edges.yml
 - greenhouse/integrations/greenhouse-integration-edges.yml
 - https://fivetran.com/docs-sitemap.xml
 - https://fivetran.com/docs/connectors/partner-built-program
 - https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/
 - https://zapier.com/api/v4/apps/
 - okta/integrations/okta-integration-edges.yml
+- slack/integrations/slack-integration-edges.yml
 source:
 - adp/integrations/adp-integration-edges.yml
 - greenhouse/integrations/greenhouse-integration-edges.yml
@@ -144,3 +146,37 @@ edges:
     builder: Fivetran
   detected_by: sweep-data-integration.py
   first_seen: '2026-10-18'
+- partner_name: Google Workspace (own)
+  partner: google-workspace
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://workspace.google.com/marketplace/app/charthop_sheets/397657075455
+  mirror_of: google-workspace/integrations/google-workspace-integration-edges.yml
+  apps:
+  - ChartHop Sheets
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Google Workspace app
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/A971D0G6R-charthop
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - ChartHop
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
